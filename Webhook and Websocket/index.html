@@ -1,0 +1,681 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook vs WebSocket - Working Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .demo-section {
+            padding: 30px;
+            position: relative;
+        }
+
+        .webhook-section {
+            background: #f8f9fa;
+            border-right: 2px solid #dee2e6;
+        }
+
+        .websocket-section {
+            background: #fff;
+        }
+
+        .demo-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-controls {
+            margin-bottom: 30px;
+        }
+
+        .demo-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .demo-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .webhook-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+
+        .webhook-btn:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .demo-area {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 400px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .webhook-area {
+            background: #fff8f0;
+            border-color: #ff6b6b;
+        }
+
+        .websocket-area {
+            background: #f0f8ff;
+            border-color: #667eea;
+        }
+
+        .event-message {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            animation: slideIn 0.5s ease;
+            position: relative;
+        }
+
+        .webhook-message {
+            border-left: 4px solid #ff6b6b;
+            background: #fff5f5;
+        }
+
+        .websocket-message {
+            border-left: 4px solid #667eea;
+            background: #f0f8ff;
+        }
+
+        .message-time {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .status-bar {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-disconnected {
+            background: #dc3545;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .explanation {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .webhook-explanation {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+
+        .how-it-works {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .webhook-step .step-number {
+            background: #ff6b6b;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chat-input button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .typing-indicator {
+            background: #f0f0f0;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 10px 0;
+            font-style: italic;
+            color: #666;
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes typing {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .server-simulation {
+            background: #333;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .server-log {
+            color: #00ff00;
+            margin: 5px 0;
+        }
+
+        .clear-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .webhook-section {
+                border-right: none;
+                border-bottom: 2px solid #dee2e6;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .demo-controls {
+                text-align: center;
+            }
+            
+            .demo-btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔔 Webhook vs 💬 WebSocket</h1>
+            <p>Working Demo - See the Real Difference!</p>
+        </div>
+
+        <div class="demo-grid">
+            <!-- Webhook Demo -->
+            <div class="demo-section webhook-section">
+                <div class="demo-title">
+                    🔔 Webhook Demo
+                </div>
+                
+                <div class="explanation webhook-explanation">
+                    <strong>How it works:</strong> Server sends HTTP POST request to your endpoint when an event occurs. One-way communication - Server → Client.
+                </div>
+
+                <div class="server-simulation">
+                    <div>🖥️ Server Status:</div>
+                    <div id="webhook-server-log" class="server-log">Ready to send webhooks...</div>
+                </div>
+
+                <div class="demo-controls">
+                    <button class="demo-btn webhook-btn" onclick="triggerWebhook('payment')">💳 Payment Received</button>
+                    <button class="demo-btn webhook-btn" onclick="triggerWebhook('order')">📦 New Order</button>
+                    <button class="demo-btn webhook-btn" onclick="triggerWebhook('user')">👤 User Signup</button>
+                    <button class="demo-btn webhook-btn" onclick="triggerWebhook('error')">⚠️ System Error</button>
+                    <button class="clear-btn" onclick="clearWebhooks()">Clear</button>
+                </div>
+
+                <div class="demo-area webhook-area" id="webhook-area">
+                    <div class="event-message webhook-message">
+                        <strong>🎯 Webhook Endpoint Ready</strong>
+                        <div>Waiting for events from server...</div>
+                        <div class="message-time">Ready to receive</div>
+                    </div>
+                </div>
+
+                <div class="how-it-works">
+                    <h4>How Webhooks Work:</h4>
+                    <div class="step webhook-step">
+                        <div class="step-number">1</div>
+                        <div>Event happens on server (payment, order, etc.)</div>
+                    </div>
+                    <div class="step webhook-step">
+                        <div class="step-number">2</div>
+                        <div>Server sends HTTP POST to your webhook URL</div>
+                    </div>
+                    <div class="step webhook-step">
+                        <div class="step-number">3</div>
+                        <div>Your app receives and processes the data</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WebSocket Demo -->
+            <div class="demo-section websocket-section">
+                <div class="demo-title">
+                    💬 WebSocket Demo
+                </div>
+                
+                <div class="explanation">
+                    <strong>How it works:</strong> Persistent connection between client and server. Two-way real-time communication - Client ↔ Server.
+                </div>
+
+                <div class="status-bar" id="websocket-status">
+                    <div class="status-indicator"></div>
+                    <span>Disconnected</span>
+                </div>
+
+                <div class="demo-controls">
+                    <button class="demo-btn" id="connect-btn" onclick="toggleWebSocket()">🔗 Connect</button>
+                    <button class="demo-btn" onclick="simulateServerMessage()" disabled id="server-msg-btn">📡 Server Message</button>
+                    <button class="demo-btn" onclick="startTyping()" disabled id="typing-btn">⌨️ Show Typing</button>
+                    <button class="clear-btn" onclick="clearWebSocket()">Clear</button>
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Type your message..." disabled>
+                    <button onclick="sendMessage()" disabled id="send-btn">Send</button>
+                </div>
+
+                <div class="demo-area websocket-area" id="websocket-area">
+                    <div class="event-message websocket-message">
+                        <strong>🔌 WebSocket Connection</strong>
+                        <div>Click "Connect" to establish real-time connection</div>
+                        <div class="message-time">Ready to connect</div>
+                    </div>
+                </div>
+
+                <div class="how-it-works">
+                    <h4>How WebSockets Work:</h4>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div>Client opens persistent connection to server</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div>Both can send messages anytime</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div>Real-time bidirectional communication</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket simulation
+        let isWebSocketConnected = false;
+        let typingTimer;
+        let messageId = 0;
+
+        // Webhook simulation
+        function triggerWebhook(eventType) {
+            const webhookArea = document.getElementById('webhook-area');
+            const serverLog = document.getElementById('webhook-server-log');
+            
+            const events = {
+                payment: {
+                    title: '💳 Payment Webhook Received',
+                    data: 'Payment ID: PAY_123456\nAmount: $99.99\nStatus: SUCCESS\nUser: john@example.com',
+                    color: '#28a745'
+                },
+                order: {
+                    title: '📦 Order Webhook Received',
+                    data: 'Order ID: ORD_789012\nProduct: Premium Plan\nQuantity: 1\nCustomer: Jane Smith',
+                    color: '#17a2b8'
+                },
+                user: {
+                    title: '👤 User Signup Webhook Received',
+                    data: 'User ID: USR_345678\nEmail: newuser@example.com\nPlan: Free\nSource: Website',
+                    color: '#ffc107'
+                },
+                error: {
+                    title: '⚠️ Error Webhook Received',
+                    data: 'Error Code: 500\nMessage: Database connection failed\nTimestamp: ' + new Date().toISOString(),
+                    color: '#dc3545'
+                }
+            };
+
+            const event = events[eventType];
+            
+            // Update server log
+            serverLog.textContent = `Sending ${eventType} webhook...`;
+            
+            setTimeout(() => {
+                // Create webhook message
+                const messageEl = document.createElement('div');
+                messageEl.className = 'event-message webhook-message';
+                messageEl.innerHTML = `
+                    <strong>${event.title}</strong>
+                    <div style="white-space: pre-line; margin: 10px 0; font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 5px;">${event.data}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                `;
+                messageEl.style.borderLeftColor = event.color;
+                
+                webhookArea.appendChild(messageEl);
+                webhookArea.scrollTop = webhookArea.scrollHeight;
+                
+                // Update server log
+                serverLog.textContent = `✅ ${eventType} webhook sent successfully`;
+            }, 1000);
+        }
+
+        function clearWebhooks() {
+            const webhookArea = document.getElementById('webhook-area');
+            webhookArea.innerHTML = `
+                <div class="event-message webhook-message">
+                    <strong>🎯 Webhook Endpoint Ready</strong>
+                    <div>Waiting for events from server...</div>
+                    <div class="message-time">Ready to receive</div>
+                </div>
+            `;
+            document.getElementById('webhook-server-log').textContent = 'Ready to send webhooks...';
+        }
+
+        // WebSocket simulation
+        function toggleWebSocket() {
+            const connectBtn = document.getElementById('connect-btn');
+            const statusBar = document.getElementById('websocket-status');
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const serverMsgBtn = document.getElementById('server-msg-btn');
+            const typingBtn = document.getElementById('typing-btn');
+            const websocketArea = document.getElementById('websocket-area');
+
+            if (!isWebSocketConnected) {
+                // Connect
+                isWebSocketConnected = true;
+                connectBtn.textContent = '❌ Disconnect';
+                statusBar.className = 'status-bar';
+                statusBar.innerHTML = '<div class="status-indicator"></div><span>Connected</span>';
+                
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                serverMsgBtn.disabled = false;
+                typingBtn.disabled = false;
+
+                // Add connection message
+                const messageEl = document.createElement('div');
+                messageEl.className = 'event-message websocket-message';
+                messageEl.innerHTML = `
+                    <strong>🔗 WebSocket Connected</strong>
+                    <div>Real-time connection established!</div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                `;
+                websocketArea.appendChild(messageEl);
+                websocketArea.scrollTop = websocketArea.scrollHeight;
+
+                // Simulate server welcome message
+                setTimeout(() => {
+                    addWebSocketMessage('Server', 'Welcome! Connection established successfully. You can now send and receive messages in real-time.', 'server');
+                }, 1000);
+
+            } else {
+                // Disconnect
+                isWebSocketConnected = false;
+                connectBtn.textContent = '🔗 Connect';
+                statusBar.className = 'status-bar status-disconnected';
+                statusBar.innerHTML = '<div class="status-indicator"></div><span>Disconnected</span>';
+                
+                chatInput.disabled = true;
+                sendBtn.disabled = true;
+                serverMsgBtn.disabled = true;
+                typingBtn.disabled = true;
+
+                // Add disconnection message
+                const messageEl = document.createElement('div');
+                messageEl.className = 'event-message websocket-message';
+                messageEl.innerHTML = `
+                    <strong>❌ WebSocket Disconnected</strong>
+                    <div>Connection closed</div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                `;
+                websocketArea.appendChild(messageEl);
+                websocketArea.scrollTop = websocketArea.scrollHeight;
+            }
+        }
+
+        function addWebSocketMessage(sender, message, type) {
+            const websocketArea = document.getElementById('websocket-area');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'event-message websocket-message';
+            
+            const bgColor = type === 'server' ? '#e8f5e8' : '#f0f8ff';
+            const emoji = type === 'server' ? '🖥️' : '👤';
+            
+            messageEl.innerHTML = `
+                <strong>${emoji} ${sender}</strong>
+                <div style="margin: 8px 0; padding: 8px; background: ${bgColor}; border-radius: 5px;">${message}</div>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            websocketArea.appendChild(messageEl);
+            websocketArea.scrollTop = websocketArea.scrollHeight;
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+            
+            if (message && isWebSocketConnected) {
+                addWebSocketMessage('You', message, 'user');
+                chatInput.value = '';
+                
+                // Simulate server response
+                setTimeout(() => {
+                    const responses = [
+                        'Message received! This is a real-time response.',
+                        'Thanks for your message. WebSocket is working perfectly!',
+                        'I got your message instantly via WebSocket connection.',
+                        'WebSocket allows us to chat in real-time like this!',
+                        'Your message was delivered immediately through the persistent connection.'
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addWebSocketMessage('Server', randomResponse, 'server');
+                }, 500 + Math.random() * 1000);
+            }
+        }
+
+        function simulateServerMessage() {
+            if (!isWebSocketConnected) return;
+            
+            const serverMessages = [
+                'Server notification: New user joined the chat!',
+                'System update: All services are running smoothly.',
+                'Real-time alert: High traffic detected.',
+                'Server message: Database backup completed.',
+                'Live update: 127 users currently online.'
+            ];
+            
+            const randomMessage = serverMessages[Math.floor(Math.random() * serverMessages.length)];
+            addWebSocketMessage('Server', randomMessage, 'server');
+        }
+
+        function startTyping() {
+            if (!isWebSocketConnected) return;
+            
+            const websocketArea = document.getElementById('websocket-area');
+            const typingEl = document.createElement('div');
+            typingEl.className = 'typing-indicator';
+            typingEl.innerHTML = '🖥️ Server is typing...';
+            
+            websocketArea.appendChild(typingEl);
+            websocketArea.scrollTop = websocketArea.scrollHeight;
+            
+            setTimeout(() => {
+                typingEl.remove();
+                addWebSocketMessage('Server', 'This is what I was typing! WebSocket allows real-time typing indicators.', 'server');
+            }, 2000);
+        }
+
+        function clearWebSocket() {
+            const websocketArea = document.getElementById('websocket-area');
+            websocketArea.innerHTML = `
+                <div class="event-message websocket-message">
+                    <strong>🔌 WebSocket Connection</strong>
+                    <div>Click "Connect" to establish real-time connection</div>
+                    <div class="message-time">Ready to connect</div>
+                </div>
+            `;
+        }
+
+        // Enter key support for chat
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Auto-scroll to bottom
+        function autoScroll() {
+            const areas = document.querySelectorAll('.demo-area');
+            areas.forEach(area => {
+                area.scrollTop = area.scrollHeight;
+            });
+        }
+
+        // Initialize with some demo data
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                triggerWebhook('payment');
+            }, 2000);
+            
+            setTimeout(() => {
+                triggerWebhook('order');
+            }, 4000);
+        });
+    </script>
+</body>
+</html>

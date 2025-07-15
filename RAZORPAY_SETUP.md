@@ -14,21 +14,38 @@ Your Fullstackgada website now includes Razorpay payment integration for accepti
 3. Complete KYC verification
 4. Get your API keys from the dashboard
 
-### 2. Configure API Keys
-In `main.js`, replace the test key with your actual Razorpay key:
+### 2. Secure Configuration Setup
+**IMPORTANT**: Your Razorpay keys are now stored securely in a separate configuration file.
 
-```javascript
-const RAZORPAY_CONFIG = {
-  key: 'rzp_live_YOUR_ACTUAL_KEY_HERE', // Replace with your live key
-  currency: 'INR',
-  name: 'Fullstackgada',
-  description: 'Support Fullstackgada Content Creation',
-  image: 'image/jetha.png',
-  theme: {
-    color: '#356c67'
-  }
-};
-```
+1. **Copy the template**: Copy `config.template.js` to `config.js`
+   ```bash
+   cp config.template.js config.js
+   ```
+
+2. **Update your keys**: Edit `config.js` and replace `rzp_live_YOUR_ACTUAL_KEY_HERE` with your actual Razorpay key:
+   ```javascript
+   const CONFIG = {
+     RAZORPAY: {
+       KEY_ID: 'rzp_live_YOUR_ACTUAL_KEY_HERE', // Replace with your actual key
+       // ... other config
+     }
+   };
+   ```
+
+3. **Verify .gitignore**: Ensure `config.js` is listed in `.gitignore` to prevent committing sensitive data:
+   ```
+   # Environment and Configuration Files
+   config.js
+   .env
+   .env.local
+   ```
+
+### 3. Security Features Implemented
+✅ **API Key Separation**: Sensitive keys moved to external config file  
+✅ **Git Ignore Protection**: Config file automatically excluded from version control  
+✅ **Template System**: Safe template file for sharing/deployment  
+✅ **Runtime Validation**: Code checks if configuration is properly loaded  
+✅ **Error Handling**: Graceful fallbacks when config is missing
 
 ### 3. Backend Integration (Recommended)
 For production use, you should:

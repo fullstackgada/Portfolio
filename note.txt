@@ -1,2 +1,0 @@
-main color:#356c67;
-second color: #ff6f61 

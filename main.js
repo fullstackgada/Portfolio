@@ -188,17 +188,25 @@ function initBackToTopButton() {
 // Initialize back to top button when DOM is loaded
 document.addEventListener('DOMContentLoaded', initBackToTopButton);
 
-// Razorpay configuration
-const RAZORPAY_CONFIG = {
-  key: 'rzp_live_Ges6PQSdPI40Df', // Replace with your actual Razorpay key ID
-  currency: 'INR',
-  name: 'Fullstackgada',
-  description: 'Support Fullstackgada Content Creation',
-  image: 'image/jetha.png', // Your logo
-  theme: {
-    color: '#356c67'
+// Razorpay configuration - loaded from external config file
+function getRazorpayConfig() {
+  // Check if CONFIG is loaded from config.js
+  if (typeof window.CONFIG === 'undefined') {
+    console.error('Configuration not loaded. Please ensure config.js is included before main.js');
+    return null;
   }
-};
+  
+  return {
+    key: window.CONFIG.RAZORPAY.KEY_ID,
+    currency: window.CONFIG.RAZORPAY.CURRENCY,
+    name: window.CONFIG.RAZORPAY.COMPANY_NAME,
+    description: window.CONFIG.RAZORPAY.DESCRIPTION,
+    image: window.CONFIG.RAZORPAY.LOGO,
+    theme: {
+      color: window.CONFIG.RAZORPAY.THEME_COLOR
+    }
+  };
+}
 
 // Payment handling function with Razorpay integration
 function handlePayment(type) {
@@ -234,8 +242,15 @@ function initiateRazorpayPayment(paymentData) {
     return;
   }
 
+  // Get Razorpay configuration
+  const razorpayConfig = getRazorpayConfig();
+  if (!razorpayConfig) {
+    alert("Payment configuration not loaded. Please refresh the page and try again.");
+    return;
+  }
+
   const options = {
-    ...RAZORPAY_CONFIG,
+    ...razorpayConfig,
     amount: paymentData.amount,
     description: paymentData.description,
     order_id: '', // You'll get this from your backend

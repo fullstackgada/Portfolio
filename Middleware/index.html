@@ -1,0 +1,736 @@
+    <!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middleware Demo - Fullstackgada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            padding: 40px;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            border-left: 6px solid #4ecdc4;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .character {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .jethalal {
+            color: #e74c3c;
+        }
+
+        .babita {
+            color: #9b59b6;
+        }
+
+        .society-analogy {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed #e17055;
+        }
+
+        .society-analogy h4 {
+            color: #d63031;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .pipeline-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid #dee2e6;
+        }
+
+        .pipeline-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .middleware-pipeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .middleware-step {
+            background: white;
+            border: 3px solid #dee2e6;
+            border-radius: 15px;
+            padding: 20px;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .middleware-step.active {
+            border-color: #4ecdc4;
+            background: #e8f5e8;
+            transform: scale(1.05);
+        }
+
+        .middleware-step.rejected {
+            border-color: #e74c3c;
+            background: #ffe6e6;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .middleware-step.passed {
+            border-color: #27ae60;
+            background: #d4edda;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .step-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: #4ecdc4;
+            margin: 0 10px;
+        }
+
+        .request-form {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 30px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+
+        .send-request-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+
+        .send-request-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-request-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .response-container {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .response-title {
+            color: #4ecdc4;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .log-entry {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .log-entry.error {
+            border-left-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .log-entry.success {
+            border-left-color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .middleware-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .control-panel h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .switch {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .switch.active {
+            background: #4ecdc4;
+        }
+
+        .switch::before {
+            content: '';
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s ease;
+        }
+
+        .switch.active::before {
+            left: 27px;
+        }
+
+        .reset-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+
+        .api-endpoints {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .endpoint-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #4ecdc4;
+        }
+
+        .endpoint-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .endpoint-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .endpoint-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .endpoint-btn:hover {
+            background: #45b7aa;
+        }
+
+        @media (max-width: 768px) {
+            .middleware-pipeline {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .demo-section {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Middleware Demo</h1>
+            <div class="subtitle">Jethalal & Babita की समझाई गई तकनीक</div>
+        </div>
+
+        <div class="demo-section">
+            <div class="explanation">
+                <div class="character jethalal">🎭 जेठालाल:</div>
+                <p>बबिता जी, Middleware ठीक वैसे ही है जैसे आप सोसाइटी गेट से बाहर जाते समय हर चेकपॉइंट से गुज़रती हैं!</p>
+                
+                <div class="society-analogy">
+                    <h4>🏠 गोकुलधाम सोसाइटी का उदाहरण:</h4>
+                    <p><strong>1. वॉचमैन:</strong> "कहाँ जा रही हैं?" = Authentication Middleware</p>
+                    <p><strong>2. सिक्योरिटी गार्ड:</strong> बैग चेक = Validation Middleware</p>
+                    <p><strong>3. लॉग बुक:</strong> एंट्री करना = Logging Middleware</p>
+                    <p><strong>4. मुख्य गेट:</strong> बाहर जाना = Main API Endpoint</p>
+                </div>
+
+                <div class="character babita">👩 बबिता जी:</div>
+                <p>वाह! तो हर middleware एक छोटा काम करता है और फिर request को आगे भेजता है। अगर कोई problem है तो वहीं रोक देता है!</p>
+            </div>
+
+            <div class="pipeline-container">
+                <div class="pipeline-title">🚦 API Request Pipeline</div>
+                <div class="middleware-pipeline">
+                    <div class="middleware-step" id="step1">
+                        <span class="step-icon">🔐</span>
+                        <div class="step-title">Authentication</div>
+                        <div class="step-description">Token चेक करना</div>
+                    </div>
+                    <span class="arrow">→</span>
+                    <div class="middleware-step" id="step2">
+                        <span class="step-icon">✅</span>
+                        <div class="step-title">Validation</div>
+                        <div class="step-description">Data validate करना</div>
+                    </div>
+                    <span class="arrow">→</span>
+                    <div class="middleware-step" id="step3">
+                        <span class="step-icon">📝</span>
+                        <div class="step-title">Logging</div>
+                        <div class="step-description">Request log करना</div>
+                    </div>
+                    <span class="arrow">→</span>
+                    <div class="middleware-step" id="step4">
+                        <span class="step-icon">🎯</span>
+                        <div class="step-title">API Endpoint</div>
+                        <div class="step-description">Main function</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="request-form">
+                <h3>🚀 API Request भेजें</h3>
+                <div class="form-group">
+                    <label for="token">Authorization Token:</label>
+                    <input type="text" id="token" placeholder="your-secret-token">
+                </div>
+                <div class="form-group">
+                    <label for="userId">User ID:</label>
+                    <input type="text" id="userId" placeholder="123">
+                </div>
+                <div class="form-group">
+                    <label for="endpoint">API Endpoint:</label>
+                    <select id="endpoint">
+                        <option value="/user-profile">User Profile</option>
+                        <option value="/secure-data">Secure Data</option>
+                        <option value="/admin-panel">Admin Panel</option>
+                    </select>
+                </div>
+                <button class="send-request-btn" onclick="sendRequest()" id="sendBtn">
+                    🚀 Request भेजें
+                </button>
+            </div>
+
+            <div class="middleware-controls">
+                <div class="control-panel">
+                    <h4>🔧 Middleware Controls</h4>
+                    <div class="toggle-switch">
+                        <span>Authentication</span>
+                        <div class="switch active" onclick="toggleMiddleware('auth')" id="authToggle"></div>
+                    </div>
+                    <div class="toggle-switch">
+                        <span>Validation</span>
+                        <div class="switch active" onclick="toggleMiddleware('validation')" id="validationToggle"></div>
+                    </div>
+                    <div class="toggle-switch">
+                        <span>Logging</span>
+                        <div class="switch active" onclick="toggleMiddleware('logging')" id="loggingToggle"></div>
+                    </div>
+                    <button class="reset-btn" onclick="resetPipeline()">Reset Pipeline</button>
+                </div>
+
+                <div class="control-panel">
+                    <h4>🎯 Quick Test Scenarios</h4>
+                    <button class="endpoint-btn" onclick="testScenario('valid')" style="margin: 5px; background: #27ae60;">
+                        ✅ Valid Request
+                    </button>
+                    <button class="endpoint-btn" onclick="testScenario('invalid-token')" style="margin: 5px; background: #e74c3c;">
+                        ❌ Invalid Token
+                    </button>
+                    <button class="endpoint-btn" onclick="testScenario('missing-data')" style="margin: 5px; background: #f39c12;">
+                        ⚠️ Missing Data
+                    </button>
+                    <button class="endpoint-btn" onclick="testScenario('admin-access')" style="margin: 5px; background: #9b59b6;">
+                        🔒 Admin Access
+                    </button>
+                </div>
+            </div>
+
+            <div class="response-container">
+                <div class="response-title">📊 Response & Logs</div>
+                <div id="responseLog">
+                    <div class="log-entry">
+                        <strong>Ready:</strong> API pipeline तैयार है। Request भेजने के लिए ऊपर form fill करें!
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoints">
+                <div class="endpoint-card">
+                    <h4>👤 User Profile API</h4>
+                    <p>Basic user information के लिए। Authentication और Validation की जरूरत है।</p>
+                    <button class="endpoint-btn" onclick="selectEndpoint('/user-profile')">Select</button>
+                </div>
+                <div class="endpoint-card">
+                    <h4>🔒 Secure Data API</h4>
+                    <p>Sensitive data के लिए। सभी middleware checks required हैं।</p>
+                    <button class="endpoint-btn" onclick="selectEndpoint('/secure-data')">Select</button>
+                </div>
+                <div class="endpoint-card">
+                    <h4>⚡ Admin Panel API</h4>
+                    <p>Admin-only access। Extra security checks के साथ।</p>
+                    <button class="endpoint-btn" onclick="selectEndpoint('/admin-panel')">Select</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let middlewareConfig = {
+            auth: true,
+            validation: true,
+            logging: true
+        };
+
+        let requestCount = 0;
+
+        function toggleMiddleware(type) {
+            middlewareConfig[type] = !middlewareConfig[type];
+            const toggle = document.getElementById(type + 'Toggle');
+            toggle.classList.toggle('active');
+            
+            addLog(`🔧 ${type} middleware ${middlewareConfig[type] ? 'enabled' : 'disabled'} किया गया`);
+        }
+
+        function resetPipeline() {
+            // Reset all steps
+            document.querySelectorAll('.middleware-step').forEach(step => {
+                step.className = 'middleware-step';
+            });
+            
+            // Clear logs
+            document.getElementById('responseLog').innerHTML = `
+                <div class="log-entry">
+                    <strong>Reset:</strong> Pipeline reset हो गया। नई request भेजें!
+                </div>
+            `;
+            
+            requestCount = 0;
+        }
+
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('responseLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function sendRequest() {
+            requestCount++;
+            const token = document.getElementById('token').value;
+            const userId = document.getElementById('userId').value;
+            const endpoint = document.getElementById('endpoint').value;
+            
+            // Disable button
+            document.getElementById('sendBtn').disabled = true;
+            document.getElementById('sendBtn').textContent = 'Processing...';
+            
+            // Reset all steps
+            document.querySelectorAll('.middleware-step').forEach(step => {
+                step.className = 'middleware-step';
+            });
+            
+            addLog(`🚀 Request #${requestCount} शुरू की गई: ${endpoint}`);
+            
+            // Step 1: Authentication
+            await processStep('step1', 'Authentication', async () => {
+                if (!middlewareConfig.auth) {
+                    addLog('⚠️ Authentication middleware disabled है');
+                    return true;
+                }
+                
+                if (!token) {
+                    throw new Error('Token नहीं मिला! वॉचमैन ने रोक दिया: "ID कार्ड दिखाओ!"');
+                }
+                
+                if (token !== 'your-secret-token') {
+                    throw new Error('गलत token! वॉचमैन: "ये fake ID card है!"');
+                }
+                
+                addLog('✅ Authentication successful: Token verified');
+                return true;
+            });
+            
+            // Step 2: Validation
+            await processStep('step2', 'Validation', async () => {
+                if (!middlewareConfig.validation) {
+                    addLog('⚠️ Validation middleware disabled है');
+                    return true;
+                }
+                
+                if (!userId) {
+                    throw new Error('User ID नहीं मिली! सिक्योरिटी गार्ड: "बैग में ID proof नहीं है!"');
+                }
+                
+                if (endpoint === '/admin-panel' && userId !== 'admin123') {
+                    throw new Error('Admin access नहीं है! सिक्योरिटी: "आप admin area में नहीं जा सकते!"');
+                }
+                
+                addLog('✅ Validation successful: Data validated');
+                return true;
+            });
+            
+            // Step 3: Logging
+            await processStep('step3', 'Logging', async () => {
+                if (!middlewareConfig.logging) {
+                    addLog('⚠️ Logging middleware disabled है');
+                    return true;
+                }
+                
+                addLog('📝 Request logged: User activity recorded');
+                return true;
+            });
+            
+            // Step 4: Main API
+            await processStep('step4', 'API Endpoint', async () => {
+                const responses = {
+                    '/user-profile': { name: 'Babita Iyer', status: 'active', message: 'User profile data retrieved' },
+                    '/secure-data': { data: 'Top secret information', level: 'classified', message: 'Secure data accessed' },
+                    '/admin-panel': { panel: 'admin dashboard', privileges: 'full access', message: 'Admin panel loaded' }
+                };
+                
+                const response = responses[endpoint];
+                addLog(`🎯 API Response: ${JSON.stringify(response)}`, 'success');
+                return true;
+            });
+            
+            // Re-enable button
+            document.getElementById('sendBtn').disabled = false;
+            document.getElementById('sendBtn').textContent = '🚀 Request भेजें';
+        }
+
+        async function processStep(stepId, stepName, processor) {
+            return new Promise((resolve) => {
+                setTimeout(async () => {
+                    const step = document.getElementById(stepId);
+                    step.classList.add('active');
+                    
+                    try {
+                        await processor();
+                        step.classList.remove('active');
+                        step.classList.add('passed');
+                        resolve(true);
+                    } catch (error) {
+                        step.classList.remove('active');
+                        step.classList.add('rejected');
+                        addLog(`❌ ${stepName} failed: ${error.message}`, 'error');
+                        
+                        // Re-enable button
+                        document.getElementById('sendBtn').disabled = false;
+                        document.getElementById('sendBtn').textContent = '🚀 Request भेजें';
+                        
+                        resolve(false);
+                    }
+                }, 1000);
+            });
+        }
+
+        function testScenario(scenario) {
+            const scenarios = {
+                'valid': {
+                    token: 'your-secret-token',
+                    userId: '123',
+                    endpoint: '/user-profile'
+                },
+                'invalid-token': {
+                    token: 'wrong-token',
+                    userId: '123',
+                    endpoint: '/secure-data'
+                },
+                'missing-data': {
+                    token: 'your-secret-token',
+                    userId: '',
+                    endpoint: '/user-profile'
+                },
+                'admin-access': {
+                    token: 'your-secret-token',
+                    userId: 'admin123',
+                    endpoint: '/admin-panel'
+                }
+            };
+            
+            const config = scenarios[scenario];
+            if (config) {
+                document.getElementById('token').value = config.token;
+                document.getElementById('userId').value = config.userId;
+                document.getElementById('endpoint').value = config.endpoint;
+                
+                addLog(`🎯 Test scenario loaded: ${scenario}`);
+            }
+        }
+
+        function selectEndpoint(endpoint) {
+            document.getElementById('endpoint').value = endpoint;
+            addLog(`📍 Endpoint selected: ${endpoint}`);
+        }
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🏠 गोकुलधाम Middleware Pipeline ready!');
+        });
+    </script>
+</body>
+</html>

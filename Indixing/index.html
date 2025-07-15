@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Indexing - Fullstackgada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .character-intro {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .character {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            min-width: 150px;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .character:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .character-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .bhide { background: linear-gradient(45deg, #FF9A9E, #FECFEF); }
+        .jethalal { background: linear-gradient(45deg, #A8EDEA, #FED6E3); }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .conversation-flow {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dialogue-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .dialogue-card.bhide-card {
+            border-left-color: #FF6B6B;
+            margin-left: 0;
+            margin-right: auto;
+            max-width: 80%;
+        }
+
+        .dialogue-card.jethalal-card {
+            border-left-color: #4ECDC4;
+            margin-left: auto;
+            margin-right: 0;
+            max-width: 80%;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .speaker {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .speaker-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .concepts-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .concept-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: #4ECDC4;
+        }
+
+        .concept-card.active {
+            border-color: #FF6B6B;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+        }
+
+        .concept-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .concept-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .interactive-demo {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-button.active {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+        }
+
+        .demo-visualization {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 2px dashed #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .demo-visualization.active {
+            border-color: #4ECDC4;
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+        }
+
+        .code-snippet {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        .tips-section {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tip-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff7f50;
+        }
+
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .character-intro {
+                gap: 15px;
+            }
+            
+            .concepts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dialogue-card {
+                max-width: 95%;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            
+            .demo-controls {
+                justify-content: center;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px;
+            }
+            
+            .concept-card, .interactive-demo, .tips-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗂️ Database Indexing समझाया गया है!</h1>
+            <p>Bhide और Jethalal के साथ सीखें Database Optimization</p>
+        </div>
+
+        <div class="main-content">
+            <div class="concepts-section">
+                <h2>🎯 Index के प्रकार (Types of Indexes)</h2>
+                <div class="concepts-grid">
+                    <div class="concept-card" onclick="showIndexDetails('single')" id="single-index">
+                        <div class="concept-header">
+                            <div class="concept-icon">1️⃣</div>
+                            <h3>Single Column Index</h3>
+                        </div>
+                        <p>एक कॉलम के लिए बनाया जाता है</p>
+                        <div class="code-snippet">
+CREATE INDEX idx_product_name 
+ON products(product_name);
+                        </div>
+                    </div>
+
+                    <div class="concept-card" onclick="showIndexDetails('composite')" id="composite-index">
+                        <div class="concept-header">
+                            <div class="concept-icon">🔗</div>
+                            <h3>Composite Index</h3>
+                        </div>
+                        <p>कई कॉलम्स पर एक साथ</p>
+                        <div class="code-snippet">
+CREATE INDEX idx_category_price 
+ON products(category, price);
+                        </div>
+                    </div>
+
+                    <div class="concept-card" onclick="showIndexDetails('unique')" id="unique-index">
+                        <div class="concept-header">
+                            <div class="concept-icon">⭐</div>
+                            <h3>Unique Index</h3>
+                        </div>
+                        <p>डुप्लीकेशन रोकने के लिए</p>
+                        <div class="code-snippet">
+CREATE UNIQUE INDEX idx_email 
+ON users(email);
+                        </div>
+                    </div>
+
+                    <div class="concept-card" onclick="showIndexDetails('fulltext')" id="fulltext-index">
+                        <div class="concept-header">
+                            <div class="concept-icon">🔍</div>
+                            <h3>Full-Text Index</h3>
+                        </div>
+                        <p>Description में search के लिए</p>
+                        <div class="code-snippet">
+CREATE FULLTEXT INDEX idx_description 
+ON products(description);
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <h2>🎮 Interactive Demo: Index Performance</h2>
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="simulateSearch('without')">Without Index</button>
+                    <button class="demo-button" onclick="simulateSearch('with')">With Index</button>
+                    <button class="demo-button" onclick="simulateSearch('over')">Over-Indexing</button>
+                    <button class="demo-button" onclick="resetDemo()">Reset</button>
+                </div>
+                <div class="demo-visualization" id="demo-area">
+                    <h3>🎯 Click buttons to see performance difference</h3>
+                    <p>यहाँ देखें कि Index कैसे Search Speed को बढ़ाता है!</p>
+                </div>
+            </div>
+
+            <div class="tips-section">
+                <h2>💡 Jethalal के Expert Tips</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>🎯 कब बनाएं Index?</h4>
+                        <p>WHERE, ORDER BY, JOIN में बार-बार उपयोग होने वाले columns पर</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>⚠️ कब न बनाएं?</h4>
+                        <p>छोटी tables पर या बहुत कम search वाले columns पर</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🔍 Index Check करें</h4>
+                        <p>SHOW INDEX FROM table_name; से देखें कौन से indexes हैं</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🗑️ हटाना भी जरूरी</h4>
+                        <p>DROP INDEX index_name ON table_name; से अनावश्यक indexes हटाएं</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <h2>🛠️ Index Management Commands</h2>
+                <div class="demo-controls">
+                    <button class="demo-button" onclick="showCommand('create')">Create Index</button>
+                    <button class="demo-button" onclick="showCommand('show')">Show Indexes</button>
+                    <button class="demo-button" onclick="showCommand('drop')">Drop Index</button>
+                    <button class="demo-button" onclick="showCommand('analyze')">Analyze Performance</button>
+                </div>
+                <div class="demo-visualization" id="command-area">
+                    <h3>📋 SQL Commands for Index Management</h3>
+                    <p>Click buttons to see different commands</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Highlight characters
+        function highlightCharacter(character) {
+            const cards = document.querySelectorAll('.dialogue-card');
+            cards.forEach(card => {
+                card.style.opacity = '0.3';
+            });
+            
+            const targetCards = document.querySelectorAll(`.${character}-card`);
+            targetCards.forEach(card => {
+                card.style.opacity = '1';
+                card.classList.add('pulse');
+            });
+            
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.style.opacity = '1';
+                    card.classList.remove('pulse');
+                });
+            }, 3000);
+        }
+
+        // Show index details
+        function showIndexDetails(type) {
+            // Remove active class from all cards
+            document.querySelectorAll('.concept-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to clicked card
+            document.getElementById(`${type}-index`).classList.add('active');
+            
+            const details = {
+                single: {
+                    title: "Single Column Index",
+                    description: "जब आप किसी एक specific column पर बार-बार search करते हैं",
+                    example: "जैसे: product name पर search करना",
+                    performance: "⚡ Fast retrieval for single column queries"
+                },
+                composite: {
+                    title: "Composite Index", 
+                    description: "जब आप multiple columns पर एक साथ filter करते हैं",
+                    example: "जैसे: category और price दोनों पर filter",
+                    performance: "🚀 Most efficient for multi-column WHERE clauses"
+                },
+                unique: {
+                    title: "Unique Index",
+                    description: "Data की uniqueness maintain करने के लिए", 
+                    example: "जैसे: email address duplicate नहीं होना चाहिए",
+                    performance: "🔒 Ensures data integrity + fast lookup"
+                },
+                fulltext: {
+                    title: "Full-Text Index",
+                    description: "Text content में complex search के लिए",
+                    example: "जैसे: product description में 'मसालेदार' search करना", 
+                    performance: "🔍 Powerful text search capabilities"
+                }
+            };
+            
+            const detail = details[type];
+            showTooltip(detail);
+        }
+
+        function showTooltip(detail) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.innerHTML = `
+                <h4>${detail.title}</h4>
+                <p><strong>उपयोग:</strong> ${detail.description}</p>
+                <p><strong>उदाहरण:</strong> ${detail.example}</p>
+                <p><strong>फायदा:</strong> ${detail.performance}</p>
+            `;
+            tooltip.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 400px;
+                border: 2px solid #4ECDC4;
+            `;
+            
+            document.body.appendChild(tooltip);
+            
+            setTimeout(() => {
+                if (tooltip.parentNode) {
+                    tooltip.parentNode.removeChild(tooltip);
+                }
+            }, 4000);
+        }
+
+        // Simulate search performance
+        function simulateSearch(type) {
+            const demoArea = document.getElementById('demo-area');
+            demoArea.classList.add('active');
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.demo-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            const scenarios = {
+                without: {
+                    title: "🐌 Without Index - Table Scan",
+                    time: "⏱️ Search Time: 2.5 seconds",
+                    process: "पूरी table में एक-एक record check कर रहा है...",
+                    visualization: generateTableScan(),
+                    explanation: "Database को हर row check करनी पड़ रही है!"
+                },
+                with: {
+                    title: "⚡ With Index - Direct Access", 
+                    time: "⏱️ Search Time: 0.05 seconds",
+                    process: "Index के through direct record मिल गया!",
+                    visualization: generateIndexSearch(),
+                    explanation: "Index ने तुरंत बता दिया कि data कहाँ है!"
+                },
+                over: {
+                    title: "🐢 Over-Indexing Problems",
+                    time: "⏱️ Insert Time: 3.2 seconds",
+                    process: "हर insert पर सभी indexes update हो रहे हैं...",
+                    visualization: generateOverIndexing(),
+                    explanation: "बहुत सारे indexes maintain करना भारी पड़ रहा है!"
+                }
+            };
+            
+            const scenario = scenarios[type];
+            demoArea.innerHTML = `
+                <h3>${scenario.title}</h3>
+                <div style="margin: 15px 0;">
+                    <div style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        ${scenario.time}
+                    </div>
+                    <div style="background: #f3e5f5; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        ${scenario.process}
+                    </div>
+                    ${scenario.visualization}
+                    <div style="background: #e8f5e8; padding: 10px; border-radius: 5px; margin: 10px 0; font-weight: bold;">
+                        ${scenario.explanation}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateTableScan() {
+            return `
+                <div style="display: flex; gap: 5px; justify-content: center; margin: 15px 0; flex-wrap: wrap;">
+                    ${Array.from({length: 10}, (_, i) => 
+                        `<div style="width: 30px; height: 30px; background: ${i === 7 ? '#ff6b6b' : '#ddd'}; 
+                         border-radius: 5px; display: flex; align-items: center; justify-content: center; 
+                         animation: ${i <= 7 ? `scan 0.${i+2}s ease` : 'none'};">
+                         ${i === 7 ? '✓' : i+1}
+                         </div>`
+                    ).join('')}
+                </div>
+                <style>
+                    @keyframes scan {
+                        0% { background: #ddd; }
+                        50% { background: #ffd700; }
+                        100% { background: ${7 === 7 ? '#ff6b6b' : '#ddd'}; }
+                    }
+                </style>
+            `;
+        }
+
+        function generateIndexSearch() {
+            return `
+                <div style="text-align: center; margin: 15px 0;">
+                    <div style="display: inline-block; background: #4ECDC4; color: white; padding: 10px 20px; 
+                         border-radius: 25px; margin: 10px; animation: directAccess 1s ease;">
+                        📚 Index
+                    </div>
+                    <div style="font-size: 24px; margin: 10px;">⬇️</div>
+                    <div style="display: inline-block; background: #FF6B6B; color: white; padding: 10px 20px; 
+                         border-radius: 25px; margin: 10px; animation: directAccess 1s ease;">
+                        🎯 Target Record
+                    </div>
+                </div>
+                <style>
+                    @keyframes directAccess {
+                        0% { transform: scale(0.8); opacity: 0.5; }
+                        100% { transform: scale(1); opacity: 1; }
+                    }
+                </style>
+            `;
+        }
+
+        function generateOverIndexing() {
+            return `
+                <div style="text-align: center; margin: 15px 0;">
+                    <div style="background: #ffeb3b; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        New Record को Insert कर रहे हैं...
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
+                        ${Array.from({length: 6}, (_, i) => 
+                            `<div style="background: #ff9800; color: white; padding: 8px; border-radius: 5px; 
+                             animation: updateIndex 0.${i+3}s ease infinite;">
+                             Index ${i+1} Updating...
+                             </div>`
+                        ).join('')}
+                    </div>
+                    <div style="background: #ffcdd2; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                        ⚠️ हर Index को अलग से update करना पड़ रहा है!
+                    </div>
+                </div>
+                <style>
+                    @keyframes updateIndex {
+                        0%, 100% { opacity: 1; }
+                        50% { opacity: 0.5; }
+                    }
+                </style>
+            `;
+        }
+
+        function resetDemo() {
+            const demoArea = document.getElementById('demo-area');
+            demoArea.classList.remove('active');
+            demoArea.innerHTML = `
+                <h3>🎯 Click buttons to see performance difference</h3>
+                <p>यहाँ देखें कि Index कैसे Search Speed को बढ़ाता है!</p>
+            `;
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.demo-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+        // Show SQL commands
+        function showCommand(commandType) {
+            const commandArea = document.getElementById('command-area');
+            commandArea.classList.add('active');
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('#command-area').prev().querySelectorAll('.demo-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            const commands = {
+                create: {
+                    title: "🔨 Index बनाने के Commands",
+                    content: `
+                        <div class="code-snippet">
+-- Single Column Index
+CREATE INDEX idx_product_name ON products(product_name);
+
+-- Composite Index  
+CREATE INDEX idx_category_price ON products(category, price);
+
+-- Unique Index
+CREATE UNIQUE INDEX idx_user_email ON users(email);
+
+-- Full-Text Index
+CREATE FULLTEXT INDEX idx_product_desc ON products(description);
+                        </div>
+                        <p>✨ ये commands आपकी search speed को dramatically बढ़ा देंगे!</p>
+                    `
+                },
+                show: {
+                    title: "👀 Existing Indexes देखने के Commands", 
+                    content: `
+                        <div class="code-snippet">
+-- Table के सभी indexes देखें
+SHOW INDEX FROM products;
+
+-- Specific database के सभी indexes
+SELECT * FROM information_schema.statistics 
+WHERE table_schema = 'your_database_name';
+
+-- Index का size check करें
+SELECT 
+    table_name,
+    index_name,
+    ROUND(stat_value * @@innodb_page_size / 1024 / 1024, 2) AS 'Size (MB)'
+FROM mysql.innodb_index_stats;
+                        </div>
+                        <p>🔍 Regular monitoring जरूरी है performance के लिए!</p>
+                    `
+                },
+                drop: {
+                    title: "🗑️ Unnecessary Indexes हटाने के Commands",
+                    content: `
+                        <div class="code-snippet">
+-- Index drop करें
+DROP INDEX idx_old_index ON products;
+
+-- Multiple indexes एक साथ drop करें
+ALTER TABLE products 
+DROP INDEX idx_old1,
+DROP INDEX idx_old2;
+
+-- Foreign key constraint के साथ index drop करें
+ALTER TABLE orders DROP FOREIGN KEY fk_customer_id;
+ALTER TABLE orders DROP INDEX idx_customer_id;
+                        </div>
+                        <p>⚠️ सावधानी: पहले confirm करें कि index का use नहीं हो रहा!</p>
+                    `
+                },
+                analyze: {
+                    title: "📊 Performance Analysis Commands",
+                    content: `
+                        <div class="code-snippet">
+-- Query performance check करें
+EXPLAIN SELECT * FROM products WHERE product_name = 'Mango Pickle';
+
+-- Index usage statistics
+SELECT * FROM sys.schema_unused_indexes;
+
+-- Slow queries identify करें  
+SELECT * FROM mysql.slow_log WHERE query_time > 1;
+
+-- Index effectiveness measure करें
+SHOW STATUS LIKE 'Handler_read%';
+                        </div>
+                        <p>📈 Regular analysis से आप बता सकते हैं कि indexes सही काम कर रहे हैं या नहीं!</p>
+                    `
+                }
+            };
+            
+            const command = commands[commandType];
+            commandArea.innerHTML = `
+                <h3>${command.title}</h3>
+                ${command.content}
+            `;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add some interactive animations on load
+            const cards = document.querySelectorAll('.concept-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+                card.style.animation = 'slideIn 0.6s ease forwards';
+            });
+            
+            // Add hover effects for better interactivity
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Add click effects for demo buttons
+            const demoButtons = document.querySelectorAll('.demo-button');
+            demoButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+            
+            // Add some educational tooltips
+            const conceptCards = document.querySelectorAll('.concept-card');
+            conceptCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Add a subtle success animation
+                    this.style.background = 'linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%)';
+                    setTimeout(() => {
+                        this.style.background = '';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Add some educational interactions
+        function showEducationalTip() {
+            const tips = [
+                "💡 Index बनाने से पहले हमेशा अपने query patterns analyze करें!",
+                "🎯 80-20 rule: 20% columns पर 80% queries होती हैं!",
+                "⚡ Composite index में column order बहुत important है!",
+                "🔍 Regular maintenance के बिना indexes भी slow हो सकते हैं!"
+            ];
+            
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            
+            const tipElement = document.createElement('div');
+            tipElement.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                max-width: 300px;
+                font-weight: 500;
+                animation: slideInRight 0.5s ease;
+            `;
+            
+            tipElement.innerHTML = randomTip;
+            document.body.appendChild(tipElement);
+            
+            setTimeout(() => {
+                if (tipElement.parentNode) {
+                    tipElement.style.animation = 'slideOutRight 0.5s ease';
+                    setTimeout(() => {
+                        tipElement.parentNode.removeChild(tipElement);
+                    }, 500);
+                }
+            }, 4000);
+        }
+        
+        // Show educational tips periodically
+        setInterval(showEducationalTip, 15000);
+        
+        // Add CSS animations for tips
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

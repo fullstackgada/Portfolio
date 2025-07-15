@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored Procedure vs Function - Working Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-50px) translateY(-50px); }
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            flex-grow: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            font-size: 1.1em;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .tab:hover:not(.active) {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+        
+        .content {
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .demo-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .demo-card {
+            background: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .demo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+        
+        .database-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .database-table th {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .database-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.3s ease;
+        }
+        
+        .database-table tr:hover td {
+            background: #f8f9fa;
+        }
+        
+        .database-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .code-editor {
+            background: #2d3436;
+            color: #00f2fe;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+            border: 2px solid #636e72;
+        }
+        
+        .code-editor::before {
+            content: 'SQL Editor';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 0 8px 0 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .execute-btn {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .execute-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .execute-btn:hover::before {
+            left: 100%;
+        }
+        
+        .execute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .execute-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-panel {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-panel::before {
+            content: 'Result';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 9px 0 9px 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .result-content {
+            margin-top: 20px;
+        }
+        
+        .success {
+            color: #00b894;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #e17055;
+            font-weight: bold;
+        }
+        
+        .performance-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .fast {
+            background: #00b894;
+            color: white;
+        }
+        
+        .medium {
+            background: #fdcb6e;
+            color: #2d3436;
+        }
+        
+        .slow {
+            background: #e17055;
+            color: white;
+        }
+        
+        .dialogue {
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .bhide {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-left: 4px solid #e17055;
+        }
+        
+        .jethalal {
+            background: linear-gradient(135deg, #a8e6cf, #88d8c0);
+            border-left: 4px solid #00b894;
+        }
+        
+        .speaker {
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+        
+        .comparison-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4facfe;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            color: #636e72;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .comparison-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 Stored Procedure vs Function - Working Demo</h1>
+            <p>भिडे और जेठालाल के साथ Live Database Experience</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab active" onclick="showTab('conversation')" role="tab" aria-label="बातचीत टैब">💬 बातचीत</button>
+            <button class="tab" onclick="showTab('database')" role="tab" aria-label="डेटाबेस टैब">🗄️ Database</button>
+            <button class="tab" onclick="showTab('procedure')" role="tab" aria-label="प्रोसीजर डेमो टैब">🔧 Procedure Demo</button>
+            <button class="tab" onclick="showTab('function')" role="tab" aria-label="फंक्शन डेमो टैब">⚡ Function Demo</button>
+            <button class="tab" onclick="showTab('performance')" role="tab" aria-label="प्रदर्शन टैब">📊 Performance</button>
+        </div>
+        
+        <div id="conversation" class="content active">
+            <div class="dialogue bhide">
+                <div class="speaker">भिडे:</div>
+                <div>जेठालाल! ये <span class="highlight">Stored Procedure</span> और <span class="highlight">Function</span> क्या बला है? Demo देकर समझाओ!</div>
+            </div>
+            
+            <div class="dialogue jethalal">
+                <div class="speaker">जेठालाल:</div>
+                <div>अरे भिडे! चल तुझे live demo देता हूं। देख, मैंने एक छोटा सा bank database बनाया है। अब तू खुद try करके देख सकता है कि <span class="highlight">Stored Procedure</span> और <span class="highlight">Function</span> कैसे काम करते हैं।</div>
+            </div>
+            
+            <div class="dialogue bhide">
+                <div class="speaker">भिडे:</div>
+                <div>वाह! तो मैं actual database के साथ experiment कर सकूंगा?</div>
+            </div>
+            
+            <div class="dialogue jethalal">
+                <div class="speaker">जेठालाल:</div>
+                <div>बिल्कुल! <span class="highlight">Database Tab</span> में data देख सकता है, <span class="highlight">Procedure Demo</span> में money transfer कर सकता है, <span class="highlight">Function Demo</span> में bonus calculate कर सकता है, और <span class="highlight">Performance Tab</span> में speed comparison देख सकता है।</div>
+            </div>
+        </div>
+        
+        <div id="database" class="content">
+            <div class="demo-section">
+                <h2 style="position: relative; z-index: 1;">🏦 Bank Database Tables</h2>
+                <p style="position: relative; z-index: 1;">यहाँ हमारे demo database के tables हैं:</p>
+            </div>
+            
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>👥 Accounts Table</h3>
+                    <table class="database-table" id="accountsTable">
+                        <thead>
+                            <tr>
+                                <th>Account ID</th>
+                                <th>Name</th>
+                                <th>Balance</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsData">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>💼 Employees Table</h3>
+                    <table class="database-table" id="employeesTable">
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Salary</th>
+                                <th>Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeesData">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <h3>📊 Transaction History</h3>
+                <table class="database-table" id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>From Account</th>
+                            <th>To Account</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsData">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="procedure" class="content">
+            <div class="demo-section">
+                <h2 style="position: relative; z-index: 1;">🔧 Stored Procedure Demo - Money Transfer</h2>
+                <p style="position: relative; z-index: 1;">यहाँ आप actual money transfer procedure को run कर सकते हैं:</p>
+            </div>
+            
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>💰 Transfer Money</h3>
+                    <div class="input-group">
+                        <label>From Account:</label>
+                        <select id="fromAccount">
+                            <option value="1">Account 1 - जेठालाल</option>
+                            <option value="2">Account 2 - भिडे</option>
+                            <option value="3">Account 3 - तारक</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>To Account:</label>
+                        <select id="toAccount">
+                            <option value="1">Account 1 - जेठालाल</option>
+                            <option value="2">Account 2 - भिडे</option>
+                            <option value="3">Account 3 - तारक</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Amount (₹):</label>
+                        <input type="number" id="transferAmount" placeholder="राशि दर्ज करें" min="1" max="100000">
+                    </div>
+                    <button class="execute-btn" onclick="executeTransfer()">
+                        💸 Execute Transfer <span class="performance-indicator fast">Fast</span>
+                    </button>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>📝 Stored Procedure Code</h3>
+                    <div class="code-editor">
+CREATE PROCEDURE TransferMoney(
+    @FromAccount INT,
+    @ToAccount INT,
+    @Amount DECIMAL(10,2)
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    
+    DECLARE @FromBalance DECIMAL(10,2)
+    SELECT @FromBalance = Balance 
+    FROM Accounts 
+    WHERE AccountID = @FromAccount
+    
+    IF @FromBalance >= @Amount
+    BEGIN
+        UPDATE Accounts 
+        SET Balance = Balance - @Amount 
+        WHERE AccountID = @FromAccount
+        
+        UPDATE Accounts 
+        SET Balance = Balance + @Amount 
+        WHERE AccountID = @ToAccount
+        
+        INSERT INTO Transactions VALUES(
+            @FromAccount, @ToAccount, 
+            @Amount, 'Success', GETDATE()
+        )
+        
+        COMMIT TRANSACTION
+        RETURN 1 -- Success
+    END
+    ELSE
+    BEGIN
+        ROLLBACK TRANSACTION
+        RETURN 0 -- Failed
+    END
+END
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-panel">
+                <div class="result-content" id="procedureResult">
+                    <p>Execute transfer को click करें procedure run करने के लिए...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="function" class="content">
+            <div class="demo-section">
+                <h2 style="position: relative; z-index: 1;">⚡ Function Demo - Bonus Calculator</h2>
+                <p style="position: relative; z-index: 1;">यहाँ आप employee bonus calculate करने वाला function try कर सकते हैं:</p>
+            </div>
+            
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>🎯 Calculate Bonus</h3>
+                    <div class="input-group">
+                        <label>Select Employee:</label>
+                        <select id="employeeSelect">
+                            <option value="1">Employee 1 - जेठालाल</option>
+                            <option value="2">Employee 2 - भिडे</option>
+                            <option value="3">Employee 3 - तारक</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Performance Score (0-100):</label>
+                        <input type="number" id="performanceScore" placeholder="प्रदर्शन स्कोर दर्ज करें" min="0" max="100">
+                    </div>
+                    <button class="execute-btn" onclick="calculateBonus()">
+                        🎉 Calculate Bonus <span class="performance-indicator fast">Fast</span>
+                    </button>
+                </div>
+                
+                <div class="demo-card">
+                    <h3>📝 Function Code</h3>
+                    <div class="code-editor">
+CREATE FUNCTION CalculateBonus(
+    @Salary DECIMAL(10,2), 
+    @Performance INT
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    DECLARE @Bonus DECIMAL(10,2)
+    
+    IF @Performance >= 90
+        SET @Bonus = @Salary * 0.20      -- 20%
+    ELSE IF @Performance >= 80
+        SET @Bonus = @Salary * 0.15      -- 15%
+    ELSE IF @Performance >= 70
+        SET @Bonus = @Salary * 0.10      -- 10%
+    ELSE IF @Performance >= 60
+        SET @Bonus = @Salary * 0.05      -- 5%
+    ELSE
+        SET @Bonus = 0                   -- No bonus
+    
+    RETURN @Bonus
+END
+
+-- Usage Example:
+SELECT Name, Salary, 
+       dbo.CalculateBonus(Salary, Performance) as Bonus
+FROM Employees
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-panel">
+                <div class="result-content" id="functionResult">
+                    <p>Calculate Bonus को click करें function run करने के लिए...</p>
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <h3>📊 All Employees Bonus Report</h3>
+                <button class="execute-btn" onclick="generateBonusReport()">
+                    📋 Generate Report <span class="performance-indicator medium">Medium</span>
+                </button>
+                <div id="bonusReportTable" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <div id="performance" class="content">
+            <div class="demo-section">
+                <h2 style="position: relative; z-index: 1;">📊 Performance Comparison</h2>
+                <p style="position: relative; z-index: 1;">देखिए कि Stored Procedure और Function कितने fast हैं:</p>
+            </div>
+            
+            <div class="comparison-metrics">
+                <div class="metric-card">
+                    <h4>Regular Query</h4>
+                    <div class="metric-value" id="regularQueryTime">2.5s</div>
+                    <div class="metric-label">Average Execution Time</div>
+                    <span class="performance-indicator slow">Slow</span>
+                </div>
+                
+                <div class="metric-card">
+                    <h4>Function</h4>
+                    <div class="metric-value" id="functionTime">1.8s</div>
+                    <div class="metric-label">Average Execution Time</div>
+                    <span class="performance-indicator medium">Medium</span>
+                </div>
+                
+                <div class="metric-card">
+                    <h4>Stored Procedure</h4>
+                    <div class="metric-value" id="procedureTime">1.2s</div>
+                    <div class="metric-label">Average Execution Time</div>
+                    <span class="performance-indicator fast">Fast</span>
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <h3>🧪 Performance Test</h3>
+                <p>Click करें live performance test run करने के लिए:</p>
+                <button class="execute-btn" onclick="runPerformanceTest()">
+                    🚀 Run Performance Test
+                </button>
+                <div class="result-panel">
+                    <div class="result-content" id="performanceResult">
+                        <p>Performance test के results यहाँ आएंगे...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-card">
+                <h3>💡 जेठालाल explains Performance:</h3>
+                <div class="dialogue jethalal">
+                    <div class="speaker">जेठालाल:</div>
+                    <div>
+                        <strong>भिडे, देख performance का मतलब:</strong><br><br>
+                        
+                        <strong>🔧 Stored Procedure सबसे fast क्यों?</strong><br>
+                        • Pre-compiled होते हैं<br>
+                        • Execution plan ready रहता है<br>
+                        • Network traffic कम<br>
+                        • Memory में cached रहते हैं<br><br>
+                        
+                        <strong>⚡ Function कब use करें?</strong><br>
+                        • छोटे calculations के लिए<br>
+                        • SELECT statements में<br>
+                        • Reusable logic के लिए<br><br>
+                        
+                        <strong>📝 Regular Query क्यों slow?</strong><br>
+                        • हर बार compile होती है<br>
+                        • Execution plan बनता है<br>
+                        • Network पर पूरी query भेजनी पड़ती है
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simulated Database Data
+        let accountsData = [
+            { id: 1, name: 'जेठालाल', balance: 50000, type: 'Savings' },
+            { id: 2, name: 'भिडे', balance: 25000, type: 'Current' },
+            { id: 3, name: 'तारक', balance: 75000, type: 'Savings' }
+        ];
+        
+        let employeesData = [
+            { id: 1, name: 'जेठालाल', salary: 50000, performance: 85 },
+            { id: 2, name: 'भिडे', salary: 40000, performance: 92 },
+            { id: 3, name: 'तारक', salary: 60000, performance: 78 }
+        ];
+        
+        let transactionsData = [
+            { id: 1, from: 1, to: 2, amount: 5000, status: 'Success', timestamp: '2024-01-15 10:30' },
+            { id: 2, from: 2, to: 3, amount: 3000, status: 'Success', timestamp: '2024-01-15 11:45' }
+        ];
+        
+        let transactionCounter = 3;
+        
+        function showTab(tabName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load data when database tab is shown
+            if (tabName === 'database') {
+                loadDatabaseTables();
+            }
+        }
+        
+        function loadDatabaseTables() {
+            // Load Accounts Table
+            const accountsTableBody = document.getElementById('accountsData');
+            accountsTableBody.innerHTML = '';
+            accountsData.forEach(account => {
+                const row = accountsTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${account.id}</td>
+                    <td>${account.name}</td>
+                    <td>₹${account.balance.toLocaleString()}</td>
+                    <td>${account.type}</td>
+                `;
+            });
+            
+            // Load Employees Table
+            const employeesTableBody = document.getElementById('employeesData');
+            employeesTableBody.innerHTML = '';
+            employeesData.forEach(employee => {
+                const row = employeesTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${employee.id}</td>
+                    <td>${employee.name}</td>
+                    <td>₹${employee.salary.toLocaleString()}</td>
+                    <td>${employee.performance}</td>
+                `;
+            });
+            
+            // Load Transactions Table
+            const transactionsTableBody = document.getElementById('transactionsData');
+            transactionsTableBody.innerHTML = '';
+            transactionsData.forEach(transaction => {
+                const row = transactionsTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.from}</td>
+                    <td>${transaction.to}</td>
+                    <td>₹${transaction.amount.toLocaleString()}</td>
+                    <td>${transaction.status}</td>
+                    <td>${transaction.timestamp}</td>
+                `;
+            });
+        }
+        
+        function executeTransfer() {
+            const fromAccount = parseInt(document.getElementById('fromAccount').value);
+            const toAccount = parseInt(document.getElementById('toAccount').value);
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const resultPanel = document.getElementById('procedureResult');
+            
+            // Input validation
+            if (fromAccount === toAccount) {
+                resultPanel.innerHTML = '<p class="error">Error: From and To accounts cannot be the same!</p>';
+                return;
+            }
+            if (isNaN(amount) || amount <= 0 || amount > 100000) {
+                resultPanel.innerHTML = '<p class="error">Error: Please enter a valid amount (1-100,000)!</p>';
+                return;
+            }
+            
+            // Simulate stored procedure
+            const fromAccountData = accountsData.find(acc => acc.id === fromAccount);
+            if (fromAccountData.balance >= amount) {
+                fromAccountData.balance -= amount;
+                const toAccountData = accountsData.find(acc => acc.id === toAccount);
+                toAccountData.balance += amount;
+                
+                transactionsData.push({
+                    id: transactionCounter++,
+                    from: fromAccount,
+                    to: toAccount,
+                    amount: amount,
+                    status: 'Success',
+                    timestamp: new Date().toLocaleString()
+                });
+                
+                resultPanel.innerHTML = `<p class="success">Success: ₹${amount.toLocaleString()} transferred from Account ${fromAccount} to Account ${toAccount}!</p>`;
+            } else {
+                resultPanel.innerHTML = '<p class="error">Error: Insufficient balance in Account ${fromAccount}!</p>';
+            }
+            
+            // Refresh database tables
+            loadDatabaseTables();
+        }
+        
+        function calculateBonus() {
+            const employeeId = parseInt(document.getElementById('employeeSelect').value);
+            const performance = parseInt(document.getElementById('performanceScore').value);
+            const resultPanel = document.getElementById('functionResult');
+            
+            // Input validation
+            if (isNaN(performance) || performance < 0 || performance > 100) {
+                resultPanel.innerHTML = '<p class="error">Error: Please enter a valid performance score (0-100)!</p>';
+                return;
+            }
+            
+            // Simulate function
+            const employee = employeesData.find(emp => emp.id === employeeId);
+            let bonus = 0;
+            if (performance >= 90) {
+                bonus = employee.salary * 0.20;
+            } else if (performance >= 80) {
+                bonus = employee.salary * 0.15;
+            } else if (performance >= 70) {
+                bonus = employee.salary * 0.10;
+            } else if (performance >= 60) {
+                bonus = employee.salary * 0.05;
+            }
+            
+            resultPanel.innerHTML = `<p class="success">Bonus for ${employee.name}: ₹${bonus.toLocaleString()}</p>`;
+        }
+        
+        function generateBonusReport() {
+            const reportTable = document.getElementById('bonusReportTable');
+            reportTable.innerHTML = `
+                <table class="database-table">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Salary</th>
+                            <th>Performance</th>
+                            <th>Bonus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${employeesData.map(emp => {
+                            let bonus = 0;
+                            if (emp.performance >= 90) {
+                                bonus = emp.salary * 0.20;
+                            } else if (emp.performance >= 80) {
+                                bonus = emp.salary * 0.15;
+                            } else if (emp.performance >= 70) {
+                                bonus = emp.salary * 0.10;
+                            } else if (emp.performance >= 60) {
+                                bonus = emp.salary * 0.05;
+                            }
+                            return `
+                                <tr>
+                                    <td>${emp.id}</td>
+                                    <td>${emp.name}</td>
+                                    <td>₹${emp.salary.toLocaleString()}</td>
+                                    <td>${emp.performance}</td>
+                                    <td>₹${bonus.toLocaleString()}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        function runPerformanceTest() {
+            const resultPanel = document.getElementById('performanceResult');
+            
+            // Simulate performance test with random times
+            const regularQueryTime = (Math.random() * 0.5 + 2).toFixed(2);
+            const functionTime = (Math.random() * 0.4 + 1.5).toFixed(2);
+            const procedureTime = (Math.random() * 0.3 + 1).toFixed(2);
+            
+            document.getElementById('regularQueryTime').textContent = `${regularQueryTime}s`;
+            document.getElementById('functionTime').textContent = `${functionTime}s`;
+            document.getElementById('procedureTime').textContent = `${procedureTime}s`;
+            
+            resultPanel.innerHTML = `
+                <p class="success">Performance Test Results:</p>
+                <p>Regular Query: ${regularQueryTime}s</p>
+                <p>Function: ${functionTime}s</p>
+                <p>Stored Procedure: ${procedureTime}s</p>
+            `;
+        }
+        
+        // Initialize database tables on page load
+        loadDatabaseTables();
+    </script>
+</body>
+</html>

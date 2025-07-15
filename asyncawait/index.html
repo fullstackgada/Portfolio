@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async By Full Stack Gada</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ff6b6b, #4ecdc4);
+            z-index: 1;
+        }
+        
+        .step {
+            background: white;
+            border: 4px solid #ff6b6b;
+            border-radius: 20px;
+            padding: 20px;
+            width: 200px;
+            min-width: 180px;
+            flex: 1;
+            max-width: 250px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .step.active {
+            border-color: #4ecdc4;
+            background: #f0fdfa;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 20px 40px rgba(78, 205, 196, 0.3); }
+            100% { box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        }
+        
+        .step h3 {
+            color: #333;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        
+        .step p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .characters {
+            display: flex;
+            justify-content: space-around;
+            margin: 60px 0;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .character {
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .character:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .jetha {
+            border-left: 6px solid #ff6b6b;
+        }
+        
+        .babita {
+            border-left: 6px solid #4ecdc4;
+        }
+        
+        .character h2 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 1.8em;
+        }
+        
+        .character ul {
+            text-align: left;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .button {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .status {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f5e8;
+            border-radius: 15px;
+            border-left: 6px solid #4ecdc4;
+            font-size: 1.1em;
+            color: #2d5a2d;
+        }
+        
+        .code-example {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .code-example h3 {
+            color: #4ecdc4;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #333;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .sync, .async {
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Mobile Responsive Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+            
+            .timeline::before {
+                display: none;
+            }
+            
+            .step {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .characters {
+                flex-direction: column;
+                gap: 30px;
+                margin: 40px 0;
+            }
+            
+            .character {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .character-icon {
+                font-size: 3em !important;
+            }
+            
+            .comparison {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .code-example {
+                padding: 15px;
+                font-size: 0.9em;
+            }
+            
+            .button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .step {
+                padding: 15px;
+                min-width: auto;
+            }
+            
+            .step h3 {
+                font-size: 1.1em;
+            }
+            
+            .step p {
+                font-size: 0.85em;
+            }
+            
+            .character {
+                padding: 20px;
+            }
+            
+            .character h2 {
+                font-size: 1.5em;
+            }
+            
+            .character-icon {
+                font-size: 2.5em !important;
+            }
+            
+            .code-example {
+                padding: 10px;
+                font-size: 0.8em;
+                overflow-x: scroll;
+            }
+            
+            .button {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+        
+        .sync {
+            background: #ffebee;
+            border-left: 6px solid #f44336;
+        }
+        
+        .async {
+            background: #e8f5e8;
+            border-left: 6px solid #4caf50;
+        }
+        
+        .sync h3 {
+            color: #f44336;
+            margin-top: 0;
+        }
+        
+        .async h3 {
+            color: #4caf50;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Asynchronous Programming</h1>
+            <p>Jethalal-Babita के through समझें!</p>
+        </div>
+        
+        <div class="content">
+            <div class="characters">
+                <div class="character jetha">
+                    <span class="character-icon">👨‍💼</span>
+                    <h2>Jethalal (Async Function)</h2>
+                    <ul>
+                        <li>API calls भेजता है</li>
+                        <li>Non-blocking operation</li>
+                        <li>Background में काम करता है</li>
+                        <li>Result ready होने पर notify करता है</li>
+                    </ul>
+                </div>  
+                
+                <div class="character babita">
+                    <span class="character-icon">👩‍💼</span>
+                    <h2>Babita (Main Thread)</h2>
+                    <ul>
+                        <li>Request करती है</li>
+                        <li>Wait करती है पर रुकती नहीं</li>
+                        <li>दूसरे काम करती रहती है</li>
+                        <li>Response मिलने पर action लेती है</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline" id="timeline">
+                <div class="step" id="step1">
+                    <h3>1. Request</h3>
+                    <p>Babita: "Jetha ji, website का data मंगवा दीजिए!"</p>
+                </div>
+                
+                <div class="step" id="step2">
+                    <h3>2. API Call</h3>
+                    <p>Jethalal तुरंत API call भेज देता है server को</p>
+                </div>
+                
+                <div class="step" id="step3">
+                    <h3>3. Parallel Work</h3>
+                    <p>Babita दूसरे काम करती रहती है (UI update, etc.)</p>
+                </div>
+                
+                <div class="step" id="step4">
+                    <h3>4. Response</h3>
+                    <p>Jethalal: "Babita ji! Data आ गया!"</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <button class="button" onclick="startDemo()">🚀 Demo शुरू करें</button>
+            </div>
+            
+            <div class="status" id="status">
+                Demo शुरू करने के लिए button पर click करें!
+            </div>
+            
+            <div class="comparison">
+                <div class="sync">
+                    <h3>❌ Synchronous (Blocking)</h3>
+                    <p>• Babita को wait करना पड़ता है</p>
+                    <p>• दूसरे काम रुक जाते हैं</p>
+                    <p>• UI freeze हो जाता है</p>
+                    <p>• Poor user experience</p>
+                </div>
+                
+                <div class="async">
+                    <h3>✅ Asynchronous (Non-blocking)</h3>
+                    <p>• Babita दूसरे काम कर सकती है</p>
+                    <p>• Multiple tasks parallel में</p>
+                    <p>• UI responsive रहता है</p>
+                    <p>• Better performance</p>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <h3>🔥 Code Example:</h3>
+                <pre>
+// Babita का request
+console.log("Jetha ji, data मंगवा दीजिए!");
+
+// Jethalal का async function
+async function fetchData() {
+    try {
+        const response = await fetch('https://api.example.com/data');
+        const data = await response.json();
+        console.log("Babita ji! Data आ गया:", data);
+        return data;
+    } catch (error) {
+        console.log("Sorry Babita ji, कुछ problem है!");
+    }
+}
+
+// Non-blocking call
+fetchData();
+
+// Babita दूसरे काम करती रहती है
+console.log("UI update कर रही हूँ...");
+console.log("Images load कर रही हूँ...");
+console.log("Animations चला रही हूँ...");
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const steps = ['step1', 'step2', 'step3', 'step4'];
+        const messages = [
+            "🗣️ Babita ने request की: 'Jetha ji, website का data मंगवा दीजिए!'",
+            "🚀 Jethalal ने तुरंत API call भेज दी server को!",
+            "💼 Babita दूसरे काम करती रहती है - UI update, images load, animations...",
+            "🎉 Jethalal: 'Babita ji! Data आ गया!' - Response मिल गया!"
+        ];
+
+        function startDemo() {
+            currentStep = 0;
+            // Reset all steps
+            steps.forEach(step => {
+                document.getElementById(step).classList.remove('active');
+            });
+            
+            // Start the demo
+            nextStep();
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length) {
+                // Remove previous active class
+                if (currentStep > 0) {
+                    document.getElementById(steps[currentStep - 1]).classList.remove('active');
+                }
+                
+                // Add active class to current step
+                document.getElementById(steps[currentStep]).classList.add('active');
+                
+                // Update status message
+                document.getElementById('status').innerHTML = messages[currentStep];
+                
+                currentStep++;
+                
+                // Continue to next step after 2 seconds
+                setTimeout(nextStep, 2000);
+            } else {
+                // Demo complete
+                setTimeout(() => {
+                    document.getElementById(steps[steps.length - 1]).classList.remove('active');
+                    document.getElementById('status').innerHTML = "✅ Demo complete! फिर से देखने के लिए button पर click करें।";
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

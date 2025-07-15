@@ -1,0 +1,481 @@
+    <!DOCTYPE html>
+    <html lang="hi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ACID Demo - Fullstackgada</title>
+       <link rel="stylesheet" href="style.css">
+       
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>💊 ACID Properties Demo</h1>
+                <div class="subtitle">Database Transactions की चार गारंटी - Jethalal & Bhide Style</div>
+            </div>
+
+            <div class="explanation">
+                <div class="character bhide">🎭 भिडे:</div>
+                <p>जेठालाल! ट्रांजैक्शन तो समझ आ गया... पर लोग ACID-ACID बोलते रहते हैं, वो क्या है? डेटाबेस में भी केमिस्ट्री आ गई क्या?</p>
+                
+                <div class="character jethalal">👨 जेठालाल:</div>
+                <p>अरे भिडे ये कोई केमिकल वाला ACID नहीं — ये है ट्रांजैक्शन की चार गारंटी! आओ एक-एक करके समझते हैं...</p>
+            </div>
+
+            <div class="acid-grid">
+                <!-- Atomicity Card -->
+                <div class="acid-card atomicity">
+                    <div class="acid-title">
+                        <span class="acid-icon">⚛️</span>
+                        Atomicity - सब या कुछ भी नहीं
+                    </div>
+                    <p><strong>जेठालाल की समझाई:</strong> या तो पूरा ट्रांजेक्शन होगा या कुछ भी नहीं — जैसे तू सोसायटी का सेक्रेटरी बना तो पूरा बना, आधा-सेक्रेटरी तो नहीं बना ना?</p>
+                    
+                    <div class="demo-section">
+                        <h4>💰 Bank Transfer Demo</h4>
+                        <div class="demo-controls">
+                            <button class="demo-btn" onclick="startAtomicTransfer(true)">✅ Successful Transfer</button>
+                            <button class="demo-btn" onclick="startAtomicTransfer(false)">❌ Failed Transfer</button>
+                        </div>
+                        
+                        <div class="database-state">
+                            <div class="account-balance">
+                                <span>Jethalal का Account:</span>
+                                <span class="balance-amount" id="jethalal-balance">₹5000</span>
+                            </div>
+                            <div class="account-balance">
+                                <span>Bhide का Account:</span>
+                                <span class="balance-amount" id="bhide-balance">₹3000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="transaction-log" id="atomicity-log"></div>
+                    </div>
+                </div>
+
+                <!-- Consistency Card -->
+                <div class="acid-card consistency">
+                    <div class="acid-title">
+                        <span class="acid-icon">⚖️</span>
+                        Consistency - हमेशा सही रहे
+                    </div>
+                    <p><strong>जेठालाल की समझाई:</strong> डेटाबेस पहले भी सही था और ट्रांजेक्शन के बाद भी सही रहना चाहिए — सोसायटी के खाते में ₹1000 थे, ₹100 जोड़े तो ₹1100 होने चाहिए, ₹1300 नहीं!</p>
+                    
+                    <div class="demo-section">
+                        <h4>🏠 Society Maintenance Demo</h4>
+                        <div class="demo-controls">
+                            <button class="demo-btn" onclick="addMaintenance(100)">+ ₹100 Add</button>
+                            <button class="demo-btn" onclick="addMaintenance(-50)">- ₹50 Deduct</button>
+                            <button class="demo-btn" onclick="violateConsistency()">🚫 Break Rules</button>
+                        </div>
+                        
+                        <div class="database-state">
+                            <div class="account-balance">
+                                <span>Society Fund:</span>
+                                <span class="balance-amount" id="society-fund">₹10000</span>
+                            </div>
+                            <div class="account-balance">
+                                <span>Total Collected:</span>
+                                <span class="balance-amount" id="total-collected">₹10000</span>
+                            </div>
+                            <div style="text-align: center; margin-top: 10px;">
+                                <span style="color: #27ae60;" id="consistency-status">✅ Consistent</span>
+                            </div>
+                        </div>
+                        
+                        <div class="transaction-log" id="consistency-log"></div>
+                    </div>
+                </div>
+
+                <!-- Isolation Card -->
+                <div class="acid-card isolation">
+                    <div class="acid-title">
+                        <span class="acid-icon">🔒</span>
+                        Isolation - अलग-अलग काम
+                    </div>
+                    <p><strong>जेठालाल की समझाई:</strong> हर ट्रांजेक्शन को लगे जैसे वो अकेला चल रहा है। जैसे मैं और अय्यर भाई एक ही टाइम पे बबिता जी से बात करें, तो झगड़ा हो जाएगा — इसलिए अलग-अलग टाइम पे!</p>
+                    
+                    <div class="demo-section">
+                        <h4>👥 Concurrent Transactions Demo</h4>
+                        <div class="demo-controls">
+                            <button class="demo-btn" onclick="startConcurrentTransactions()">🚀 Start Both Transactions</button>
+                            <button class="demo-btn" onclick="resetIsolation()">🔄 Reset</button>
+                        </div>
+                        
+                        <div class="concurrent-demo">
+                            <div class="transaction-box">
+                                <h5>Transaction 1: Jethalal</h5>
+                                <div>Action: Withdraw ₹1000</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="t1-progress"></div>
+                                </div>
+                                <div class="transaction-status" id="t1-status">Ready</div>
+                            </div>
+                            
+                            <div class="transaction-box">
+                                <h5>Transaction 2: Bhide</h5>
+                                <div>Action: Withdraw ₹500</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="t2-progress"></div>
+                                </div>
+                                <div class="transaction-status" id="t2-status">Ready</div>
+                            </div>
+                        </div>
+                        
+                        <div class="database-state">
+                            <div class="account-balance">
+                                <span>Shared Account Balance:</span>
+                                <span class="balance-amount" id="shared-balance">₹2000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="transaction-log" id="isolation-log"></div>
+                    </div>
+                </div>
+
+                <!-- Durability Card -->
+                <div class="acid-card durability">
+                    <div class="acid-title">
+                        <span class="acid-icon">💾</span>
+                        Durability - हमेशा के लिए
+                    </div>
+                    <p><strong>जेठालाल की समझाई:</strong> ट्रांजेक्शन एक बार हो गया तो पक्का हो गया — फिर चाहे बिजली चली जाए, चाहे सिस्टम क्रैश हो जाए डेटा रहेगा। जैसे बबिता जी की मुस्कान — एक बार दिख गई, तो हमेशा के लिए सेव हो गई!</p>
+                    
+                    <div class="demo-section">
+                        <h4>⚡ System Crash Simulation</h4>
+                        <div class="demo-controls">
+                            <button class="demo-btn" onclick="makeTransaction()">💳 Make Transaction</button>
+                            <button class="demo-btn" onclick="simulateCrash()" style="background: #e74c3c;">💥 Simulate Crash</button>
+                            <button class="demo-btn" onclick="restoreSystem()" style="background: #27ae60;">🔄 Restore System</button>
+                        </div>
+                        
+                        <div class="database-state">
+                            <div class="account-balance">
+                                <span>System Status:</span>
+                                <span class="balance-amount" id="system-status" style="color: #27ae60;">🟢 Online</span>
+                            </div>
+                            <div class="account-balance">
+                                <span>Last Transaction:</span>
+                                <span class="balance-amount" id="last-transaction">None</span>
+                            </div>
+                            <div class="account-balance">
+                                <span>Data Integrity:</span>
+                                <span class="balance-amount" id="data-integrity" style="color: #27ae60;">✅ Safe</span>
+                            </div>
+                        </div>
+                        
+                        <div class="transaction-log" id="durability-log"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="reset-all-btn" onclick="resetAllDemos()">🔄 Reset All Demos</button>
+        </div>
+
+  <script>
+// Global state
+let balances = {
+    jethalal: 5000,
+    bhide: 3000,
+    society: 10000,
+    collected: 10000,
+    shared: 2000
+};
+
+let transactionCounter = 1;
+let systemOnline = true;
+let lastTransactionData = null;
+let transactionInProgress = false; // New flag to track ongoing transactions
+
+// Utility functions
+function addLog(logId, message, type = 'info') {
+    const logContainer = document.getElementById(logId);
+    const logEntry = document.createElement('div');
+    logEntry.className = `log-entry log-${type}`;
+    const timestamp = new Date().toLocaleTimeString();
+    logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+    logContainer.appendChild(logEntry);
+    logContainer.scrollTop = logContainer.scrollHeight;
+}
+
+function updateBalance(elementId, value) {
+    document.getElementById(elementId).textContent = `₹${value}`;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Atomicity Demo
+async function startAtomicTransfer(shouldSucceed) {
+    const amount = 1000;
+    addLog('atomicity-log', '🚀 Starting Bank Transfer...', 'info');
+    addLog('atomicity-log', `💸 Deducting ₹${amount} from Jethalal...`, 'info');
+    
+    // Step 1: Deduct from sender
+    await sleep(1000);
+    balances.jethalal -= amount;
+    updateBalance('jethalal-balance', balances.jethalal);
+    addLog('atomicity-log', `✅ Jethalal: ₹${balances.jethalal}`, 'success');
+    
+    // Step 2: Add to receiver (this might fail)
+    await sleep(1000);
+    if (shouldSucceed) {
+        balances.bhide += amount;
+        updateBalance('bhide-balance', balances.bhide);
+        addLog('atomicity-log', `✅ Bhide: ₹${balances.bhide}`, 'success');
+        addLog('atomicity-log', '🎉 Transaction COMMITTED! (Atomicity maintained)', 'success');
+    } else {
+        addLog('atomicity-log', '❌ Network error! Adding to Bhide failed!', 'error');
+        addLog('atomicity-log', '🔄 Rolling back Jethalal deduction...', 'warning');
+        await sleep(1000);
+        balances.jethalal += amount; // Rollback
+        updateBalance('jethalal-balance', balances.jethalal);
+        addLog('atomicity-log', '↩️ Transaction ROLLED BACK! (Atomicity maintained)', 'warning');
+    }
+}
+
+// Consistency Demo
+function addMaintenance(amount) {
+    addLog('consistency-log', `💰 Processing ₹${amount} maintenance...`, 'info');
+    
+    balances.society += amount;
+    balances.collected += amount;
+    
+    updateBalance('society-fund', balances.society);
+    updateBalance('total-collected', balances.collected);
+    
+    // Check consistency
+    if (balances.society === balances.collected) {
+        document.getElementById('consistency-status').innerHTML = '✅ Consistent';
+        document.getElementById('consistency-status').style.color = '#27ae60';
+        addLog('consistency-log', '✅ Consistency maintained!', 'success');
+    } else {
+        document.getElementById('consistency-status').innerHTML = '❌ Inconsistent!';
+        document.getElementById('consistency-status').style.color = '#e74c3c';
+        addLog('consistency-log', '❌ Consistency violated!', 'error');
+    }
+}
+
+function violateConsistency() {
+    addLog('consistency-log', '🚫 Attempting to break consistency rules...', 'warning');
+    
+    // Artificially create inconsistency
+    balances.society += 500; // Only update one side
+    updateBalance('society-fund', balances.society);
+    
+    document.getElementById('consistency-status').innerHTML = '❌ Inconsistent!';
+    document.getElementById('consistency-status').style.color = '#e74c3c';
+    addLog('consistency-log', '💥 Consistency violation detected! Transaction rejected!', 'error');
+    
+    // Auto-fix after 2 seconds
+    setTimeout(() => {
+        balances.society -= 500;
+        updateBalance('society-fund', balances.society);
+        document.getElementById('consistency-status').innerHTML = '✅ Consistent';
+        document.getElementById('consistency-status').style.color = '#27ae60';
+        addLog('consistency-log', '🔧 Database auto-repaired consistency!', 'success');
+    }, 2000);
+}
+
+// Isolation Demo
+async function startConcurrentTransactions() {
+    addLog('isolation-log', '👥 Starting concurrent transactions...', 'info');
+    
+    // Transaction 1: Jethalal
+    updateTransactionStatus('t1-status', 'Waiting for lock...', 'status-waiting');
+    addLog('isolation-log', '🔒 T1: Jethalal requesting account lock...', 'info');
+    
+    await sleep(500);
+    updateTransactionStatus('t1-status', 'Got lock! Running...', 'status-running');
+    addLog('isolation-log', '✅ T1: Lock acquired! Processing withdrawal...', 'success');
+    
+    // Simulate T1 progress
+    for (let i = 25; i <= 100; i += 25) {
+        document.getElementById('t1-progress').style.width = i + '%';
+        await sleep(400);
+    }
+    
+    // T1 completes
+    balances.shared -= 1000;
+    updateBalance('shared-balance', balances.shared);
+    updateTransactionStatus('t1-status', 'Committed ✅', 'status-committed');
+    addLog('isolation-log', '🎉 T1: Jethalal transaction committed!', 'success');
+    
+    await sleep(500);
+    
+    // Transaction 2: Bhide (starts after T1 releases lock)
+    updateTransactionStatus('t2-status', 'Got lock! Running...', 'status-running');
+    addLog('isolation-log', '🔒 T2: Bhide got the lock, starting...', 'info');
+    
+    // Simulate T2 progress
+    for (let i = 25; i <= 100; i += 25) {
+        document.getElementById('t2-progress').style.width = i + '%';
+        await sleep(400);
+    }
+    
+    if (balances.shared >= 500) {
+        balances.shared -= 500;
+        updateBalance('shared-balance', balances.shared);
+        updateTransactionStatus('t2-status', 'Committed ✅', 'status-committed');
+        addLog('isolation-log', '🎉 T2: Bhide transaction committed!', 'success');
+    } else {
+        updateTransactionStatus('t2-status', 'Failed ❌', 'status-rollback');
+        addLog('isolation-log', '❌ T2: Insufficient funds! Transaction failed!', 'error');
+    }
+    
+    addLog('isolation-log', '🔒 Isolation maintained - no interference!', 'success');
+}
+
+function updateTransactionStatus(elementId, text, className) {
+    const element = document.getElementById(elementId);
+    element.textContent = text;
+    element.className = `transaction-status ${className}`;
+}
+
+function resetIsolation() {
+    balances.shared = 2000;
+    updateBalance('shared-balance', balances.shared);
+    
+    document.getElementById('t1-progress').style.width = '0%';
+    document.getElementById('t2-progress').style.width = '0%';
+    
+    updateTransactionStatus('t1-status', 'Ready', 'status-waiting');
+    updateTransactionStatus('t2-status', 'Ready', 'status-waiting');
+    
+    document.getElementById('isolation-log').innerHTML = '';
+}
+
+// Durability Demo
+function makeTransaction() {
+    if (!systemOnline) {
+        addLog('durability-log', '❌ System offline! Cannot process transaction.', 'error');
+        return;
+    }
+    
+    transactionInProgress = true; // Mark transaction as in progress
+    const transactionId = `TXN${transactionCounter++}`;
+    const amount = Math.floor(Math.random() * 1000) + 100;
+    
+    addLog('durability-log', `💳 Processing transaction ${transactionId} for ₹${amount}...`, 'info');
+    
+    setTimeout(() => {
+        if (systemOnline) { // Only commit if system is still online
+            lastTransactionData = { id: transactionId, amount: amount, timestamp: new Date() };
+            document.getElementById('last-transaction').textContent = `${transactionId} - ₹${amount}`;
+            addLog('durability-log', `✅ Transaction ${transactionId} committed to disk!`, 'success');
+            addLog('durability-log', '💾 Data written to persistent storage!', 'success');
+        }
+        transactionInProgress = false; // Transaction complete
+    }, 1000);
+}
+
+function simulateCrash() {
+    systemOnline = false;
+    document.getElementById('system-status').innerHTML = '🔴 CRASHED';
+    document.getElementById('system-status').style.color = '#e74c3c';
+    
+    if (transactionInProgress) {
+        addLog('durability-log', '💥 System crashed during transaction! Data not committed.', 'error');
+        document.getElementById('last-transaction').textContent = lastTransactionData ? `${lastTransactionData.id} - ₹${lastTransactionData.amount}` : 'None';
+        document.getElementById('data-integrity').innerHTML = '✅ Safe';
+        document.getElementById('data-integrity').style.color = '#27ae60';
+    } else {
+        addLog('durability-log', '💥 System crashed! Committed transactions remain safe.', 'warning');
+        document.getElementById('data-integrity').innerHTML = '✅ Safe';
+        document.getElementById('data-integrity').style.color = '#27ae60';
+    }
+    
+    // Clear logs for other demos to simulate system-wide crash
+    document.getElementById('atomicity-log').innerHTML = '';
+    document.getElementById('consistency-log').innerHTML = '';
+    document.getElementById('isolation-log').innerHTML = '';
+    addLog('atomicity-log', '🔄 Atomicity demo reset due to crash!', 'info');
+    addLog('consistency-log', '🔄 Consistency demo reset due to crash!', 'info');
+    addLog('isolation-log', '🔄 Isolation demo reset due to crash!', 'info');
+}
+
+function restoreSystem() {
+    systemOnline = true;
+    document.getElementById('system-status').innerHTML = '🟢 Online';
+    document.getElementById('system-status').style.color = '#27ae60';
+    
+    if (lastTransactionData) {
+        addLog('durability-log', `🔄 System restored! Last committed transaction (${lastTransactionData.id} - ₹${lastTransactionData.amount}) intact.`, 'success');
+        document.getElementById('last-transaction').textContent = `${lastTransactionData.id} - ₹${lastTransactionData.amount}`;
+    } else {
+        addLog('durability-log', '🔄 System restored! No committed transactions found.', 'info');
+        document.getElementById('last-transaction').textContent = 'None';
+    }
+    
+    document.getElementById('data-integrity').innerHTML = '✅ Safe';
+    document.getElementById('data-integrity').style.color = '#27ae60';
+    addLog('durability-log', '💾 Durability ensured: All committed data preserved!', 'success');
+    
+    // Reinitialize other demo logs
+    addLog('atomicity-log', '🔄 Atomicity demo ready after system restore!', 'info');
+    addLog('consistency-log', '🔄 Consistency demo ready after system restore!', 'info');
+    addLog('isolation-log', '🔄 Isolation demo ready after system restore!', 'info');
+}
+
+// Reset All Demos
+function resetAllDemos() {
+    // Reset balances
+    balances = {
+        jethalal: 5000,
+        bhide: 3000,
+        society: 10000,
+        collected: 10000,
+        shared: 2000
+    };
+    
+    // Reset transaction counter and system state
+    transactionCounter = 1;
+    systemOnline = true;
+    lastTransactionData = null;
+    transactionInProgress = false;
+    
+    // Update UI for Atomicity
+    updateBalance('jethalal-balance', balances.jethalal);
+    updateBalance('bhide-balance', balances.bhide);
+    document.getElementById('atomicity-log').innerHTML = '';
+    addLog('atomicity-log', '🔄 Atomicity demo reset!', 'info');
+    
+    // Update UI for Consistency
+    updateBalance('society-fund', balances.society);
+    updateBalance('total-collected', balances.collected);
+    document.getElementById('consistency-status').innerHTML = '✅ Consistent';
+    document.getElementById('consistency-status').style.color = '#27ae60';
+    document.getElementById('consistency-log').innerHTML = '';
+    addLog('consistency-log', '🔄 Consistency demo reset!', 'info');
+    
+    // Update UI for Isolation
+    updateBalance('shared-balance', balances.shared);
+    document.getElementById('t1-progress').style.width = '0%';
+    document.getElementById('t2-progress').style.width = '0%';
+    updateTransactionStatus('t1-status', 'Ready', 'status-waiting');
+    updateTransactionStatus('t2-status', 'Ready', 'status-waiting');
+    document.getElementById('isolation-log').innerHTML = '';
+    addLog('isolation-log', '🔄 Isolation demo reset!', 'info');
+    
+    // Update UI for Durability
+    document.getElementById('system-status').innerHTML = '🟢 Online';
+    document.getElementById('system-status').style.color = '#27ae60';
+    document.getElementById('last-transaction').textContent = 'None';
+    document.getElementById('data-integrity').innerHTML = '✅ Safe';
+    document.getElementById('data-integrity').style.color = '#27ae60';
+    document.getElementById('durability-log').innerHTML = '';
+    addLog('durability-log', '🔄 Durability demo reset!', 'info');
+}
+
+// Initialize demo
+document.addEventListener('DOMContentLoaded', function() {
+    // Add welcome messages to all logs
+    addLog('atomicity-log', '⚛️ Atomicity Demo Ready - All or Nothing!', 'info');
+    addLog('consistency-log', '⚖️ Consistency Demo Ready - Always Valid!', 'info');
+    addLog('isolation-log', '🔒 Isolation Demo Ready - No Interference!', 'info');
+    addLog('durability-log', '💾 Durability Demo Ready - Forever Safe!', 'info');
+});
+</script>
+    </body>
+    </html> 

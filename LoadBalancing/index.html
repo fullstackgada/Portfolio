@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Balancer- Fullstackgada</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            line-height: 1.2;
+        }
+
+        .header h4 {
+            margin: 10px 0 0 0;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            color: #666;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        .control-group label {
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            font-weight: 600;
+            color: #555;
+            text-align: center;
+        }
+
+        button {
+            padding: clamp(8px, 2vw, 12px) clamp(16px, 4vw, 24px);
+            border: none;
+            border-radius: 25px;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+
+        .primary-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .secondary-btn {
+            background: #f8f9fa;
+            color: #495057;
+            border: 2px solid #dee2e6;
+        }
+
+        .secondary-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+
+        select {
+            padding: clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 16px);
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            background: white;
+            min-width: 120px;
+        }
+
+        .diagram {
+            position: relative;
+            height: clamp(400px, 60vh, 500px);
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #e9ecef;
+        }
+
+        .internet {
+            position: absolute;
+            top: clamp(20px, 4vh, 30px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(100px, 20vw, 120px);
+            height: clamp(40px, 8vh, 60px);
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: clamp(0.7rem, 2vw, 1rem);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .load-balancer {
+            position: absolute;
+            top: clamp(120px, 25vh, 150px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(160px, 35vw, 200px);
+            height: clamp(60px, 12vh, 80px);
+            background: linear-gradient(45deg, #ffeaa7, #fdcb6e);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #2d3436;
+            font-weight: bold;
+            font-size: clamp(0.8rem, 2.2vw, 1rem);
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(253, 203, 110, 0.3);
+            padding: 5px;
+        }
+
+        .load-balancer div:last-child {
+            font-size: clamp(0.6rem, 1.8vw, 0.75rem);
+        }
+
+        .servers {
+            position: absolute;
+            bottom: clamp(40px, 8vh, 80px);
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(80px, 15vw, 120px), 1fr));
+            gap: clamp(8px, 2vw, 20px);
+            width: 95%;
+            max-width: 600px;
+            justify-items: center;
+        }
+
+        .server {
+            width: clamp(80px, 15vw, 120px);
+            height: clamp(50px, 10vh, 80px);
+            background: linear-gradient(45deg, #a8e6cf, #7fcdcd);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #2d3436;
+            font-weight: bold;
+            font-size: clamp(0.6rem, 1.8vw, 0.9rem);
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(168, 230, 207, 0.3);
+            text-align: center;
+            padding: 2px;
+        }
+
+        .server.active {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.4);
+        }
+
+        .server.overloaded {
+            background: linear-gradient(45deg, #ff7675, #e17055);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .load-indicator {
+            position: absolute;
+            bottom: 3px;
+            left: 3px;
+            right: 3px;
+            height: clamp(2px, 0.5vh, 4px);
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .load-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #00b894, #00a085);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .request {
+            position: absolute;
+            width: clamp(8px, 2vw, 12px);
+            height: clamp(8px, 2vw, 12px);
+            background: radial-gradient(circle, #ff6b6b, #ee5a52);
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(140px, 25vw, 200px), 1fr));
+            gap: clamp(10px, 3vw, 20px);
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: clamp(15px, 4vw, 20px);
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-value {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            opacity: 0.9;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            padding: clamp(15px, 4vw, 20px);
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .explanation h3 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+
+        .explanation p {
+            font-size: clamp(0.8rem, 2.2vw, 1rem);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                padding: 15px;
+                border-radius: 15px;
+            }
+            
+            .controls {
+                gap: 10px;
+            }
+            
+            .control-group {
+                min-width: 100px;
+                gap: 5px;
+            }
+            
+            .servers {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                width: 98%;
+            }
+            
+            .server {
+                min-width: 70px;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .control-group {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            select, button {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .servers {
+                grid-template-columns: repeat(2, 1fr);
+                bottom: 20px;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Large screens */
+        @media (min-width: 1400px) {
+            .container {
+                padding: 40px;
+            }
+            
+            .servers {
+                grid-template-columns: repeat(6, 1fr);
+                max-width: 800px;
+            }
+        }
+
+        /* Landscape orientation on mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .diagram {
+                height: 350px;
+            }
+            
+            .internet {
+                top: 15px;
+            }
+            
+            .load-balancer {
+                top: 80px;
+            }
+            
+            .servers {
+                bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 Babita ji ka Load Balancer </h1>
+            <h4>अब बबीता जी का सर्वर कभी डाउन नहीं होगा</h4>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Load Balancing Method:</label>
+                <select id="method">
+                    <option value="round-robin">Round Robin</option>
+                    <option value="load-based">Load Based</option>
+                    <option value="random">Random</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>Request Speed:</label>
+                <select id="speed">
+                    <option value="slow">Slow (1/sec)</option>
+                    <option value="medium" selected>Medium (3/sec)</option>
+                    <option value="fast">Fast (5/sec)</option>
+                    <option value="extreme">Extreme (10/sec)</option>
+                </select>
+            </div>
+
+            <button class="primary-btn" onclick="startTraffic()">▶️ Start Traffic</button>
+            <button class="secondary-btn" onclick="stopTraffic()">⏹️ Stop</button>
+            <button class="secondary-btn" onclick="resetStats()">🔄 Reset</button>
+            <button class="secondary-btn" onclick="simulateFailure()">⚠️ Simulate Failure</button>
+        </div>
+
+        <div class="diagram" id="diagram">
+            <div class="internet">
+                <div>🌐 Internet</div>
+            </div>
+            
+            <div class="load-balancer">
+                <div>Load Balancer</div>
+                <div>(Traffic Cop)</div>
+            </div>
+            
+            <div class="servers" id="servers">
+                <!-- Servers will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalRequests">0</div>
+                <div class="stat-label">Total Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="successfulRequests">0</div>
+                <div class="stat-label">Successful</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="failedRequests">0</div>
+                <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgResponseTime">0ms</div>
+                <div class="stat-label">Avg Response Time</div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>🎯 How Load Balancing Works</h3>
+            <p><strong>Round Robin:</strong> Requests are sent to servers in a circular order (1→2→3→4→1→2...)</p>
+            <p><strong>Load Based:</strong> Requests go to the server with the lowest current load</p>
+            <p><strong>Random:</strong> Requests are distributed randomly across available servers</p>
+            <p><strong>Benefits:</strong> Prevents server overload, improves response times, provides redundancy, and ensures high availability even if some servers fail.</p>
+        </div>
+    </div>
+
+    <script>
+        let servers = [];
+        let currentServerIndex = 0;
+        let isRunning = false;
+        let requestInterval;
+        let stats = {
+            total: 0,
+            successful: 0,
+            failed: 0,
+            responseTimes: []
+        };
+
+        // Initialize servers
+        function initializeServers() {
+            const serversContainer = document.getElementById('servers');
+            serversContainer.innerHTML = '';
+            
+            for (let i = 1; i <= 6; i++) {
+                const server = {
+                    id: i,
+                    load: 0,
+                    maxLoad: 100,
+                    active: true,
+                    element: null
+                };
+                
+                const serverDiv = document.createElement('div');
+                serverDiv.className = 'server';
+                serverDiv.innerHTML = `
+                    <div>Server ${i}</div>
+                    <div style="font-size: 0.7em;">Load: <span id="load-${i}">0%</span></div>
+                    <div class="load-indicator">
+                        <div class="load-bar" id="loadbar-${i}"></div>
+                    </div>
+                `;
+                
+                server.element = serverDiv;
+                serversContainer.appendChild(serverDiv);
+                servers.push(server);
+            }
+        }
+
+        function createRequest() {
+            const request = document.createElement('div');
+            request.className = 'request';
+            
+            // Start from internet
+            const internet = document.querySelector('.internet');
+            const internetRect = internet.getBoundingClientRect();
+            const diagramRect = document.getElementById('diagram').getBoundingClientRect();
+            
+            request.style.left = (internetRect.left - diagramRect.left + internetRect.width/2) + 'px';
+            request.style.top = (internetRect.top - diagramRect.top + internetRect.height) + 'px';
+            
+            document.getElementById('diagram').appendChild(request);
+            
+            // Animate to load balancer
+            setTimeout(() => {
+                const loadBalancer = document.querySelector('.load-balancer');
+                const lbRect = loadBalancer.getBoundingClientRect();
+                
+                request.style.transition = 'all 0.5s ease';
+                request.style.left = (lbRect.left - diagramRect.left + lbRect.width/2) + 'px';
+                request.style.top = (lbRect.top - diagramRect.top + lbRect.height) + 'px';
+                
+                // Route to server after reaching load balancer
+                setTimeout(() => {
+                    routeRequest(request);
+                }, 500);
+            }, 100);
+        }
+
+        function routeRequest(request) {
+            const method = document.getElementById('method').value;
+            let targetServer;
+            
+            // Find available servers
+            const availableServers = servers.filter(s => s.active);
+            
+            if (availableServers.length === 0) {
+                // All servers failed
+                handleFailedRequest(request);
+                return;
+            }
+            
+            switch (method) {
+                case 'round-robin':
+                    targetServer = availableServers[currentServerIndex % availableServers.length];
+                    currentServerIndex++;
+                    break;
+                case 'load-based':
+                    targetServer = availableServers.reduce((min, server) => 
+                        server.load < min.load ? server : min
+                    );
+                    break;
+                case 'random':
+                    targetServer = availableServers[Math.floor(Math.random() * availableServers.length)];
+                    break;
+            }
+            
+            // Check if server is overloaded
+            if (targetServer.load > 80) {
+                handleFailedRequest(request);
+                targetServer.element.classList.add('overloaded');
+                setTimeout(() => {
+                    targetServer.element.classList.remove('overloaded');
+                }, 500);
+                return;
+            }
+            
+            // Route to target server
+            const serverRect = targetServer.element.getBoundingClientRect();
+            const diagramRect = document.getElementById('diagram').getBoundingClientRect();
+            
+            request.style.left = (serverRect.left - diagramRect.left + serverRect.width/2) + 'px';
+            request.style.top = (serverRect.top - diagramRect.top + serverRect.height/2) + 'px';
+            
+            // Highlight active server
+            targetServer.element.classList.add('active');
+            
+            // Increase server load
+            targetServer.load = Math.min(targetServer.load + 10, 100);
+            updateServerDisplay(targetServer);
+            
+            // Process request
+            const responseTime = Math.random() * 200 + 100; // 100-300ms
+            setTimeout(() => {
+                handleSuccessfulRequest(request, responseTime);
+                targetServer.element.classList.remove('active');
+                
+                // Decrease server load
+                targetServer.load = Math.max(targetServer.load - 10, 0);
+                updateServerDisplay(targetServer);
+            }, responseTime);
+        }
+
+        function handleSuccessfulRequest(request, responseTime) {
+            stats.successful++;
+            stats.responseTimes.push(responseTime);
+            
+            // Remove request element
+            request.style.opacity = '0';
+            setTimeout(() => {
+                if (request.parentNode) {
+                    request.parentNode.removeChild(request);
+                }
+            }, 200);
+            
+            updateStats();
+        }
+
+        function handleFailedRequest(request) {
+            stats.failed++;
+            
+            // Show failed request (red and shake)
+            request.style.background = 'radial-gradient(circle, #ff4757, #ff3838)';
+            request.style.animation = 'shake 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                request.style.opacity = '0';
+                setTimeout(() => {
+                    if (request.parentNode) {
+                        request.parentNode.removeChild(request);
+                    }
+                }, 200);
+            }, 500);
+            
+            updateStats();
+        }
+
+        function updateServerDisplay(server) {
+            document.getElementById(`load-${server.id}`).textContent = Math.round(server.load) + '%';
+            document.getElementById(`loadbar-${server.id}`).style.width = server.load + '%';
+            
+            // Change color based on load
+            const loadBar = document.getElementById(`loadbar-${server.id}`);
+            if (server.load > 80) {
+                loadBar.style.background = 'linear-gradient(45deg, #ff7675, #e17055)';
+            } else if (server.load > 50) {
+                loadBar.style.background = 'linear-gradient(45deg, #fdcb6e, #e17055)';
+            } else {
+                loadBar.style.background = 'linear-gradient(45deg, #00b894, #00a085)';
+            }
+        }
+
+        function updateStats() {
+            stats.total = stats.successful + stats.failed;
+            document.getElementById('totalRequests').textContent = stats.total;
+            document.getElementById('successfulRequests').textContent = stats.successful;
+            document.getElementById('failedRequests').textContent = stats.failed;
+            
+            if (stats.responseTimes.length > 0) {
+                const avgTime = stats.responseTimes.reduce((a, b) => a + b, 0) / stats.responseTimes.length;
+                document.getElementById('avgResponseTime').textContent = Math.round(avgTime) + 'ms';
+            }
+        }
+
+        function startTraffic() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            const speed = document.getElementById('speed').value;
+            let interval;
+            
+            switch (speed) {
+                case 'slow': interval = 1000; break;
+                case 'medium': interval = 333; break;
+                case 'fast': interval = 200; break;
+                case 'extreme': interval = 100; break;
+            }
+            
+            requestInterval = setInterval(() => {
+                if (isRunning) {
+                    createRequest();
+                }
+            }, interval);
+        }
+
+        function stopTraffic() {
+            isRunning = false;
+            if (requestInterval) {
+                clearInterval(requestInterval);
+            }
+        }
+
+        function resetStats() {
+            stopTraffic();
+            stats = { total: 0, successful: 0, failed: 0, responseTimes: [] };
+            
+            // Reset all servers
+            servers.forEach(server => {
+                server.load = 0;
+                server.active = true;
+                server.element.classList.remove('active', 'overloaded');
+                server.element.style.opacity = '1';
+                server.element.style.background = 'linear-gradient(45deg, #a8e6cf, #7fcdcd)';
+                updateServerDisplay(server);
+            });
+            
+            // Remove all request elements
+            document.querySelectorAll('.request').forEach(req => req.remove());
+            
+            updateStats();
+        }
+
+        function simulateFailure() {
+            // Randomly fail 1-2 servers
+            const activeServers = servers.filter(s => s.active);
+            if (activeServers.length <= 1) return;
+            
+            const numToFail = Math.random() > 0.5 ? 1 : 2;
+            
+            for (let i = 0; i < numToFail; i++) {
+                const randomServer = activeServers[Math.floor(Math.random() * activeServers.length)];
+                randomServer.active = false;
+                randomServer.element.style.opacity = '0.3';
+                randomServer.element.style.background = 'linear-gradient(45deg, #636e72, #2d3436)';
+                
+                // Remove from active list
+                activeServers.splice(activeServers.indexOf(randomServer), 1);
+            }
+            
+            // Restore servers after 5 seconds
+            setTimeout(() => {
+                servers.forEach(server => {
+                    if (!server.active) {
+                        server.active = true;
+                        server.element.style.opacity = '1';
+                        server.element.style.background = 'linear-gradient(45deg, #a8e6cf, #7fcdcd)';
+                    }
+                });
+            }, 5000);
+        }
+
+        // Initialize the demo
+        initializeServers();
+        updateStats();
+    </script>
+</body>
+</html>

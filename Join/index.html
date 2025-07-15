@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL JOINs with TMKOC Characters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+
+        .join-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .join-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .join-btn:hover::before {
+            left: 100%;
+        }
+
+        .join-btn.active {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .inner-join { background: linear-gradient(45deg, #ff6b6b, #ee5a52); color: white; }
+        .left-join { background: linear-gradient(45deg, #4ecdc4, #44a08d); color: white; }
+        .right-join { background: linear-gradient(45deg, #45b7d1, #2980b9); color: white; }
+        .full-join { background: linear-gradient(45deg, #f9ca24, #f0932b); color: white; }
+        .cross-join { background: linear-gradient(45deg, #6c5ce7, #a29bfe); color: white; }
+
+        .tables-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid #e0e0e0;
+        }
+
+        .table-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(45deg, #34495e, #2c3e50);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+
+        .result-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid #3498db;
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .explanation {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .explanation h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .null-value {
+            color: #e74c3c;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .highlight-row {
+            background: linear-gradient(45deg, #fff3cd, #ffeaa7) !important;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .venn-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            height: 200px;
+        }
+
+        .circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            position: relative;
+            opacity: 0.7;
+        }
+
+        .circle-left {
+            background: #3498db;
+            z-index: 1;
+        }
+
+        .circle-right {
+            background: #e74c3c;
+            margin-left: -40px;
+            z-index: 2;
+        }
+
+        .circle-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .tables-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .join-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .join-btn {
+                width: 200px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+
+        .tmkoc-banner {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tmkoc-banner">
+            🏠 Gokuldham Society SQL JOINs Tutorial 🏠
+        </div>
+        
+        <h1>SQL JOINs with TMKOC Characters</h1>
+        <p class="subtitle">भिड़े और जेठालाल के साथ SQL JOINs सीखें!</p>
+        
+        <div class="join-selector">
+            <button class="join-btn inner-join active" onclick="showJoin('inner')">INNER JOIN</button>
+            <button class="join-btn left-join" onclick="showJoin('left')">LEFT JOIN</button>
+            <button class="join-btn right-join" onclick="showJoin('right')">RIGHT JOIN</button>
+            <button class="join-btn full-join" onclick="showJoin('full')">FULL OUTER JOIN</button>
+            <button class="join-btn cross-join" onclick="showJoin('cross')">CROSS JOIN</button>
+        </div>
+
+        <div class="tables-container">
+            <div class="table-section">
+                <div class="table-title">Members Table</div>
+                <table id="membersTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>जेठालाल</td>
+                            <td>Society Secretary</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>भिड़े</td>
+                            <td>Tuition Master</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>पोपटलाल</td>
+                            <td>Post Office</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>तपू</td>
+                            <td>Student</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>बापूजी</td>
+                            <td>Retired</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-section">
+                <div class="table-title">GamesParticipated Table</div>
+                <table id="gamesTable">
+                    <thead>
+                        <tr>
+                            <th>PlayerID</th>
+                            <th>GameName</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Cricket</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Carrom</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Chess</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Football</td>
+                            <td>22</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Volleyball</td>
+                            <td>15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <div class="result-title" id="resultTitle">INNER JOIN Result</div>
+            
+            <div class="explanation" id="explanation">
+                <h3>INNER JOIN</h3>
+                <p>सिर्फ वे members दिखेंगे जिन्होंने कोई गेम खेला है। बापूजी नहीं दिखेंगे क्योंकि उन्होंने कोई गेम नहीं खेला। Guest (ID 6) भी नहीं दिखेगा क्योंकि वह members list में है ही नहीं।</p>
+            </div>
+
+            <div class="venn-diagram" id="vennDiagram">
+                <div class="circle circle-left">
+                    <div class="circle-label">Members</div>
+                </div>
+                <div class="circle circle-right">
+                    <div class="circle-label">Games</div>
+                </div>
+            </div>
+
+            <table id="resultTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>GameName</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody">
+                    <!-- Results will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const members = [
+            {id: 1, name: 'जेठालाल', role: 'Society Secretary'},
+            {id: 2, name: 'भिड़े', role: 'Tuition Master'},
+            {id: 3, name: 'पोपटलाल', role: 'Post Office'},
+            {id: 4, name: 'तपू', role: 'Student'},
+            {id: 5, name: 'बापूजी', role: 'Retired'}
+        ];
+
+        const games = [
+            {playerID: 1, gameName: 'Cricket', score: 45},
+            {playerID: 2, gameName: 'Carrom', score: 12},
+            {playerID: 3, gameName: 'Chess', score: 8},
+            {playerID: 4, gameName: 'Football', score: 22},
+            {playerID: 6, gameName: 'Volleyball', score: 15}
+        ];
+
+        const joinExplanations = {
+            inner: {
+                title: 'INNER JOIN',
+                explanation: 'सिर्फ वे members दिखेंगे जिन्होंने कोई गेम खेला है। बापूजी नहीं दिखेंगे क्योंकि उन्होंने कोई गेम नहीं खेला। Guest (ID 6) भी नहीं दिखेगा क्योंकि वह members list में है ही नहीं।'
+            },
+            left: {
+                title: 'LEFT JOIN',
+                explanation: 'सभी members दिखेंगे। बापूजी ने कोई गेम नहीं खेला — उनके लिए GameName NULL होगा। Members table का हर record दिखेगा।'
+            },
+            right: {
+                title: 'RIGHT JOIN',
+                explanation: 'सभी GamesParticipated के records दिखेंगे। Guest (ID 6) की Volleyball दिखेगी, भले वो member list में नहीं है। बापूजी नहीं दिखेंगे क्योंकि उन्होंने कोई गेम नहीं खेला।'
+            },
+            full: {
+                title: 'FULL OUTER JOIN',
+                explanation: 'सभी members और सभी games दिखेंगे। जिनके पास जो नहीं है — वहाँ NULL आएगा। बापूजी के पास कोई game नहीं → GameName = NULL। Guest के पास member record नहीं → Name = NULL।'
+            },
+            cross: {
+                title: 'CROSS JOIN',
+                explanation: 'हर member को हर game assign कर दिया गया — बापूजी को भी सारे games खेला दिए! कोई relationship नहीं देखा गया, बस हर possible combination बना डाला। पागलपन!'
+            }
+        };
+
+        function performJoin(type) {
+            switch(type) {
+                case 'inner':
+                    return members.filter(member => 
+                        games.some(game => game.playerID === member.id)
+                    ).map(member => {
+                        const game = games.find(g => g.playerID === member.id);
+                        return {
+                            id: member.id,
+                            name: member.name,
+                            role: member.role,
+                            gameName: game.gameName,
+                            score: game.score
+                        };
+                    });
+
+                case 'left':
+                    return members.map(member => {
+                        const game = games.find(g => g.playerID === member.id);
+                        return {
+                            id: member.id,
+                            name: member.name,
+                            role: member.role,
+                            gameName: game ? game.gameName : null,
+                            score: game ? game.score : null
+                        };
+                    });
+
+                case 'right':
+                    return games.map(game => {
+                        const member = members.find(m => m.id === game.playerID);
+                        return {
+                            id: game.playerID,
+                            name: member ? member.name : null,
+                            role: member ? member.role : null,
+                            gameName: game.gameName,
+                            score: game.score
+                        };
+                    });
+
+                case 'full':
+                    const leftJoin = members.map(member => {
+                        const game = games.find(g => g.playerID === member.id);
+                        return {
+                            id: member.id,
+                            name: member.name,
+                            role: member.role,
+                            gameName: game ? game.gameName : null,
+                            score: game ? game.score : null
+                        };
+                    });
+
+                    const rightOnly = games.filter(game => 
+                        !members.some(member => member.id === game.playerID)
+                    ).map(game => ({
+                        id: game.playerID,
+                        name: null,
+                        role: null,
+                        gameName: game.gameName,
+                        score: game.score
+                    }));
+
+                    return [...leftJoin, ...rightOnly];
+
+                case 'cross':
+                    const result = [];
+                    members.forEach(member => {
+                        games.forEach(game => {
+                            result.push({
+                                id: member.id,
+                                name: member.name,
+                                role: member.role,
+                                gameName: game.gameName,
+                                score: game.score
+                            });
+                        });
+                    });
+                    return result;
+
+                default:
+                    return [];
+            }
+        }
+
+        function showJoin(type) {
+            // Update button states
+            document.querySelectorAll('.join-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.${type}-join`).classList.add('active');
+
+            // Update title and explanation
+            const info = joinExplanations[type];
+            document.getElementById('resultTitle').textContent = info.title + ' Result';
+            document.getElementById('explanation').innerHTML = `
+                <h3>${info.title}</h3>
+                <p>${info.explanation}</p>
+            `;
+
+            // Update Venn diagram
+            updateVennDiagram(type);
+
+            // Perform join and update result table
+            const result = performJoin(type);
+            const resultBody = document.getElementById('resultBody');
+            resultBody.innerHTML = '';
+
+            result.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.id}</td>
+                    <td>${row.name || '<span class="null-value">NULL</span>'}</td>
+                    <td>${row.role || '<span class="null-value">NULL</span>'}</td>
+                    <td>${row.gameName || '<span class="null-value">NULL</span>'}</td>
+                    <td>${row.score || '<span class="null-value">NULL</span>'}</td>
+                `;
+                resultBody.appendChild(tr);
+            });
+        }
+
+        function updateVennDiagram(type) {
+            const vennDiagram = document.getElementById('vennDiagram');
+            let diagramHTML = '';
+
+            switch(type) {
+                case 'inner':
+                    diagramHTML = `
+                        <div class="circle circle-left" style="background: rgba(52, 152, 219, 0.3);">
+                            <div class="circle-label" style="color: #2c3e50;">Members</div>
+                        </div>
+                        <div class="circle circle-right" style="background: rgba(231, 76, 60, 0.3);">
+                            <div class="circle-label" style="color: #2c3e50;">Games</div>
+                        </div>
+                        <div style="position: absolute; background: rgba(46, 204, 113, 0.8); width: 80px; height: 80px; border-radius: 50%; margin-left: -40px; z-index: 3;">
+                            <div class="circle-label" style="color: white;">Match</div>
+                        </div>
+                    `;
+                    break;
+                case 'left':
+                    diagramHTML = `
+                        <div class="circle circle-left" style="background: rgba(52, 152, 219, 0.8);">
+                            <div class="circle-label">Members</div>
+                        </div>
+                        <div class="circle circle-right" style="background: rgba(231, 76, 60, 0.3);">
+                            <div class="circle-label" style="color: #2c3e50;">Games</div>
+                        </div>
+                    `;
+                    break;
+                case 'right':
+                    diagramHTML = `
+                        <div class="circle circle-left" style="background: rgba(52, 152, 219, 0.3);">
+                            <div class="circle-label" style="color: #2c3e50;">Members</div>
+                        </div>
+                        <div class="circle circle-right" style="background: rgba(231, 76, 60, 0.8);">
+                            <div class="circle-label">Games</div>
+                        </div>
+                    `;
+                    break;
+                case 'full':
+                    diagramHTML = `
+                        <div class="circle circle-left" style="background: rgba(52, 152, 219, 0.8);">
+                            <div class="circle-label">Members</div>
+                        </div>
+                        <div class="circle circle-right" style="background: rgba(231, 76, 60, 0.8);">
+                            <div class="circle-label">Games</div>
+                        </div>
+                    `;
+                    break;
+                case 'cross':
+                    diagramHTML = `
+                        <div style="background: linear-gradient(45deg, #6c5ce7, #a29bfe); padding: 20px; border-radius: 10px; color: white; font-weight: bold;">
+                            Members × Games = हर possible combination!
+                        </div>
+                    `;
+                    break;
+            }
+
+            vennDiagram.innerHTML = diagramHTML;
+        }
+
+        // Initialize with INNER JOIN
+        showJoin('inner');
+    </script>
+</body>
+</html>

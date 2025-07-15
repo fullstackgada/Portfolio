@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoization vs Caching - Interactive Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .concept-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .concept-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .concept-title {
+            font-size: 2rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .concept-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .demo-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: rgba(247,250,252,0.8);
+            border-radius: 15px;
+            border: 2px solid rgba(102,126,234,0.2);
+        }
+
+        .demo-title {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .interactive-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .result-display {
+            min-height: 60px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .result-display.loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, transparent 37%, transparent 63%, #f0f0f0 75%);
+            background-size: 400% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        .result-display.success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border-color: #48bb78;
+        }
+
+        .cache-visualization {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cache-item {
+            background: #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .cache-item.cached {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border-color: #48bb78;
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 5px;
+        }
+
+        .explanation {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .explanation h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .explanation p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .differences-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .differences-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .difference-item {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid rgba(102,126,234,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .difference-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: rgba(102,126,234,0.3);
+        }
+
+        .difference-title {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .concept-card {
+                padding: 20px;
+            }
+            
+            .demo-section {
+                padding: 20px;
+            }
+            
+            .interactive-demo {
+                gap: 10px;
+            }
+            
+            .cache-visualization {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 8px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>मेमोइज़ेशन vs कैशिंग</h1>
+            <p>जेठालाल और बबिता के साथ समझें - Interactive Diagram</p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="concept-card">
+                <h2 class="concept-title">मेमोइज़ेशन</h2>
+                
+                <div class="demo-section">
+                    <div class="demo-title">🧠 फिबोनाची कैलकुलेशन</div>
+                    <div class="interactive-demo">
+                        <button class="demo-button" onclick="calculateFibonacci()">
+                            फिबोनाची संख्या निकालें
+                        </button>
+                        <div class="result-display" id="fibResult">
+                            यहाँ परिणाम दिखेगा
+                        </div>
+                    </div>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-value" id="fibCalls">0</div>
+                            <div class="stat-label">कुल कॉल्स</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="fibTime">0ms</div>
+                            <div class="stat-label">समय</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="fibCached">0</div>
+                            <div class="stat-label">कैश्ड</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="explanation">
+                    <h3>मेमोइज़ेशन कैसे काम करता है:</h3>
+                    <p>जब आप पहली बार fibonacci(10) calculate करते हैं, तो सभी छोटे values भी calculate होते हैं। अगली बार जब आप fibonacci(12) मांगते हैं, तो पहले से calculated values का उपयोग होता है!</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h2 class="concept-title">कैशिंग</h2>
+                
+                <div class="demo-section">
+                    <div class="demo-title">🌐 वेबसाइट डाटा लोडिंग</div>
+                    <div class="interactive-demo">
+                        <button class="demo-button" onclick="loadWebsiteData()">
+                            वेबसाइट डाटा लोड करें
+                        </button>
+                        <div class="result-display" id="cacheResult">
+                            यहाँ परिणाम दिखेगा
+                        </div>
+                    </div>
+                    <div class="cache-visualization" id="cacheViz">
+                        <div class="cache-item">Image 1</div>
+                        <div class="cache-item">Image 2</div>
+                        <div class="cache-item">CSS File</div>
+                        <div class="cache-item">JS File</div>
+                        <div class="cache-item">API Data</div>
+                        <div class="cache-item">Font</div>
+                    </div>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-value" id="cacheHits">0</div>
+                            <div class="stat-label">कैश हिट्स</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="cacheTime">0ms</div>
+                            <div class="stat-label">लोड टाइम</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="cacheSize">0</div>
+                            <div class="stat-label">कैश साइज़</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="explanation">
+                    <h3>कैशिंग कैसे काम करता है:</h3>
+                    <p>जब आप पहली बार वेबसाइट visit करते हैं, सभी files download होती हैं। दूसरी बार आने पर ये files आपके browser cache से तुरंत load हो जाती हैं!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="differences-section">
+            <h2 class="concept-title">मुख्य अंतर</h2>
+            <div class="differences-grid">
+                <div class="difference-item">
+                    <div class="difference-title">📍 स्कोप</div>
+                    <p><strong>मेमोइज़ेशन:</strong> केवल function calls के लिए</p>
+                    <p><strong>कैशिंग:</strong> किसी भी प्रकार के data के लिए</p>
+                </div>
+                <div class="difference-item">
+                    <div class="difference-title">🎯 उद्देश्य</div>
+                    <p><strong>मेमोइज़ेशन:</strong> महंगे calculations को बचाना</p>
+                    <p><strong>कैशिंग:</strong> बार-बार data fetch करने से बचना</p>
+                </div>
+                <div class="difference-item">
+                    <div class="difference-title">💾 स्टोरेज</div>
+                    <p><strong>मेमोइज़ेशन:</strong> Memory में function results</p>
+                    <p><strong>कैशिंग:</strong> Memory/Disk में कोई भी data</p>
+                </div>
+                <div class="difference-item">
+                    <div class="difference-title">⚡ परफॉर्मेंस</div>
+                    <p><strong>मेमोइज़ेशन:</strong> CPU intensive tasks के लिए</p>
+                    <p><strong>कैशिंग:</strong> I/O operations के लिए</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Memoization demonstration
+        const memoCache = {};
+        let fibCalls = 0;
+        let fibCachedHits = 0;
+
+        function fibonacci(n) {
+            fibCalls++;
+            if (n in memoCache) {
+                fibCachedHits++;
+                return memoCache[n];
+            }
+            
+            if (n <= 1) {
+                return memoCache[n] = n;
+            }
+            
+            const result = fibonacci(n - 1) + fibonacci(n - 2);
+            memoCache[n] = result;
+            return result;
+        }
+
+        function calculateFibonacci() {
+            const resultDiv = document.getElementById('fibResult');
+            resultDiv.className = 'result-display loading';
+            resultDiv.textContent = 'गणना हो रही है...';
+            
+            // Reset stats
+            fibCalls = 0;
+            fibCachedHits = 0;
+            
+            setTimeout(() => {
+                const startTime = performance.now();
+                const n = Math.floor(Math.random() * 15) + 10; // Random number between 10-25
+                const result = fibonacci(n);
+                const endTime = performance.now();
+                
+                resultDiv.className = 'result-display success';
+                resultDiv.innerHTML = `
+                    <div>
+                        <strong>fibonacci(${n}) = ${result}</strong><br>
+                        <small>जेठालाल: "देखिये, ${fibCachedHits} values पहले से याद थे!"</small>
+                    </div>
+                `;
+                
+                // Update stats
+                document.getElementById('fibCalls').textContent = fibCalls;
+                document.getElementById('fibTime').textContent = Math.round(endTime - startTime) + 'ms';
+                document.getElementById('fibCached').textContent = fibCachedHits;
+            }, 1000);
+        }
+
+        // Caching demonstration
+        const websiteCache = new Set();
+        let cacheHits = 0;
+        let totalCacheSize = 0;
+
+        function loadWebsiteData() {
+            const resultDiv = document.getElementById('cacheResult');
+            const cacheItems = document.querySelectorAll('.cache-item');
+            
+            resultDiv.className = 'result-display loading';
+            resultDiv.textContent = 'डाटा लोड हो रहा है...';
+            
+            const startTime = performance.now();
+            let loadedFromCache = 0;
+            
+            // Simulate loading different resources
+            cacheItems.forEach((item, index) => {
+                setTimeout(() => {
+                    const resourceName = item.textContent;
+                    
+                    if (websiteCache.has(resourceName)) {
+                        // Cache hit
+                        cacheHits++;
+                        loadedFromCache++;
+                        item.classList.add('cached');
+                        item.textContent = resourceName + ' ✓';
+                    } else {
+                        // Cache miss - add to cache
+                        websiteCache.add(resourceName);
+                        totalCacheSize++;
+                        setTimeout(() => {
+                            item.classList.add('cached');
+                            item.textContent = resourceName + ' ✓';
+                        }, 500);
+                    }
+                }, index * 200);
+            });
+            
+            setTimeout(() => {
+                const endTime = performance.now();
+                const loadTime = Math.round(endTime - startTime);
+                
+                resultDiv.className = 'result-display success';
+                resultDiv.innerHTML = `
+                    <div>
+                        <strong>वेबसाइट लोड हो गई!</strong><br>
+                        <small>जेठालाल: "${loadedFromCache} files cache से मिलीं!"</small>
+                    </div>
+                `;
+                
+                // Update stats
+                document.getElementById('cacheHits').textContent = cacheHits;
+                document.getElementById('cacheTime').textContent = loadTime + 'ms';
+                document.getElementById('cacheSize').textContent = totalCacheSize;
+            }, 2000);
+        }
+
+        // Add some initial animations
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.concept-card').forEach((card, index) => {
+                    card.style.animationDelay = (index * 0.2) + 's';
+                });
+            }, 100);
+        });
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.concept-card, .differences-section').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover effects to demo buttons
+        document.querySelectorAll('.demo-button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-2px) scale(1.05)';
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

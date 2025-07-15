@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throttling Demo - Jethalal Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            padding: 40px;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            border-left: 6px solid #4ecdc4;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .character {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .jethalal {
+            color: #e74c3c;
+        }
+
+        .babita {
+            color: #9b59b6;
+        }
+
+        .iyer-analogy {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed #e17055;
+        }
+
+        .iyer-analogy h4 {
+            color: #d63031;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .demo-box {
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .demo-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .demo-box h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .without-throttle h3 {
+            color: #e74c3c;
+        }
+
+        .with-throttle h3 {
+            color: #27ae60;
+        }
+
+        .scroll-area {
+            height: 300px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
+            overflow-y: scroll;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .scroll-content {
+            height: 1000px;
+            background: linear-gradient(to bottom, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .log-container {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 5px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .log-without {
+            background: rgba(231, 76, 60, 0.2);
+            border-left: 3px solid #e74c3c;
+        }
+
+        .log-with {
+            background: rgba(39, 174, 96, 0.2);
+            border-left: 3px solid #27ae60;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .comparison-section {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #27ae60;
+        }
+
+        .comparison-title {
+            font-size: 1.4rem;
+            color: #27ae60;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .comparison-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .comparison-item h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .debouncing {
+            border-left: 4px solid #e74c3c;
+        }
+
+        .throttling {
+            border-left: 4px solid #27ae60;
+        }
+
+        .iyer-simulator {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .iyer-btn {
+            background: #ffc107;
+            color: #212529;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .iyer-btn:hover {
+            background: #ffb300;
+            transform: scale(1.05);
+        }
+
+        .iyer-output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            height: 100px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Throttling Demo</h1>
+            <div class="subtitle">Jethalal & Babita की समझाई गई तकनीक</div>
+        </div>
+
+        <div class="demo-section">
+            <div class="explanation">
+                <div class="character jethalal">🎭 जेठालाल:</div>
+                <p>बबिता जी, Throttling ठीक वैसा है जैसे अय्यर भाई को हर 5 सेकंड में सिर्फ एक बार "बबिता डार्लिंग" कहने की अनुमति देना!</p>
+                
+                <div class="iyer-analogy">
+                    <h4>🤓 अय्यर भाई का उदाहरण:</h4>
+                    <p><strong>बिना Throttling:</strong> अय्यर भाई हर 2 सेकंड में "बबिता डार्लिंग" = स्क्रॉल पर हर बार फंक्शन call</p>
+                    <p><strong>Throttling के साथ:</strong> अय्यर भाई सिर्फ हर 5 सेकंड में एक बार बोल सकते हैं = fixed interval पर फंक्शन call</p>
+                </div>
+
+                <div class="character babita">👩 बबिता जी:</div>
+                <p>अच्छा! तो Throttling performance को सुधारता है और browser को freeze होने से बचाता है!</p>
+            </div>
+
+            <!-- Iyer Simulator -->
+            <div class="iyer-simulator">
+                <h3>🤓 अय्यर भाई सिमुलेटर</h3>
+                <p>नीचे वाले बटन को बार-बार जल्दी-जल्दी दबाएं!</p>
+                <button class="iyer-btn" onclick="sayDarlingWithoutThrottle()">बिना Throttling - "बबिता डार्लिंग" कहें</button>
+                <button class="iyer-btn" onclick="sayDarlingWithThrottle()">Throttling के साथ - "बबिता डार्लिंग" कहें</button>
+                <div class="iyer-output" id="iyerOutput"></div>
+            </div>
+
+            <div class="demo-container">
+                <div class="demo-box without-throttle">
+                    <h3>❌ बिना Throttling </h3>
+                    <div class="scroll-area" id="scrollWithout">
+                        <div class="scroll-indicator">Scroll Position: <span id="positionWithout">0</span></div>
+                        <div class="scroll-content">
+                            <h2>बिना Throttling वाला Area</h2>
+                            <p>यहाँ scroll करें और देखें कि हर scroll पर function कैसे चलता है!</p>
+                            <p>🔄 Scroll करते रहें...</p>
+                            <p>हर छोटी movement पर function trigger होगा</p>
+                            <p>Performance impact हो सकता है</p>
+                            <p>Browser lag हो सकता है</p>
+                        </div>
+                    </div>
+                    <div class="log-container" id="logWithout"></div>
+                </div>
+
+                <div class="demo-box with-throttle">
+                    <h3>✅ Throttling के साथ </h3>
+                    <div class="scroll-area" id="scrollWith">
+                        <div class="scroll-indicator">Scroll Position: <span id="positionWith">0</span></div>
+                        <div class="scroll-content">
+                            <h2>Throttling के साथ वाला Area</h2>
+                            <p>यहाँ scroll करें और देखें कि function controlled way में कैसे चलता है!</p>
+                            <p>⚡ Smooth scrolling...</p>
+                            <p>Fixed interval पर ही function trigger होगा</p>
+                            <p>Better performance</p>
+                            <p>No browser lag</p>
+                        </div>
+                    </div>
+                    <div class="log-container" id="logWith"></div>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="countWithout">0</div>
+                    <div class="stat-label">बिना Throttling<br>Function Calls</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="countWith">0</div>
+                    <div class="stat-label">Throttling के साथ<br>Function Calls</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="savedCalls">0</div>
+                    <div class="stat-label">बचे हुए<br>Function Calls</div>
+                </div>
+            </div>
+
+            <div class="comparison-section">
+                <div class="comparison-title">🔍 Debouncing vs Throttling</div>
+                <div class="comparison-grid">
+                    <div class="comparison-item debouncing">
+                        <h4>🎯 Debouncing</h4>
+                        <p><strong>कब उपयोग करें:</strong> Search boxes, form validation</p>
+                        <p><strong>कैसे काम करता है:</strong> "जब रुक जाओ, तब काम करो"</p>
+                        <p><strong>उदाहरण:</strong> पोपटलाल को शादी confirm होने पर ही मिठाई बांटने देना</p>
+                    </div>
+                    <div class="comparison-item throttling">
+                        <h4>⚡ Throttling</h4>
+                        <p><strong>कब उपयोग करें:</strong> Scroll events, window resize, mouse movements</p>
+                        <p><strong>कैसे काम करता है:</strong> "हर थोड़ी देर पर ही काम करो"</p>
+                        <p><strong>उदाहरण:</strong> अय्यर भाई को हर 5 सेकंड में एक बार ही "डार्लिंग" कहने देना</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="reset-btn" onclick="resetDemo()">🔄 Reset Demo</button>
+        </div>
+    </div>
+
+    <script>
+        let countWithout = 0;
+        let countWith = 0;
+        let throttleTimer = null;
+        let lastThrottleTime = 0;
+
+        // Throttle utility function
+        function throttle(func, delay = 1000) {
+            return function (...args) {
+                const now = Date.now();
+                if (now - lastThrottleTime >= delay) {
+                    func.apply(this, args);
+                    lastThrottleTime = now;
+                }
+            };
+        }
+
+        // Function without throttling
+        function handleScrollWithout(scrollTop) {
+            countWithout++;
+            const logContainer = document.getElementById('logWithout');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry log-without';
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> 🔄 अय्यर style: Scroll ${scrollTop}px - Call #${countWithout}`;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            document.getElementById('positionWithout').textContent = scrollTop;
+            updateStats();
+        }
+
+        // Function with throttling
+        function handleScrollWith(scrollTop) {
+            countWith++;
+            const logContainer = document.getElementById('logWith');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry log-with';
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ⚡ समझदारी style: Scroll ${scrollTop}px - Call #${countWith}`;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            document.getElementById('positionWith').textContent = scrollTop;
+            updateStats();
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('countWithout').textContent = countWithout;
+            document.getElementById('countWith').textContent = countWith;
+            document.getElementById('savedCalls').textContent = countWithout - countWith;
+        }
+
+        // Reset demo
+        function resetDemo() {
+            countWithout = 0;
+            countWith = 0;
+            lastThrottleTime = 0;
+            
+            document.getElementById('logWithout').innerHTML = '';
+            document.getElementById('logWith').innerHTML = '';
+            document.getElementById('iyerOutput').innerHTML = '';
+            document.getElementById('positionWithout').textContent = '0';
+            document.getElementById('positionWith').textContent = '0';
+            
+            // Reset scroll positions
+            document.getElementById('scrollWithout').scrollTop = 0;
+            document.getElementById('scrollWith').scrollTop = 0;
+            
+            updateStats();
+        }
+
+        // Create throttled scroll function
+        const throttledScroll = throttle(handleScrollWith, 1000);
+
+        // Event listeners for scroll areas
+        document.getElementById('scrollWithout').addEventListener('scroll', (e) => {
+            handleScrollWithout(Math.round(e.target.scrollTop));
+        });
+
+        document.getElementById('scrollWith').addEventListener('scroll', (e) => {
+            throttledScroll(Math.round(e.target.scrollTop));
+        });
+
+        // Iyer simulator functions
+        let iyerCount = 0;
+        let iyerThrottleTime = 0;
+
+        function sayDarlingWithoutThrottle() {
+            iyerCount++;
+            const output = document.getElementById('iyerOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            output.innerHTML += `<div style="color: #e74c3c;">[${timestamp}] 🤓 अय्यर: "बबिता डार्लिंग!" (#${iyerCount})</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function sayDarlingWithThrottle() {
+            const now = Date.now();
+            if (now - iyerThrottleTime >= 3000) { // 3 second throttle
+                iyerCount++;
+                const output = document.getElementById('iyerOutput');
+                const timestamp = new Date().toLocaleTimeString();
+                output.innerHTML += `<div style="color: #27ae60;">[${timestamp}] 🤓 अय्यर (Throttled): "बबिता डार्लिंग!" (#${iyerCount})</div>`;
+                output.scrollTop = output.scrollHeight;
+                iyerThrottleTime = now;
+            } else {
+                const output = document.getElementById('iyerOutput');
+                const timestamp = new Date().toLocaleTimeString();
+                output.innerHTML += `<div style="color: #ffc107;">[${timestamp}] 🤐 अय्यर: (Throttled - wait kar raha hai...)</div>`;
+                output.scrollTop = output.scrollHeight;
+            }
+        }
+
+        // Initial stats display
+        updateStats();
+
+        // Add some fun animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoBoxes = document.querySelectorAll('.demo-box');
+            demoBoxes.forEach((box, index) => {
+                setTimeout(() => {
+                    box.style.opacity = '0';
+                    box.style.transform = 'translateY(20px)';
+                    box.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        box.style.opacity = '1';
+                        box.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

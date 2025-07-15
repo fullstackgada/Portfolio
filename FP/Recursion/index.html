@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Recursion Diagram</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        /* Mobile-first responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .header p {
+                font-size: 0.9em;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .header p {
+                font-size: 0.8em;
+            }
+            
+            .content {
+                padding: 10px;
+            }
+        }
+
+        .code-section {
+            background: #1e1e1e;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            color: #d4d4d4;
+            position: relative;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        .code-line {
+            margin: 8px 0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            word-wrap: break-word;
+        }
+
+        /* Mobile adjustments for code */
+        @media (max-width: 768px) {
+            .code-section {
+                padding: 15px;
+                font-size: 0.8em;
+                border-radius: 10px;
+            }
+            
+            .code-line {
+                padding: 3px 8px;
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .code-section {
+                padding: 10px;
+                font-size: 0.7em;
+            }
+            
+            .code-line {
+                padding: 2px 5px;
+                margin: 3px 0;
+            }
+        }
+
+        .code-line.highlight {
+            background: rgba(255, 215, 0, 0.2);
+            border-left: 4px solid #ffd700;
+        }
+
+        .keyword { color: #569cd6; }
+        .function-name { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+        .comment { color: #6a9955; }
+        .string { color: #ce9178; }
+
+        .visualization {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .stack-frame {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px;
+            min-width: 120px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: all 0.5s ease;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .stack-frame.active {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+
+        .stack-frame.completed {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            opacity: 0.8;
+        }
+
+        .arrow {
+            font-size: 1.5em;
+            color: #3498db;
+            margin: 0 5px;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        /* Mobile adjustments for visualization */
+        @media (max-width: 768px) {
+            .visualization {
+                min-height: 300px;
+                padding: 15px;
+                margin: 20px 0;
+                flex-direction: column;
+            }
+            
+            .stack-frame {
+                padding: 12px;
+                min-width: 100px;
+                font-size: 1em;
+                margin: 8px 0;
+            }
+            
+            .arrow {
+                font-size: 1.2em;
+                margin: 5px 0;
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .visualization {
+                min-height: 250px;
+                padding: 10px;
+                margin: 15px 0;
+            }
+            
+            .stack-frame {
+                padding: 10px;
+                min-width: 80px;
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+            
+            .arrow {
+                font-size: 1em;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Mobile adjustments for controls */
+        @media (max-width: 768px) {
+            .controls {
+                margin: 20px 0;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9em;
+                width: 100%;
+                max-width: 200px;
+                margin: 5px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                padding: 10px 15px;
+                font-size: 0.8em;
+            }
+        }
+
+        .explanation {
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1em;
+            line-height: 1.6;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .dialogue {
+            background: #f1f2f6;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 0.95em;
+        }
+
+        .dialogue .speaker {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            margin: 20px 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .step-info {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        /* Mobile adjustments for text sections */
+        @media (max-width: 768px) {
+            .explanation {
+                padding: 15px;
+                font-size: 0.9em;
+                margin: 15px 0;
+            }
+            
+            .dialogue {
+                padding: 15px;
+                font-size: 0.85em;
+                margin: 15px 0;
+            }
+            
+            .output {
+                padding: 15px;
+                font-size: 0.9em;
+                margin: 15px 0;
+            }
+            
+            .step-info {
+                padding: 12px;
+                font-size: 0.85em;
+                margin: 12px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .explanation {
+                padding: 12px;
+                font-size: 0.8em;
+            }
+            
+            .dialogue {
+                padding: 12px;
+                font-size: 0.8em;
+            }
+            
+            .output {
+                padding: 12px;
+                font-size: 0.8em;
+            }
+            
+            .step-info {
+                padding: 10px;
+                font-size: 0.8em;
+            }
+        }
+
+        /* Ensure text doesn't overflow */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Handle long words/URLs */
+        .code-section, .output, .explanation, .dialogue {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Recursion Interactive Diagram</h1>
+            <p>Understanding how countDown(3) works step by step</p>
+        </div>
+
+        <div class="content">
+            <div class="code-section">
+                <div class="code-line" id="line1">
+                    <span class="keyword">function</span> <span class="function-name">countDown</span>(<span class="keyword">n</span>) {
+                </div>
+                <div class="code-line" id="line2">
+                    &nbsp;&nbsp;<span class="keyword">if</span> (<span class="keyword">n</span> === <span class="number">0</span>) <span class="keyword">return</span>; 
+                    <span class="comment">// ✅ Base Case</span>
+                </div>
+                <div class="code-line" id="line3">
+                    &nbsp;&nbsp;<span class="keyword">console</span>.<span class="function-name">log</span>(<span class="keyword">n</span>);
+                </div>
+                <div class="code-line" id="line4">
+                    &nbsp;&nbsp;<span class="function-name">countDown</span>(<span class="keyword">n</span> - <span class="number">1</span>); 
+                    <span class="comment">// 🔄 Recursive Call</span>
+                </div>
+                <div class="code-line" id="line5">
+                    }
+                </div>
+            </div>
+
+            <div class="step-info" id="stepInfo">
+                Click "Start Animation" to see how recursion works!
+            </div>
+
+            <div class="visualization" id="visualization">
+                <div id="stackContainer">
+                    <!-- Stack frames will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="output" id="output">
+                <strong>Output:</strong> <span id="outputText">Ready to start...</span>
+            </div>
+
+            <div class="controls">
+                <button class="btn" id="startBtn" onclick="startAnimation()">Start Animation</button>
+                <button class="btn" id="nextBtn" onclick="nextStep()" disabled>Next Step</button>
+                <button class="btn" id="resetBtn" onclick="resetAnimation()">Reset</button>
+            </div>
+
+            <div class="explanation">
+                <h3>🎯 What's happening?</h3>
+                <p id="explanationText">
+                    Recursion is like a function calling itself repeatedly until it reaches a stopping condition (base case). 
+                    Each call creates a new "stack frame" in memory, and they resolve in reverse order.
+                </p>
+            </div>
+
+            <div class="dialogue">
+                <div class="speaker">बबिता:</div>
+                <div>जेठाजी, ये "Recursion" क्या होता है? लोग कहते हैं function खुद को call करता है?</div>
+                <br>
+                <div class="speaker">जेठालाल:</div>
+                <div>बबिता जी, Recursion एक ऐसा function होता है जो खुद को तब तक call करता है, जब तक एक "base case" न मिल जाए। जैसे आप हर बार नई साड़ी पहनती हैं और मैं हर बार इश्क़ में पड़ जाता हूं… बार-बार… लगातार…</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let steps = [];
+        let isAnimating = false;
+        let outputArray = [];
+
+        function initializeSteps() {
+            steps = [
+                {
+                    call: 'countDown(3)',
+                    n: 3,
+                    action: 'check_base_case',
+                    line: 2,
+                    explanation: 'countDown(3) called → Check if n === 0? No (3 ≠ 0), continue...'
+                },
+                {
+                    call: 'countDown(3)',
+                    n: 3,
+                    action: 'console_log',
+                    line: 3,
+                    explanation: 'Print n = 3 to console'
+                },
+                {
+                    call: 'countDown(3)',
+                    n: 3,
+                    action: 'recursive_call',
+                    line: 4,
+                    explanation: 'Call countDown(2) → Creating new stack frame'
+                },
+                {
+                    call: 'countDown(2)',
+                    n: 2,
+                    action: 'check_base_case',
+                    line: 2,
+                    explanation: 'countDown(2) called → Check if n === 0? No (2 ≠ 0), continue...'
+                },
+                {
+                    call: 'countDown(2)',
+                    n: 2,
+                    action: 'console_log',
+                    line: 3,
+                    explanation: 'Print n = 2 to console'
+                },
+                {
+                    call: 'countDown(2)',
+                    n: 2,
+                    action: 'recursive_call',
+                    line: 4,
+                    explanation: 'Call countDown(1) → Creating new stack frame'
+                },
+                {
+                    call: 'countDown(1)',
+                    n: 1,
+                    action: 'check_base_case',
+                    line: 2,
+                    explanation: 'countDown(1) called → Check if n === 0? No (1 ≠ 0), continue...'
+                },
+                {
+                    call: 'countDown(1)',
+                    n: 1,
+                    action: 'console_log',
+                    line: 3,
+                    explanation: 'Print n = 1 to console'
+                },
+                {
+                    call: 'countDown(1)',
+                    n: 1,
+                    action: 'recursive_call',
+                    line: 4,
+                    explanation: 'Call countDown(0) → Creating new stack frame'
+                },
+                {
+                    call: 'countDown(0)',
+                    n: 0,
+                    action: 'base_case_reached',
+                    line: 2,
+                    explanation: 'countDown(0) called → Check if n === 0? YES! Base case reached, return and start unwinding'
+                },
+                {
+                    call: 'countDown(1)',
+                    n: 1,
+                    action: 'return_from_recursive',
+                    line: 4,
+                    explanation: 'countDown(0) returned, now countDown(1) completes and returns'
+                },
+                {
+                    call: 'countDown(2)',
+                    n: 2,
+                    action: 'return_from_recursive',
+                    line: 4,
+                    explanation: 'countDown(1) returned, now countDown(2) completes and returns'
+                },
+                {
+                    call: 'countDown(3)',
+                    n: 3,
+                    action: 'return_from_recursive',
+                    line: 4,
+                    explanation: 'countDown(2) returned, now countDown(3) completes and returns'
+                }
+            ];
+        }
+
+        function startAnimation() {
+            if (isAnimating) return;
+            
+            isAnimating = true;
+            currentStep = 0;
+            outputArray = [];
+            
+            initializeSteps();
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('outputText').textContent = '';
+            
+            updateVisualization();
+        }
+
+        function nextStep() {
+            if (currentStep >= steps.length) {
+                document.getElementById('nextBtn').disabled = true;
+                document.getElementById('stepInfo').textContent = 'Animation Complete! 🎉';
+                return;
+            }
+
+            const step = steps[currentStep];
+            
+            // Update code highlighting
+            clearHighlights();
+            document.getElementById(`line${step.line}`).classList.add('highlight');
+            
+            // Update step info
+            document.getElementById('stepInfo').textContent = `Step ${currentStep + 1}: ${step.explanation}`;
+            
+            // Handle different actions
+            if (step.action === 'console_log') {
+                outputArray.push(step.n);
+                document.getElementById('outputText').textContent = outputArray.join(' ');
+            }
+            
+            updateVisualization();
+            currentStep++;
+            
+            if (currentStep >= steps.length) {
+                setTimeout(() => {
+                    document.getElementById('nextBtn').disabled = true;
+                    document.getElementById('stepInfo').textContent = 'Animation Complete! 🎉';
+                    isAnimating = false;
+                }, 500);
+            }
+        }
+
+        function updateVisualization() {
+            const container = document.getElementById('stackContainer');
+            container.innerHTML = '';
+            
+            // Get current active calls
+            const activeCalls = getActiveCallsAtStep(currentStep);
+            
+            // Check if we're on mobile
+            const isMobile = window.innerWidth <= 768;
+            
+            activeCalls.forEach((call, index) => {
+                const frame = document.createElement('div');
+                frame.className = 'stack-frame';
+                frame.textContent = call;
+                
+                if (index === activeCalls.length - 1) {
+                    frame.classList.add('active');
+                }
+                
+                container.appendChild(frame);
+                
+                if (index < activeCalls.length - 1) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'arrow';
+                    arrow.textContent = isMobile ? '↓' : '→';
+                    container.appendChild(arrow);
+                }
+            });
+        }
+
+        function getActiveCallsAtStep(step) {
+            const calls = [];
+            
+            if (step >= 0) calls.push('countDown(3)');
+            if (step >= 3) calls.push('countDown(2)');
+            if (step >= 6) calls.push('countDown(1)');
+            if (step >= 9) calls.push('countDown(0)');
+            
+            // Handle unwinding
+            if (step >= 10) {
+                calls.pop(); // Remove countDown(0)
+            }
+            if (step >= 11) {
+                calls.pop(); // Remove countDown(1)
+            }
+            if (step >= 12) {
+                calls.pop(); // Remove countDown(2)
+            }
+            
+            return calls;
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.code-line').forEach(line => {
+                line.classList.remove('highlight');
+            });
+        }
+
+        function resetAnimation() {
+            isAnimating = false;
+            currentStep = 0;
+            outputArray = [];
+            
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('outputText').textContent = 'Ready to start...';
+            document.getElementById('stepInfo').textContent = 'Click "Start Animation" to see how recursion works!';
+            
+            clearHighlights();
+            document.getElementById('stackContainer').innerHTML = '';
+            
+            document.getElementById('explanationText').textContent = 
+                'Recursion is like a function calling itself repeatedly until it reaches a stopping condition (base case). Each call creates a new "stack frame" in memory, and they resolve in reverse order.';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            resetAnimation();
+        });
+    </script>
+</body>
+</html>

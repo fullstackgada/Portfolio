@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Normalization - Bhide vs Jethalal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .tab-button:not(.active) {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .tab-button:hover:not(.active) {
+            background: #d5dbdb;
+            transform: translateY(-1px);
+        }
+
+        .content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .problem-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .solution-section {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .character {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .character-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .bhide {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .jethalal {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .dialogue {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-left: 65px;
+            font-style: italic;
+            border-left: 3px solid #3498db;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            transition: background-color 0.3s ease;
+        }
+
+        tr:hover td {
+            background-color: #f8f9fa;
+        }
+
+        .duplicate {
+            background-color: #ffebee !important;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { background-color: #ffebee; }
+            50% { background-color: #ffcdd2; }
+        }
+
+        .tables-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .table-wrapper {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .table-title {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: #f39c12;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .benefit-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .comparison-card {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .before {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border: 3px solid #e74c3c;
+        }
+
+        .after {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border: 3px solid #27ae60;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .tables-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 गोकुलधाम Database Normalization</h1>
+            <p>भिड़े और जेठालाल के साथ सीखें Database Normalization</p>
+        </div>
+
+        <div class="controls">
+            <button class="tab-button active" onclick="showTab('problem')">😰 भिड़े की समस्या</button>
+            <button class="tab-button" onclick="showTab('solution')">💡 जेठालाल का समाधान</button>
+            <button class="tab-button" onclick="showTab('benefits')">✨ फायदे</button>
+        </div>
+
+        <div id="problem" class="content active">
+            <div class="problem-section">
+                <div class="character">
+                    <div class="character-icon bhide">भि</div>
+                    <strong>भिड़े की परेशानी</strong>
+                </div>
+                <div class="dialogue">
+                    "अरे जेठालाल! एक ही कस्टमर का नाम और पता मेरी वेबसाइट में बार-बार स्टोर हो रहा है। कुछ भी अपडेट करना हो तो हर जगह अलग-अलग बदलना पड़ता है!"
+                </div>
+            </div>
+
+            <h3 style="color: #e74c3c; text-align: center; margin: 20px 0;">❌ Non-Normalized Table (भिड़े का Database)</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Customer Address</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1001</td>
+                        <td class="duplicate">बबीता जी</td>
+                        <td class="duplicate">गोकुलधाम सोसाइटी</td>
+                        <td>समोसा</td>
+                        <td>10</td>
+                        <td>₹100</td>
+                    </tr>
+                    <tr>
+                        <td>1002</td>
+                        <td class="duplicate">बबीता जी</td>
+                        <td class="duplicate">गोकुलधाम सोसाइटी</td>
+                        <td>जलेबी</td>
+                        <td>5</td>
+                        <td>₹75</td>
+                    </tr>
+                    <tr>
+                        <td>1003</td>
+                        <td>तारक मेहता</td>
+                        <td>गदा इलेक्ट्रॉनिक्स</td>
+                        <td>कचोरी</td>
+                        <td>8</td>
+                        <td>₹120</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight">
+                <h3>😱 समस्याएं:</h3>
+                <p>• डेटा रिडंडेंसी (Duplication)<br>
+                • Storage की बर्बादी<br>
+                • Update करते समय परेशानी<br>
+                • Data Inconsistency का खतरा</p>
+            </div>
+        </div>
+
+        <div id="solution" class="content">
+            <div class="solution-section">
+                <div class="character">
+                    <div class="character-icon jethalal">जे</div>
+                    <strong>जेठालाल का स्मार्ट समाधान</strong>
+                </div>
+                <div class="dialogue">
+                    "अरे भिड़े! नॉर्मलाइजेशन का मतलब होता है — डेटा को इस तरह से अलग-अलग टेबल्स में बांटना ताकि डुप्लिकेशन न हो!"
+                </div>
+            </div>
+
+            <h3 style="color: #27ae60; text-align: center; margin: 20px 0;">✅ Normalized Tables (जेठालाल का Database)</h3>
+
+            <div class="tables-container">
+                <div class="table-wrapper">
+                    <div class="table-title">👥 Customers Table</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>C001</td>
+                                <td>बबीता जी</td>
+                                <td>गोकुलधाम सोसाइटी</td>
+                            </tr>
+                            <tr>
+                                <td>C002</td>
+                                <td>तारक मेहता</td>
+                                <td>गदा इलेक्ट्रॉनिक्स</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-wrapper">
+                    <div class="table-title">🛍️ Orders Table</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer ID</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1001</td>
+                                <td>C001</td>
+                                <td>समोसा</td>
+                                <td>10</td>
+                                <td>₹100</td>
+                            </tr>
+                            <tr>
+                                <td>1002</td>
+                                <td>C001</td>
+                                <td>जलेबी</td>
+                                <td>5</td>
+                                <td>₹75</td>
+                            </tr>
+                            <tr>
+                                <td>1003</td>
+                                <td>C002</td>
+                                <td>कचोरी</td>
+                                <td>8</td>
+                                <td>₹120</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h3>🎯 जेठालाल की सलाह:</h3>
+                <p>"अब बबीता जी की डिटेल्स एक बार ही स्टोर हुई। अगर एड्रेस बदलना हो, सिर्फ कस्टमर टेबल में एक बार चेंज करना होगा!"</p>
+            </div>
+        </div>
+
+        <div id="benefits" class="content">
+            <h3 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">🌟 Normalization के फायदे</h3>
+            
+            <div class="benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">💾</div>
+                    <h4>Storage बचाओ</h4>
+                    <p>डुप्लिकेट डेटा नहीं, कम storage</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h4>Fast Updates</h4>
+                    <p>एक जगह बदलो, हर जगह अपडेट</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔒</div>
+                    <h4>Data Integrity</h4>
+                    <p>Consistent और accurate data</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">🧹</div>
+                    <h4>Clean Structure</h4>
+                    <p>Organized और maintainable</p>
+                </div>
+            </div>
+
+            <div class="comparison">
+                <div class="comparison-card before">
+                    <h4>❌ पहले (भिड़े का तरीका)</h4>
+                    <p>• बबीता जी का नाम 5 बार<br>
+                    • Address 5 बार store<br>
+                    • Update करने के लिए 5 जगह बदलना<br>
+                    • Data में गलती का डर</p>
+                </div>
+                
+                <div class="comparison-card after">
+                    <h4>✅ बाद में (जेठालाल का तरीका)</h4>
+                    <p>• बबीता जी का नाम 1 बार<br>
+                    • Address 1 बार store<br>
+                    • Update करने के लिए 1 जगह बदलना<br>
+                    • 100% accurate data</p>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <div class="character">
+                    <div class="character-icon jethalal">जे</div>
+                    <strong>जेठालाल का अंतिम फंडा</strong>
+                </div>
+                <div class="dialogue">
+                    "देख भिड़े, जैसे गर्मियों में AC अच्छा लगता है, लेकिन अगर बिजली चली जाए तो पंखा ही काम आता है! वैसे ही कभी-कभी Denormalization भी करना पड़ता है जब reporting तेज़ चाहिए!"
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Add some interactive hover effects
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                if (this.querySelector('.duplicate')) {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.transition = 'transform 0.2s ease';
+                }
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

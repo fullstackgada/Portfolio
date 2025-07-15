@@ -1,0 +1,1867 @@
+/* Import Comic Sans MS-like web font */
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&display=swap');
+
+/* =========================
+   FullStackGada Style Sheet
+   ========================= */
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+    font-family: 'Kalam', 'Comic Sans MS', 'Caveat', cursive, sans-serif;
+    line-height: 1.7;   
+    color: #333;
+    background: #f9fafc;
+    overflow-x: hidden;
+     padding-top: 65px; 
+}
+
+/* =========================
+   Header & Navigation
+   ========================= */
+   #header-include {
+    position: relative;
+    z-index: 1000;
+}
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #f9fafc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 2rem;
+    color: #356c67;
+    text-decoration: none;
+    text-shadow: 1px 1px rgba(0,0,0,0.1);
+}
+
+.nav-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.nav-menu a {
+    color: #356c67;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s, transform 0.3s;
+    font-weight: 600;
+}
+
+.nav-menu a:hover {
+    color: #ff6f61;
+    transform: translateY(-2px);
+}
+
+/* Instagram Button */
+.instagram-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 40px;
+    background: #e1d5ff;
+    border-radius: 8px;
+    color: #356c67;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 1rem;
+    gap: 8px;
+}
+
+.instagram-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: #356c67;
+    transition: fill 0.3s;
+}
+
+.instagram-icon:hover svg {
+    fill: #ff6f61 !important;
+}
+
+.instagram-icon:hover {
+    transform: translateY(-2px);
+}
+
+.instagram-icon::after {
+    content: "Follow";
+    font-size: 0.9rem;
+    color: #356c67;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.hamburger.animated {
+    transition: transform 0.4s cubic-bezier(.68,-0.55,.27,1.55);
+    transform: rotate(90deg) scale(1.2);
+}
+
+/* =========================
+   Hero Section
+   ========================= */
+.hero {
+    background: #356c67;
+    background-size: 20px 20px;
+    color: #fff;
+    text-align: center;
+    padding: 30px 2rem 50px;
+}
+
+.hero-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    text-shadow: 1px 1px rgba(0,0,0,0.1);
+    animation: fadeIn 1.5s ease-out;
+}
+
+.hero-subtitle {
+    font-size: 2.2rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 15px 40px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    text-decoration: none;
+    background: #ff6f61;
+    color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 3px solid #ff6f61;
+    color: #fff;
+}
+
+.btn:hover {
+    transform: translateY(-1px) scale(1.01);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   Section Divider
+   ========================= */
+.wave-divider {
+    width: 100%;
+    height: 70px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V60c200,30,400,30,600,0s400-60,600,0V0H0Z" fill="%23f9fafc"/></svg>');
+    background-size: cover;
+    margin-bottom: -1px;
+}
+
+/* =========================
+   Neumorphic Card
+   ========================= */
+.neu-card {
+    background: #f9f9fb;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 2rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-top: 4px solid #356c67;
+}
+
+.neu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   About Section
+   ========================= */
+.about {
+    padding: 50px 2rem;
+    background: #f9fafc;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 3rem;
+    color: #356c67;
+    margin-bottom: 1.5rem;
+}
+
+.section-title-footer {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 5px;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.about-text {
+    font-size: 1.3rem;
+    line-height: 1.8;
+}
+
+.character-card {
+    background: #ff6f61;
+    color: #fff;
+    padding: 2.5rem;
+    border-radius: 20px;
+    text-align: center;
+    transform: rotate(-2deg);
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.character-card:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.character-emoji {
+    margin-bottom: 1rem;
+}
+
+.character-emoji img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: block;
+    margin: 0 auto;
+}
+
+/* =========================
+   Banter (Chat) Section
+   ========================= */
+.banter {
+    padding: 50px 2rem;
+    background: #e5deff4d;
+}
+
+.chat-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: transparent;
+    border-radius: 20px;
+    padding: 1.5rem;
+}
+
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.chat-message.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.chat-message.left {
+    justify-content: flex-start;
+}
+
+.chat-message.right {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+.chat-bubble {
+    max-width: 70%;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    position: relative;
+    font-size: 1.1rem;
+    color: #000;
+    border: 1px solid #000;
+    background: #fff;
+}
+
+/* Specific background colors for each character */
+.chat-bubble.jethalal { background: #ffebee; }
+.chat-bubble.babita { background: #e0f7fa; }
+.chat-bubble.bhide { background: #e6f4ea; }
+.chat-bubble.babubhaiya,
+.chat-bubble.raju { background: #fff; }
+
+.chat-bubble::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+}
+
+.left .chat-bubble::after {
+    left: -20px;
+    border-right-color: #000;
+}
+
+.right .chat-bubble::after {
+    right: -20px;
+    border-left-color: #000;
+}
+
+.chat-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 1rem;
+    object-fit: cover;
+    border: 3px solid;
+    animation: bounce 2s infinite;
+}
+
+.chat-message.left .chat-avatar {
+    border-color: #a855f7;
+}
+
+.chat-message.right .chat-avatar {
+    border-color: #f97316;
+}
+
+.chat-author {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+/* Name labels below avatars */
+.chat-message.left::after,
+.chat-message.right::after {
+    content: attr(data-author);
+    position: absolute;
+    bottom: -30px;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 5px 15px;
+    border-radius: 15px;
+    color: #fff;
+}
+
+/* =========================
+   Features Section
+   ========================= */
+.features {
+    padding: 50px 2rem;
+    background: #f9fafc;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature-row .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 0;
+}
+
+.feature-row h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.feature-icon {
+    font-size: 4rem;
+    color: #ff6f61;
+    margin-bottom: 1rem;
+}
+
+/* =========================
+   Tech Stack Section
+   ========================= */
+.tech-stack {
+    padding: 50px 2rem;
+    background: #e5deff4d;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.tech-item {
+    background: #356c67;
+    color: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.tech-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tech-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.interactive-section {
+    padding: 50px 2rem;
+    background: #f9fafc;
+}
+.interactive-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    justify-items: center;
+    align-items: stretch;
+}
+
+.interactive-card {
+    flex: 1 1 0;
+    max-width: 340px;
+    min-width: 260px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(53,108,103,0.08);
+    border-radius: 18px;
+    background: #fff;
+    margin-bottom: 1.5rem;
+    margin-top: 5px;
+}
+.font-color-secondary {
+    color: #ff6f61;
+}
+
+/* Card buttons container */
+.card-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    flex-wrap: wrap;
+}
+
+/* Make Try Demo button smaller inside interactive cards */
+.interactive-card .btn {
+    padding: 8px 18px;
+    font-size: 1rem;
+    min-width: 90px;
+    border-radius: 30px;
+    margin-top: 0;
+}
+
+/* Reel button styling */
+.btn-reel {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #fff !important;
+    border: none;
+    padding: 8px 18px;
+    font-size: 1rem;
+    min-width: 90px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-reel:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(188, 24, 136, 0.3);
+}
+
+.btn-reel i {
+    font-size: 0.9rem;
+}
+/* Responsive: stack cards on small screens */
+@media (max-width: 1200px) {
+    .interactive-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .interactive-cards {
+        grid-template-columns: 1fr;
+    }
+    .interactive-card {
+        max-width: 100%;
+    }
+}
+/* ...existing code... */
+/* =========================
+   YouTube Section
+   ========================= */
+.youtube-section {
+    padding: 50px 2rem;
+    background: #fff;
+    color: #333;
+}
+
+.youtube-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.youtube-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 3.5rem;
+    display: block;
+    color: #356c67;
+}
+
+/* =========================
+   Payment Section
+   ========================= */
+.payment-section {
+    padding: 50px 2rem;
+    background: #fff;
+}
+
+.payment-section {
+    padding: 50px 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    overflow: hidden;
+}
+/* --- Support Card Style --- */
+.payment-support-center {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 1.5rem;
+}
+.payment-support-title {
+  font-size: 2.5rem;
+  font-family: 'Kalam', 'Comic Sans MS', 'Caveat', cursive, sans-serif;
+  color: #222;
+  margin-bottom: 0.7rem;
+  font-weight: 700;
+}
+.payment-support-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2.2rem;
+  line-height: 1.6;
+}
+.payment-support-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(53,108,103,0.10);
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin: 0 auto;
+  max-width: 420px;
+}
+.payment-support-icon {
+  background: #ffefea;
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 2px 8px rgba(255,111,97,0.10);
+}
+.payment-support-icon span {
+  font-size: 3.2rem;
+}
+.payment-support-product {
+  font-size: 1.5rem;
+  color: #ff6f61;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.payment-support-desc {
+  color: #444;
+  font-size: 1.08rem;
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+.payment-support-btn {
+  width: 100%;
+  padding: 16px 0;
+  background: #ff6f61;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(53,108,103,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.payment-support-btn:hover {
+  background: #356c67;
+  box-shadow: 0 6px 18px rgba(53,108,103,0.18);
+  transform: translateY(-2px) scale(1.02);
+}
+@media (max-width: 600px) {
+  .payment-support-card {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+  }
+  .payment-support-title {
+    font-size: 1.5rem;
+  }
+  .payment-support-icon {
+    width: 60px;
+    height: 60px;
+  }
+  .payment-support-icon span {
+    font-size: 2rem;
+  }
+  .payment-support-product {
+    font-size: 1.1rem;
+  }
+}
+
+/* Modern Payment Card Styles */
+.modern-payment-card {
+  max-width: 420px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 28px;
+  box-shadow: 0 8px 32px rgba(53,108,103,0.10), 0 1.5px 8px rgba(255,111,97,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  border: 1.5px solid #f3eaea;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.modern-payment-card:hover {
+  box-shadow: 0 16px 48px rgba(53,108,103,0.18), 0 2px 12px rgba(255,111,97,0.13);
+  transform: translateY(-4px) scale(1.01);
+}
+.modern-payment-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.modern-payment-emoji {
+  font-size: 3.2rem;
+  background: #ffefea;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(255,111,97,0.10);
+  margin-right: 0.5rem;
+}
+.modern-payment-title {
+  font-size: 2.1rem;
+  color: #356c67;
+  font-weight: 700;
+  margin: 0;
+}
+.modern-payment-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0.2rem 0 0 0;
+}
+.modern-payment-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+.modern-payment-product {
+  font-size: 1.4rem;
+  color: #ff6f61;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.modern-payment-desc {
+  color: #444;
+  font-size: 1.08rem;
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+.modern-payment-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.7rem 0;
+}
+.modern-payment-currency {
+  font-size: 1.5rem;
+  color: #ff6f61;
+  font-weight: 600;
+}
+.modern-payment-amount {
+  font-size: 2.7rem;
+  color: #ff6f61;
+  font-weight: 700;
+  line-height: 1;
+}
+.modern-payment-label {
+  font-size: 1.1rem;
+  color: #888;
+  font-weight: 500;
+}
+.modern-payment-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.7rem 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.modern-payment-benefits li {
+  font-size: 1.05rem;
+  color: #356c67;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.modern-payment-benefits i {
+  color: #ff6f61;
+  font-size: 1.1rem;
+}
+.modern-payment-btn {
+  width: 100%;
+  padding: 15px 0;
+  background: linear-gradient(90deg, #356c67 0%, #2d5a54 100%);
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(53,108,103,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.modern-payment-btn:hover {
+  background: linear-gradient(90deg, #ff6f61 0%, #e55a4f 100%);
+  box-shadow: 0 6px 18px rgba(255,111,97,0.18);
+  transform: translateY(-2px) scale(1.02);
+}
+.modern-payment-btn .btn-arrow {
+  font-size: 1.3rem;
+  transition: transform 0.3s;
+}
+.modern-payment-btn:hover .btn-arrow {
+  transform: translateX(5px);
+}
+.modern-payment-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.2rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid #f3eaea;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.modern-payment-secure {
+  color: #356c67;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.modern-payment-secure i {
+  color: #28a745;
+  font-size: 1.1rem;
+}
+.modern-payment-methods {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1.1rem;
+  color: #888;
+}
+.modern-payment-methods i {
+  font-size: 1.5rem;
+  color: #356c67;
+  transition: color 0.3s, transform 0.3s;
+}
+.modern-payment-methods i:hover {
+  color: #ff6f61;
+  transform: translateY(-2px);
+}
+@media (max-width: 600px) {
+  .modern-payment-card {
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+  }
+  .modern-payment-title {
+    font-size: 1.3rem;
+  }
+  .modern-payment-header {
+    gap: 0.7rem;
+  }
+  .modern-payment-emoji {
+    font-size: 2.1rem;
+    width: 44px;
+    height: 44px;
+  }
+  .modern-payment-amount {
+    font-size: 2rem;
+  }
+}
+
+.payment-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23356c67" opacity="0.05"/><circle cx="75" cy="75" r="1" fill="%23ff6f61" opacity="0.05"/><circle cx="50" cy="10" r="0.5" fill="%23356c67" opacity="0.03"/><circle cx="10" cy="50" r="0.5" fill="%23ff6f61" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+    pointer-events: none;
+}
+
+.payment-hero {
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Payment Header */
+.payment-header {
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.jethalal-avatar {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.jethalal-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #ff6f61;
+    box-shadow: 0 10px 30px rgba(255, 111, 97, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+.speech-bubble {
+    position: absolute;
+    top: -20px;
+    left: 140px;
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    border: 2px solid #ff6f61;
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: -10px;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: #ff6f61;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 22px;
+    left: -6px;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-right-color: #fff;
+}
+
+.speech-bubble p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.4;
+}
+
+.payment-title {
+    font-size: 3.5rem;
+    color: #356c67;
+    margin-bottom: 0rem;
+    font-weight: 700;
+}
+
+.payment-subtitle {
+    font-size: 1.3rem;
+    color: #666;
+    margin-bottom: 0;
+}
+
+/* Modern Payment Card */
+.payment-card-modern {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 25px;
+    padding: 3rem;
+    margin: 1rem 0;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    border-radius: 25px;
+}
+
+.floating-icons {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.float-icon {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.1;
+    animation: floatAround 15s infinite linear;
+}
+
+.float-icon:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.float-icon:nth-child(2) {
+    top: 60%;
+    right: 15%;
+    animation-delay: 3s;
+}
+
+.float-icon:nth-child(3) {
+    bottom: 30%;
+    left: 20%;
+    animation-delay: 6s;
+}
+
+.float-icon:nth-child(4) {
+    top: 40%;
+    right: 30%;
+    animation-delay: 9s;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Jalebi Section */
+.jalebi-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.jalebi-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+    animation: bounce 2s infinite;
+}
+
+.jalebi-section h3 {
+    font-size: 2.2rem;
+    color: #356c67;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.card-description {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Price Section */
+.price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.price-tag {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.currency {
+    font-size: 2rem;
+    color: #ff6f61;
+    font-weight: 600;
+}
+
+.amount {
+    font-size: 4rem;
+    color: #ff6f61;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.price-label {
+    font-size: 1.2rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.price-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1rem;
+    color: #356c67;
+}
+
+.benefit-item i {
+    color: #ff6f61;
+    font-size: 1.1rem;
+}
+
+/* Modern Payment Button */
+.payment-btn-modern {
+    width: 100%;
+    padding: 18px 30px;
+    background: linear-gradient(135deg, #356c67 0%, #2d5a54 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.payment-btn-modern:hover::before {
+    left: 100%;
+}
+
+.payment-btn-modern:hover {
+    background: linear-gradient(135deg, #ff6f61 0%, #e55a4f 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 111, 97, 0.4);
+}
+
+.btn-icon {
+    font-size: 1.5rem;
+}
+
+.btn-text {
+    flex: 1;
+}
+
+.btn-arrow {
+    font-size: 1.5rem;
+    transition: transform 0.3s;
+}
+
+.payment-btn-modern:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+/* Payment Security */
+.payment-security {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 3rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #356c67;
+    font-weight: 600;
+}
+
+.security-badge i {
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.payment-methods-modern {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.methods-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.method-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.method-icons i {
+    font-size: 1.8rem;
+    color: #356c67;
+    transition: transform 0.3s, color 0.3s;
+}
+
+.method-icons i:hover {
+    transform: translateY(-3px);
+    color: #ff6f61;
+}
+
+/* Support Stats */
+.support-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    transition: transform 0.3s;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ff6f61;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #666;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Testimonial Section */
+.testimonial-section {
+    margin-top: 3rem;
+}
+
+.testimonial-card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    padding: 2rem;
+    border-radius: 20px;
+    border-left: 4px solid #ff6f61;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.testimonial-content p {
+    font-size: 1.2rem;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.testimonial-author {
+    color: #356c67;
+    font-weight: 600;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes floatAround {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(30px, -30px) rotate(90deg); }
+    50% { transform: translate(0, -60px) rotate(180deg); }
+    75% { transform: translate(-30px, -30px) rotate(270deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+
+/* =========================
+   Contact Section
+   ========================= */
+.contact {
+    padding: 50px 2rem;
+    background: #356c67;
+    color: #fff;
+}
+
+.contact-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.contact-form {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 2rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    font-family: 'Kalam', 'Comic Sans MS', 'Caveat', cursive, sans-serif;
+    background: #f9f9fb;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+    outline-color: #ff6f61;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.social-link {
+    padding: 1rem;
+    background: #356c67;
+    border-radius: 50%;
+    text-decoration: none;
+    color: #fff;
+    font-size: 2rem;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.social-link:hover {
+    transform: rotate(360deg);
+    background: #ff6f61;
+}
+
+/* =========================
+   Footer
+   ========================= */
+.footer {
+    background: #2d2d2d;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* =========================
+   Quotes (Speech Bubble)
+   ========================= */
+.gada-quote,
+.gada-quote1 {
+    background: #ff6f61;
+    color: #333;
+    padding: 1rem 0rem;
+    border-radius: 20px;
+    font-size: 1.4rem;
+    font-style: italic;
+    margin: 2rem 0;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.gada-quote::after,
+.gada-quote1::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: #ff6f61;
+}
+
+/* =========================
+   Animations
+   ========================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+    100% { transform: translateY(0) rotate(360deg); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes confetti {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* =========================
+   Confetti Effect
+   ========================= */
+.confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.confetti-piece {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #356c67;
+    animation: confetti 4s infinite;
+}
+
+.confetti-piece:nth-child(odd) {
+    background: #ff6f61;
+    border-radius: 50%;
+}
+
+.confetti-piece:nth-child(even) {
+    background: #356c67;
+    transform: rotate(45deg);
+}
+
+/* =========================
+   Floating Emojis
+   ========================= */
+.floating-emojis {
+    position: absolute;
+    font-size: 3rem;
+    animation: particleFloat 8s ease-in-out infinite;
+}
+
+.emoji-1 { top: 15%; left: 5%; animation-delay: 0s; }
+.emoji-2 { top: 50%; right: 5%; animation-delay: 2s; }
+.emoji-3 { bottom: 20%; left: 15%; animation-delay: 4s; }
+
+/* =========================
+   Scroll Animation
+   ========================= */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   Utility
+   ========================= */
+.icon-color {
+    color: #ff6f61;
+    font-size: 30px;
+}
+.font-family{
+    font-family: 'Kalam', 'Comic Sans MS', 'Caveat', cursive, sans-serif;
+    line-height: 1.7;   
+}
+/* =========================
+   Responsive Styles
+   ========================= */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 5px;
+    }
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 69.5px;
+        left: 0;
+        width: 100%;
+        background: #356c67;
+        padding: 1rem;
+        gap: 1px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translatex(-20px);
+        transition: opacity 0.4s, transform 0.4s;
+    }
+    .nav-menu.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translatex(0);
+    }
+    .nav-menu li {
+        width: 100%;
+    }
+    .instagram-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 46px !important;
+        background: transparent !important;
+        border-radius: 8px;
+        color: white !important;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-left: 0rem;
+        gap: 8px;
+    }
+    .nav-menu a,
+    .instagram-icon {
+        color: #fff !important;
+        font-size: 1.3rem;
+        width: 100%;
+        display: inline-flex;
+        padding: 0.4rem 0;
+        border-radius: 8px;
+        text-align: left;
+    }
+    .instagram-icon svg {
+        width: 25px;
+        height: 25px;
+        fill: #ff6f61 !important;
+        transition: fill 0.3s;
+    }
+    .instagram-icon::after {
+        content: "Follow";
+        font-size: 1.3rem;
+        color: #ff6f61!important;
+    }
+    .nav-menu a:hover,
+    .instagram-icon:hover {
+        color: #ff6f61 !important;
+        transform: none;
+    }
+    .hamburger {
+        display: block;
+        font-size: 2.2rem;
+        color: #356c67;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 2100;
+        position: relative;
+    }
+    .hero h1 {
+        font-size: 3rem;
+    }
+    .hero-subtitle {
+        font-size: 1.8rem;
+    }
+    .about-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    .chat-bubble {
+        max-width: 85%;
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+    }
+    .chat-avatar {
+        font-size: 1.2rem;
+        margin: 0 0.5rem;
+    }
+    .chat-author {
+        font-size: 0.8rem;
+    }
+    .chat-container {
+        padding: 1.5rem;
+    }
+    .neu-card {
+        padding: 10px;
+    }
+    .feature-icon {
+        font-size: 3rem;
+        color: #356c67;
+        margin-bottom: 1rem;
+    }
+    .youtube-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .section-title {
+        font-size: 2.5rem;
+    }
+    .about-text, .testimonial-text {
+        font-size: 1.2rem;
+        padding: 10px;
+    }
+    .btn {
+        font-size: 1.2rem;
+    }
+    .character-emoji img {
+        width: 120px;
+        height: 120px;
+    }
+    .about {
+        padding: 30px 1.2rem;
+        background: #f9fafc;
+    }
+    .tech-stack {
+        padding: 30px 1.2rem;
+        background: #e5deff4d;
+    }
+    .tech-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem;
+    }
+    .features {
+        padding: 30px 1.2rem;
+        background: #f9fafc;
+    }
+    .banter {
+        padding: 30px 1.2rem;
+        background: #e5deff4d;
+    }
+    .youtube-section {
+        padding: 30px 1.2rem;
+        background: #fff;
+        color: #333;
+    }
+    .contact {
+        padding: 30px 1.2rem;
+        background: #356c67;
+        color: #fff;
+    }
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.3rem;
+        font-family: 'Kalam', 'Comic Sans MS', 'Caveat', cursive, sans-serif;
+        background: #f9f9fb;
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .social-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    .social-link {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    .footer {
+        padding: 1.5rem;
+    }
+    .interactive-section {
+        padding: 30px 1.2rem !important;
+        background: #f9fafc !important;
+    }
+    .interactive-cards {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        justify-items: center !important;
+        align-items: stretch !important;
+    }
+    .interactive-card {
+        max-width: 100% !important;
+        min-width: 280px !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 1.2rem !important;
+        margin-bottom: 1rem !important;
+        margin-top: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .interactive-img {
+        height: 180px !important;
+        margin-bottom: 0.8rem !important;
+        width: 100% !important;
+    }
+    .interactive-card h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 0.8rem !important;
+        text-align: center !important;
+    }
+    .card-buttons {
+        gap: 8px !important;
+        margin-top: 1rem !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+    .interactive-card .btn {
+        padding: 6px 14px !important;
+        font-size: 0.9rem !important;
+        min-width: 80px !important;
+    }
+    .btn-reel {
+        padding: 6px 14px !important;
+        font-size: 0.9rem !important;
+        min-width: 80px !important;
+    }
+    
+    /* Payment Section Mobile Responsive */
+    .payment-section {
+        padding: 30px 1.2rem;
+    }
+    
+    .payment-cards {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    .payment-card {
+        padding: 1.5rem;
+    }
+    
+    .payment-card.featured {
+        transform: none;
+    }
+    
+    .payment-card.featured:hover {
+        transform: translateY(-5px);
+    }
+    
+    .price {
+        font-size: 2rem;
+    }
+    
+    .payment-icons {
+        gap: 1rem;
+    }
+    
+    .payment-method {
+        padding: 0.5rem;
+    }
+    
+    .payment-method i {
+        font-size: 2rem;
+    }
+}
+
+/* =========================
+   Interactive Card Images
+   ========================= */
+.interactive-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    margin-bottom: 1rem;
+    background: #eee;
+}
+
+/* =========================
+   Back to Top Button
+   ========================= */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: #356c67;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(53, 108, 103, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: #ff6f61;
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 111, 97, 0.4);
+}
+
+.back-to-top:active {
+    transform: translateY(-1px) scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First-Class & Higher-Order Functions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: linear-gradient(145deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .first-class-icon {
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+        }
+
+        .higher-order-icon {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .code-container {
+            background: #2d3748;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            color: #e2e8f0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-title {
+            background: #4a5568;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px 5px 0 0;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin: -20px -20px 15px -20px;
+        }
+
+        .keyword { color: #81c8ff; }
+        .function-name { color: #f7e018; }
+        .string { color: #9ae6b4; }
+        .comment { color: #718096; }
+        .output { color: #fbb6ce; }
+
+        .demo-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .demo-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .demo-box:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .run-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .run-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .reset-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .reset-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .output-box {
+            background: #1a202c;
+            color: #9ae6b4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: monospace;
+            min-height: 50px;
+            border-left: 4px solid #38b2ac;
+        }
+
+        .concept-explanation {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #f6ad55;
+        }
+
+        .concept-explanation h3 {
+            color: #744210;
+            margin-bottom: 10px;
+        }
+
+        .concept-explanation p {
+            color: #744210;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .visual-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            font-weight: bold;
+            color: #4a5568;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .arrow {
+            font-size: 1.5em;
+            color: #667eea;
+        }
+
+        /* Tablet and small desktop styles */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+
+        /* Tablet styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+                margin: 5px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            
+            .demo-section {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .visual-flow {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .section {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .section h2 {
+                font-size: 1.5em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+            
+            .code-container {
+                padding: 15px;
+                font-size: 0.9em;
+                overflow-x: auto;
+            }
+            
+            .run-button, .reset-button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+                margin: 8px 3px;
+            }
+            
+            .demo-box {
+                padding: 15px;
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                padding: 10px;
+                margin: 0;
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+            
+            .section {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .section h2 {
+                font-size: 1.3em;
+                margin-bottom: 15px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+            
+            .icon {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                gap: 3px;
+                margin-bottom: 15px;
+            }
+            
+            .tab {
+                padding: 8px 12px;
+                font-size: 0.8em;
+            }
+            
+            .code-container {
+                padding: 10px;
+                font-size: 0.8em;
+                margin: 10px 0;
+            }
+            
+            .code-title {
+                padding: 6px 10px;
+                font-size: 0.8em;
+                margin: -10px -10px 10px -10px;
+            }
+            
+            .run-button, .reset-button {
+                padding: 8px 15px;
+                font-size: 0.8em;
+                margin: 5px 2px;
+                border-radius: 20px;
+                width: calc(50% - 4px);
+                text-align: center;
+            }
+            
+            .demo-box {
+                padding: 12px;
+            }
+            
+            .demo-box h3 {
+                font-size: 1.1em;
+                margin-bottom: 10px;
+            }
+            
+            .output-box {
+                padding: 10px;
+                font-size: 0.85em;
+                margin-top: 10px;
+            }
+            
+            .concept-explanation {
+                padding: 15px;
+                margin: 10px 0;
+            }
+            
+            .concept-explanation h3 {
+                font-size: 1.1em;
+                margin-bottom: 8px;
+            }
+            
+            .concept-explanation p {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+            
+            .flow-box {
+                padding: 10px 15px;
+                font-size: 0.9em;
+                text-align: center;
+            }
+            
+            .visual-flow {
+                gap: 10px;
+                margin: 15px 0;
+            }
+            
+            .arrow {
+                font-size: 1.2em;
+            }
+            
+            ul {
+                font-size: 0.9em;
+                margin-left: 15px !important;
+                line-height: 1.6 !important;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 320px) {
+            .container {
+                padding: 8px;
+            }
+            
+            h1 {
+                font-size: 1.3em;
+            }
+            
+            .section {
+                padding: 10px;
+            }
+            
+            .section h2 {
+                font-size: 1.2em;
+            }
+            
+            .code-container {
+                padding: 8px;
+                font-size: 0.75em;
+            }
+            
+            .run-button, .reset-button {
+                padding: 6px 12px;
+                font-size: 0.75em;
+                margin: 3px 1px;
+            }
+            
+            .demo-box {
+                padding: 10px;
+            }
+            
+            .output-box {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+            
+            .tabs {
+                margin-bottom: 10px;
+            }
+            
+            .concept-explanation {
+                padding: 10px;
+                margin: 8px 0;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .container {
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            }
+            
+            .section:hover {
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            }
+            
+            .run-button:hover, .reset-button:hover {
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 First-Class & Higher-Order Functions</h1>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('first-class')">First-Class Functions</button>
+            <button class="tab" onclick="showTab('higher-order')">Higher-Order Functions</button>
+            <button class="tab" onclick="showTab('examples')">Live Examples</button>
+        </div>
+
+        <div id="first-class" class="tab-content active">
+            <div class="section">
+                <h2>
+                    <span class="icon first-class-icon">1</span>
+                    First-Class Functions
+                </h2>
+                
+                <div class="concept-explanation">
+                    <h3>🎯 What are First-Class Functions?</h3>
+                    <p>Functions that can be treated like any other value - they can be <span class="highlight">assigned to variables</span>, <span class="highlight">passed as arguments</span>, and <span class="highlight">returned from other functions</span>.</p>
+                </div>
+
+                <div class="visual-flow">
+                    <div class="flow-box">Function</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-box">Variable</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-box">Pass Around</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-box">Use Anywhere</div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-title">Example 1: Assigning Function to Variable</div>
+                    <pre><code><span class="keyword">const</span> <span class="function-name">greet</span> = <span class="keyword">function</span>(<span class="string">name</span>) {
+    <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="string">name</span>;
+};
+
+<span class="comment">// Function stored in variable can be called</span>
+console.<span class="function-name">log</span>(<span class="function-name">greet</span>(<span class="string">"Babita ji"</span>)); <span class="comment">// Output: Hello, Babita ji</span></code></pre>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-box">
+                        <h3>🔧 Try it yourself:</h3>
+                        <button class="run-button" onclick="demoFirstClass1()">Run Example 1</button>
+                        <button class="reset-button" onclick="resetOutput('output1')">Reset</button>
+                        <div id="output1" class="output-box">Click the button to see the output!</div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>📚 Key Points:</h3>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li>Functions are values in JavaScript</li>
+                            <li>Can be stored in variables</li>
+                            <li>Can be passed as arguments</li>
+                            <li>Can be returned from functions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="higher-order" class="tab-content">
+            <div class="section">
+                <h2>
+                    <span class="icon higher-order-icon">H</span>
+                    Higher-Order Functions
+                </h2>
+                
+                <div class="concept-explanation">
+                    <h3>🚀 What are Higher-Order Functions?</h3>
+                    <p>Functions that either <span class="highlight">take other functions as arguments</span> or <span class="highlight">return functions</span>. They enable powerful programming patterns!</p>
+                </div>
+
+                <div class="visual-flow">
+                    <div class="flow-box">Function A</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-box">Higher-Order Function</div>
+                    <div class="arrow">→</div>
+                    <div class="flow-box">Enhanced Result</div>
+                </div>
+
+                <div class="code-container">
+                    <div class="code-title">Example: Function taking another function as argument</div>
+                    <pre><code><span class="keyword">function</span> <span class="function-name">greetUser</span>(<span class="string">name, formatter</span>) {
+    <span class="keyword">return</span> <span class="function-name">formatter</span>(<span class="string">name</span>);
+}
+
+<span class="keyword">function</span> <span class="function-name">uppercaseName</span>(<span class="string">name</span>) {
+    <span class="keyword">return</span> <span class="string">name</span>.<span class="function-name">toUpperCase</span>();
+}
+
+<span class="comment">// Passing function as argument</span>
+console.<span class="function-name">log</span>(<span class="function-name">greetUser</span>(<span class="string">"babita ji"</span>, <span class="function-name">uppercaseName</span>));
+<span class="comment">// Output: BABITA JI</span></code></pre>
+                </div>
+
+                <div class="demo-section">
+                    <div class="demo-box">
+                        <h3>🎮 Interactive Demo:</h3>
+                        <button class="run-button" onclick="demoHigherOrder1()">Function as Argument</button>
+                        <button class="run-button" onclick="demoHigherOrder2()">Returning Function</button>
+                        <button class="reset-button" onclick="resetOutput('output2')">Reset</button>
+                        <div id="output2" class="output-box">Choose a demo to run!</div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>🌟 Common Higher-Order Functions:</h3>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>map()</strong> - Transform array elements</li>
+                            <li><strong>filter()</strong> - Filter array elements</li>
+                            <li><strong>reduce()</strong> - Reduce array to single value</li>
+                            <li><strong>forEach()</strong> - Execute function for each element</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="examples" class="tab-content">
+            <div class="section">
+                <h2>
+                    <span class="icon" style="background: linear-gradient(45deg, #ff9a9e, #fecfef);">💻</span>
+                    Live Examples & Practice
+                </h2>
+
+                <div class="demo-section" style="grid-template-columns: 1fr;">
+                    <div class="demo-box">
+                        <h3>🎯 Example 1: Array Methods (Higher-Order Functions)</h3>
+                        <div class="code-container">
+                            <pre><code><span class="keyword">const</span> numbers = [<span class="string">1, 2, 3, 4, 5</span>];
+
+<span class="comment">// map() - transforms each element</span>
+<span class="keyword">const</span> doubled = numbers.<span class="function-name">map</span>(<span class="string">x</span> => <span class="string">x</span> * <span class="string">2</span>);
+
+<span class="comment">// filter() - filters elements based on condition</span>
+<span class="keyword">const</span> evens = numbers.<span class="function-name">filter</span>(<span class="string">x</span> => <span class="string">x</span> % <span class="string">2</span> === <span class="string">0</span>);</code></pre>
+                        </div>
+                        <button class="run-button" onclick="demoArrayMethods()">Run Array Methods Demo</button>
+                        <button class="reset-button" onclick="resetOutput('output3')">Reset</button>
+                        <div id="output3" class="output-box">Click to see array transformations!</div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>🔥 Example 2: Function Reference vs Function Call</h3>
+                        <div class="code-container">
+                            <pre><code><span class="keyword">function</span> <span class="function-name">sayHello</span>() {
+    <span class="keyword">return</span> <span class="string">"Hello from function!"</span>;
+}
+
+<span class="comment">// Function reference (no parentheses)</span>
+console.<span class="function-name">log</span>(<span class="function-name">sayHello</span>);
+
+<span class="comment">// Function call (with parentheses)</span>
+console.<span class="function-name">log</span>(<span class="function-name">sayHello</span>());</code></pre>
+                        </div>
+                        <button class="run-button" onclick="demoFunctionReference()">Show Difference</button>
+                        <button class="reset-button" onclick="resetOutput('output4')">Reset</button>
+                        <div id="output4" class="output-box">See the difference between reference and call!</div>
+                    </div>
+
+                    <div class="demo-box">
+                        <h3>⭐ Example 3: Creating a Custom Higher-Order Function</h3>
+                        <div class="code-container">
+                            <pre><code><span class="keyword">function</span> <span class="function-name">createMultiplier</span>(<span class="string">factor</span>) {
+    <span class="keyword">return</span> <span class="keyword">function</span>(<span class="string">number</span>) {
+        <span class="keyword">return</span> <span class="string">number</span> * <span class="string">factor</span>;
+    };
+}
+
+<span class="keyword">const</span> double = <span class="function-name">createMultiplier</span>(<span class="string">2</span>);
+<span class="keyword">const</span> triple = <span class="function-name">createMultiplier</span>(<span class="string">3</span>);</code></pre>
+                        </div>
+                        <button class="run-button" onclick="demoCustomHigherOrder()">Create Multipliers</button>
+                        <button class="reset-button" onclick="resetOutput('output5')">Reset</button>
+                        <div id="output5" class="output-box">Create custom function generators!</div>
+                    </div>
+                </div>
+
+                <div class="concept-explanation">
+                    <h3>🎓 Key Takeaways:</h3>
+                    <p>
+                        <strong>First-Class Functions:</strong> Functions are values that can be stored, passed, and returned.<br>
+                        <strong>Higher-Order Functions:</strong> Functions that work with other functions, enabling powerful abstractions.<br>
+                        <strong>Real-world usage:</strong> Array methods, event handlers, callbacks, functional programming patterns.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function demoFirstClass1() {
+            const greet = function(name) {
+                return "Hello, " + name;
+            };
+            
+            const result = greet("Babita ji");
+            document.getElementById('output1').innerHTML = `
+                <strong>Output:</strong><br>
+                ${result}<br><br>
+                <em>✅ Function successfully stored in variable and called!</em>
+            `;
+        }
+
+        function demoHigherOrder1() {
+            function greetUser(name, formatter) {
+                return formatter(name);
+            }
+
+            function uppercaseName(name) {
+                return name.toUpperCase();
+            }
+
+            function addGreeting(name) {
+                return "Hello, " + name + "!";
+            }
+
+            const result1 = greetUser("babita ji", uppercaseName);
+            const result2 = greetUser("jethalal", addGreeting);
+            
+            document.getElementById('output2').innerHTML = `
+                <strong>Function as Argument Demo:</strong><br>
+                greetUser("babita ji", uppercaseName) → ${result1}<br>
+                greetUser("jethalal", addGreeting) → ${result2}<br><br>
+                <em>✅ Same function, different behaviors!</em>
+            `;
+        }
+
+        function demoHigherOrder2() {
+            function createGreeter(greeting) {
+                return function(name) {
+                    return greeting + ", " + name + "!";
+                };
+            }
+
+            const sayHello = createGreeter("Hello");
+            const sayHi = createGreeter("Hi");
+            
+            const result1 = sayHello("Babita ji");
+            const result2 = sayHi("Jethalal");
+            
+            document.getElementById('output2').innerHTML = `
+                <strong>Returning Function Demo:</strong><br>
+                createGreeter returns a function<br>
+                sayHello("Babita ji") → ${result1}<br>
+                sayHi("Jethalal") → ${result2}<br><br>
+                <em>✅ Functions creating customized functions!</em>
+            `;
+        }
+
+        function demoArrayMethods() {
+            const numbers = [1, 2, 3, 4, 5];
+            
+            const doubled = numbers.map(x => x * 2);
+            const evens = numbers.filter(x => x % 2 === 0);
+            const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+            
+            document.getElementById('output3').innerHTML = `
+                <strong>Array Methods Demo:</strong><br>
+                Original: [${numbers.join(', ')}]<br>
+                Doubled (map): [${doubled.join(', ')}]<br>
+                Evens (filter): [${evens.join(', ')}]<br>
+                Sum (reduce): ${sum}<br><br>
+                <em>✅ Higher-order functions in action!</em>
+            `;
+        }
+
+        function demoFunctionReference() {
+            function sayHello() {
+                return "Hello from function!";
+            }
+            
+            const functionRef = sayHello; // Reference
+            const functionCall = sayHello(); // Call
+            
+            document.getElementById('output4').innerHTML = `
+                <strong>Reference vs Call:</strong><br>
+                sayHello (reference): ${typeof functionRef} - ${functionRef.toString().substring(0, 30)}...<br>
+                sayHello() (call): ${typeof functionCall} - "${functionCall}"<br><br>
+                <em>✅ Reference gives the function itself, call executes it!</em>
+            `;
+        }
+
+        function demoCustomHigherOrder() {
+            function createMultiplier(factor) {
+                return function(number) {
+                    return number * factor;
+                };
+            }
+            
+            const double = createMultiplier(2);
+            const triple = createMultiplier(3);
+            const quadruple = createMultiplier(4);
+            
+            document.getElementById('output5').innerHTML = `
+                <strong>Custom Higher-Order Function:</strong><br>
+                double(5) = ${double(5)}<br>
+                triple(4) = ${triple(4)}<br>
+                quadruple(3) = ${quadruple(3)}<br><br>
+                <em>✅ One function creating multiple specialized functions!</em>
+            `;
+        }
+
+        // Add reset functionality
+        function resetOutput(outputId) {
+            const output = document.getElementById(outputId);
+            const originalMessages = {
+                'output1': 'Click the button to see the output!',
+                'output2': 'Choose a demo to run!',
+                'output3': 'Click to see array transformations!',
+                'output4': 'See the difference between reference and call!',
+                'output5': 'Create custom function generators!'
+            };
+            
+            output.innerHTML = originalMessages[outputId];
+            
+            // Add a nice reset animation
+            output.style.opacity = '0.5';
+            setTimeout(() => {
+                output.style.opacity = '1';
+            }, 200);
+        }
+
+        // Add some interactive animations
+        document.querySelectorAll('.run-button, .reset-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>

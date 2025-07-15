@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
+    <title>Pure Function Interactive Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .conversation {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .character {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: white;
+        }
+
+        .babita {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+        }
+
+        .jethalal {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #333;
+        }
+
+        .speech {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .speech::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid white;
+        }
+
+        .demo-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: #fff;
+            border-radius: 15px;
+            border: 2px solid #e0e7ff;
+        }
+
+        .demo-title {
+            font-size: 1.4em;
+            color: #4338ca;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .function-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .function-box {
+            padding: 25px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pure-function {
+            background: linear-gradient(135deg, #d4fcdb, #a7f3d0);
+            border: 2px solid #059669;
+        }
+
+        .impure-function {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            border: 2px solid #dc2626;
+        }
+
+        .function-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .code {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .interactive-area {
+            background: #f0f4ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            color: #4338ca;
+            min-width: 80px;
+        }
+
+        .input-group input {
+            padding: 12px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #4338ca;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .result {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #059669;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .test-history {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .test-entry {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #10b981;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }   
+
+        .pure-row {
+            background: #f0fdf4;
+            color: black;
+        }
+
+        .impure-row {
+            background: #fef2f2;
+            color: black;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .highlight {
+            background: #fef3c7 !important;
+            border: 2px solid #f59e0b !important;
+        }
+
+        /* Mobile First Responsive Design */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+                line-height: 1.2;
+            }
+            
+            .header p {
+                font-size: 0.9em;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .conversation {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .character {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 15px;
+            }
+            
+            .avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+            
+            .speech {
+                margin-left: 0;
+                padding: 15px;
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+            
+            .speech::before {
+                display: none;
+            }
+            
+            .demo-section {
+                margin: 20px 0;
+                padding: 15px;
+            }
+            
+            .demo-title {
+                font-size: 1.1em;
+                margin-bottom: 15px;
+            }
+            
+            .function-demo {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .function-box {
+                padding: 15px;
+            }
+            
+            .function-box h3 {
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+            
+            .code {
+                padding: 10px;
+                font-size: 0.8em;
+                overflow-x: auto;
+            }
+            
+            .interactive-area {
+                padding: 20px 15px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .input-group label {
+                min-width: auto;
+                font-size: 0.9em;
+            }
+            
+            .input-group input {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 12px;
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+            
+            .result {
+                padding: 15px;
+                font-size: 0.9em;
+                min-height: 50px;
+            }
+            
+            .comparison-table {
+                font-size: 0.8em;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 8px;
+            }
+            
+            .test-history {
+                padding: 15px;
+            }
+            
+            .test-entry {
+                padding: 8px;
+                font-size: 0.85em;
+            }
+        }
+
+        /* Tablet Portrait */
+        @media (min-width: 481px) and (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 30px 25px;
+            }
+            
+            .conversation {
+                padding: 25px 20px;
+            }
+            
+            .character {
+                margin-bottom: 18px;
+            }
+            
+            .avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 1.1em;
+            }
+            
+            .speech {
+                padding: 18px;
+                font-size: 0.95em;
+            }
+            
+            .demo-section {
+                padding: 20px;
+            }
+            
+            .demo-title {
+                font-size: 1.3em;
+            }
+            
+            .function-demo {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .function-box {
+                padding: 20px;
+            }
+            
+            .interactive-area {
+                padding: 25px 20px;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            
+            .input-group input {
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .comparison-table {
+                font-size: 0.9em;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px;
+            }
+        }
+
+        /* Tablet Landscape */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .content {
+                padding: 35px;
+            }
+            
+            .function-demo {
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+            
+            .input-group {
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            
+            .input-group input {
+                flex: 1;
+                min-width: 120px;
+                max-width: 200px;
+            }
+            
+            .btn {
+                flex: 1;
+                min-width: 150px;
+                max-width: 250px;
+            }
+        }
+
+        /* Large Desktop */
+        @media (min-width: 1441px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            .header h1 {
+                font-size: 3em;
+            }
+            
+            .content {
+                padding: 50px;
+            }
+            
+            .conversation {
+                padding: 40px;
+            }
+            
+            .demo-section {
+                padding: 35px;
+            }
+            
+            .interactive-area {
+                padding: 40px;
+            }
+        }
+
+        /* Touch Device Optimization */
+        @media (hover: none) and (pointer: coarse) {
+            .btn {
+                padding: 15px 25px;
+                font-size: 16px;
+                min-height: 44px; /* Minimum touch target */
+            }
+            
+            .function-box {
+                cursor: default;
+            }
+            
+            .input-group input {
+                font-size: 16px; /* Prevents zoom on mobile */
+                min-height: 44px;
+            }
+        }
+
+        /* High DPI Displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .header {
+                background-attachment: fixed;
+            }
+            
+            .code {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+
+        /* Landscape Orientation on Mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .conversation {
+                padding: 15px;
+            }
+            
+            .character {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .avatar {
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+            
+            .speech::before {
+                display: block;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .header {
+                background: #333 !important;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .interactive-area,
+            .btn {
+                display: none;
+            }
+            
+            .function-box {
+                break-inside: avoid;
+            }
+        }
+
+        /* Accessibility Improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .pulse {
+                animation: none;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            .comparison-table {
+                background: #1f2937;
+                color: #f9fafb;
+            }
+            
+            .comparison-table th {
+                background: linear-gradient(135deg, #374151, #4b5563);
+            }
+            
+            .test-history {
+                background: #1f2937;
+                color: #f9fafb;
+            }
+            
+            .test-entry {
+                background: #374151;
+                border-left-color: #10b981;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Pure Function Interactive Demo</h1>
+            <p>जेठालाल और बबिता के साथ समझें Pure Functions</p>
+        </div>
+
+        <div class="content">
+            <!-- Conversation Section -->
+            <div class="conversation">
+                <div class="character">
+                    <div class="avatar babita">B</div>
+                    <div class="speech">
+                        <strong>बबिता:</strong> जेठाजी, आपने कहा था कि pure function हर बार same output देता है… पर ऐसा function बनता कैसे है?
+                    </div>
+                </div>
+
+                <div class="character">
+                    <div class="avatar jethalal">J</div>
+                    <div class="speech">
+                        <strong>जेठालाल:</strong> देखिए बबिता जी, कोई भी function pure तभी होगा जब: Same input पर हमेशा same output दे, और बाहर की दुनिया में कोई बदलाव ना करे — मतलब कोई file, database या global variable ना छुए।
+                    </div>
+                </div>
+            </div>
+
+            <!-- Function Comparison -->
+            <div class="demo-section">
+                <div class="demo-title">🎯 Pure vs Impure Function Examples</div>
+                
+                <div class="function-demo">
+                    <div class="function-box pure-function" onclick="highlightFunction('pure')">
+                        <h3>✅ Pure Function</h3>
+                        <div class="code">
+function add(a, b) {
+  return a + b;
+}
+
+// हमेशा predictable result
+add(2, 3); // हमेशा 5
+add(2, 3); // हमेशा 5
+                        </div>
+                        <p><strong>विशेषताएं:</strong> Same input = Same output, No side effects</p>
+                    </div>
+
+                    <div class="function-box impure-function" onclick="highlightFunction('impure')">
+                        <h3>❌ Impure Function</h3>
+                        <div class="code">
+let bonus = 2;
+function getSalary(base) {
+  return base + bonus;
+}
+
+// Unpredictable result
+getSalary(100); // 102 या कुछ और?
+                        </div>
+                        <p><strong>समस्या:</strong> External variable पर depend, Unpredictable output</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Testing Area -->
+            <div class="interactive-area">
+                <div class="demo-title">🧪 Pure Function को Test करें</div>
+                
+                <div class="input-group">
+                    <label>Number 1:</label>
+                    <input type="number" id="num1" value="2" min="0" max="100">
+                    
+                    <label>Number 2:</label>
+                    <input type="number" id="num2" value="3" min="0" max="100">
+                    
+                    <button class="btn" onclick="testPureFunction()">Calculate Pure Function</button>
+                </div>
+
+                <div class="result" id="pureResult">
+                    Result will appear here...
+                </div>
+
+                <div class="input-group">
+                    <label>Base Salary:</label>
+                    <input type="number" id="baseSalary" value="100" min="0" max="1000">
+                    
+                    <label>Bonus:</label>
+                    <input type="number" id="bonusValue" value="2" min="0" max="50">
+                    
+                    <button class="btn" onclick="testImpureFunction()">Calculate Impure Function</button>
+                    <button class="btn" onclick="changeBonus()">Change Global Bonus</button>
+                </div>
+
+                <div class="result" id="impureResult">
+                    Result will appear here...
+                </div>
+
+                <div class="test-history" id="testHistory">
+                    <h4>📊 Test History (Pure Function की Consistency देखें)</h4>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+
+            <!-- Properties Comparison Table -->
+            <div class="demo-section">
+                <div class="demo-title">📋 Pure vs Impure Functions Comparison</div>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Pure Function</th>
+                            <th>Impure Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="pure-row">
+                            <td><strong>Predictability</strong></td>
+                            <td>✅ हमेशा same result</td>
+                            <td>❌ Result बदल सकता है</td>
+                        </tr>
+                        <tr class="impure-row">
+                            <td><strong>Side Effects</strong></td>
+                            <td>✅ कोई side effect नहीं</td>
+                            <td>❌ External state बदल सकता है</td>
+                        </tr>
+                        <tr class="pure-row">
+                            <td><strong>Testing</strong></td>
+                            <td>✅ आसान testing</td>
+                            <td>❌ Complex testing</td>
+                        </tr>
+                        <tr class="impure-row">
+                            <td><strong>Debugging</strong></td>
+                            <td>✅ आसान debugging</td>
+                            <td>❌ Difficult debugging</td>
+                        </tr>
+                        <tr class="pure-row">
+                            <td><strong>Parallelization</strong></td>
+                            <td>✅ Safe for parallel execution</td>
+                            <td>❌ Race conditions possible</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        
+        </div>
+    </div>
+
+    <script>
+        // Global variable for impure function demonstration
+        let globalBonus = 2;
+        let testCount = 0;
+
+        // Pure function
+        function add(a, b) {
+            return a + b;
+        }
+
+        // Impure function
+        function getSalary(base) {
+            return base + globalBonus;
+        }
+
+        function testPureFunction() {
+            const num1 = parseInt(document.getElementById('num1').value);
+            const num2 = parseInt(document.getElementById('num2').value);
+            const result = add(num1, num2);
+            
+            document.getElementById('pureResult').innerHTML = `
+                <strong>Pure Function Result:</strong> add(${num1}, ${num2}) = ${result}<br>
+                <small>यह result हमेशा same होगा! 🎯</small>
+            `;
+            
+            // Add to history
+            addToHistory(`add(${num1}, ${num2}) = ${result}`);
+            
+            // Add pulse animation
+            document.getElementById('pureResult').classList.add('pulse');
+            setTimeout(() => {
+                document.getElementById('pureResult').classList.remove('pulse');
+            }, 500);
+        }
+
+        function testImpureFunction() {
+            const base = parseInt(document.getElementById('baseSalary').value);
+            globalBonus = parseInt(document.getElementById('bonusValue').value);
+            const result = getSalary(base);
+            
+            document.getElementById('impureResult').innerHTML = `
+                <strong>Impure Function Result:</strong> getSalary(${base}) = ${result}<br>
+                <small>Current Global Bonus: ${globalBonus} (यह बदल सकता है! ⚠️)</small>
+            `;
+            
+            // Add pulse animation
+            document.getElementById('impureResult').classList.add('pulse');
+            setTimeout(() => {
+                document.getElementById('impureResult').classList.remove('pulse');
+            }, 500);
+        }
+
+        function changeBonus() {
+            globalBonus = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('bonusValue').value = globalBonus;
+            
+            alert(`Global Bonus बदल गया! नया Bonus: ${globalBonus}\nअब same input पर भी different result मिलेगा!`);
+        }
+
+        function addToHistory(test) {
+            testCount++;
+            const historyList = document.getElementById('historyList');
+            const entry = document.createElement('div');
+            entry.className = 'test-entry';
+            entry.innerHTML = `<strong>Test ${testCount}:</strong> ${test}`;
+            historyList.appendChild(entry);
+            
+            // Keep only last 5 entries
+            if (historyList.children.length > 5) {
+                historyList.removeChild(historyList.firstChild);
+            }
+        }
+
+        function highlightFunction(type) {
+            const boxes = document.querySelectorAll('.function-box');
+            boxes.forEach(box => box.classList.remove('highlight'));
+            
+            if (type === 'pure') {
+                document.querySelector('.pure-function').classList.add('highlight');
+                setTimeout(() => {
+                    document.querySelector('.pure-function').classList.remove('highlight');
+                }, 2000);
+            } else {
+                document.querySelector('.impure-function').classList.add('highlight');
+                setTimeout(() => {
+                    document.querySelector('.impure-function').classList.remove('highlight');
+                }, 2000);
+            }
+        }
+
+        // Initialize with default values
+        window.onload = function() {
+            testPureFunction();
+        };
+    </script>
+</body>
+</html>

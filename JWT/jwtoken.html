@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+    
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-interactive" style="position:relative;">
+        <h1>🔐 JWT Interactive Demo</h1>
+        <p>Understand how JWT works with Jethalal!</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                💡 More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                👉 Follow for More
+            </a>
+        </div>
+    </div>
+    <!-- ...rest of your content... -->
+      
+        <div class="demo-grid">
+            <!-- JWT Generation Demo -->
+            <div class="demo-section">
+                <h3 class="demo-title">🎫 JWT Token Generator</h3>
+                
+                <div class="explanation one-explanation">
+                  Here you can <strong>generate a JWT token</strong> by logging in. It works exactly like in a real application!
+                </div>
+
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="username">Username: (try: jethalal, babita, popatlal)</label> 
+                        <input type="text" id="username" placeholder="Enter username (try: jethalal)" value="jethalal">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password: (try:babitaji123, jethaji123, rita123) </label>
+                        <input type="password" id="password" placeholder="Enter password (try: babita123)" value="babita123">
+                    </div>
+                    <div class="demo-controls">
+                        <button class="demo-btn first-btn" onclick="login()">🔑 Login & Generate JWT</button>
+                        <button class="demo-btn clear-btn" onclick="clearTokens()">🗑️ Clear</button>
+                    </div>
+                </div>
+
+                <div class="status-bar">
+                    <div class="status-indicator" id="loginStatus"></div>
+                    <span id="statusText">Not logged in</span>
+                </div>
+
+                <div class="demo-area" id="tokenDisplay">
+                    <div class="event-message one-message">
+                        <strong>The JWT token will appear here after login...</strong>
+                    </div>
+                </div>
+
+                <div class="how-it-works">
+                    <h4>🔧 How JWT Works:</h4>
+                    <div class="step one-step">
+                        <div class="step-number">1</div>
+                        <span>User sends credentials</span>
+                    </div>
+                    <div class="step one-step">
+                        <div class="step-number">2</div>
+                        <span>Server verifies them</span>
+                    </div>
+                    <div class="step one-step">
+                        <div class="step-number">3</div>
+                        <span>JWT token is generated</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Request Demo -->
+            <div class="demo-section">
+                <h3 class="demo-title">🌐 Protected API Demo</h3>
+                
+                <div class="explanation">
+                     Here you can see how to access a <strong>protected API</strong> with a JWT token!
+                </div>
+
+                <div class="server-simulation">
+                    <strong>Server Status:</strong>
+                    <div class="server-log" id="serverLog">
+                        Server ready... Send a request with a JWT token
+                    </div>
+                </div>
+
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="fetchUserProfile()">👤 Get User Profile</button>
+                    <button class="demo-btn" onclick="fetchSecretData()">🔒 Get Secret Data</button>
+                    <button class="demo-btn" onclick="fetchWithoutToken()">❌ Request Without Token</button>
+                </div>
+
+                <div class="demo-area" id="apiResponse">
+                    <div class="event-message two-message">
+                        <strong>API Response will appear... here</strong>
+                        <div class="message-time">Loginzaree Login first</div>
+                    </div>
+                </div>
+
+                <div class="how-it-works">
+                    
+                    <h4>🚀 API Request Flow:</h4>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <span>Send JWT token in the request header</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <span>Server verifies the token</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <span>Data is returned if the token is valid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentToken = null;
+        let tokenExpiry = null;
+
+        // Mock user database
+        const users = {
+            'jethalal': 'babitaji123',
+            'babita': 'jethaji123',
+            'popatlal': 'rita123'
+        };
+
+        // Mock user data
+        const userData = {
+            'jethalal': {
+                name: 'Jethalal Champaklal Gada',
+                role: 'Fullstackgada',
+                society: 'Gokuldham Society',
+                loves: 'Babita Ji'
+            },
+            'babita': {
+                name: 'Babita Iyer',
+                role: 'Housewife',
+                society: 'Gokuldham Society',
+                loves: 'Jethalal (secretly)'
+            },
+            'popatlal': {
+                name: 'Popatlal Pandey',
+                role: 'Journalist',
+                society: 'Gokuldham Society',
+                loves: 'Finding a wife'
+            }
+        };
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showError('Please fill in both Username and Password!');
+                return;
+            }
+
+            // Simulate server verification
+            if (users[username] && users[username] === password) {
+                // Generate JWT token (mock)
+                const header = {
+                    "alg": "HS256",
+                    "typ": "JWT"
+                };
+
+                const payload = {
+                    "sub": username,
+                    "name": userData[username].name,
+                    "role": userData[username].role,
+                    "iat": Math.floor(Date.now() / 1000),
+                    "exp": Math.floor(Date.now() / 1000) + 3600 // 1 hour
+                };
+
+                const signature = "mock_signature_" + Math.random().toString(36).substring(7);
+
+                // Create JWT-like token
+                const headerEncoded = btoa(JSON.stringify(header));
+                const payloadEncoded = btoa(JSON.stringify(payload));
+                const signatureEncoded = btoa(signature);
+
+                currentToken = `${headerEncoded}.${payloadEncoded}.${signatureEncoded}`;
+                tokenExpiry = Date.now() + 3600000; // 1 hour from now
+
+                // Update UI
+                document.getElementById('loginStatus').classList.add('connected');
+                document.getElementById('statusText').textContent = `Logged in as ${userData[username].name}`;
+
+                displayToken(header, payload, signature);
+                showSuccess('Login successful! JWT token generated.');
+                
+                // Update server log
+                updateServerLog(`✅ Login successful for ${username}. JWT token generated.`);
+            } else {
+                showError('Invalid username or password!');
+                updateServerLog(`❌ Login failed for ${username}. Invalid credentials.`);
+            }
+        }
+
+        function displayToken(header, payload, signature) {
+            const tokenDisplay = document.getElementById('tokenDisplay');
+            tokenDisplay.innerHTML = `
+                <div class="event-message one-message">
+                    <strong>🎫 JWT Token Generated:</strong>
+                    <div class="jwt-display">
+                        <div class="jwt-part jwt-header">
+                            <strong>Header:</strong><br>
+                            ${JSON.stringify(header, null, 2)}
+                        </div>
+                        <div class="jwt-part jwt-payload">
+                            <strong>Payload:</strong><br>
+                            ${JSON.stringify(payload, null, 2)}
+                        </div>
+                        <div class="jwt-part jwt-signature">
+                            <strong>Signature:</strong><br>
+                            ${signature}
+                        </div>
+                    </div>
+                    <div class="token-info">
+                        <strong>Complete Token:</strong><br>
+                        <small style="word-break: break-all; color: #666;">${currentToken}</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        function fetchUserProfile() {
+            if (!currentToken) {
+                showApiError('Please login first!');
+                return;
+            }
+
+            if (Date.now() > tokenExpiry) {
+                showApiError('Token expired! Please login again.');
+                return;
+            }
+
+            // Decode payload to get user info
+            const payloadEncoded = currentToken.split('.')[1];
+            const payload = JSON.parse(atob(payloadEncoded));
+            const userInfo = userData[payload.sub];
+
+            updateServerLog(`✅ GET /api/profile - Token verified for ${payload.name}`);
+
+            const apiResponse = document.getElementById('apiResponse');
+            apiResponse.innerHTML = `
+                <div class="event-message two-message">
+                    <strong>👤 User Profile:</strong>
+                    <div class="token-info">
+                        <strong>Name:</strong> ${userInfo.name}<br>
+                        <strong>Role:</strong> ${userInfo.role}<br>
+                        <strong>Society:</strong> ${userInfo.society}<br>
+                        <strong>Loves:</strong> ${userInfo.loves}
+                    </div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function fetchSecretData() {
+            if (!currentToken) {
+                showApiError('Please login first!');
+                return;
+            }
+
+            if (Date.now() > tokenExpiry) {
+                showApiError('Token expired! Please login again.');
+                return;
+            }
+
+            const payloadEncoded = currentToken.split('.')[1];
+            const payload = JSON.parse(atob(payloadEncoded));
+
+            updateServerLog(`✅ GET /api/secret - Token verified for ${payload.name}`);
+
+            const secretData = {
+                'jethalal': 'Babita ji\'s secret phone number: 9999999999',
+                'babita': 'Jetha ji\'s daily income: ₹50,000',
+                'popatlal': 'Rita\'s actual contact details 😍'
+            };
+
+            const apiResponse = document.getElementById('apiResponse');
+            apiResponse.innerHTML = `
+                <div class="event-message two-message">
+                    <strong>🔒 Secret Data:</strong>
+                    <div class="token-info">
+                        ${secretData[payload.sub] || 'No secret data found!'}
+                    </div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function fetchWithoutToken() {
+            updateServerLog(`❌ GET /api/profile - No token provided. Access denied.`);
+
+            const apiResponse = document.getElementById('apiResponse');
+            apiResponse.innerHTML = `
+                <div class="event-message two-message">
+                    <div class="error-message">
+                        <strong>❌ Access Denied:</strong><br>
+                        No JWT token found! Authentication required.
+                    </div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function clearTokens() {
+            currentToken = null;
+            tokenExpiry = null;
+            document.getElementById('loginStatus').classList.remove('connected');
+            document.getElementById('statusText').textContent = 'Not logged in';
+            document.getElementById('tokenDisplay').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>The JWT token will appear here after login...</strong>
+                </div>
+            `;
+            document.getElementById('apiResponse').innerHTML = `
+                <div class="event-message two-message">
+                    <strong>API Response will appear here...</strong>
+                    <div class="message-time">Please login first</div>
+                </div>
+            `;
+            updateServerLog('Tokens cleared. Ready for new login.');
+        }
+
+        function showError(message) {
+            const tokenDisplay = document.getElementById('tokenDisplay');
+            tokenDisplay.innerHTML = `
+                <div class="event-message one-message">
+                    <div class="error-message">
+                        <strong>❌ Error:</strong> ${message}
+                    </div>
+                </div>
+            `;
+        }
+
+        function showSuccess(message) {
+            // Success message is handled in displayToken function
+        }
+
+        function showApiError(message) {
+            const apiResponse = document.getElementById('apiResponse');
+            apiResponse.innerHTML = `
+                <div class="event-message two-message">
+                    <div class="error-message">
+                        <strong>❌ Error:</strong> ${message}
+                    </div>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function updateServerLog(message) {
+            const serverLog = document.getElementById('serverLog');
+            serverLog.textContent = message;
+        }
+
+        // Check token expiry every minute
+        setInterval(() => {
+            if (currentToken && Date.now() > tokenExpiry) {
+                clearTokens();
+                updateServerLog('Token expired. Please login again.');
+            }
+        }, 60000);
+    </script>
+</body>
+</html>

@@ -1,8 +1,10 @@
 
-    /* Import Comic Sans MS-like web fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&display=swap');
+ /* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Caveat:wght@400;500;600;700&display=swap');
 
-/* Reset & Base Styles */
+/* =========================
+   Reset & Base Styles
+   ========================= */
 * {
     margin: 0;
     padding: 0;
@@ -17,15 +19,19 @@ body {
     overflow-x: hidden;
 }
 
-/* Container */
+/* =========================
+   Container
+   ========================= */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem 1.2rem;
 }
 
-/* Header */
-.header-interactive  {
+/* =========================
+   Header
+   ========================= */
+.header-interactive {
     text-align: center;
     padding: 2rem 1rem;
     background: linear-gradient(135deg, #356c67 0%, #2a5550 100%);
@@ -33,6 +39,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .header-interactive h1 {
@@ -46,6 +53,7 @@ body {
     color: #e5deff;
     margin-top: 0.5rem;
 }
+
 /* Header left button */
 .explore-diagrams-btn-wrapper {
     position: absolute;
@@ -99,7 +107,10 @@ body {
     background: #b92d5d;
     transform: translateY(-2px);
 }
-/* Demo Grid */
+
+/* =========================
+   Demo Grid & Sections
+   ========================= */
 .demo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -113,7 +124,6 @@ body {
     }
 }
 
-/* Demo Section */
 .demo-section {
     background: #fff;
     border-radius: 20px;
@@ -121,6 +131,7 @@ body {
     box-shadow: 0 8px 24px rgba(53, 108, 103, 0.08);
     border-top: 4px solid #356c67;
     transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .demo-section:hover {
@@ -136,7 +147,9 @@ body {
     text-align: center;
 }
 
-/* Explanation */
+/* =========================
+   Explanation
+   ========================= */
 .explanation {
     font-size: 1.1rem;
     color: #444;
@@ -151,7 +164,9 @@ body {
     border-left-color: #356c67;
 }
 
-/* Server Simulation */
+/* =========================
+   Server Simulation
+   ========================= */
 .server-simulation {
     margin-bottom: 1.5rem;
     font-size: 1rem;
@@ -168,7 +183,9 @@ body {
     border: 1px solid #356c67;
 }
 
-/* Demo Controls */
+/* =========================
+   Demo Controls & Buttons
+   ========================= */
 .demo-controls {
     display: flex;
     flex-wrap: wrap;
@@ -221,7 +238,9 @@ body {
     box-shadow: 0 4px 15px rgba(53, 108, 103, 0.2);
 }
 
-/* Status Bar */
+/* =========================
+   Status Bar
+   ========================= */
 .status-bar {
     display: flex;
     align-items: center;
@@ -243,7 +262,9 @@ body {
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
 }
 
-/* Chat Input */
+/* =========================
+   Chat Input
+   ========================= */
 .chat-input {
     display: flex;
     gap: 0.8rem;
@@ -283,7 +304,9 @@ body {
     cursor: not-allowed;
 }
 
-/* Demo Area */
+/* =========================
+   Demo Area
+   ========================= */
 .demo-area {
     background: #f9f9fb;
     padding: 1rem;
@@ -317,7 +340,9 @@ body {
     margin-top: 0.5rem;
 }
 
-/* How It Works */
+/* =========================
+   How It Works
+   ========================= */
 .how-it-works {
     margin-top: 1.5rem;
 }
@@ -353,6 +378,9 @@ body {
     background: #356c67;
 }
 
+/* =========================
+   Forms
+   ========================= */
 .form-group {
     margin-bottom: 1rem;
 }
@@ -378,6 +406,9 @@ body {
     border-color: #356c67;
 }
 
+/* =========================
+   Token Info & Messages
+   ========================= */
 .token-info {
     background: #e6fffa;
     border: 1px solid #4fd1c7;
@@ -404,17 +435,272 @@ body {
     border: 1px solid #9ae6b4;
 }
 
-/* Animations */
+/* =========================
+   Animations
+   ========================= */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.demo-section {
-    animation: fadeIn 0.8s ease-out;
+/* =========================
+   Tabs & Tab Content
+   ========================= */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-/* Responsive Styles */
+.tab {
+    background: #f0f0f0;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    color: #666;
+    font-family: 'Kalam', 'Comic Sans MS', 'Caveat', cursive, sans-serif;
+}
+
+.tab.active {
+    background: #356c67;
+    color: #fff;
+}
+
+.tab:hover {
+    background: #ff6f61;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* =========================
+   Code Containers & Blocks
+   ========================= */
+.code-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .code-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.code-block {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 1.5rem;
+    border-radius: 12px;
+    font-family: 'Courier New', monospace;
+    position: relative;
+    overflow-x: auto;
+}
+
+.code-line {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.var-usage {
+    color: #f687b3;
+}
+
+.var-declaration {
+    color: #68d391;
+}
+
+.var-assignment {
+    color: #fbd38d;
+}
+
+.error {
+    color: #fc8181;
+}
+
+.comment {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+/* =========================
+   Hoisting Visualization
+   ========================= */
+.hoisting-visualization {
+    margin: 2rem 0;
+}
+
+.memory-diagram {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.memory-slot {
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.memory-slot:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.memory-slot.hoisted {
+    border-color: #48bb78;
+    background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+}
+
+.memory-slot.tdz {
+    border-color: #ed8936;
+    background: linear-gradient(135deg, #fffaf0, #feebc8);
+}
+
+.memory-slot.error {
+    border-color: #f56565;
+    background: linear-gradient(135deg, #fff5f5, #fed7d7);
+}
+
+.variable-name {
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.variable-value {
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+
+/* =========================
+   Timeline
+   ========================= */
+.timeline {
+    margin: 2rem 0;
+}
+
+.timeline-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.timeline-number {
+    width: 40px;
+    height: 40px;
+    background: #ff6f61;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.timeline-content {
+    color: #2d3748;
+}
+
+/* =========================
+   Interactive Example
+   ========================= */
+.interactive-example {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    border: 1px solid #e2e8f0;
+}
+
+.run-button {
+    background: #ff6f61;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s;
+}
+
+.run-button:hover {
+    background: #e55a50;
+    transform: translateY(-2px);
+}
+
+.output {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    min-height: 60px;
+    white-space: pre-wrap;
+    line-height: 1.4;
+}
+
+/* =========================
+   Tooltip
+   ========================= */
+.tooltip {
+    position: absolute;
+    background: #2d3748;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    z-index: 1000;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #2d3748;
+}
+
+/* =========================
+   Responsive Styles
+   ========================= */
 @media (max-width: 768px) {
     .container {
         padding: 1.5rem 1rem;
@@ -428,7 +714,7 @@ body {
         font-size: 1.1rem;
     }
 
-     .explore-diagrams-btn-wrapper,
+    .explore-diagrams-btn-wrapper,
     .follow-btn-wrapper {
         position: static !important;
         display: block;
@@ -488,10 +774,9 @@ body {
     }
 }
 
-/* Additional CSS for Currying Interactive Diagram */
-/* Add this to your existing interactive-demo.css file */
-
-/* Step Container */
+/* =========================
+   Additional Interactive Diagram Styles
+   ========================= */
 .step-container {
     display: flex;
     flex-direction: column;
@@ -650,8 +935,9 @@ body {
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
 }
-
-/* Mobile Responsive Updates */
+/* =========================
+   Mobile Responsive Updates
+   ========================= */
 @media (max-width: 768px) {
     .step {
         padding: 1rem;
@@ -708,11 +994,37 @@ body {
         padding: 1rem;
         font-size: 1rem;
     }
+     .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab {
+                width: 100%;
+                max-width: 200px;
+                text-align: center;
+            }
+
+            .code-container {
+                grid-template-columns: 1fr;
+            }
+
+            .memory-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
 }
 
-/* Tablet Responsive */
+/* =========================
+   Tablet Responsive
+   ========================= */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .step-code {
+ .step-code {
         font-size: 0.85rem;
     }
 
@@ -725,7 +1037,9 @@ body {
     }
 }
 
-/* Dark Mode Support */
+/* =========================
+   Dark Mode Support
+   ========================= */
 @media (prefers-color-scheme: dark) {
     .step {
         background: #2d3748;
@@ -763,8 +1077,9 @@ body {
         border-color: #d69e2e;
     }
 }
-
-/* Accessibility - Reduced Motion */
+/* =========================
+   Accessibility - Reduced Motion
+   ========================= */
 @media (prefers-reduced-motion: reduce) {
     .step {
         transition: opacity 0.3s ease;
@@ -781,7 +1096,9 @@ body {
     }
 }
 
-/* Print Styles */
+/* =========================
+   Print Styles
+   ========================= */
 @media print {
     .step {
         break-inside: avoid;

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Hoisting Interactive Diagram</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-interactive" style="position: relative;">
+            <h1>🚀 JavaScript Hoisting</h1>
+            <p>Understanding Hoisting in JavaScript</p>
+            <div class="explore-diagrams-btn-wrapper">
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    💡 More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    👉 Follow for More
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" data-tab="overview">📚 Overview</button>
+                <button class="tab" data-tab="var-demo">🔄 var Hoisting</button>
+                <button class="tab" data-tab="let-const">⚡ let & const</button>
+                <button class="tab" data-tab="functions">🎯 Functions</button>
+                <button class="tab" data-tab="interactive">🎮 Interactive</button>
+            </div>
+
+            <div id="overview" class="tab-content active">
+                <div class="explanation">
+                    <h3>🎭 What is Hoisting?</h3>
+                    <p>JavaScript allocates memory for all variables and functions before executing the code. This process is called "Hoisting". Variables and function declarations are moved to the top of their containing scope during compilation.</p>
+                </div>
+
+                <div class="hoisting-visualization">
+                    <h3 style="text-align: center; margin-bottom: 30px;">🧠 Memory Allocation Process</h3>
+                    <div class="memory-diagram">
+                        <div class="memory-slot hoisted" data-tooltip="Variables are hoisted with undefined value">
+                            <div class="variable-name">Variables</div>
+                            <div class="variable-value">Memory Reserved</div>
+                        </div>
+                        <div class="memory-slot hoisted" data-tooltip="Functions are completely hoisted">
+                            <div class="variable-name">Functions</div>
+                            <div class="variable-value">Complete Definition</div>
+                        </div>
+                        <div class="memory-slot tdz" data-tooltip="let/const are in Temporal Dead Zone">
+                            <div class="variable-name">let/const</div>
+                            <div class="variable-value">Temporal Dead Zone</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <h3>📝 Hoisting Process Timeline</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content">
+                            <strong>Compilation Phase:</strong> JavaScript engine scans the code first
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content">
+                            <strong>Memory Allocation:</strong> Reserves memory for variables and functions
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content">
+                            <strong>Execution Phase:</strong> Actual code execution begins
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="var-demo" class="tab-content">
+                <div class="demo-section">
+                    <h3>🔄 var Hoisting Magic</h3>
+                    
+                    <div class="explanation">
+                        <h4>Understanding var Behavior</h4>
+                        <p>With <code>var</code>, the variable name is hoisted to the top, but the value remains where it was assigned. This is why you get <code>undefined</code> instead of an error when accessing it before declaration.</p>
+                    </div>
+                    
+                    <div class="code-container">
+                        <div class="code-block">
+                            <div class="code-line var-usage">console.log(myVar); <span class="comment">// undefined</span></div>
+                            <div class="code-line var-declaration">var myVar;</div>
+                            <div class="code-line var-assignment">myVar = "Hello World";</div>
+                            <div class="code-line var-usage">console.log(myVar); <span class="comment">// "Hello World"</span></div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-line var-declaration">var myVar; <span class="comment">// Hoisted to top</span></div>
+                            <div class="code-line var-usage">console.log(myVar); <span class="comment">// undefined</span></div>
+                            <div class="code-line var-assignment">myVar = "Hello World";</div>
+                            <div class="code-line var-usage">console.log(myVar); <span class="comment">// "Hello World"</span></div>
+                        </div>
+                    </div>
+
+                    <div class="interactive-example">
+                        <h4>🎮 Try It Yourself!</h4>
+                        <button class="run-button" onclick="runVarExample()">Run var Example</button>
+                        <div class="output" id="var-output">Click the button to see var hoisting in action!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="let-const" class="tab-content">
+                <div class="demo-section">
+                    <h3>⚡ let & const: Temporal Dead Zone</h3>
+                    
+                    <div class="explanation">
+                        <h4>Understanding Temporal Dead Zone</h4>
+                        <p>While <code>let</code> and <code>const</code> are hoisted, they remain in the <strong>Temporal Dead Zone</strong> until they are declared. This means they cannot be accessed before their declaration line, resulting in a ReferenceError.</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-block">
+                            <div class="code-line error">console.log(myLet); <span class="comment">// ReferenceError!</span></div>
+                            <div class="code-line var-declaration">let myLet = "I'm a let variable";</div>
+                            <div class="code-line var-usage">console.log(myLet); <span class="comment">// "I'm a let variable"</span></div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-line error">console.log(MY_CONST); <span class="comment">// ReferenceError!</span></div>
+                            <div class="code-line var-declaration">const MY_CONST = "I'm constant";</div>
+                            <div class="code-line var-usage">console.log(MY_CONST); <span class="comment">// "I'm constant"</span></div>
+                        </div>
+                    </div>
+
+                    <div class="hoisting-visualization">
+                        <h3 style="text-align: center; margin-bottom: 30px;">🚫 Temporal Dead Zone</h3>
+                        <div class="memory-diagram">
+                            <div class="memory-slot tdz" data-tooltip="let is hoisted but in TDZ">
+                                <div class="variable-name">let variable</div>
+                                <div class="variable-value">❌ Cannot Access</div>
+                            </div>
+                            <div class="memory-slot tdz" data-tooltip="const is hoisted but in TDZ">
+                                <div class="variable-name">const variable</div>
+                                <div class="variable-value">❌ Cannot Access</div>
+                            </div>
+                            <div class="memory-slot hoisted" data-tooltip="Accessible after declaration">
+                                <div class="variable-name">After Declaration</div>
+                                <div class="variable-value">✅ Accessible</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interactive-example">
+                        <h4>🎮 Experience the Error!</h4>
+                        <button class="run-button" onclick="runLetConstExample()">Run let/const Example</button>
+                        <div class="output" id="let-const-output">Click to see Temporal Dead Zone in action!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="functions" class="tab-content">
+                <div class="demo-section">
+                    <h3>🎯 Function Hoisting</h3>
+                    
+                    <div class="explanation">
+                        <h4>Function Declaration vs Function Expression</h4>
+                        <p>Function declarations are fully hoisted - you can call them before they're defined. Function expressions follow variable hoisting rules and cannot be called before declaration.</p>
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-block" data-title="Function Declaration">
+                            <div class="code-line var-usage">sayHello(); <span class="comment">// "Hello World!"</span></div>
+                            <div class="code-line"></div>
+                            <div class="code-line var-declaration">function sayHello() {</div>
+                            <div class="code-line var-assignment">  return "Hello World!";</div>
+                            <div class="code-line var-declaration">}</div>
+                        </div>
+                        
+                        <div class="code-block" data-title="Function Expression">
+                            <div class="code-line error">sayBye(); <span class="comment">// TypeError!</span></div>
+                            <div class="code-line"></div>
+                            <div class="code-line var-declaration">var sayBye = function() {</div>
+                            <div class="code-line var-assignment">  return "Goodbye World!";</div>
+                            <div class="code-line var-declaration">};</div>
+                        </div>
+                    </div>
+
+                    <div class="hoisting-visualization">
+                        <h3 style="text-align: center; margin-bottom: 30px;">🎭 Function Hoisting Comparison</h3>
+                        <div class="memory-diagram">
+                            <div class="memory-slot hoisted" data-tooltip="Function declarations are fully hoisted">
+                                <div class="variable-name">Function Declaration</div>
+                                <div class="variable-value">✅ Fully Hoisted</div>
+                            </div>
+                            <div class="memory-slot tdz" data-tooltip="Function expressions follow variable hoisting">
+                                <div class="variable-name">Function Expression</div>
+                                <div class="variable-value">❌ Variable Hoisting</div>
+                            </div>
+                            <div class="memory-slot error" data-tooltip="Arrow functions follow let/const rules">
+                                <div class="variable-name">Arrow Function</div>
+                                <div class="variable-value">❌ Same as Expression</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interactive-example">
+                        <h4>🎮 Function Hoisting Demo</h4>
+                        <button class="run-button" onclick="runFunctionExample()">Run Function Example</button>
+                        <div class="output" id="function-output">Click to see function hoisting!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="interactive" class="tab-content">
+                <div class="demo-section">
+                    <h3>🎮 Interactive Hoisting Playground</h3>
+                    
+                    <div class="explanation">
+                        <h4>🧪 Experiment with Different Code Scenarios</h4>
+                        <p>Try running different combinations and see how hoisting affects the output!</p>
+                    </div>
+
+                    <div class="interactive-example">
+                        <h4>🎯 Scenario 1: Mixed Variables</h4>
+                        <button class="run-button" onclick="runScenario1()">Run Scenario 1</button>
+                        <div class="output" id="scenario1-output">Test mixed variable declarations</div>
+                    </div>
+
+                    <div class="interactive-example">
+                        <h4>🎯 Scenario 2: Function Chaos</h4>
+                        <button class="run-button" onclick="runScenario2()">Run Scenario 2</button>
+                        <div class="output" id="scenario2-output">Test function hoisting chaos</div>
+                    </div>
+
+                    <div class="interactive-example">
+                        <h4>🎯 Scenario 3: Real-world Example</h4>
+                        <button class="run-button" onclick="runScenario3()">Run Scenario 3</button>
+                        <div class="output" id="scenario3-output">Real-world hoisting scenario</div>
+                    </div>
+
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Management
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            const targetContent = document.getElementById(tabName);
+            targetContent.classList.add('active');
+            
+            // Add active class to clicked tab
+            const targetTab = document.querySelector(`.tab[data-tab="${tabName}"]`);
+            targetTab.classList.add('active');
+        }
+
+        // Add click event listeners to tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => showTab(tab.dataset.tab));
+        });
+
+        // Code Copy Function
+        function copyCode(button) {
+            const codeBlock = button.parentElement;
+            const codeLines = codeBlock.querySelectorAll('.code-line');
+            const codeText = Array.from(codeLines)
+                .map(line => line.textContent.replace(/\/\/.*/, '').trim())
+                .filter(line => line)
+                .join('\n');
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                button.textContent = '✅ Copied!';
+                setTimeout(() => button.textContent = '📋 Copy', 2000);
+            });
+        }
+
+        // Interactive Examples
+        function runVarExample() {
+            const output = document.getElementById('var-output');
+            output.textContent = '';
+            try {
+                let log = console.log;
+                console.log = (msg) => output.textContent += msg + '\n';
+                
+                // var example
+                output.textContent += 'console.log(myVar); // ';
+                output.textContent += (typeof myVar === 'undefined' ? 'undefined' : myVar) + '\n';
+                var myVar;
+                myVar = "Hello World";
+                output.textContent += 'myVar = "Hello World";\n';
+                output.textContent += 'console.log(myVar); // ' + myVar + '\n';
+                
+                console.log = log;
+            } catch (e) {
+                output.textContent += 'Error: ' + e.message + '\n';
+                console.log = log;
+            }
+        }
+
+        function runLetConstExample() {
+            const output = document.getElementById('let-const-output');
+            output.textContent = '';
+            try {
+                let log = console.log;
+                console.log = (msg) => output.textContent += msg + '\n';
+                
+                try {
+                    output.textContent += 'console.log(myLet); // ';
+                    output.textContent += myLet + '\n'; // Should throw ReferenceError
+                } catch (e) {
+                    output.textContent += 'ReferenceError: myLet is not defined\n';
+                }
+                let myLet = "I'm a let variable";
+                output.textContent += 'let myLet = "I\'m a let variable";\n';
+                output.textContent += 'console.log(myLet); // ' + myLet + '\n';
+                
+                console.log = log;
+            } catch (e) {
+                output.textContent += 'Error: ' + e.message + '\n';
+                console.log = log;
+            }
+        }
+
+        function runFunctionExample() {
+            const output = document.getElementById('function-output');
+            output.textContent = '';
+            try {
+                let log = console.log;
+                console.log = (msg) => output.textContent += msg + '\n';
+
+                output.textContent += 'sayHello(); // ';
+                output.textContent += sayHello() + '\n';
+
+                function sayHello() {
+                    return "Hello World!";
+                }
+
+                try {
+                    output.textContent += 'sayBye(); // ';
+                    sayBye();
+                } catch (e) {
+                    output.textContent += 'TypeError: sayBye is not a function\n';
+                }
+
+                var sayBye = function() {
+                    return "Goodbye World!";
+                };
+
+                console.log = log;
+            } catch (e) {
+                output.textContent += 'Error: ' + e.message + '\n';
+                console.log = log;
+            }
+        }
+
+        // Scenario 1: Mixed variable declarations
+        function runScenario1() {
+            const output = document.getElementById('scenario1-output');
+            output.textContent = '';
+            try {
+                let log = console.log;
+                console.log = (msg) => output.textContent += msg + '\n';
+
+                output.textContent += 'console.log(a); // ';
+                output.textContent += (typeof a === 'undefined' ? 'undefined' : a) + '\n';
+                var a = "Declared Later";
+                output.textContent += 'var a = "Declared Later";\n';
+                output.textContent += 'console.log(a); // ' + a + '\n';
+
+                console.log = log;
+            } catch (e) {
+                output.textContent += 'Error: ' + e.message + '\n';
+                console.log = log;
+            }
+        }
+
+        // Scenario 2: Function Hoisting Chaos
+        function runScenario2() {
+            const output = document.getElementById('scenario2-output');
+            output.textContent = '';
+            try {
+                let log = console.log;
+                console.log = (msg) => output.textContent += msg + '\n';
+
+                output.textContent += 'foo(); // ';
+                foo(); // works
+
+                function foo() {
+                    output.textContent += 'Function Declaration Called\n';
+                }
+
+                try {
+                    bar(); // doesn't work
+                } catch (e) {
+                    output.textContent += 'TypeError: bar is not a function\n';
+                }
+
+                var bar = function() {
+                    output.textContent += 'Function Expression Called\n';
+                };
+
+                console.log = log;
+            } catch (e) {
+                output.textContent += 'Error: ' + e.message + '\n';
+                console.log = log;
+            }
+        }
+
+        // Scenario 3: Real-world Example
+        function runScenario3() {
+            const output = document.getElementById('scenario3-output');
+            output.textContent = '';
+            try {
+                let log = console.log;
+                console.log = (msg) => output.textContent += msg + '\n';
+
+                output.textContent += 'Initial value of x: ' + (typeof x === 'undefined' ? 'undefined' : x) + '\n';
+                if (true) {
+                    var x = 10;
+                }
+                output.textContent += 'Value of x inside block: ' + x + '\n';
+
+                try {
+                    output.textContent += 'Value of y: ' + y + '\n';
+                } catch (e) {
+                    output.textContent += 'ReferenceError: y is not defined\n';
+                }
+
+                let y = 20;
+                output.textContent += 'Value of y after declaration: ' + y + '\n';
+
+                console.log = log;
+            } catch (e) {
+                output.textContent += 'Error: ' + e.message + '\n';
+                console.log = log;
+            }
+        }
+
+        // Tooltip Handling (Optional)
+        document.addEventListener('DOMContentLoaded', () => {
+            const slots = document.querySelectorAll('.memory-slot');
+            slots.forEach(slot => {
+                const tooltipText = slot.dataset.tooltip;
+                               if (tooltipText) {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = tooltipText;
+                    slot.appendChild(tooltip);
+
+                    slot.addEventListener('mouseenter', () => {
+                        tooltip.style.opacity = '1';
+                        tooltip.style.top = '-40px';
+                    });
+
+                    slot.addEventListener('mouseleave', () => {
+                        tooltip.style.opacity = '0';
+                        tooltip.style.top = '-20px';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

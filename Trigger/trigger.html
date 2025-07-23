@@ -1,728 +1,620 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Triggers - Interactive Diagram</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 10px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: #ff6b6b;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header h1 {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header p {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .diagram-container {
-            position: relative;
-            width: 100%;
-            min-height: 600px;
-            background: linear-gradient(145deg, #f0f9ff, #e0f2fe);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .database-section {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .database-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .table-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .table {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid transparent;
-        }
-
-        .table:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            border-color: #4ecdc4;
-        }
-
-        .table.active {
-            border-color: #ff6b6b;
-            background: linear-gradient(135deg, #fff5f5, #ffffff);
-        }
-
-        .table h3 {
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: clamp(1.1rem, 2vw, 1.3rem);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .table-icon {
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .table-row {
-            background: #f8fafc;
-            margin: 5px 0;
-            padding: 8px 12px;
-            color: #2d3748;
-            border-radius: 5px;
-            border-left: 4px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .table-row:hover {
-            background: #e2e8f0;
-            border-left-color: #4ecdc4;
-        }
-
-        .trigger-container {
-            position: relative;
-            margin: 30px 0;
-        }
-
-        .trigger {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 10px 0;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .trigger::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .trigger:hover::before {
-            left: 100%;
-        }
-
-        .trigger:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
-        }
-
-        .trigger h4 {
-            margin-bottom: 10px;
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .trigger-icon {
-            width: 30px;
-            height: 30px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .trigger-code {
-            background: rgba(0,0,0,0.2);
-            padding: 10px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
-            margin-top: 10px;
-            border-left: 4px solid rgba(255,255,255,0.3);
-        }
-
-        .action-panel {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #4ecdc4, #44a08d);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: clamp(0.9rem, 1.5vw, 1rem);
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .action-btn:hover {
-            background: linear-gradient(135deg, #44a08d, #4ecdc4);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(78,205,196,0.3);
-        }
-
-        .action-btn:active {
-            transform: translateY(0);
-        }
-
-        .notification-area {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            color: white;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .notification {
-            animation: slideIn 0.5s ease;
-            text-align: center;
-            font-size: clamp(0.9rem, 1.5vw, 1rem);
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .flow-arrow {
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 15px solid #ff6b6b;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        .info-panel {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            color: white;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .info-card {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .info-card h4 {
-            margin-bottom: 10px;
-            font-size: clamp(1rem, 2vw, 1.1rem);
-        }
-
-        .info-card p {
-            font-size: clamp(0.9rem, 1.5vw, 1rem);
-            line-height: 1.5;
-        }
-
-        .pulse {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .character-dialogue {
-            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .character-dialogue::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 15s linear infinite;
-        }
-
-        .character-name {
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: clamp(1.1rem, 2vw, 1.3rem);
-        }
-
-        .character-text {
-            color: #4a5568;
-            font-size: clamp(0.9rem, 1.5vw, 1rem);
-            line-height: 1.6;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-                border-radius: 15px;
-            }
-
-            .table-container {
-                grid-template-columns: 1fr;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                min-width: 100%;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-                border-radius: 10px;
-            }
-
-            body {
-                padding: 5px;
-            }
-
-            .diagram-container {
-                padding: 15px;
-            }
-
-            .database-section {
-                padding: 15px;
-            }
-
-            .trigger {
-                padding: 15px;
-            }
-        }
-    </style>
+    <title>SQL Triggers ka Funda - Fullstackgada ka Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🗄️ Database Triggers</h1>
-            <p>Interactive Learning with Jethalal & Bhide</p>
+    <div class="container"> 
+        <!-- Header Section -->
+        <div class="header-interactive" style="position:relative;">
+            <h1>SQL Triggers ka Funda</h1>
+            <p>Understand how SQL Triggers works with Fullstackgada</p>
+            <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
         </div>
 
-        <div class="character-dialogue">
-            <div class="character-name">🧑‍💼 Bhide:</div>
-            <div class="character-text">Jethalal! मेरी website पर नया order आते ही मुझे notification चाहिए, लेकिन हर बार manually check करना पड़ता है! कोई हल है?</div>
-        </div>
-
-        <div class="character-dialogue">
-            <div class="character-name">👨‍💼 Jethalal:</div>
-            <div class="character-text">अरे Bhide! तू manually क्यों झंझट में पड़ता है? इसके लिए Database में "Trigger" लगा — जैसे automatic alarm! कोई INSERT, UPDATE या DELETE हो — database खुद action ले लेगा!</div>
-        </div>
-
-        <div class="diagram-container">
-            <div class="database-section">
-                <h2 style="margin-bottom: 20px; font-size: clamp(1.5rem, 3vw, 2rem);">📊 Database Tables</h2>
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Trigger Concepts -->
+            <div class="demo-section">
+                <h2 class="demo-title">⏳ Database Triggers ka Concept</h2>
                 
-                <div class="table-container">
-                    <div class="table" id="orders-table">
-                        <h3><span class="table-icon">O</span>Orders Table</h3>
-                        <div class="table-row">order_id: 1001</div>
-                        <div class="table-row">customer_name: राम</div>
-                        <div class="table-row">amount: ₹1500</div>
-                        <div class="table-row">status: pending</div>
-                    </div>
-
-                    <div class="table" id="inventory-table">
-                        <h3><span class="table-icon">I</span>Inventory Table</h3>
-                        <div class="table-row">product_id: 101</div>
-                        <div class="table-row">product_name: Mobile</div>
-                        <div class="table-row">quantity: 50</div>
-                        <div class="table-row">price: ₹15000</div>
-                    </div>
-
-                    <div class="table" id="logs-table">
-                        <h3><span class="table-icon">L</span>Logs Table</h3>
-                        <div class="table-row">log_id: 2001</div>
-                        <div class="table-row">action: INSERT</div>
-                        <div class="table-row">table_name: orders</div>
-                        <div class="table-row">timestamp: 2024-01-15 10:30:00</div>
-                    </div>
+                <div class="explanation">
+                    <strong>Trigger</strong> ek automated action hai, jo database mein koi event (INSERT, UPDATE, DELETE) hone par apne-aap chal jati hai.
                 </div>
-            </div>
 
-            <div class="trigger-container">
-                <div class="trigger" id="insert-trigger">
-                    <h4><span class="trigger-icon">🔥</span>AFTER INSERT Trigger</h4>
-                    <p>जब भी नया order आए, automatic notification और log entry बनाएगा</p>
-                    <div class="trigger-code">
-                        CREATE TRIGGER order_notification<br>
-                        AFTER INSERT ON orders<br>
-                        FOR EACH ROW<br>
-                        BEGIN<br>
-                        &nbsp;&nbsp;INSERT INTO logs (action, table_name, timestamp)<br>
-                        &nbsp;&nbsp;VALUES ('INSERT', 'orders', NOW());<br>
-                        &nbsp;&nbsp;-- Send notification logic here<br>
-                        END;
+                <!-- Trigger Control Buttons -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="showTriggerType('insert')">
+                        🗓️ INSERT Trigger
+                    </button>
+                    <button class="demo-btn" onclick="showTriggerType('update')">
+                        ✏️ UPDATE Trigger
+                    </button>
+                    <button class="demo-btn" onclick="showTriggerType('delete')">
+                        🗑️ DELETE Trigger
+                    </button>
+                </div>
+
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="showTriggerCondition()">
+                        🚦 Trigger Condition
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="resetTriggerDemo()">
+                        🔄 Demo Reset Karo
+                    </button>
+                </div>
+
+                <!-- Trigger SQL Example -->
+                <div class="code-block" id="triggerSqlCode">
+                    <div class="code-line comment">/* Koi trigger type choose karo SQL example dekhne ke liye */</div>
+                </div>
+
+                <!-- Trigger Action Results -->
+                <div class="demo-area" id="triggerActionOutput">
+                    <div class="event-message one-message">
+                        <div>Trigger ki action ka natija yahan dikhega...</div>
                     </div>
                 </div>
 
-                <div class="trigger" id="update-trigger">
-                    <h4><span class="trigger-icon">🔄</span>AFTER UPDATE Trigger</h4>
-                    <p>Order status change होने पर inventory update करेगा</p>
-                    <div class="trigger-code">
-                        CREATE TRIGGER inventory_update<br>
-                        AFTER UPDATE ON orders<br>
-                        FOR EACH ROW<br>
-                        WHEN (NEW.status = 'confirmed')<br>
-                        BEGIN<br>
-                        &nbsp;&nbsp;UPDATE inventory SET quantity = quantity - 1<br>
-                        &nbsp;&nbsp;WHERE product_id = NEW.product_id;<br>
-                        END;
+                <!-- Trigger Benefits -->
+                <div class="how-it-works">
+                    <h4>🔍 Triggers ke Fayde</h4>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div>Repetitive tasks ko automate karo</div>
                     </div>
-                </div>
-
-                <div class="trigger" id="delete-trigger">
-                    <h4><span class="trigger-icon">🗑️</span>BEFORE DELETE Trigger</h4>
-                    <p>Order delete करने से पहले backup बनाएगा</p>
-                    <div class="trigger-code">
-                        CREATE TRIGGER backup_before_delete<br>
-                        BEFORE DELETE ON orders<br>
-                        FOR EACH ROW<br>
-                        BEGIN<br>
-                        &nbsp;&nbsp;INSERT INTO deleted_orders<br>
-                        &nbsp;&nbsp;VALUES (OLD.order_id, OLD.customer_name, OLD.amount);<br>
-                        END;
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div>Business rules ko enforce karo</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div>Audit logs maintain karo</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div>Data ko consistent rakho</div>
                     </div>
                 </div>
             </div>
 
-            <div class="action-panel">
-                <h3 style="margin-bottom: 15px; color: #2d3748;">🎮 Try Database Actions</h3>
-                <div class="action-buttons">
-                    <button class="action-btn" onclick="simulateInsert()">📝 Insert New Order</button>
-                    <button class="action-btn" onclick="simulateUpdate()">🔄 Update Order Status</button>
-                    <button class="action-btn" onclick="simulateDelete()">🗑️ Delete Order</button>
-                    <button class="action-btn" onclick="resetDemo()">🔄 Reset Demo</button>
+            <!-- Gokuldham Analogy & Jethalal Style -->
+            <div class="demo-section">
+                <h2 class="demo-title">🏠 Gokuldham Analogy</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Jethalal ka Style:</strong> Triggers ko real-world desi examples se samjhaate hain.
                 </div>
 
-                <div class="notification-area" id="notification-area">
-                    <div class="notification">👆 Click any action button to see triggers in action!</div>
+                <!-- Analogy Display -->
+                <div class="saree-analogy" id="triggerAnalogy">
+                    <h4>Gokuldham Society ka Example</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🚪</div>
+                        <div>Kisi table mein event (INSERT, UPDATE, DELETE) hone par trigger apne-aap kaam karta hai</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🛎️</div>
+                        <div>Jaise Gokuldham mein doorbell (trigger), koi aayega toh apne-aap baj jayega — tumhe manually check nahi karna padega</div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="info-panel">
-            <h3 style="margin-bottom: 15px; font-size: clamp(1.3rem, 2.5vw, 1.8rem);">💡 Key Points about Triggers</h3>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>🎯 Automatic Execution</h4>
-                    <p>Triggers automatically चलते हैं जब specific database events होते हैं - INSERT, UPDATE, या DELETE</p>
-                </div>
-                <div class="info-card">
-                    <h4>⚡ Real-time Response</h4>
-                    <p>Data change होते ही instant action लेते हैं - notifications, logging, या validation के लिए perfect</p>
-                </div>
-                <div class="info-card">
-                    <h4>🔒 Data Integrity</h4>
-                    <p>Business rules enforce करने और data consistency maintain करने के लिए बहुत useful</p>
-                </div>
-                <div class="info-card">
-                    <h4>⚠️ Performance Impact</h4>
-                    <p>हर operation पर चलते हैं, इसलिए light logic रखें - heavy processing avoid करें</p>
+                <!-- Trigger Flow Visualization -->
+                <div class="memory-diagram" id="triggerFlowDiagram">
+                    <div class="memory-slot">
+                        <div class="variable-name">Event (INSERT/UPDATE/DELETE)</div>
+                        <div class="variable-value">Table mein data change hote hi</div>
+                    </div>
+                    <div class="memory-slot">
+                        <div class="variable-name">Trigger Fires!</div>
+                        <div class="variable-value">Automated action (notification, log, vagairah)</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="character-dialogue">
-            <div class="character-name">🧑‍💼 Bhide:</div>
-            <div class="character-text">अगर एक साथ 100 लोगों ने order कर दिया तो?</div>
+        <!-- Tables & Mock Data -->
+        <div class="demo-section">
+            <h2 class="demo-title">📝 Order & Notification Tables (Mock Data)</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('orders-tab')">Orders Table</button>
+                <button class="tab" onclick="showTab('notifications-tab')">Notifications Table</button>
+                <button class="tab" onclick="showTab('logs-tab')">Audit Logs Table</button>
+            </div>
+
+            <!-- Orders Table Tab -->
+            <div id="orders-tab" class="tab-content active">
+                <h4>🛒 Orders Table</h4>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>OrderID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Samay</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Rows added by JavaScript -->
+                    </tbody>
+                </table>
+                <div class="demo-controls" style="margin-top: 1rem;">
+                    <button class="demo-btn first-btn" onclick="addOrder()">
+                        ➕ Naya Order Add Karo (Insert)
+                    </button>
+                    <button class="demo-btn" onclick="updateOrder()">
+                        ✏️ Order Update Karo
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="deleteOrder()">
+                        🗑️ Order Delete Karo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notifications Table Tab -->
+            <div id="notifications-tab" class="tab-content">
+                <h4>📩 Notifications Table</h4>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>NotificationID</th>
+                            <th>Message</th>
+                            <th>ForUser</th>
+                            <th>Samay</th>
+                        </tr>
+                    </thead>
+                    <tbody id="notificationsTableBody">
+                        <!-- Rows added by JavaScript -->
+                    </tbody>
+                </table>
+                <div class="explanation">
+                    <strong>INSERT Trigger:</strong> Naye order aane par notification apne-aap add hota hai
+                </div>
+            </div>
+
+            <!-- Audit Logs Table Tab -->
+            <div id="logs-tab" class="tab-content">
+                <h4>📝 Audit Logs Table</h4>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>LogID</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                            <th>Samay</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        <!-- Rows added by JavaScript -->
+                    </tbody>
+                </table>
+                <div class="explanation">
+                    <strong>UPDATE/DELETE Trigger:</strong> Order mein change hua toh log apne-aap add hota hai
+                </div>
+            </div>
         </div>
 
-        <div class="character-dialogue">
-            <div class="character-name">👨‍💼 Jethalal:</div>
-            <div class="character-text">Trigger हर insert पर चलेगा — यानी 100 order आए तो 100 बार trigger active होगा। इसलिए heavy logic मत डाल उसमें — notification जैसी light चीज़ें trigger से कर, complex calculations नहीं।</div>
+        <!-- Jethalal-Bhide Conversation Section -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">💬 Jethalal aur Bhide ki Trigger wali Baat</h2>
+            
+            <div class="chat-input">
+                <button class="demo-btn first-btn" onclick="startConversation()">
+                    🎬 Baat Shuru Karo
+                </button>
+                <button class="demo-btn" onclick="nextMessage()">
+                    ➡️ Agla Message
+                </button>
+                <button class="demo-btn clear-btn" onclick="resetConversation()">
+                    🔄 Chat Reset Karo
+                </button>
+            </div>
+
+            <div class="demo-area" id="conversationArea">
+                <div class="event-message">
+                    "Baat Shuru Karo" pe click karke Jethalal-Bhide ki Triggers wali charcha shuru karo!
+                </div>
+            </div>
+        </div>
+
+        <!-- Trigger Best Practices & Warnings -->
+        <div class="comparison-section" id="triggerBestPractices">
+            <h3>📌 Trigger ke Best Practices aur Warnings</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>✅ Karo</th>
+                        <th>❌ Mat Karo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Istemal</strong></td>
+                        <td>Notifications, Logs, Data Consistency</td>
+                        <td>Complex Business Logic, Lambi Tasks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Fast, Idempotent actions</td>
+                        <td>Heavy calculations, API calls, Nested Triggers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Testing</strong></td>
+                        <td>Realistic data ke saath test karo</td>
+                        <td>Development mein ignore mat karo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monitoring</strong></td>
+                        <td>Errors ke liye monitor karo</td>
+                        <td>Bina dhyan ke chhod do</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="explanation">
+                <strong>Jethalal ki Salah:</strong> Trigger ko halki-phulki cheezon ke liye hi use karo. Nahi toh website ki performance ka band baj jayega!
+            </div>
         </div>
     </div>
 
     <script>
-        let orderCounter = 1002;
-        let logCounter = 2002;
+        // Conversation data
+        const conversation = [
+            {
+                speaker: "भिडे",
+                message: "Jethalal! Meri website par naya order aate hi mujhe notification chahiye, lekin har baar manually check karna padta hai! Koi hal hai?",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Arre Bhide! Tu manually kyun jhak maar raha hai? Iske liye Database mein 'Trigger' laga — jaise automatic alarm! Koi INSERT, UPDATE ya DELETE ho — database khud action le lega!",
+                type: "two"
+            },
+            {
+                speaker: "भिडे",
+                message: "Achha! Toh Trigger ek tarah ka watchdog hai? Yeh kaise tay karta hai ki kab aur kis table par react kare?",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Simple Bhide! Trigger ko set karta hai — jaise 'AFTER INSERT ON Orders'. Matlab jaise hi naya order dalega, Trigger chal padega. Yeh notification bhej sakta hai, log bana sakta hai, ya doosri table update kar sakta hai.",
+                type: "two"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Agar condition lagani ho toh WHEN ya IF use kar — jaise 'Order ₹1000 se zyada ho tabhi Trigger chale!' Yani Trigger soch-samajhkar active hoga, bina wajah nahi.",
+                type: "two"
+            },
+            {
+                speaker: "भिडे",
+                message: "Lekin Jethalal, agar ek Trigger ke andar hum doosra Trigger chala dein toh?",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Arre Bhide, ise kehte hain 'Nested Triggers' — aur haan, kuch databases ise allow karte hain! Lekin zyada chhedchhad ki toh system ki performance ka achar ban jayega! Isliye inhe samajhdari se istemal karna chahiye.",
+                type: "two"
+            },
+            {
+                speaker: "भिडे",
+                message: "Agar ek saath 100 logon ne order kar diya toh?",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Trigger har insert par chalega — yani 100 order aaye toh 100 baar trigger active hoga. Trigger koi jadu nahi, woh bhi resource leta hai. Isliye heavy logic mat daal usme — notification bhejne jaisi light cheezein trigger se kar, lekin complex calculations, API calls, ya long-running kaam nahi.",
+                type: "two"
+            }
+        ];
 
-        function simulateInsert() {
-            // Highlight orders table
-            highlightTable('orders-table');
-            
-            // Add new order row
-            const ordersTable = document.getElementById('orders-table');
-            const newRow = document.createElement('div');
-            newRow.className = 'table-row pulse';
-            newRow.innerHTML = `order_id: ${orderCounter++}`;
-            ordersTable.appendChild(newRow);
-            
-            // Trigger notification
-            showNotification('🔥 INSERT Trigger Activated!<br>✅ New order logged<br>📧 Notification sent to admin');
-            
-            // Add log entry
-            setTimeout(() => {
-                addLogEntry('INSERT', 'orders');
-                highlightTable('logs-table');
-            }, 1000);
-            
-            // Highlight trigger
-            highlightTrigger('insert-trigger');
+        let currentMessageIndex = 0;
+        let currentTriggerType = null;
+        let orders = [
+            { id: 1, customer: 'Jethalal', amount: 1500, status: 'Pending', timestamp: new Date().toLocaleTimeString() },
+            { id: 2, customer: 'Bhide', amount: 900, status: 'Processing', timestamp: new Date().toLocaleTimeString() },
+            { id: 3, customer: 'Popatlal', amount: 2300, status: 'Shipped', timestamp: new Date().toLocaleTimeString() }
+        ];
+        let notifications = [];
+        let logs = [];
+
+        // Show specific trigger type example
+        function showTriggerType(triggerType) {
+            currentTriggerType = triggerType;
+            let sql = '';
+            let output = '';
+
+            switch(triggerType) {
+                case 'insert':
+                    sql = `
+CREATE OR REPLACE TRIGGER new_order_notification
+AFTER INSERT ON Orders
+FOR EACH ROW
+BEGIN
+    -- Ek notification bhejo
+    INSERT INTO Notifications(message, forUser, time)
+    VALUES ('Naya order #' || :new.id || ' mila!', 'Admin', SYSDATE);
+END;
+`;
+                    output = "✅ Trigger chalega jab bhi koi naya order aayega — notification apne-aap ban jayega!";
+                    break;
+                case 'update':
+                    sql = `
+CREATE OR REPLACE TRIGGER order_status_changed
+AFTER UPDATE ON Orders
+FOR EACH ROW
+WHEN (new.status != old.status)
+BEGIN
+    -- Audit log daalo
+    INSERT INTO Logs(action, details, time)
+    VALUES ('Status Badla', 'Order #' || :new.id || ' from ' || :old.status || ' to ' || :new.status, SYSDATE);
+END;
+`;
+                    output = "✅ Trigger chalega jab order ki status change hogi — log apne-aap add ho jayega!";
+                    break;
+                case 'delete':
+                    sql = `
+CREATE OR REPLACE TRIGGER order_deleted
+AFTER DELETE ON Orders
+FOR EACH ROW
+BEGIN
+    -- Deletion log daalo
+    INSERT INTO Logs(action, details, time)
+    VALUES ('Order Delete Hua', 'Order #' || :old.id || ' delete ho gaya', SYSDATE);
+END;
+`;
+                    output = "✅ Trigger chalega jab koi order delete hoga — log entry apne-aap ban jayegi!";
+                    break;
+            }
+
+            document.getElementById('triggerSqlCode').innerHTML = `
+                <div class="code-line comment">/* ${triggerType.toUpperCase()} Trigger ka Example */</div>
+                ${sql.split('\n').map(line => `<div class="code-line">${line}</div>`).join('')}
+                <div class="code-line comment">/* Niche "Add", "Update", ya "Delete" button try karo triggers in action dekhne ke liye! */</div>
+            `;
+            document.getElementById('triggerActionOutput').innerHTML = `
+                <div class="event-message one-message">
+                    ${output}
+                </div>
+            `;
         }
 
-        function simulateUpdate() {
-            highlightTable('orders-table');
+        // Show trigger with condition
+        function showTriggerCondition() {
+            currentTriggerType = 'condition';
+            let sql = `
+CREATE OR REPLACE TRIGGER high_value_order
+AFTER INSERT ON Orders
+FOR EACH ROW
+WHEN (new.amount > 1000)
+BEGIN
+    INSERT INTO Notifications(message, forUser, time)
+    VALUES ('High value order #' || :new.id || ' (' || :new.amount || ') mila!', 'Admin', SYSDATE);
+END;
+`;
+            document.getElementById('triggerSqlCode').innerHTML = `
+                <div class="code-line comment">/* Conditional INSERT Trigger ka Example */</div>
+                ${sql.split('\n').map(line => `<div class="code-line">${line}</div>`).join('')}
+                <div class="code-line comment">/* Yeh trigger tabhi chalega jab order amount ₹1000 se zyada ho! */</div>
+            `;
+            document.getElementById('triggerActionOutput').innerHTML = `
+                <div class="event-message one-message">
+                    ✅ Trigger sirf tabhi chalega jab koi condition puri hogi (jaise amount > ₹1000).<br>
+                    🙅‍♂️ Chhota order hua toh trigger nahi chalega — database par unnecessary load se bachayega!
+                </div>
+            `;
+        }
+
+        // Reset trigger demo
+        function resetTriggerDemo() {
+            currentTriggerType = null;
+            document.getElementById('triggerSqlCode').innerHTML = `
+                <div class="code-line comment">/* Koi trigger type choose karo SQL example dekhne ke liye */</div>
+            `;
+            document.getElementById('triggerActionOutput').innerHTML = `
+                <div class="event-message one-message">
+                    <div>Trigger ki action ka natija yahan dikhega...</div>
+                </div>
+            `;
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
             
-            // Update order status
-            const orderRows = document.querySelectorAll('#orders-table .table-row');
-            if (orderRows.length > 3) {
-                orderRows[3].innerHTML = 'status: confirmed';
-                orderRows[3].classList.add('pulse');
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Render tables
+        function renderTables() {
+            // Orders Table
+            document.getElementById('ordersTableBody').innerHTML = '';
+            orders.forEach(order => {
+                document.getElementById('ordersTableBody').innerHTML += `
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.customer}</td>
+                        <td>₹${order.amount}</td>
+                        <td>${order.status}</td>
+                        <td>${order.timestamp}</td>
+                    </tr>
+                `;
+            });
+            
+            // Notifications Table
+            document.getElementById('notificationsTableBody').innerHTML = '';
+            notifications.forEach(notif => {
+                document.getElementById('notificationsTableBody').innerHTML += `
+                    <tr>
+                        <td>${notif.id}</td>
+                        <td>${notif.message}</td>
+                        <td>${notif.forUser}</td>
+                        <td>${notif.time}</td>
+                    </tr>
+                `;
+            });
+            
+            // Logs Table
+            document.getElementById('logsTableBody').innerHTML = '';
+            logs.forEach(log => {
+                document.getElementById('logsTableBody').innerHTML += `
+                    <tr>
+                        <td>${log.id}</td>
+                        <td>${log.action}</td>
+                        <td>${log.details}</td>
+                        <td>${log.time}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Add new order (fires INSERT trigger)
+        function addOrder() {
+            const newId = orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1;
+            const customers = ['Jethalal', 'Bhide', 'Popatlal', 'Madhavi', 'Babita', 'Iyer', 'Tapu'];
+            const customer = customers[Math.floor(Math.random() * customers.length)];
+            const amount = Math.floor(500 + Math.random() * 2000);
+            const status = 'Pending';
+            const timestamp = new Date().toLocaleTimeString();
+            
+            orders.push({ id: newId, customer, amount, status, timestamp });
+            
+            // INSERT Trigger logic (simulated)
+            const notifId = notifications.length > 0 ? Math.max(...notifications.map(n => n.id)) + 1 : 1;
+            
+            // Simulate conditional trigger (only if amount > 1000)
+            if (amount > 1000) {
+                notifications.push({
+                    id: notifId,
+                    message: `High value order #${newId} (₹${amount}) mila!`,
+                    forUser: 'Admin',
+                    time: timestamp
+                });
+                logs.push({
+                    id: logs.length + 1,
+                    action: 'Order Created (High Value)',
+                    details: `Order #${newId} (₹${amount}) by ${customer}`,
+                    time: timestamp
+                });
+            } else {
+                notifications.push({
+                    id: notifId,
+                    message: `Naya order #${newId} mila!`,
+                    forUser: 'Admin',
+                    time: timestamp
+                });
             }
             
-            showNotification('🔄 UPDATE Trigger Activated!<br>✅ Order status updated<br>📦 Inventory adjusted');
-            
-            // Update inventory
-            setTimeout(() => {
-                const inventoryRows = document.querySelectorAll('#inventory-table .table-row');
-                if (inventoryRows.length > 2) {
-                    inventoryRows[2].innerHTML = 'quantity: 49';
-                    inventoryRows[2].classList.add('pulse');
-                }
-                highlightTable('inventory-table');
-            }, 1000);
-            
-            setTimeout(() => {
-                addLogEntry('UPDATE', 'orders');
-                highlightTable('logs-table');
-            }, 1500);
-            
-            highlightTrigger('update-trigger');
+            renderTables();
         }
 
-        function simulateDelete() {
-            highlightTable('orders-table');
+        // Update order (fires UPDATE trigger)
+        function updateOrder() {
+            if (orders.length === 0) return;
+            const orderIdx = Math.floor(Math.random() * orders.length);
+            const order = orders[orderIdx];
+            if (order.status === 'Pending') order.status = 'Processing';
+            else if (order.status === 'Processing') order.status = 'Shipped';
+            else if (order.status === 'Shipped') order.status = 'Delivered';
+            order.timestamp = new Date().toLocaleTimeString();
             
-            showNotification('🗑️ DELETE Trigger Activated!<br>💾 Order backed up<br>🗂️ Safe to delete');
-            
-            // Remove last order row
-            setTimeout(() => {
-                const ordersTable = document.getElementById('orders-table');
-                const rows = ordersTable.querySelectorAll('.table-row');
-                if (rows.length > 4) {
-                    const lastRow = rows[rows.length - 1];
-                    lastRow.style.animation = 'slideOut 0.5s ease';
-                    setTimeout(() => {
-                        lastRow.remove();
-                    }, 500);
-                }
-            }, 1000);
-            
-            setTimeout(() => {
-                addLogEntry('DELETE', 'orders');
-                highlightTable('logs-table');
-            }, 1500);
-            
-            highlightTrigger('delete-trigger');
-        }
-
-        function resetDemo() {
-            // Reset all tables
-            const tables = document.querySelectorAll('.table');
-            tables.forEach(table => {
-                table.classList.remove('active');
-                const extraRows = table.querySelectorAll('.table-row:nth-child(n+5)');
-                extraRows.forEach(row => row.remove());
+            // UPDATE Trigger logic (simulated)
+            logs.push({
+                id: logs.length + 1,
+                action: 'Status Badla',
+                details: `Order #${order.id} ${order.status}`,
+                time: order.timestamp
             });
             
-            // Reset triggers
-            const triggers = document.querySelectorAll('.trigger');
-            triggers.forEach(trigger => {
-                trigger.classList.remove('pulse');
+            renderTables();
+        }
+
+        // Delete order (fires DELETE trigger)
+        function deleteOrder() {
+            if (orders.length === 0) return;
+            const orderIdx = Math.floor(Math.random() * orders.length);
+            const order = orders.splice(orderIdx, 1)[0];
+            
+            // DELETE Trigger logic (simulated)
+            logs.push({
+                id: logs.length + 1,
+                action: 'Order Delete Hua',
+                details: `Order #${order.id} by ${order.customer} (₹${order.amount}) delete ho gaya`,
+                time: new Date().toLocaleTimeString()
             });
             
-            // Reset counters
-            orderCounter = 1002;
-            logCounter = 2002;
-            
-            // Reset original content
-            document.querySelector('#orders-table .table-row:nth-child(4)').innerHTML = 'status: pending';
-            document.querySelector('#inventory-table .table-row:nth-child(3)').innerHTML = 'quantity: 50';
-            
-            showNotification('🔄 Demo Reset!<br>📊 All tables restored<br>🎮 Ready for new actions');
+            renderTables();
         }
 
-        function highlightTable(tableId) {
-            // Remove previous highlights
-            document.querySelectorAll('.table').forEach(table => {
-                table.classList.remove('active');
-            });
-            
-            // Highlight current table
-            document.getElementById(tableId).classList.add('active');
+        // Conversation functions
+        function startConversation() {
+            currentMessageIndex = 0;
+            showMessage();
         }
 
-        function highlightTrigger(triggerId) {
-            // Remove previous highlights
-            document.querySelectorAll('.trigger').forEach(trigger => {
-                trigger.classList.remove('pulse');
-            });
-            
-            // Highlight current trigger
-            document.getElementById(triggerId).classList.add('pulse');
-        }
-
-        function addLogEntry(action, tableName) {
-            const logsTable = document.getElementById('logs-table');
-            const newRow = document.createElement('div');
-            newRow.className = 'table-row pulse';
-            newRow.innerHTML = `log_id: ${logCounter++}`;
-            logsTable.appendChild(newRow);
-            
-            const actionRow = document.createElement('div');
-            actionRow.className = 'table-row pulse';
-            actionRow.innerHTML = `action: ${action}`;
-            logsTable.appendChild(actionRow);
-        }
-
-        function showNotification(message) {
-            const notificationArea = document.getElementById('notification-area');
-            notificationArea.innerHTML = `<div class="notification">${message}</div>`;
-        }
-
-        // Add CSS for slideOut animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideOut {
-                from { opacity: 1; transform: translateX(0); }
-                to { opacity: 0; transform: translateX(-100%); }
+        function nextMessage() {
+            if (currentMessageIndex < conversation.length - 1) {
+                currentMessageIndex++;
+                showMessage();
             }
-        `;
-        document.head.appendChild(style);
+        }
 
-        // Initialize
-        showNotification('🎮 Interactive Database Triggers Demo<br>👆 Click any action button to see triggers in action!');
+        function showMessage() {
+            const message = conversation[currentMessageIndex];
+            const conversationArea = document.getElementById('conversationArea');
+            
+            if (currentMessageIndex === 0) {
+                conversationArea.innerHTML = '';
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `event-message ${message.type}-message`;
+            messageDiv.innerHTML = `
+                <strong>${message.speaker}:</strong> ${message.message}
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            conversationArea.appendChild(messageDiv);
+            conversationArea.scrollTop = conversationArea.scrollHeight;
+        }
+
+        function resetConversation() {
+            currentMessageIndex = 0;
+            document.getElementById('conversationArea').innerHTML = `
+                <div class="event-message">
+                    "Baat Shuru Karo" pe click karke Jethalal-Bhide ki Triggers wali charcha shuru karo!
+                </div>
+            `;
+        }
+
+        // Render default tables on load
+        window.onload = function() {
+            renderTables();
+        };
     </script>
 </body>
 </html>

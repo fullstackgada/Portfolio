@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Injection - Fullstackgada ka Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-interactive" style="position:relative;">
+            <h1>SQL Injection ka Funda</h1>
+             <p>Understand how SQL Injection works with Fullstackgada</p>
+            <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+        </div>
+
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- SQL Injection Demo Section -->
+            <div class="demo-section">
+                <h2 class="demo-title">🔒 SQL Injection Attack Demo</h2>
+                
+                <div class="explanation">
+                    <strong>Bhide ki Problem:</strong> Bhide ne user input ko seedha SQL query mein daal diya. Dekhte hain kaise hacker iska fayda uthata hai!
+                </div>
+
+                <!-- Vulnerable Login Form -->
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="bhidu" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="papad123" />
+                </div>
+
+                <!-- Demo Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="normalLogin()">
+                        ✅ Normal Login
+                    </button>
+                    <button class="demo-btn" onclick="sqlInjectionAttack()">
+                        🔓 SQL Injection Attack
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearDemo()">
+                        🗑️ Clear Karo
+                    </button>
+                </div>
+
+                <!-- Server Log Display -->
+                <div class="server-simulation">
+                    <h4>Server Log:</h4>
+                    <div class="server-log" id="serverLog">
+                        Login attempt ka wait kar raha hai...
+                    </div>
+                </div>
+
+                <!-- Query Display -->
+                <div class="demo-area" id="queryDisplay">
+                    <div class="event-message one-message">
+                        <strong>SQL Query Preview:</strong><br>
+                        <code>SELECT * FROM Users WHERE username = '?' AND password = '?';</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Protection Methods Section -->
+            <div class="demo-section">
+                <h2 class="demo-title">🛡️ Protection ke Tareeke</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Jethalal ka Solution:</strong> Prepared statements aur proper validation se SQL injection ko roka ja sakta hai.
+                </div>
+
+                <!-- Tabs for Different Solutions -->
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('prepared')">Prepared Statements</button>
+                    <button class="tab" onclick="showTab('validation')">Input Validation</button>
+                    <button class="tab" onclick="showTab('best-practices')">Best Practices</button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div id="prepared" class="tab-content active">
+                    <div class="code-block">
+                        <div class="code-line comment">// Prepared Statement Example (Safe)</div>
+                        <div class="code-line var-declaration">const query = "SELECT * FROM Users WHERE username = ? AND password = ?";</div>
+                        <div class="code-line var-usage">db.prepare(query).get(username, hashedPassword);</div>
+                        <div class="code-line comment">// User input automatically escaped hota hai</div>
+                    </div>
+                </div>
+
+                <div id="validation" class="tab-content">
+                    <div class="code-block">
+                        <div class="code-line comment">// Input Validation</div>
+                        <div class="code-line var-declaration">function validateInput(input) {</div>
+                        <div class="code-line var-usage">  return input.replace(/['"\\;]/g, '');</div>
+                        <div class="code-line var-usage">  // Dangerous characters hatao</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                </div>
+
+                <div id="best-practices" class="tab-content">
+                    <div class="step-container">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div>Hamesha parameterized queries use karo</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div>Passwords ko bcrypt/SHA-256 se hash karo</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div>Sabhi user inputs ko validate karo</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div>Jab possible ho, ORM tools use karo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Protection Demo -->
+                <div class="demo-controls" style="margin-top: 20px;">
+                    <button class="demo-btn first-btn" onclick="showProtectedLogin()">
+                        🔐 Secure Login 
+                    </button>
+                </div>
+
+                <div class="demo-area" id="protectionResult" style="display: none;">
+                    <div class="success-message">
+                        <strong>✅ Secure Implementation:</strong><br>
+                        Prepared statements use karne se - SQL injection attempt block ho gaya!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jethalal-Bhide Conversation Section -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">💬 Jethalal aur Bhide ki Baat</h2>
+            
+            <div class="chat-input">
+                <button class="demo-btn first-btn" onclick="startConversation()">
+                    🎬 Baat Shuru Karo
+                </button>
+                <button class="demo-btn" onclick="nextMessage()">
+                    ➡️ Agla Message
+                </button>
+                <button class="demo-btn clear-btn" onclick="resetConversation()">
+                    🔄 Reset Karo
+                </button>
+            </div>
+
+            <div class="demo-area" id="conversationArea">
+                <div class="event-message">
+                    "Baat Shuru Karo" pe click karke Jethalal-Bhide ki SQL Injection wali discussion shuru karo!
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="comparison-section" id="comparisonSection">
+            <h3>🔍 Vulnerable vs Secure Code ki Takkar</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>❌ Vulnerable Code</th>
+                        <th>✅ Secure Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Query Building</strong></td>
+                        <td>String concatenation</td>
+                        <td>Prepared statements</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Input Handling</strong></td>
+                        <td>Direct insertion</td>
+                        <td>Parameter binding</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Password Storage</strong></td>
+                        <td>Plain text comparison</td>
+                        <td>Hashed comparison</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risk Level</strong></td>
+                        <td>🔴 High (Pura bypass)</td>
+                        <td>🟢 Low (Attack block)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Conversation data
+        const conversation = [
+            {
+                speaker: "भिडे",
+                message: "जेठालाल! Meri website mein problem ho gayi hai! Koi unknown banda bina login ke admin panel mein ghus gaya!",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Arre Bhide! Tu toh har baar discipline ka jhanda leke ghoomta hai. Ab kahan gaya tera discipline? Lagta hai tune user input seedha SQL query mein daal diya?",
+                type: "two"
+            },
+            {
+                speaker: "भिडे",
+                message: "Arre toh kya hua? Maine bas itna likha tha: SELECT * FROM Users WHERE username = 'bhidu' AND password = 'papad123';",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Chal soch — teri site mein ek login form hai. User usme username aur password bharta hai. Ab tune backend mein yeh likha: SELECT * FROM Users WHERE username = 'bhidu' AND password = '1234'; Agar input sahi hai — toh sahi user milega.",
+                type: "two"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Lekin hacker ne smart input diya: username: ' OR '1'='1 aur password: kuch bhi. Toh ab teri query yeh banti hai: SELECT * FROM Users WHERE username = '' OR '1'='1' AND password = 'kuch bhi';",
+                type: "two"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Ab '1'='1' toh hamesha sach rahega — matlab authentication bypass ho gaya! Koi bhi bina sahi credentials ke admin ban gaya! Yani teri site mein SQL Injection ho gaya!",
+                type: "two"
+            },
+            {
+                speaker: "भिडे",
+                message: "Arre deva! Matlab pura system hi khol diya maine? Ab main kya karoon?",
+                type: "one"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Dekh Bhide, kabhi bhi user input ko direct SQL query mein mat daal. Aisa karna bahut bada security risk hai. Use kar — parameterized queries, prepared statements, ya phir ORM tools jaise Entity Framework, Hibernate, ya Sequelize.",
+                type: "two"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Yeh methods user input ko automatically sanitize karte hain aur SQL Injection se bachate hain. Aur haan, agar tu stored procedures use karta hai, toh usme bhi parameter binding karna zaroori hai — warna wahan bhi injection ho sakta hai.",
+                type: "two"
+            },
+            {
+                speaker: "जेठालाल",
+                message: "Aur kabhi bhi password ko plain SQL mein store ya match mat karo. Hamesha bcrypt ya SHA-256 jaise algorithms se password ko hash karo aur phir match karo.",
+                type: "two"
+            }
+        ];
+
+        let currentMessageIndex = 0;
+
+        // Normal login function
+        function normalLogin() {
+            const username = document.getElementById('username').value || 'bhidu';
+            const password = document.getElementById('password').value || 'papad123';
+            
+            const query = `SELECT * FROM Users WHERE username = '${username}' AND password = '${password}';`;
+            
+            document.getElementById('serverLog').innerHTML = `
+                <strong style="color: #4caf50;">✅ Authentication Successful</strong><br>
+                User: ${username} ne successfully login kiya!
+            `;
+            
+            document.getElementById('queryDisplay').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>Executed Query:</strong><br>
+                    <code>${query}</code><br><br>
+                    <strong>Result:</strong> Valid user mila - Login successful!
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // SQL Injection attack simulation
+        function sqlInjectionAttack() {
+            document.getElementById('username').value = "' OR '1'='1";
+            document.getElementById('password').value = "anything";
+            
+            const maliciousQuery = "SELECT * FROM Users WHERE username = '' OR '1'='1' AND password = 'anything';";
+            
+            document.getElementById('serverLog').innerHTML = `
+                <strong style="color: #f56565;">🚨 SECURITY BREACH!</strong><br>
+                Unauthorized access mil gaya! SQL Injection successful!
+            `;
+            
+            document.getElementById('queryDisplay').innerHTML = `
+                <div class="event-message two-message">
+                    <strong>🔓 Malicious Query:</strong><br>
+                    <code>${maliciousQuery}</code><br><br>
+                    <strong>Result:</strong> '1'='1' hamesha TRUE hota hai - Authentication bypassed!<br>
+                    <strong style="color: #f56565;">⚠️ Attacker ko admin access mil gaya!</strong>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+            
+            // Show comparison table
+            document.getElementById('comparisonSection').style.display = 'block';
+        }
+
+        // Clear demo
+        function clearDemo() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('serverLog').innerHTML = 'Login attempt ka wait kar raha hai...';
+            document.getElementById('queryDisplay').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>SQL Query Preview:</strong><br>
+                    <code>SELECT * FROM Users WHERE username = '?' AND password = '?';</code>
+                </div>
+            `;
+            document.getElementById('comparisonSection').style.display = 'none';
+        }
+
+        // Show protected login
+        function showProtectedLogin() {
+            document.getElementById('protectionResult').style.display = 'block';
+            document.getElementById('protectionResult').innerHTML = `
+                <div class="success-message">
+                    <strong>✅ Secure Implementation Active:</strong><br>
+                    <code>const stmt = db.prepare("SELECT * FROM Users WHERE username = ? AND password = ?");</code><br>
+                    <code>stmt.get(username, hashedPassword);</code><br><br>
+                    Malicious input "' OR '1'='1" ke saath bhi, prepared statement ise literal text treat karta hai, SQL code nahi!
+                </div>
+            `;
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Conversation functions
+        function startConversation() {
+            currentMessageIndex = 0;
+            showMessage();
+        }
+
+        function nextMessage() {
+            if (currentMessageIndex < conversation.length - 1) {
+                currentMessageIndex++;
+                showMessage();
+            }
+        }
+
+        function showMessage() {
+            const message = conversation[currentMessageIndex];
+            const conversationArea = document.getElementById('conversationArea');
+            
+            if (currentMessageIndex === 0) {
+                conversationArea.innerHTML = '';
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `event-message ${message.type}-message`;
+            messageDiv.innerHTML = `
+                <strong>${message.speaker}:</strong> ${message.message}
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            
+            conversationArea.appendChild(messageDiv);
+            conversationArea.scrollTop = conversationArea.scrollHeight;
+        }
+
+        function resetConversation() {
+            currentMessageIndex = 0;
+            document.getElementById('conversationArea').innerHTML = `
+                <div class="event-message">
+                    "Baat Shuru Karo" pe click karke Jethalal-Bhide ki SQL Injection wali discussion shuru karo!
+                </div>
+            `;
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            clearDemo();
+        };
+    </script>
+</body>
+</html>

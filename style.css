@@ -505,7 +505,7 @@ body {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    clip-path: inset(30px 0 10px 0); /* crops 50px from the bottom */
+   /*  clip-path: inset(30px 0 10px 0); crops 50px from the bottom */
     border-radius: 12px;
     display: block;
     margin-bottom: 1rem;
@@ -1192,6 +1192,7 @@ body {
         height: 180px !important;
         margin-bottom: 0.8rem !important;
         width: 100% !important;
+        /* clip-path: inset(30px 20px 10px 17px); */
     }
     .interactive-card h3 {
         font-size: 1.1rem !important;

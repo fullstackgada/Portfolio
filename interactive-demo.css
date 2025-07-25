@@ -1209,3 +1209,132 @@ td{
         margin-bottom: 0.8rem;
     }
 }
+
+/* =========================
+   Styled Dropdowns (Select)
+   ========================= */
+.form-group select,
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1.5px solid #356c67;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: #f9f9fb;
+    color: #356c67;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    appearance: none;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(53, 108, 103, 0.05);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.form-group select:focus,
+select:focus {
+    border-color: #356c67;
+    background: #fff;
+}
+
+.form-group select:disabled,
+select:disabled {
+    background: #e2e8f0;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Custom arrow for select (optional, for modern browsers) */
+.form-group select,
+select {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 8L10 13L15 8' stroke='%23356c67' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    background-size: 1.2rem;
+    padding-right: 2.5rem;
+}
+
+/* Performance indicators */
+.performance-indicator {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.performance-indicator.fast {
+    background: #48bb78;
+    color: #fff;
+}
+
+.performance-indicator.medium {
+    background: #ed8936;
+    color: #fff;
+}
+
+.performance-indicator.slow {
+    background: #f56565;
+    color: #fff;
+}
+
+/* Metric cards for performance tab */
+.comparison-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.metric-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(53, 108, 103, 0.1);
+    border-top: 4px solid #356c67;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(53, 108, 103, 0.12);
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #356c67;
+    margin: 0.5rem 0;
+}
+
+.metric-label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile responsive for new elements */
+@media (max-width: 768px) {
+    .dialogue {
+        padding: 1rem;
+        margin: 0.8rem 0;
+    }
+    
+    .speaker {
+        font-size: 1rem;
+    }
+    
+    .comparison-metrics {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .metric-card {
+        padding: 1rem;
+    }
+    
+    .metric-value {
+        font-size: 1.5rem;
+    }
+}

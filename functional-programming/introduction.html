@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functional Programming - Fullstackgada ka Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-interactive" style="position:relative;">
+            <h1>Functional Programming ka Funda</h1>
+            <p>Understand how Functional Programming works with Fullstackgada</p>
+            <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+        </div>
+
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Functional Programming Concepts -->
+            <div class="demo-section">
+                <h2 class="demo-title">🎯 Functional Programming Kya Hai?</h2>
+                
+                <div class="explanation">
+                    <strong>Functional Programming (FP):</strong> Code jo functions par based ho, saaf-suthra, bina side effects ke, aur aasani se reuse ho sake.
+                </div>
+
+                <!-- Daya's Garba Analogy -->
+                <div class="saree-analogy">
+                    <h4>💃 Daya ka Garba Analogy</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💃</div>
+                        <div><strong>Pure Function (Daya ka Garba):</strong> Same steps, same josh! Same input = Same output</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🐍</div>
+                        <div><strong>Impure Function (Kabhi Garba, Kabhi Nagin):</strong> Kabhi result aisa, kabhi waisa - koi bharosa nahi!</div>
+                    </div>
+                </div>
+
+                <!-- Core Principles Demo -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstratePureFunctions()">
+                        ✨ Pure Functions (Daya ka Garba)
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateImpureFunctions()">
+                        🔀 Impure Functions (Nagin Dance)
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateSideEffects()">
+                        ⚠️ Side Effects
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearDemo()">
+                        🗑️ Clear Karo
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="fpConceptResults">
+                    <div class="event-message one-message">
+                        Upar ke buttons click karo to Functional Programming ke concepts dekho!
+                    </div>
+                </div>
+            </div>
+
+            <!-- FP vs OOP Comparison -->
+            <div class="demo-section">
+                <h2 class="demo-title">⚖️ FP vs OOP vs Imperative</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Kaun si approach kab use karein?</strong> Har style ka apna maza aur jagah hai!
+                </div>
+
+                <!-- Programming Paradigm Selector -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="showParadigm('functional')">
+                        🔧 Functional Style
+                    </button>
+                    <button class="demo-btn" onclick="showParadigm('object-oriented')">
+                        🏗️ Object-Oriented
+                    </button>
+                    <button class="demo-btn" onclick="showParadigm('imperative')">
+                        💻 Imperative Style
+                    </button>
+                </div>
+
+                <!-- Paradigm Code Examples -->
+                <div class="code-block" id="paradigmCodeExample">
+                    <div class="code-line comment">/* Upar se koi programming style choose karo to code examples dekho */</div>
+                </div>
+
+                <!-- When to Use What -->
+                <div class="how-it-works" id="whenToUse">
+                    <h4>🤔 Kab Use Karein?</h4>
+                    <div class="step">
+                        <div class="step-number">?</div>
+                        <div>Koi style select karo to dekho kab use karna hai!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive FP Benefits Demo -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🌟 Functional Programming Kyun Chune?</h2>
+            
+            <div class="explanation">
+                <strong>Jethalal ke Hisaab se FP ke Fayde:</strong> Bug-free, predictable code, safai se testing, aur aasaan reuse!
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showBenefit('predictability')">🎯 Predictability</button>
+                <button class="tab" onclick="showBenefit('testing')">🧪 Aasaan Testing</button>
+                <button class="tab" onclick="showBenefit('reusability')">♻️ Reusability</button>
+                <button class="tab" onclick="showBenefit('debugging')">🐛 Aasaan Debugging</button>
+            </div>
+
+            <!-- Predictability Benefit -->
+            <div id="predictability" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Functional: Predictable jaise Daya ka Garba</div>
+                        <div class="code-line var-declaration">const calculateDiscount = (price, discountPercent) => {</div>
+                        <div class="code-line var-usage">  return price - (price * discountPercent / 100);</div>
+                        <div class="code-line var-declaration">};</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Hamesha same result</div>
+                        <div class="code-line var-usage">console.log(calculateDiscount(1000, 10)); // Hamesha 900</div>
+                        <div class="code-line var-usage">console.log(calculateDiscount(1000, 10)); // Hamesha 900</div>
+                        <div class="code-line var-usage">console.log(calculateDiscount(1000, 10)); // Hamesha 900</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Imperative: Unpredictable jaise Nagin Dance</div>
+                        <div class="code-line var-declaration">let globalDiscount = 10;</div>
+                        <div class="code-line error">function calculateDiscountUnpredictable(price) {</div>
+                        <div class="code-line error">  globalDiscount += Math.random() * 5; // Har baar badalta hai!</div>
+                        <div class="code-line error">  return price - (price * globalDiscount / 100);</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Har baar alag results</div>
+                        <div class="code-line error">console.log(calculateDiscountUnpredictable(1000)); // 875.23</div>
+                        <div class="code-line error">console.log(calculateDiscountUnpredictable(1000)); // 832.45</div>
+                        <div class="code-line error">console.log(calculateDiscountUnpredictable(1000)); // 798.67</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testPredictability()">🎯 Predictability Test Karo</button>
+                <div id="predictabilityResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Predictability test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Testing Benefit -->
+            <div id="testing" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Functional: Testing mein aasaan</div>
+                        <div class="code-line var-declaration">const add = (a, b) => a + b;</div>
+                        <div class="code-line var-declaration">const multiply = (a, b) => a * b;</div>
+                        <div class="code-line var-declaration">const calculateArea = (length, width) => multiply(length, width);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Testing seedha-sada - koi mocking nahi chahiye</div>
+                        <div class="code-line var-usage">// Test 1: add function</div>
+                        <div class="code-line var-usage">assert(add(2, 3) === 5); // ✅ Pass</div>
+                        <div class="code-line var-usage">// Test 2: multiply function</div>
+                        <div class="code-line var-usage">assert(multiply(4, 5) === 20); // ✅ Pass</div>
+                        <div class="code-line var-usage">// Test 3: calculateArea function</div>
+                        <div class="code-line var-usage">assert(calculateArea(10, 5) === 50); // ✅ Pass</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Object-Oriented: Testing mein jhamela</div>
+                        <div class="code-line error">class Calculator {</div>
+                        <div class="code-line error">  constructor() {</div>
+                        <div class="code-line error">    this.history = [];</div>
+                        <div class="code-line error">    this.database = new Database(); // Bahar ka dependency</div>
+                        <div class="code-line error">  }</div>
+                        <div class="code-line error">  add(a, b) {</div>
+                        <div class="code-line error">    const result = a + b;</div>
+                        <div class="code-line error">    this.history.push({operation: 'add', result});</div>
+                        <div class="code-line error">    this.database.save(result); // Side effect</div>
+                        <div class="code-line error">    return result;</div>
+                        <div class="code-line error">  }</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Testing ke liye mocking, setup, teardown chahiye</div>
+                        <div class="code-line error">// Database mock karna, history check karna, etc.</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="demonstrateTesting()">🧪 Testing Demo Chalao</button>
+                <div id="testingResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Testing comparison dekhne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Reusability Benefit -->
+            <div id="reusability" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Functional: Bahut reusable</div>
+                        <div class="code-line var-declaration">const map = (fn, array) => array.map(fn);</div>
+                        <div class="code-line var-declaration">const filter = (predicate, array) => array.filter(predicate);</div>
+                        <div class="code-line var-declaration">const reduce = (reducer, initial, array) => array.reduce(reducer, initial);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Reusable utility functions</div>
+                        <div class="code-line var-usage">const double = x => x * 2;</div>
+                        <div class="code-line var-usage">const isEven = x => x % 2 === 0;</div>
+                        <div class="code-line var-usage">const sum = (acc, curr) => acc + curr;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Kahin bhi, kisi bhi data ke saath use karo</div>
+                        <div class="code-line var-usage">const numbers = [1, 2, 3, 4, 5];</div>
+                        <div class="code-line var-usage">const doubled = map(double, numbers);     // [2,4,6,8,10]</div>
+                        <div class="code-line var-usage">const evens = filter(isEven, numbers);    // [2, 4]</div>
+                        <div class="code-line var-usage">const total = reduce(sum, 0, numbers);    // 15</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Object-Oriented: Limited reusability</div>
+                        <div class="code-line error">class NumberProcessor {</div>
+                        <div class="code-line error">  constructor(numbers) {</div>
+                        <div class="code-line error">    this.numbers = numbers;</div>
+                        <div class="code-line error">    this.processed = [];</div>
+                        <div class="code-line error">  }</div>
+                        <div class="code-line error">  doubleNumbers() {</div>
+                        <div class="code-line error">    this.processed = this.numbers.map(x => x * 2);</div>
+                        <div class="code-line error">    return this;</div>
+                        <div class="code-line error">  }</div>
+                        <div class="code-line error">  filterEvens() {</div>
+                        <div class="code-line error">    this.processed = this.processed.filter(x => x % 2 === 0);</div>
+                        <div class="code-line error">    return this;</div>
+                        <div class="code-line error">  }</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Alag data types ke liye logic reuse nahi kar sakte</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="demonstrateReusability()">♻️ Reusability Test Karo</button>
+                <div id="reusabilityResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Reusability demo dekhne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Debugging Benefit -->
+            <div id="debugging" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Functional: Debugging mein aasaan - alag-alag functions</div>
+                        <div class="code-line var-declaration">const getUserName = (user) => user.name;</div>
+                        <div class="code-line var-declaration">const formatName = (name) => name.toUpperCase();</div>
+                        <div class="code-line var-declaration">const addGreeting = (name) => `Hello, ${name}!`;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Debug karna aasaan - har function alag test kar sakte hain</div>
+                        <div class="code-line var-usage">const user = {name: "Jethalal"};</div>
+                        <div class="code-line var-usage">const name = getUserName(user);        // "Jethalal"</div>
+                        <div class="code-line var-usage">const formatted = formatName(name);    // "JETHALAL"</div>
+                        <div class="code-line var-usage">const greeting = addGreeting(formatted); // "Hello, JETHALAL!"</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Har step alag se debug kar sakte hain</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Procedural: Debugging mein mushkil - sab mixed up</div>
+                        <div class="code-line error">function processUser(user) {</div>
+                        <div class="code-line error">  let result = "";</div>
+                        <div class="code-line error">  if (user && user.name) {</div>
+                        <div class="code-line error">    let name = user.name;</div>
+                        <div class="code-line error">    // Side effect: global state badalta hai</div>
+                        <div class="code-line error">    lastProcessedUser = user;</div>
+                        <div class="code-line error">    name = name.toUpperCase();</div>
+                        <div class="code-line error">    result = "Hello, " + name + "!";</div>
+                        <div class="code-line error">    // Dusra side effect: logging</div>
+                        <div class="code-line error">    console.log("Processed: " + result);</div>
+                        <div class="code-line error">  }</div>
+                        <div class="code-line error">  return result;</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Debug karna mushkil - sab kuch ghulmil gaya</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="demonstrateDebugging()">🐛 Debugging Comparison Dekho</button>
+                <div id="debuggingResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Debugging demo dekhne ke liye click karo...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-world Applications -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🌍 Real-world FP ke Applications</h2>
+            
+            <div class="memory-diagram">
+                <div class="memory-slot">
+                    <div class="variable-name">⚛️ React</div>
+                    <div class="variable-value">Functional components, hooks, pure render functions</div>
+                </div>
+                <div class="memory-slot">
+                    <div class="variable-name">📊 Data Processing</div>
+                    <div class="variable-value">map(), filter(), reduce() se data transform karo</div>
+                </div>
+                <div class="memory-slot">
+                    <div class="variable-name">🔒 State Management</div>
+                    <div class="variable-value">Redux, Zustand - immutable state updates</div>
+                </div>
+                <div class="memory-slot">
+                    <div class="variable-name">🧪 Testing</div>
+                    <div class="variable-value">Pure functions ko test aur mock karna aasaan</div>
+                </div>
+                <div class="memory-slot">
+                    <div class="variable-name">🚀 Performance</div>
+                    <div class="variable-value">Memoization, lazy evaluation, parallel processing</div>
+                </div>
+                <div class="memory-slot">
+                    <div class="variable-name">🎯 APIs</div>
+                    <div class="variable-value">Stateless functions, middleware, data transformation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Programming Paradigms Comparison -->
+        <div class="comparison-section">
+            <h3>🔍 Programming Paradigms ka Comparison</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>🔧 Functional</th>
+                        <th>🏗️ Object-Oriented</th>
+                        <th>💻 Imperative</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Main Focus</strong></td>
+                        <td>Functions aur unka composition</td>
+                        <td>Objects aur unka interaction</td>
+                        <td>Ek-ek karke instructions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Kaise Handle Hota Hai</strong></td>
+                        <td>Immutable data, pure transformations</td>
+                        <td>Objects mein encapsulated, mutable</td>
+                        <td>Variables aur assignments se</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Problem Solving</strong></td>
+                        <td>Chhote, pure functions compose karo</td>
+                        <td>Real-world entities ko objects banakar model karo</td>
+                        <td>Sequential steps mein tod do</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best For</strong></td>
+                        <td>Data transformation, calculations, parallel processing</td>
+                        <td>Bade applications, GUI, business logic</td>
+                        <td>Simple scripts, algorithms, system programming</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Testing</strong></td>
+                        <td>Aasaan - pure functions, koi dependency nahi</td>
+                        <td>Medium - mocking, setup chahiye</td>
+                        <td>Mushkil - side effects, global state</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Debugging</strong></td>
+                        <td>Aasaan - alag-alag, predictable functions</td>
+                        <td>Medium - encapsulated par complex</td>
+                        <td>Mushkil - tangled logic, side effects</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Example Languages</strong></td>
+                        <td>Haskell, Clojure, F#, JavaScript (FP style)</td>
+                        <td>Java, C++, Python, JavaScript (OOP style)</td>
+                        <td>C, Assembly, JavaScript (imperative style)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jethalal ka Take</strong></td>
+                        <td>Daya ka Garba - predictable, consistent</td>
+                        <td>Gokuldham Society - organized, structured</td>
+                        <td>Tapu ki Masti - chaotic par direct</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- When to Choose What -->
+        <div class="comparison-section">
+            <h3>🤔 Kaun sa Paradigm Kab Chune?</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Recommended Paradigm</th>
+                        <th>Kyun?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Data Processing & Analytics</strong></td>
+                        <td>🔧 Functional</td>
+                        <td>Pure functions, aasaan testing, parallel processing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Web UI Development</strong></td>
+                        <td>🔧 Functional + 🏗️ OOP</td>
+                        <td>React (functional components) + component architecture</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bade Enterprise Applications</strong></td>
+                        <td>🏗️ Object-Oriented</td>
+                        <td>Behtar organization, encapsulation, maintainability</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mathematical Calculations</strong></td>
+                        <td>🔧 Functional</td>
+                        <td>Pure functions mathematical functions se match karte hain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>System Programming</strong></td>
+                        <td>💻 Imperative</td>
+                        <td>Direct hardware control, performance critical</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API Development</strong></td>
+                        <td>🔧 Functional</td>
+                        <td>Stateless, predictable, test karna aasaan</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Game Development</strong></td>
+                        <td>🏗️ OOP + 💻 Imperative</td>
+                        <td>Object modeling + performance optimization</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    
+        // Demonstrate pure functions (Daya's Garba)
+        function demonstratePureFunctions() {
+            const result = document.getElementById('fpConceptResults');
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>💃 Pure Functions - Daya ka Garba Style!</strong><br><br>
+                    <code>const dayaGarba = (steps, energy) => steps * energy;</code><br><br>
+                    <strong>Test Results:</strong><br>
+                    • dayaGarba(10, 5) = ${10 * 5} (hamesha same!)<br>
+                    • dayaGarba(10, 5) = ${10 * 5} (phir same!)<br>
+                    • dayaGarba(10, 5) = ${10 * 5} (hamesha same!)<br><br>
+                    <strong>Fayde:</strong><br>
+                    ✅ Predictable - Same input, same output<br>
+                    ✅ Koi side effects nahi - bahar ki duniya ko nahi chhuta<br>
+                    ✅ Testing aasaan - Simple assertions<br>
+                    ✅ Thread-safe - Parallel execution mein safe
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Demonstrate impure functions (Nagin Dance)
+        function demonstrateImpureFunctions() {
+            const result = document.getElementById('fpConceptResults');
+            
+            // Simulate impure function with random behavior
+            let danceStyle = Math.random() > 0.5 ? 'Garba' : 'Nagin Dance';
+            let mood = Math.floor(Math.random() * 10) + 1;
+            let externalFactor = new Date().getSeconds(); // Har second badalta hai
+            
+            result.innerHTML = `
+                <div class="error-message">
+                    <strong>🐍 Impure Functions - Kabhi Garba, Kabhi Nagin!</strong><br><br>
+                    <code>const dayaUnpredictableDance = () => { /* mood, time, weather par depend karta hai */ }</code><br><br>
+                    <strong>Test Results (Same Input, Alag Outputs):</strong><br>
+                    • Call 1: "${danceStyle}" with energy ${mood}<br>
+                    • Call 2: "${Math.random() > 0.5 ? 'Bharatnatyam' : 'Disco'}" with energy ${Math.floor(Math.random() * 10) + 1}<br>
+                    • Call 3: "${Math.random() > 0.5 ? 'Classical' : 'Hip-Hop'}" with energy ${Math.floor(Math.random() * 10) + 1}<br>
+                    • External factor: ${externalFactor} (current seconds)<br><br>
+                    <strong>Problems:</strong><br>
+                    ❌ Unpredictable - Kabhi kya ho jaye, pata nahi!<br>
+                    ❌ Testing mushkil - Mocking karna padega<br>
+                    ❌ Side effects - Bahar ka state badalta hai<br>
+                    ❌ Thread-safe nahi - Race conditions ho sakte hain
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Demonstrate side effects
+        function demonstrateSideEffects() {
+            const result = document.getElementById('fpConceptResults');
+            
+            // Simulate side effects
+            let logMessages = [];
+            let databaseCalls = [];
+            let globalState = { count: 0, lastUser: null };
+            
+            // Simulate function with side effects
+            function functionWithSideEffects(user) {
+                // Side effect 1: Logging
+                logMessages.push(`User process kar raha hai: ${user}`);
+                
+                // Side effect 2: Database call
+                databaseCalls.push(`INSERT INTO logs (user, time) VALUES ('${user}', '${new Date().toISOString()}')`);
+                
+                // Side effect 3: Modifying global state
+                globalState.count++;
+                globalState.lastUser = user;
+                
+                // Side effect 4: Network call simulation
+                logMessages.push(`Notification bhej raha hai to ${user}`);
+                
+                return `Processed ${user}`;
+            }
+            
+            // Run the function
+            const output = functionWithSideEffects('Jethalal');
+            
+            result.innerHTML = `
+                <div class="error-message">
+                    <strong>⚠️ Side Effects - Bahar ki Duniya ko Badalna!</strong><br><br>
+                    <code>functionWithSideEffects('Jethalal')</code><br><br>
+                    <strong>Function Output:</strong> "${output}"<br><br>
+                    <strong>Side Effects Hue:</strong><br>
+                    📝 <strong>Logging:</strong><br>
+                    ${logMessages.map(msg => `&nbsp;&nbsp;• ${msg}`).join('<br>')}<br><br>
+                    🗄️ <strong>Database Calls:</strong><br>
+                    &nbsp;&nbsp;• ${databaseCalls[0]}<br><br>
+                    🌐 <strong>Global State Changes:</strong><br>
+                    &nbsp;&nbsp;• count: 0 → ${globalState.count}<br>
+                    &nbsp;&nbsp;• lastUser: null → "${globalState.lastUser}"<br><br>
+                    <strong>Side Effects ke Problems:</strong><br>
+                    ❌ Testing mushkil - Database, logs mock karna padta hai<br>
+                    ❌ Unpredictable - Bahar ke systems fail ho sakte hain<br>
+                    ❌ Debugging mushkil - Effects har jagah failte hain<br>
+                    ❌ Pure nahi - Same input, alag consequences
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Clear demo
+        function clearDemo() {
+            document.getElementById('fpConceptResults').innerHTML = `
+                <div class="event-message one-message">
+                    Upar ke buttons click karo to Functional Programming ke concepts dekho!
+                </div>
+            `;
+        }
+
+        // Show programming paradigm examples
+        function showParadigm(paradigm) {
+            const codeExample = document.getElementById('paradigmCodeExample');
+            const whenToUse = document.getElementById('whenToUse');
+            
+            const examples = {
+                'functional': {
+                    code: `// 🔧 Functional Programming - Data Transformation
+const numbers = [1, 2, 3, 4, 5];
+
+// Pure functions banaye data transform ke liye
+const double = x => x * 2;
+const isEven = x => x % 2 === 0;
+const sum = (acc, curr) => acc + curr;
+
+// Functions ko compose karke problem solve karo
+const result = numbers
+    .map(double)          // [2, 4, 6, 8, 10]
+    .filter(isEven)       // [2, 4, 6, 8, 10] (sab even doubling ke baad)
+    .reduce(sum, 0);      // 30
+
+console.log(result); // 30`,
+                    when: [
+                        { step: 1, desc: "Data processing aur transformations" },
+                        { step: 2, desc: "Mathematical calculations" },
+                        { step: 3, desc: "Stateless functions wale APIs" },
+                        { step: 4, desc: "Parallel processing ke liye" },
+                        { step: 5, desc: "Jab predictability zaroori ho" }
+                    ]
+                },
+                'object-oriented': {
+                    code: `// 🏗️ Object-Oriented Programming - Entities ko Model Karna
+class BankAccount {
+    constructor(accountNumber, initialBalance) {
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
+        this.transactions = [];
+    }
+    
+    deposit(amount) {
+        this.balance += amount;
+        this.transactions.push({type: 'deposit', amount, date: new Date()});
+        return this.balance;
+    }
+    
+    withdraw(amount) {
+        if (amount <= this.balance) {
+            this.balance -= amount;
+            this.transactions.push({type: 'withdraw', amount, date: new Date()});
+            return this.balance;
+        }
+        throw new Error('Paise kam hain');
+    }
+    
+    getStatement() {
+        return this.transactions;
+    }
+}
+
+const account = new BankAccount('ACC001', 1000);
+account.deposit(500);   // 1500
+account.withdraw(200);  // 1300`,
+                    when: [
+                        { step: 1, desc: "Bade, complex applications" },
+                        { step: 2, desc: "Real-world entities ko model karne ke liye" },
+                        { step: 3, desc: "GUI aur desktop applications" },
+                        { step: 4, desc: "Jab encapsulation chahiye" },
+                        { step: 5, desc: "Badi teams ke saath projects" }
+                    ]
+                },
+                'imperative': {
+                    code: `// 💻 Imperative Programming - Ek-Ek Karke Instructions
+let numbers = [1, 2, 3, 4, 5];
+let result = 0;
+
+console.log("Calculation shuru kar rahe hain...");
+
+// Ek-ek karke process
+for (let i = 0; i < numbers.length; i++) {
+    console.log(\`Number process kar rahe hain: \${numbers[i]}\`);
+    
+    // Step 1: Number ko double karo
+    let doubled = numbers[i] * 2;
+    console.log(\`Doubled: \${doubled}\`);
+    
+    // Step 2: Check karo even hai ya nahi
+    if (doubled % 2 === 0) {
+        console.log(\`\${doubled} even hai, result mein add kar rahe hain\`);
+        // Step 3: Result mein add karo
+        result += doubled;
+        console.log(\`Current result: \${result}\`);
+    }
+}
+
+console.log(\`Final result: \${result}\`); // 30`,
+                    when: [
+                        { step: 1, desc: "Simple scripts aur automation" },
+                        { step: 2, desc: "System programming" },
+                        { step: 3, desc: "Performance-critical code" },
+                        { step: 4, desc: "Programming basics sikhne ke liye" },
+                        { step: 5, desc: "Hardware-level programming" }
+                    ]
+                }
+            };
+            
+            const selected = examples[paradigm];
+            codeExample.innerHTML = selected.code.split('\n').map(line => 
+                `<div class="code-line">${line}</div>`
+            ).join('');
+            
+            whenToUse.innerHTML = `
+                <h4>🤔 ${paradigm === 'functional' ? 'Functional' : paradigm === 'object-oriented' ? 'Object-Oriented' : 'Imperative'} Kab Use Karein?</h4>
+                ${selected.when.map(item => `
+                    <div class="step">
+                        <div class="step-number">${item.step}</div>
+                        <div>${item.desc}</div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        // Test predictability
+        function testPredictability() {
+            const functionalResults = [];
+            const imperativeResults = [];
+            
+            // Functional approach
+            const calculateDiscount = (price, discountPercent) => {
+                return price - (price * discountPercent / 100);
+            };
+            
+            for (let i = 0; i < 3; i++) {
+                functionalResults.push(calculateDiscount(1000, 10));
+            }
+            
+            // Imperative approach with side effects
+            let globalDiscount = 10;
+            function calculateDiscountImperative(price) {
+                globalDiscount += Math.random() * 5; // Side effect!
+                return price - (price * globalDiscount / 100);
+            }
+            
+            for (let i = 0; i < 3; i++) {
+                imperativeResults.push(Math.round(calculateDiscountImperative(1000) * 100) / 100);
+            }
+            
+            document.getElementById('predictabilityResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🎯 Predictability Test Results:</strong><br><br>
+                    <strong>✅ Functional Approach:</strong><br>
+                    ${functionalResults.map((result, i) => `Run ${i + 1}: ₹${result}`).join('<br>')}<br>
+                    <span style="color: #4caf50;">Sab results ek jaisa! 🎉</span><br><br>
+                    <strong>❌ Imperative Approach:</strong><br>
+                    ${imperativeResults.map((result, i) => `Run ${i + 1}: ₹${result}`).join('<br>')}<br>
+                    <span style="color: #f56565;">Sab results alag-alag! 😵</span>
+                </div>
+            `;
+        }
+
+        // Demonstrate testing
+        function demonstrateTesting() {
+            document.getElementById('testingResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🧪 Testing Comparison Demo:</strong><br><br>
+                    <strong>✅ Functional Testing (Aasaan):</strong><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+// Test suite 0.05 seconds mein complete<br>
+✅ add(2, 3) === 5<br>
+✅ multiply(4, 5) === 20<br>
+✅ calculateArea(10, 5) === 50<br>
+<span style="color: #4caf50;">Sab tests pass! Koi mocking nahi chahiye.</span>
+                    </div>
+                    <strong>❌ OOP Testing (Jhamela):</strong><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+// Test suite 2.3 seconds mein chalta hai<br>
+🔧 Database connection mock karo...<br>
+🔧 Test data setup karo...<br>
+🔧 Calculator ko mocks ke saath initialize karo...<br>
+✅ Calculator.add(2, 3) === 5<br>
+🔧 Check karo database.save() call hua...<br>
+🔧 Test data cleanup karo...<br>
+<span style="color: #ff6f61;">Tests pass par setup complicated hai!</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Demonstrate reusability
+        function demonstrateReusability() {
+            document.getElementById('reusabilityResult').innerHTML = `
+                <div class="success-message">
+                    <strong>♻️ Reusability Demo:</strong><br><br>
+                    <strong>✅ Functional: Bahut Reusable</strong><br>
+                    <div style="background: #f9f9fb; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+Same <code>map</code>, <code>filter</code>, <code>reduce</code> functions kaam karte hain:<br>
+• Numbers: [1,2,3] → processing → result<br>
+• Strings: ["a","b","c"] → processing → result<br>
+• Objects: [{...},{...}] → processing → result<br>
+• Koi bhi data type! Universal functions 🌟
+                    </div>
+                    <strong>❌ OOP: Limited Reusability</strong><br>
+                    <div style="background: #fff5f5; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+<code>NumberProcessor</code> class sirf numbers ke saath kaam karta hai<br>
+Alag classes chahiye:<br>
+• StringProcessor strings ke liye<br>
+• ObjectProcessor objects ke liye<br>
+• ArrayProcessor arrays ke liye<br>
+Code duplication! 😔
+                    </div>
+                </div>
+            `;
+        }
+
+        // Demonstrate debugging
+        function demonstrateDebugging() {
+            document.getElementById('debuggingResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🐛 Debugging Comparison:</strong><br><br>
+                    <strong>✅ Functional: Aasaan Debugging</strong><br>
+                    <div style="background: #f0fff4; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+<strong>Debug Process:</strong><br>
+1️⃣ Test <code>getUserName({name: "Jethalal"})</code> → "Jethalal" ✅<br>
+2️⃣ Test <code>formatName("Jethalal")</code> → "JETHALAL" ✅<br>
+3️⃣ Test <code>addGreeting("JETHALAL")</code> → "Hello, JETHALAL!" ✅<br>
+<span style="color: #4caf50;">Har function alag hai - issue jaldi pakda jayega!</span>
+                    </div>
+                    <strong>❌ Imperative: Mushkil Debugging</strong><br>
+                    <div style="background: #fff5f5; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+<strong>Debug Process:</strong><br>
+🔍 Function mein 15 lines ka mixed logic<br>
+🔍 3 global variables modify karta hai<br>
+🔍 2 side effects (logging, state change)<br>
+🔍 Pura execution trace karna padta hai<br>
+🔍 Multiple breakpoints lagane padte hain<br>
+<span style="color: #f56565;">Asli problem pakadna mushkil hai! 😵</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show benefit tabs
+        function showBenefit(benefit) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(benefit).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            clearDemo();
+        };
+    </script>
+</body>
+</html>

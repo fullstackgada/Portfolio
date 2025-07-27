@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pure Functions - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+       <div class="header-interactive" style="position:relative;">
+        <h1>Pure Functions ka Funda</h1>
+        <p>Understand how Pure Functions works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Pure vs Impure Function Tester -->
+            <div class="demo-section">
+                <h2 class="demo-title">✨ Pure vs Impure Function Tester</h2>
+                
+                <div class="explanation">
+                    <strong>Pure Function ke Niyam:</strong><br>
+                    1️⃣ Same input = Same output (hamesha)<br>
+                    2️⃣ Koi side effects nahi (bahar ki duniya ko nahi chhuta)
+                </div>
+
+                <!-- Function Testing Area -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="testPureFunction()">
+                        ✅ Pure Function Test Karo
+                    </button>
+                    <button class="demo-btn" onclick="testImpureFunction()">
+                        ❌ Impure Function Test Karo
+                    </button>
+                    <button class="demo-btn" onclick="testSideEffects()">
+                        ⚠️ Side Effects Test Karo
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearTests()">
+                        🗑️ Results Clear Karo
+                    </button>
+                </div>
+
+                <!-- Test Results Display -->
+                <div class="demo-area" id="functionTestResults">
+                    <div class="event-message one-message">
+                        Upar ke buttons click karo to alag-alag functions test karo!
+                    </div>
+                </div>
+
+                <!-- External State Display -->
+                <div class="server-simulation">
+                    <h4>External State Monitor:</h4>
+                    <div class="server-log" id="externalState">
+                        <strong>Global Variables:</strong><br>
+                        bonus = <span id="bonusValue">100</span><br>
+                        counter = <span id="counterValue">0</span><br>
+                        lastUser = <span id="lastUserValue">"none"</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Function Builder -->
+            <div class="demo-section">
+                <h2 class="demo-title">🔧 Interactive Function Builder</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Apna Function Banaye:</strong> Pure aur Impure functions banao aur dekho kaise kaam karte hain!
+                </div>
+
+                <!-- Input Parameters -->
+                <div class="form-group">
+                    <label>Input A:</label>
+                    <input type="number" id="inputA" value="5">
+                    <label>Input B:</label>
+                    <input type="number" id="inputB" value="3">
+                </div>
+
+                <!-- Function Type Selector -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="runPureAdd()">
+                        ➕ Pure Add
+                    </button>
+                    <button class="demo-btn" onclick="runImpureAdd()">
+                        ➕ Impure Add (bonus ke saath)
+                    </button>
+                    <button class="demo-btn" onclick="runPureMultiply()">
+                        ✖️ Pure Multiply
+                    </button>
+                    <button class="demo-btn" onclick="runSideEffectFunction()">
+                        📝 Side Effect wala Function
+                    </button>
+                </div>
+
+                <!-- Function Execution History -->
+                <div class="how-it-works">
+                    <h4>📊 Function Execution ka History</h4>
+                    <div id="executionHistory">
+                        <div class="step">
+                            <div class="step-number">0</div>
+                            <div>Functions test karne ke liye ready...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Examples Section -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">💻 Pure vs Impure Code ke Examples</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showCodeExample('pure-examples')">✅ Pure Functions</button>
+                <button class="tab" onclick="showCodeExample('impure-examples')">❌ Impure Functions</button>
+                <button class="tab" onclick="showCodeExample('pure-calling-pure')">🔗 Pure se Pure Call</button>
+                <button class="tab" onclick="showCodeExample('common-mistakes')">⚠️ Common Galtiyan</button>
+            </div>
+
+            <!-- Pure Functions Tab -->
+            <div id="pure-examples" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Pure Function ke Examples</div>
+                        <div class="code-line var-declaration">function add(a, b) {</div>
+                        <div class="code-line var-usage">  return a + b; // Same input = Same output</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">function multiply(x, y) {</div>
+                        <div class="code-line var-usage">  return x * y; // Koi side effects nahi</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">function getFullName(firstName, lastName) {</div>
+                        <div class="code-line var-usage">  return firstName + " " + lastName;</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Testing</div>
+                        <div class="code-line var-usage">console.log(add(2, 3)); // Hamesha 5</div>
+                        <div class="code-line var-usage">console.log(add(2, 3)); // Hamesha 5</div>
+                        <div class="code-line var-usage">console.log(add(2, 3)); // Hamesha 5</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Pure Array Operations</div>
+                        <div class="code-line var-declaration">function doubleArray(arr) {</div>
+                        <div class="code-line var-usage">  return arr.map(x => x * 2); // Nayi array return karta hai</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">function filterAdults(people) {</div>
+                        <div class="code-line var-usage">  return people.filter(person => person.age >= 18);</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Original arrays wahi rehte hain</div>
+                        <div class="code-line var-usage">let nums = [1, 2, 3];</div>
+                        <div class="code-line var-usage">let doubled = doubleArray(nums);</div>
+                        <div class="code-line var-usage">console.log(nums);    // [1, 2, 3] (badla nahi)</div>
+                        <div class="code-line var-usage">console.log(doubled); // [2, 4, 6] (nayi array)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impure Functions Tab -->
+            <div id="impure-examples" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Impure Function ke Examples</div>
+                        <div class="code-line var-declaration">let bonus = 100; // Global variable</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">function calculateSalaryWithBonus(base) {</div>
+                        <div class="code-line error">  return base + bonus; // Bahar ke state par depend karta hai</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Same input, alag output</div>
+                        <div class="code-line var-usage">console.log(calculateSalaryWithBonus(1000)); // 1100</div>
+                        <div class="code-line var-assignment">bonus = 200; // Bahar se badla</div>
+                        <div class="code-line var-usage">console.log(calculateSalaryWithBonus(1000)); // 1200 (Alag!)</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Side Effects wale Functions</div>
+                        <div class="code-line var-declaration">let counter = 0;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">function incrementAndAdd(a, b) {</div>
+                        <div class="code-line error">  counter++; // Side effect: global state badalta hai</div>
+                        <div class="code-line error">  console.log("Adding..."); // Side effect: logging</div>
+                        <div class="code-line error">  return a + b;</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">function saveToDatabase(data) {</div>
+                        <div class="code-line error">  database.save(data); // Side effect: bahar ke change</div>
+                        <div class="code-line error">  return "Saved successfully";</div>
+                        <div class="code-line error">}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pure Calling Pure Tab -->
+            <div id="pure-calling-pure" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ✅ Pure Function se Pure Function Call</div>
+                        <div class="code-line var-declaration">function square(x) {</div>
+                        <div class="code-line var-usage">  return x * x; // Pure</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">function add(a, b) {</div>
+                        <div class="code-line var-usage">  return a + b; // Pure</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">function sumOfSquares(a, b) {</div>
+                        <div class="code-line var-usage">  return add(square(a), square(b)); // Pure se Pure = Pure!</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Predictable results</div>
+                        <div class="code-line var-usage">console.log(sumOfSquares(3, 4)); // Hamesha 25</div>
+                        <div class="code-line var-usage">console.log(sumOfSquares(3, 4)); // Hamesha 25</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ❌ Pure Function se Impure Function Call</div>
+                        <div class="code-line var-declaration">let randomSeed = 42;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">function getRandomNumber() {</div>
+                        <div class="code-line error">  return Math.random(); // Impure: har baar alag output</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">function addRandomToNumber(num) {</div>
+                        <div class="code-line error">  return num + getRandomNumber(); // Ab yeh bhi Impure!</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Unpredictable results</div>
+                        <div class="code-line var-usage">console.log(addRandomToNumber(10)); // 10.234...</div>
+                        <div class="code-line var-usage">console.log(addRandomToNumber(10)); // 10.876... (Alag!)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Mistakes Tab -->
+            <div id="common-mistakes" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ⚠️ Common Galti #1: Chhupi Dependencies</div>
+                        <div class="code-line var-declaration">const TAX_RATE = 0.18;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">function calculateTax(amount) {</div>
+                        <div class="code-line error">  return amount * TAX_RATE; // Pure lagta hai par external constant par depend karta hai</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// ✅ Better: Sab kuch parameters mein do</div>
+                        <div class="code-line var-declaration">function calculateTaxPure(amount, taxRate) {</div>
+                        <div class="code-line var-usage">  return amount * taxRate;</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// ⚠️ Common Galti #2: Array Mutation</div>
+                        <div class="code-line error">function addToArray(arr, item) {</div>
+                        <div class="code-line error">  arr.push(item); // Original array badalta hai!</div>
+                        <div class="code-line error">  return arr;</div>
+                        <div class="code-line error">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// ✅ Better: Nayi array return karo</div>
+                        <div class="code-line var-declaration">function addToArrayPure(arr, item) {</div>
+                        <div class="code-line var-usage">  return [...arr, item]; // Nayi array banata hai</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predictability Test -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🎯 Predictability Test: Same Input, Same Output?</h2>
+            
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>✅ Pure Function Test</h3>
+                    <div class="form-group">
+                        <label>Test Input:</label>
+                        <input type="number" id="pureTestInput" value="7" style="width: 80px;">
+                    </div>
+                    <button class="demo-btn first-btn" onclick="runPredictabilityTest(true)">
+                        🔄 5 Baar Chalao (Pure)
+                    </button>
+                    <div id="pureTestResults" class="result-panel" style="margin-top: 1rem;">
+                        <div class="result-content">Pure function ka predictability test karne ke liye click karo...</div>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>❌ Impure Function Test</h3>
+                    <div class="form-group">
+                        <label>Test Input:</label>
+                        <input type="number" id="impureTestInput" value="7" style="width: 80px;">
+                    </div>
+                    <button class="demo-btn" onclick="runPredictabilityTest(false)">
+                        🔄 5 Baar Chalao (Impure)
+                    </button>
+                    <div id="impureTestResults" class="result-panel" style="margin-top: 1rem;">
+                        <div class="result-content">Impure function ka predictability test karne ke liye click karo...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits & Testing Section -->
+        <div class="comparison-section">
+            <h3>🎯 Pure Functions: Fayde aur Testing</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>✅ Pure Functions</th>
+                        <th>❌ Impure Functions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Predictability</strong></td>
+                        <td>Same input = Same output (hamesha)</td>
+                        <td>Same input ≠ Same output (kabhi kabhi)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Testing</strong></td>
+                        <td>Aasaan testing - koi mocking ki zarurat nahi</td>
+                        <td>Mushkil testing - external dependencies ko mock karna padta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Debugging</strong></td>
+                        <td>Aasaan debugging - isolated logic</td>
+                        <td>Mushkil debugging - side effects har jagah</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Caching</strong></td>
+                        <td>Memoization possible (result caching)</td>
+                        <td>Cache nahi kar sakte - results alag ho sakte hain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parallelization</strong></td>
+                        <td>Thread-safe, parallel execution safe</td>
+                        <td>Race conditions, synchronization ke issues</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Code Reuse</strong></td>
+                        <td>Zyada reusability - kahin bhi use karo</td>
+                        <td>Kam reusability - context par depend karta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jethalal ki Misal</strong></td>
+                        <td>Jaise calculator - 2+3 hamesha 5</td>
+                        <td>Jaise weather - aaj dhoop, kal baarish</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+     
+        let executionHistory = [];
+        let globalBonus = 100;
+        let globalCounter = 0;
+        let lastUser = "none";
+
+        // Update external state display
+        function updateExternalState() {
+            document.getElementById('bonusValue').textContent = globalBonus;
+            document.getElementById('counterValue').textContent = globalCounter;
+            document.getElementById('lastUserValue').textContent = `"${lastUser}"`;
+        }
+
+        // Pure function examples
+        function pureAdd(a, b) {
+            return a + b;
+        }
+
+        function pureMultiply(a, b) {
+            return a * b;
+        }
+
+        // Impure function examples
+        function impureAddWithBonus(base) {
+            return base + globalBonus; // Bahar ke state par depend karta hai
+        }
+
+        function sideEffectFunction(a, b) {
+            globalCounter++; // Side effect: global state badalta hai
+            lastUser = "Jethalal"; // Side effect: global state badalta hai
+            console.log("Function chalaya with:", a, b); // Side effect: logging
+            return a + b;
+        }
+
+        // Test pure function
+        function testPureFunction() {
+            const input1 = 5, input2 = 3;
+            const results = [];
+            
+            for (let i = 0; i < 3; i++) {
+                results.push(pureAdd(input1, input2));
+            }
+            
+            document.getElementById('functionTestResults').innerHTML = `
+                <div class="success-message">
+                    <strong>✅ Pure Function Test: add(${input1}, ${input2})</strong><br>
+                    Run 1: ${results[0]}<br>
+                    Run 2: ${results[1]}<br>
+                    Run 3: ${results[2]}<br><br>
+                    <strong>Result:</strong> Consistent output! Same input hamesha same result deta hai. 🎯
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Test impure function
+        function testImpureFunction() {
+            const input = 1000;
+            const results = [];
+            
+            // First call
+            results.push(impureAddWithBonus(input));
+            
+            // Change global state
+            globalBonus = 200;
+            updateExternalState();
+            
+            // Second call with same input
+            results.push(impureAddWithBonus(input));
+            
+            // Change global state again
+            globalBonus = 50;
+            updateExternalState();
+            
+            // Third call with same input
+            results.push(impureAddWithBonus(input));
+            
+            document.getElementById('functionTestResults').innerHTML = `
+                <div class="error-message">
+                    <strong>❌ Impure Function Test: addWithBonus(${input})</strong><br>
+                    Run 1 (bonus=100): ${results[0]}<br>
+                    Run 2 (bonus=200): ${results[1]}<br>
+                    Run 3 (bonus=50): ${results[2]}<br><br>
+                    <strong>Problem:</strong> Same input, alag outputs! Bahar ke state par depend karta hai. ⚠️
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Test side effects
+        function testSideEffects() {
+            const input1 = 7, input2 = 4;
+            const initialCounter = globalCounter;
+            const initialUser = lastUser;
+            
+            const result = sideEffectFunction(input1, input2);
+            
+            document.getElementById('functionTestResults').innerHTML = `
+                <div class="error-message">
+                    <strong>⚠️ Side Effects Test: sideEffectFunction(${input1}, ${input2})</strong><br>
+                    Function Result: ${result}<br><br>
+                    <strong>Side Effects Pata Chale:</strong><br>
+                    • Counter badla: ${initialCounter} → ${globalCounter}<br>
+                    • LastUser badla: "${initialUser}" → "${lastUser}"<br>
+                    • Console logging hua<br><br>
+                    <strong>Problem:</strong> Function ne bahar ka state badla! Pure nahi hai. ❌
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+            
+            updateExternalState();
+        }
+
+        // Clear test results
+        function clearTests() {
+            document.getElementById('functionTestResults').innerHTML = `
+                <div class="event-message one-message">
+                    Upar ke buttons click karo to alag-alag functions test karo!
+                </div>
+            `;
+            
+            // Reset global state
+            globalBonus = 100;
+            globalCounter = 0;
+            lastUser = "none";
+            updateExternalState();
+        }
+
+        // Run pure add function
+        function runPureAdd() {
+            const a = parseInt(document.getElementById('inputA').value);
+            const b = parseInt(document.getElementById('inputB').value);
+            const result = pureAdd(a, b);
+            
+            addToExecutionHistory(`Pure Add: ${a} + ${b} = ${result}`, 'success');
+        }
+
+        // Run impure add function
+        function runImpureAdd() {
+            const a = parseInt(document.getElementById('inputA').value);
+            const b = parseInt(document.getElementById('inputB').value);
+            const result = a + b + globalBonus; // Global state ka use
+            
+            addToExecutionHistory(`Impure Add: ${a} + ${b} + bonus(${globalBonus}) = ${result}`, 'error');
+        }
+
+        // Run pure multiply function
+        function runPureMultiply() {
+            const a = parseInt(document.getElementById('inputA').value);
+            const b = parseInt(document.getElementById('inputB').value);
+            const result = pureMultiply(a, b);
+            
+            addToExecutionHistory(`Pure Multiply: ${a} × ${b} = ${result}`, 'success');
+        }
+
+        // Run side effect function
+        function runSideEffectFunction() {
+            const a = parseInt(document.getElementById('inputA').value);
+            const b = parseInt(document.getElementById('inputB').value);
+            const oldCounter = globalCounter;
+            
+            const result = sideEffectFunction(a, b);
+            
+            addToExecutionHistory(`Side Effect Function: ${a} + ${b} = ${result} (Counter: ${oldCounter} → ${globalCounter})`, 'error');
+            updateExternalState();
+        }
+
+        // Add to execution history
+        function addToExecutionHistory(message, type) {
+            executionHistory.push({ message, type, time: new Date().toLocaleTimeString() });
+            updateExecutionHistory();
+        }
+
+        // Update execution history display
+        function updateExecutionHistory() {
+            const historyDiv = document.getElementById('executionHistory');
+            historyDiv.innerHTML = executionHistory.map((entry, index) => `
+                <div class="step ${entry.type === 'success' ? '' : 'error'}">
+                    <div class="step-number">${index + 1}</div>
+                    <div>
+                        ${entry.message}
+                        <small style="color: #666; display: block; margin-top: 0.2rem;">${entry.time}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Run predictability test
+        function runPredictabilityTest(isPure) {
+            const input = isPure ? 
+                parseInt(document.getElementById('pureTestInput').value) : 
+                parseInt(document.getElementById('impureTestInput').value);
+            
+            const results = [];
+            const resultDiv = isPure ? 'pureTestResults' : 'impureTestResults';
+            
+            for (let i = 0; i < 5; i++) {
+                if (isPure) {
+                    results.push(pureAdd(input, input)); // Pure function
+                } else {
+                    // Impure: add random component
+                    globalBonus = Math.floor(Math.random() * 100) + 50;
+                    results.push(input + input + globalBonus);
+                }
+            }
+            
+            const allSame = results.every(result => result === results[0]);
+            
+            document.getElementById(resultDiv).innerHTML = `
+                <div class="${isPure ? 'success-message' : 'error-message'}">
+                    <strong>${isPure ? '✅' : '❌'} ${isPure ? 'Pure' : 'Impure'} Function Test Results:</strong><br>
+                    ${results.map((result, i) => `Run ${i + 1}: ${result}`).join('<br>')}<br><br>
+                    <strong>Consistency:</strong> ${allSame ? '✅ Sab results same' : '❌ Results alag-alag'}<br>
+                    <strong>Predictable:</strong> ${isPure ? 'Haan' : 'Nahi'}
+                </div>
+            `;
+            
+            if (!isPure) updateExternalState();
+        }
+
+        // Show code examples
+        function showCodeExample(exampleType) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(exampleType).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            updateExternalState();
+            updateExecutionHistory();
+        };
+    </script>
+</body>
+</html>

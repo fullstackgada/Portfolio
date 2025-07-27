@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursion ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+<div class="container">
+
+  <div class="header-interactive" style="position:relative;">
+        <h1>Recursion ka Funda</h1>
+        <p>Understand how Recursion works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+    <div class="demo-grid">
+        <!-- Explanation & Analogy -->
+        <div class="demo-section">
+            <h2 class="demo-title">🪞 Recursion Kya Hai?</h2>
+            <div class="explanation">
+                <strong>Recursion:</strong> Ek function jo khud ko baar-baar call karta hai, jab tak koi <b>base case</b> na mil jaye.
+                <br> <span style="color:#ff6f61;">Har Recursion mein do part hote hain:</span>
+                <ul>
+                    <li><b>Base Case:</b> Jahan function ruk jata hai</li>
+                    <li><b>Recursive Case:</b> Function khud ko call karta hai</li>
+                </ul>
+                <br>
+                <strong>Examples:</strong><br>
+                <b>Factorial (n!)</b>:<br>
+                <code>factorial(n) = n × factorial(n-1)</code>, jab tak <code>n=1</code> na ho jaye.
+            </div>
+            
+            <div class="saree-analogy">
+                <h4>Saree wali Misal:</h4>
+                <div class="saree-step">
+                    <div class="saree-emoji">👗</div>
+                    <div>Har baar Babita ji nayi saree pehenti hain (function call), <b>base case</b> tab aata hai jab wardrobe khali ho jata hai!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">❤️</div>
+                    <div>Har baar Jethalal pyar mein pad jate hain (recursion)… jab tak Babita ji mana nahi karti! (base case 🛑)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interactive Recursion Simulator -->
+        <div class="demo-section">
+            <h2 class="demo-title">🔗 Recursion vs Loop: Factorial Calculator</h2>
+            
+            <div class="form-group">
+                <label for="factInput">Kiska factorial check karna hai? (n):</label>
+                <input type="number" id="factInput" placeholder="Misal: 5" value="5" min="0" max="20" style="width: 80px;">
+            </div>
+            <div class="demo-controls">
+                <button class="demo-btn first-btn" onclick="calculateRecursively()">♻️ Recursive</button>
+                <button class="demo-btn" onclick="calculateIteratively()">🔁 Loop</button>
+                <button class="demo-btn clear-btn" onclick="clearFact()">🧹 Clear Karo</button>
+            </div>
+            <div class="demo-area" id="factResult">
+                <div class="event-message one-message">Ek method choose karo to see step-by-step execution!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recursion vs Loop Table -->
+    <div class="comparison-section">
+        <h3>🔍 Recursion vs Loop Takkar</h3>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>🔁 Loop</th>
+                    <th>🔄 Recursion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Kaise?</td>
+                    <td>Har baar manually control (for/while)</td>
+                    <td>Function khud ko call karta hai (self-calling)</td>
+                </tr>
+                <tr>
+                    <td>Rukna</td>
+                    <td>Condition false hone par rukta hai</td>
+                    <td>Base case milne par rukta hai</td>
+                </tr>
+                <tr>
+                    <td>Memory Use</td>
+                    <td>Fixed, efficient hai</td>
+                    <td>Har call ke liye alag stack frame— zyada memory use</td>
+                </tr>
+                <tr>
+                    <td>Performance</td>
+                    <td>Aam taur par faster</td>
+                    <td>Deep calls ke liye slow ho sakta hai</td>
+                </tr>
+                <tr>
+                    <td>Glamour Factor</td>
+                    <td>Simple aur sidha</td>
+                    <td>Stylish & elegant (lekin risky bhi!)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+// Recursion demo (shows stack frames)
+function calculateRecursively() {
+    let n = parseInt(document.getElementById('factInput').value);
+    let html = '';
+    let stack = [];
+    function recFact(x) {
+        stack.push(x);
+        html += `<div class="event-message">
+                <span style="color:#356c67">factorial(${x}) call hua.</span> [Stack: ${stack.join(' → ')}]</div>`;
+        if(x === 0 || x === 1) {
+            html += `<div class="event-message">
+                    <span style="color:#ff6f61">Base Case Mil Gaya: factorial(${x}) = 1</span></div>`;
+            stack.pop();
+            return 1;
+        }
+        let res = x * recFact(x - 1);
+        html += `<div class="event-message"><span style="color:#e55a50">Return: ${x} × factorial(${x-1}) = ${res}</span></div>`;
+        stack.pop();
+        return res;
+    }
+    try {
+        if(isNaN(n) || n < 0 || n > 20) throw "0 se 20 tak valid number daalo!";
+        let ans = recFact(n);
+        html += `<div class="success-message"><b>Result:</b> ${n}! = ${ans}</div>`;
+    } catch(e) {
+        html += `<div class="error-message">${e}</div>`;
+    }
+    document.getElementById('factResult').innerHTML = html;
+}
+
+// Loop demo
+function calculateIteratively() {
+    let n = parseInt(document.getElementById('factInput').value);
+    let html = '';
+    let steps = [];
+    try {
+        if(isNaN(n) || n<0 || n>20) throw "0 se 20 tak valid number daalo!";
+        let result = 1;
+        html += `<div class="event-message one-message">Factorial loop start ho raha hai for n=${n}</div>`;
+        for(let i=n;i>1;i--) {
+            html += `<div class="event-message">result = ${result} × ${i} = ${result*i}</div>`;
+            result *= i;
+        }
+        html += `<div class="success-message"><b>Result:</b> ${n}! = ${result}</div>`;
+    } catch(e) {
+        html += `<div class="error-message">${e}</div>`;
+    }
+    document.getElementById('factResult').innerHTML = html;
+}
+// Clear result
+function clearFact(){
+    document.getElementById('factResult').innerHTML = '<div class="event-message one-message">Ek method choose karo to see step-by-step execution!</div>';
+}
+</script>
+</body>
+</html>

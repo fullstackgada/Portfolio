@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-interactive" style="position:relative;">
+        <h1>Closures ka Funda</h1>
+        <p>Understand how Closures works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Closure Concept Explanation -->
+            <div class="demo-section">
+                <h2 class="demo-title">💝 Closure Kya Hai?</h2>
+                
+                <div class="explanation">
+                    <strong>Closure:</strong> Inner function jo outer function ke variables ko yaad rakhta hai, chahe outer function khatam ho chuka ho!
+                </div>
+
+                <!-- Heart Memory Analogy -->
+                <div class="saree-analogy">
+                    <h4>💖 Jethalal ki Muskaan Memory</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">😍</div>
+                        <div><strong>Jethalal dekhta hai:</strong> Babita ki muskaan (outer function)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💝</div>
+                        <div><strong>Dil mein store:</strong> Memory ban jaati hai (closure) - hamesha yaad rehti hai!</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🔒</div>
+                        <div><strong>Private access:</strong> Sirf Jethalal ko access (lexical scope)</div>
+                    </div>
+                </div>
+
+                <!-- Basic Closure Demo -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateBasicClosure()">
+                        💝 Basic Closure Demo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateMultipleClosures()">
+                        👥 Kayi Closures
+                    </button>
+                    <button class="demo-btn" onclick="demonstratePrivateVariables()">
+                        🔒 Private Variables
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearClosureDemo()">
+                        🗑️ Clear Karo
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="closureResults">
+                    <div class="event-message one-message">
+                        Upar ke buttons click karo to Closures ka asli action dekho!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Counter Example -->
+            <div class="demo-section">
+                <h2 class="demo-title">🔢 Closure ke saath Private Counter</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Asli Example:</strong> Counter jiska count variable kisi ko directly access nahi ho sakta!
+                </div>
+
+                <!-- Counter Display -->
+                <div class="demo-area" id="counterDisplay">
+                    <div class="event-message one-message">
+                        <strong>🔢 Jethalal ka Compliment Counter</strong><br>
+                        Abhi ka Count: <span id="currentCount">0</span><br>
+                        <small>Har nayi saree par ek naya compliment!</small>
+                    </div>
+                </div>
+
+                <!-- Counter Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="incrementCounter()">
+                        👗 Nayi Saree = Naya Compliment
+                    </button>
+                    <button class="demo-btn" onclick="getCounterValue()">
+                        📊 Count Dekho (Safe Access)
+                    </button>
+                    <button class="demo-btn" onclick="tryDirectAccess()">
+                        🚫 Direct Access Try Karo (Fail!)
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="resetCounter()">
+                        🔄 Counter Reset Karo
+                    </button>
+                </div>
+
+                <!-- Counter Code Display -->
+                <div class="code-block" id="counterCode">
+                    <div class="code-line comment">// Closure-based Private Counter</div>
+                    <div class="code-line comment">// 🔒 Closure se bana Private Counter</div>
+                    <div class="code-line var-declaration">function createComplimentCounter() {</div>
+                    <div class="code-line var-usage">  let count = 0; // Private variable - bahar se access nahi ho sakta</div>
+                    <div class="code-line"></div>
+                    <div class="code-line var-usage">  return function() { // Inner function (closure)</div>
+                    <div class="code-line var-usage">    count++; // Outer variable ko access karta hai</div>
+                    <div class="code-line var-usage">  return `Compliment #${count}: Aap bahut sundar lag rahi hain!`;</div>
+                    <div class="code-line var-usage">  };</div>
+                    <div class="code-line var-declaration">}</div>
+                    <div class="code-line var"></div>
+                    <div class="code-line var-assignment">const jethalalCompliments = createComplimentCounter();</div>
+                </div>
+
+                <!-- Live Counter Actions -->
+                <div class="server-simulation">
+                    <h4>Counter Actions ka Log:</h4>
+                    <div class="server-log" id="counterLog">
+                        Compliments count karne ke liye ready hai...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Visualization -->
+        <div class="demo-section" style="grid-column: 1;">
+            <h2 class="demo-title">🧠 Memory Visualization: Closure Kaise Kaam Karta Hai</h2>
+            
+            <div class="explanation">
+                <strong>Ek-ek karke dekho:</strong> Memory mein closure kaise kaam karta hai samjho!
+            </div>
+
+            <div class="tabs">
+                <button class="demo-btn active" onclick="showMemoryStep('memoryStep1')">1️⃝️ Function Bana</button>
+                <button class="demo-btn" onclick="showMemoryStep('memoryStep2')">2️⃝️ Function Call Hua</button>
+                <button class="demo-btn" onclick="showMemoryStep('memoryStep3')">3️⃝️ Inner Function Return Hua</button>
+                <button class="demo-btn" onclick="showMemoryStep('memoryStep4')">4️⃝️ Outer Function Khatam Hua</button>
+                <button class="demo-btn" onclick="showMemoryStep('memoryStep5')">5️⃝️ Closure Zinda Raha</button>
+            </div>
+
+            <!-- Memory Step 1 -->
+            <div id="memoryStep1" class="tab-content active">
+                <div class="memory-diagram">
+                    <div class="memory-slot">
+                        <div class="variable-name">📝 Code Definition</div>
+                        <div class="variable-value">function createCounter() memory mein defined</div>
+                    </div>
+                    <div class="memory-slot">
+                        <div class="variable-name">🏗️ Function Object</div>
+                        <div class="variable-value">Function template ready, abhi execute nahi hua</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Step 1:</strong> Function define hua, abhi tak koi closure nahi bana.
+                </div>
+            </div>
+
+            <!-- Memory Step 2 -->
+            <div id="memoryStep2" class="tab-content">
+                <div class="memory-diagram">
+                    <div class="memory-slot">
+                        <div class="variable-name">🚀 Execution Context</div>
+                        <div class="variable-value">createCounter() execution shuru hua</div>
+                    </div>
+                    <div class="memory-slot">
+                        <div class="variable-name">📊 Local Variable</div>
+                        <div class="variable-value">count = 0 function scope mein bana</div>
+                    </div>
+                    <div class="memory-slot">
+                        <div class="variable-name">🏗️ Inner Function</div>
+                        <div class="variable-value">Anonymous function ban raha hai</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Step 2:</strong> Outer function execute ho raha hai, local variables ban rahe hain.
+                </div>
+            </div>
+
+            <!-- Memory Step 3 -->
+            <div id="memoryStep3" class="tab-content">
+                <div class="memory-diagram">
+                    <div class="memory-slot">
+                        <div class="variable-name">↩️ Return Value</div>
+                        <div class="variable-value">Inner function value ke roop mein return hua</div>
+                    </div>
+                    <div class="memory-slot hoisted">
+                        <div class="variable-name">🔗 Lexical Scope</div>
+                        <div class="variable-value">Inner function outer scope ko yaad rakhta hai</div>
+                    </div>
+                    <div class="memory-slot hoisted">
+                        <div class="variable-name">💝 Closure Bana</div>
+                        <div class="variable-value">count variable inner function ne capture kiya</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Step 3:</strong> Inner function return ho gaya aur closure ban gaya! Variables capture ho gaye.
+                </div>
+            </div>
+
+            <!-- Memory Step 4 -->
+            <div id="memoryStep4" class="tab-content">
+                <div class="memory-diagram">
+                    <div class="memory-slot error">
+                        <div class="variable-name">❌ Outer Context</div>
+                        <div class="variable-value">createCounter() execution khatam hua</div>
+                    </div>
+                    <div class="memory-slot">
+                        <div class="variable-name">📱 Variable Reference</div>
+                        <div class="variable-value">jethalalCounter mein returned function hai</div>
+                    </div>
+                    <div class="memory-slot hoisted">
+                        <div class="variable-name">🔒 Preserved Scope</div>
+                        <div class="variable-value">count ab bhi closure ke through accessible hai</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Step 4:</strong> Outer function khatam ho gaya, par closure ke wajah se variables bache rahe!
+                </div>
+            </div>
+
+            <!-- Memory Step 5 -->
+            <div id="memoryStep5" class="tab-content">
+                <div class="memory-diagram">
+                    <div class="memory-slot hoisted">
+                        <div class="variable-name">🎯 Active Closure</div>
+                        <div class="variable-value">jethalalCounter() count ko access kar sakta hai</div>
+                    </div>
+                    <div class="memory-slot hoisted">
+                        <div class="variable-name">🔢 Private Data</div>
+                        <div class="variable-value">count = 5 (kai calls ke baad)</div>
+                    </div>
+                    <div class="memory-slot hoisted">
+                        <div class="variable-name">🔐 Encapsulation</div>
+                        <div class="variable-value">count ka direct access bahar se nahi</div>
+                    </div>
+                </div>
+                <div class="explanation">
+                    <strong>Step 5:</strong> Closure poori tarah active! Private variables sirf closure ke through accessible.
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Examples Section -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">💻 Practical Closure ke Examples</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showClosureExample('basic')">🎯 Basic Closure</button>
+                <button class="tab" onclick="showClosureExample('private-data')">🔒 Private Data</button>
+                <button class="tab" onclick="showClosureExample('module-pattern')">📦 Module Pattern</button>
+                <button class="tab" onclick="showClosureExample('event-handlers')">🎪 Event Handlers</button>
+            </div>
+
+            <!-- Basic Closure Example -->
+            <div id="basic" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🎯 Basic Closure ka Example</div>
+                        <div class="code-line var-declaration">function outerFunction(name) {</div>
+                        <div class="code-line var-usage">  const greeting = "Hello"; // Outer variable</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  function innerFunction() { // Inner function</div>
+                        <div class="code-line var-usage">    return greeting + " " + name + "!"; // Outer variables ko access karta hai</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  return innerFunction; // Inner function return karta hai</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Istemal</div>
+                        <div class="code-line var-assignment">const babitaGreeter = outerFunction("Babita");</div>
+                        <div class="code-line var-usage">console.log(babitaGreeter()); // "Hello Babita!"</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Outer function khatam hone ke baad bhi closure 'name' aur 'greeting' yaad rakhta hai</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔄 Ek hi Function se Kai Closures</div>
+                        <div class="code-line var-assignment">const jethalal = outerFunction("Jethalal");</div>
+                        <div class="code-line var-assignment">const bhide = outerFunction("Bhide");</div>
+                        <div class="code-line var-assignment">const popatlal = outerFunction("Popatlal");</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">console.log(jethalal());  // "Hello Jethalal!"</div>
+                        <div class="code-line var-usage">console.log(bhide());     // "Hello Bhide!"</div>
+                        <div class="code-line var-usage">console.log(popatlal()); // "Hello Popatlal!"</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Har closure apne variables ki alag copy rakhta hai!</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testBasicClosure()">🎯 Basic Closure Test Karo</button>
+                <div id="basicClosureResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Basic closure test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Private Data Example -->
+            <div id="private-data" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔒 Closures ke saath Private Data</div>
+                        <div class="code-line var-declaration">function createBankAccount(initialBalance) {</div>
+                        <div class="code-line var-usage">  let balance = initialBalance; // Private variable</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  return {</div>
+                        <div class="code-line var-usage">    deposit: function(amount) {</div>
+                        <div class="code-line var-usage">      balance += amount;</div>
+                        <div class="code-line var-usage">      return `₹${amount} jama kiye. Naya balance: ₹${balance}`;</div>
+                        <div class="code-line var-usage">    },</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    withdraw: function(amount) {</div>
+                        <div class="code-line var-usage">      if (amount <= balance) {</div>
+                        <div class="code-line var-usage">        balance -= amount;</div>
+                        <div class="code-line var-usage">        return `₹${amount} nikale. Naya balance: ₹${balance}`;</div>
+                        <div class="code-line var-usage">      }</div>
+                        <div class="code-line var-usage">      return "Paise kam hain!";</div>
+                        <div class="code-line var-usage">    },</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    getBalance: function() {</div>
+                        <div class="code-line var-usage">      return `Abhi ka balance: ₹${balance}`;</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// Istemal - Private data protection</div>
+                        <div class="code-line var-assignment">const jethalalsAccount = createBankAccount(50000);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">console.log(jethalalsAccount.deposit(10000));</div>
+                        <div class="code-line var-usage">console.log(jethalalsAccount.withdraw(5000));</div>
+                        <div class="code-line var-usage">console.log(jethalalsAccount.getBalance());</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">// ❌ Private variable direct access nahi ho sakta</div>
+                        <div class="code-line error">console.log(jethalalsAccount.balance); // undefined</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// ✅ Sirf provided methods se access (controlled access)</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testPrivateData()">🔒 Private Data Test Karo</button>
+                <div id="privateDataResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Private data test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Module Pattern Example -->
+            <div id="module-pattern" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 📦 Closures ke saath Module Pattern</div>
+                        <div class="code-line var-declaration">const GokuldhamSociety = (function() {</div>
+                        <div class="code-line var-usage">  // Private variables</div>
+                        <div class="code-line var-usage">  let residents = [];</div>
+                        <div class="code-line var-usage">  let societyFunds = 100000;</div>
+                        <div class="code-line var-usage">  const secretCode = "TMKOC2024";</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  // Private functions</div>
+                        <div class="code-line var-usage">  function validateResident(name) {</div>
+                        <div class="code-line var-usage">    return name && name.length > 0;</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  // Public API (returned object)</div>
+                        <div class="code-line var-usage">  return {</div>
+                        <div class="code-line var-usage">    addResident: function(name) {</div>
+                        <div class="code-line var-usage">      if (validateResident(name)) {</div>
+                        <div class="code-line var-usage">        residents.push(name);</div>
+                        <div class="code-line var-usage">        return `${name} society mein add hua!`;</div>
+                        <div class="code-line var-usage">      }</div>
+                        <div class="code-line var-usage">      return "Resident ka naam galat hai!";</div>
+                        <div class="code-line var-usage">    },</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    getResidents: function() {</div>
+                        <div class="code-line var-usage">      return [...residents]; // Original nahi, copy return karta hai</div>
+                        <div class="code-line var-usage">    },</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    collectFunds: function(amount) {</div>
+                        <div class="code-line var-usage">      societyFunds += amount;</div>
+                        <div class="code-line var-usage">      return `₹${amount} collect kiye. Total funds: ₹${societyFunds}`;</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">})(); // IIFE - Turant Execute Hone Wala Function</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// Istemal - Encapsulated module</div>
+                        <div class="code-line var-usage">console.log(GokuldhamSociety.addResident("Jethalal"));</div>
+                        <div class="code-line var-usage">console.log(GokuldhamSociety.addResident("Babita"));</div>
+                        <div class="code-line var-usage">console.log(GokuldhamSociety.getResidents());</div>
+                        <div class="code-line var-usage">console.log(GokuldhamSociety.collectFunds(5000));</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">// ❌ Private data accessible nahi</div>
+                        <div class="code-line error">console.log(GokuldhamSociety.residents);     // undefined</div>
+                        <div class="code-line error">console.log(GokuldhamSociety.societyFunds);  // undefined</div>
+                        <div class="code-line error">console.log(GokuldhamSociety.secretCode);    // undefined</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testModulePattern()">📦 Module Pattern Test Karo</button>
+                <div id="modulePatternResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Module pattern test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Event Handlers Example -->
+            <div id="event-handlers" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🎪 Event Handlers mein Closures (Common Pattern)</div>
+                        <div class="code-line var-declaration">function setupEventHandlers() {</div>
+                        <div class="code-line var-usage">  const buttons = document.querySelectorAll('.demo-btn');</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  for (let i = 0; i < buttons.length; i++) {</div>
+                        <div class="code-line var-usage">    const button = buttons[i];</div>
+                        <div class="code-line var-usage">    </div>
+                        <div class="code-line var-usage">    // Closure 'button' aur 'i' ko capture karta hai</div>
+                        <div class="code-line var-usage">    button.addEventListener('click', function() {</div>
+                        <div class="code-line var-usage">      console.log(`Button ${i + 1} click hua!`);</div>
+                        <div class="code-line var-usage">      console.log('Button ka text:', button.textContent);</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔄 Closures ke saath Kai Event Handlers Banana</div>
+                        <div class="code-line var-declaration">function createClickHandler(message, count) {</div>
+                        <div class="code-line var-usage">  let clickCount = 0; // Har handler ke liye private</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  return function(event) {</div>
+                        <div class="code-line var-usage">    clickCount++;</div>
+                        <div class="code-line var-usage">    console.log(`${message} - Click #${clickCount}`);</div>
+                        <div class="code-line var-usage">    </div>
+                        <div class="code-line var-usage">    if (clickCount >= count) {</div>
+                        <div class="code-line var-usage">      console.log("Maximum clicks tak pohoch gaya!");</div>
+                        <div class="code-line var-usage">      event.target.disabled = true;</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Istemal</div>
+                        <div class="code-line var-assignment">const handler1 = createClickHandler("Jethalal ka button", 3);</div>
+                        <div class="code-line var-assignment">const handler2 = createClickHandler("Babita ka button", 5);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">button1.addEventListener('click', handler1);</div>
+                        <div class="code-line var-usage">button2.addEventListener('click', handler2);</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testEventHandlers()">🎪 Event Handlers Test Karo</button>
+                <div id="eventHandlersResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Event handlers test karne ke liye click karo...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Management & Best Practices -->
+        <div class="comparison-section">
+            <h3>🎯 Closures: Fayde, Samasyayein aur Best Practices</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>✅ Fayde</th>
+                        <th>⚠️ Sambhavit Samasyayein</th>
+                        <th>💡 Best Practices</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Data Privacy</strong></td>
+                        <td>Variables encapsulated, koi global pollution nahi</td>
+                        <td>Galat variables bhi capture ho sakte hain</td>
+                        <td>Sirf zaroori cheez capture karo, bade objects avoid karo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory</strong></td>
+                        <td>Global variables ke bina persistent state</td>
+                        <td>Memory leaks ho sakte hain agar cleanup na ho</td>
+                        <td>Event listeners hatao, references null karo jab kaam ho</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Function Factory</strong></td>
+                        <td>Customized functions dynamically banao</td>
+                        <td>Har call mein naya closure banata hai (memory cost)</td>
+                        <td>Jahan ho sake closures reuse karo, loops mein avoid karo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Event Handling</strong></td>
+                        <td>Handlers mein context aur state preserve karta hai</td>
+                        <td>DOM mein memory leaks ka common source</td>
+                        <td>Weak references use karo, cleanup par listeners hatao</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Module Pattern</strong></td>
+                        <td>Saaf API aur private implementation</td>
+                        <td>Circular references ban sakte hain</td>
+                        <td>IIFE pattern use karo, deep nesting avoid karo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Debugging</strong></td>
+                        <td>Alag scope, clear variable access</td>
+                        <td>Private variables inspect karna mushkil</td>
+                        <td>Debug methods do, meaningful names use karo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jethalal ki Samajh</strong></td>
+                        <td>Jaise dil mein sundar yaadein - hamesha safe aur private</td>
+                        <td>Jyada yaadein memory bhar deti hain - bhoolna bhi zaroori!</td>
+                        <td>Zaroori yaadein rakho, faltu ko chhodo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Real-world Use Cases -->
+        <div class="comparison-section">
+            <h3>🌍 Real-world Closure ke Istemal</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Istemal</th>
+                        <th>Misal</th>
+                        <th>Kyun Closures?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🎯 Event Handlers</strong></td>
+                        <td>Button clicks, form submissions</td>
+                        <td>Events ke beech context aur state preserve karta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔒 Private Variables</strong></td>
+                        <td>API keys, configuration, internal state</td>
+                        <td>Implementation details ko bahar se chhupata hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🏭 Function Factories</strong></td>
+                        <td>Validators, formatters, calculators</td>
+                        <td>Pre-set parameters ke saath specialized functions banata hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📦 Module Pattern</strong></td>
+                        <td>Libraries, frameworks, utility modules</td>
+                        <td>Public API deta hai, internals ko private rakhta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔄 Callbacks & Async</strong></td>
+                        <td>setTimeout, AJAX, Promise handlers</td>
+                        <td>Outer scope variables tak access deta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎮 Game State</strong></td>
+                        <td>Player stats, game configuration</td>
+                        <td>Global variables ke bina persistent game state</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📊 Data Processing</strong></td>
+                        <td>Currying, partial application</td>
+                        <td>Reusable data transformation pipelines banata hai</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+       
+        let complimentCounter = null;
+        let counterValue = 0;
+
+        // Create the actual counter using closure
+        function createComplimentCounter() {
+            let count = 0;
+            return function() {
+                count++;
+                return `Compliment #${count}: Aap bahut sundar lag rahi hain!`;
+            };
+        }
+
+        // Initialize counter
+        function initializeCounter() {
+            complimentCounter = createComplimentCounter();
+            counterValue = 0;
+            updateCounterDisplay();
+        }
+
+        // Update counter display
+        function updateCounterDisplay() {
+            document.getElementById('currentCount').textContent = counterValue;
+        }
+
+        // Demonstrate basic closure
+        function demonstrateBasicClosure() {
+            const result = document.getElementById('closureResults');
+            
+            // Create a simple closure
+            function createMemory(memory) {
+                return function() {
+                    return `💝 Jethalal yaad karta hai: "${memory}"`;
+                };
+            }
+            
+            const babitaMemory = createMemory("Babita ki khoobsurat muskaan");
+            const smileMemory = createMemory("Pehli baar milna");
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>💝 Basic Closure Demo - Memory Palace!</strong><br><br>
+                    <strong>Closure 1:</strong><br>
+                    ${babitaMemory()}<br><br>
+                    <strong>Closure 2:</strong><br>
+                    ${smileMemory()}<br><br>
+                    <strong>Jadoo:</strong><br>
+                    ✅ Inner functions outer function ke variables yaad rakhte hain<br>
+                    ✅ Har closure apni alag memory rakhta hai<br>
+                    ✅ Outer function khatam hone ke baad bhi data accessible hai
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Demonstrate multiple closures
+        function demonstrateMultipleClosures() {
+            const result = document.getElementById('closureResults');
+            
+            function createCharacterGreeter(character) {
+                let greetCount = 0;
+                return function() {
+                    greetCount++;
+                    return `${character} ne ${greetCount} baar namaste kaha!`;
+                };
+            }
+            
+            const jethalalGreeter = createCharacterGreeter("Jethalal");
+            const bhideGreeter = createCharacterGreeter("Bhide");
+            
+            // Test multiple calls
+            const jethalalResults = [jethalalGreeter(), jethalalGreeter(), jethalalGreeter()];
+            const bhideResults = [bhideGreeter(), bhideGreeter()];
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>👥 Kai Closures ka Demo!</strong><br><br>
+                    <strong>Jethalal ka Closure:</strong><br>
+                    ${jethalalResults.map(result => `• ${result}`).join('<br>')}<br><br>
+                    <strong>Bhide ka Closure:</strong><br>
+                    ${bhideResults.map(result => `• ${result}`).join('<br>')}<br><br>
+                    <strong>Zaroori Baatein:</strong><br>
+                    ✅ Har closure apna alag counter rakhta hai<br>
+                    ✅ Ek hi function se bane par independent hain<br>
+                    ✅ Memory mein alag-alag jagah lete hain
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Demonstrate private variables
+        function demonstratePrivateVariables() {
+            const result = document.getElementById('closureResults');
+            
+            function createSecretKeeper(secret) {
+                let accessCount = 0;
+                
+                return {
+                    revealSecret: function() {
+                        accessCount++;
+                        if (accessCount <= 3) {
+                            return `🤫 Secret dikha (${accessCount}/3): "${secret}"`;
+                        } else {
+                            return "🚫 Secret locked! Bahut koshish kar li.";
+                        }
+                    },
+                    getAttempts: function() {
+                        return `🔢 Access attempts: ${accessCount}`;
+                    }
+                };
+            }
+            
+            const jethalalsSecret = createSecretKeeper("Main Babita se pyar karta hoon");
+            
+            // Test access
+            const attempts = [
+                jethalalsSecret.revealSecret(),
+                jethalalsSecret.revealSecret(),
+                jethalalsSecret.revealSecret(),
+                jethalalsSecret.revealSecret(), // This should be blocked
+                jethalalsSecret.getAttempts()
+            ];
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>🔒 Private Variables ka Demo!</strong><br><br>
+                    ${attempts.map(attempt => `• ${attempt}`).join('<br>')}<br><br>
+                    <strong>Security Features:</strong><br>
+                    ✅ Secret variable bahar se access nahi ho sakta<br>
+                    ✅ Access count bhi private hai<br>
+                    ✅ Sirf provided methods se access<br>
+                    ✅ Internal logic protected hai
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Clear closure demo
+        function clearClosureDemo() {
+            document.getElementById('closureResults').innerHTML = `
+                <div class="event-message one-message">
+                    Upar ke buttons click karo to Closures ka asli action dekho!
+                </div>
+            `;
+        }
+
+        // Counter functions
+        function incrementCounter() {
+            if (!complimentCounter) {
+                initializeCounter();
+            }
+            
+            const compliment = complimentCounter();
+            counterValue++;
+            updateCounterDisplay();
+            
+            document.getElementById('counterLog').innerHTML = `
+                <strong style="color: #4caf50;">✨ Naya Compliment Aaya!</strong><br>
+                ${compliment}<br>
+                <strong>Counter State:</strong> ${counterValue}<br>
+                <small>Closure ne count variable ko safely increment kiya</small>
+            `;
+        }
+
+        function getCounterValue() {
+            document.getElementById('counterLog').innerHTML = `
+                <strong style="color: #356cc7;">📊 Safe Access Method</strong><br>
+                Abhi ka Count: ${counterValue}<br>
+                <strong>Access Method:</strong> Sirf closure function ke through<br>
+                <small>Direct variable access nahi hai - closure ka security!</small>
+            `;
+        }
+
+        function tryDirectAccess() {
+            document.getElementById('counterLog').innerHTML = `
+                <strong style="color: #f56565;">🚫 Direct Access Fail Hua!</strong><br>
+                <code>console.log(complimentCounter.count); // undefined</code><br>
+                <strong>Error:</strong> count variable private hai!<br>
+                <strong>Siksha:</strong> Closure variables direct access nahi hote<br>
+                <small>Yahi to closure ki security hai!</small>
+            `;
+        }
+
+        function resetCounter() {
+            initializeCounter();
+            document.getElementById('counterLog').innerHTML = `
+                <strong style="color: #356cc7;">🔄 Counter Reset Hua</strong><br>
+                Naya closure ban gaya, fresh count = 0<br>
+                Pehle wala closure ka memory clean ho gaya<br>
+                <small>Memory management ka misaal!</small>
+            `;
+        }
+
+        // Memory step visualization
+        function showMemoryStep(step) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(step).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Code example tests
+        function testBasicClosure() {
+            function outerFunction(name) {
+                const greeting = "Hello";
+                function innerFunction() {
+                    return greeting + " " + name + "!"; 
+                }
+                return innerFunction;
+            }
+            
+            const babitaGreeter = outerFunction("Babita");
+            const jethalalGreeter = outerFunction("Jethalal");
+            
+            document.getElementById('basicClosureResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🎯 Basic Closure Test Results:</strong><br>
+                    • babitaGreeter(): ${babitaGreeter()}<br>
+                    • jethalalGreeter(): ${jethalalGreeter()}<br>
+                    • babitaGreeter(): ${babitaGreeter()} (same result!)<br><br>
+                    <strong>Observations:</strong><br>
+                    ✅ Har closure apne variables ki alag copy rakhta hai<br>
+                    ✅ Functions apna lexical scope yaad rakhte hain<br>
+                    ✅ Results consistent aur predictable hain
+                </div>
+            `;
+        }
+
+        function testPrivateData() {
+            function createBankAccount(initialBalance) {
+                let balance = initialBalance;
+                return {
+                    deposit: function(amount) {
+                        balance += amount;
+                        return `₹${amount} jama kiye. Naya balance: ₹${balance}`;
+                    },
+                    withdraw: function(amount) {
+                        if (amount <= balance) {
+                            balance -= amount;
+                            return `₹${amount} nikale. Naya balance: ₹${balance}`;
+                        }
+                        return "Paise nahi hain!";
+                    },
+                    getBalance: function() {
+                        return `Abhi ka balance: ₹${balance}`;
+                    }
+                };
+            }
+            
+            const account = createBankAccount(50000);
+            const results = [
+                account.getBalance(),
+                account.deposit(10000),
+                account.withdraw(5000),
+                account.getBalance()
+            ];
+            
+            document.getElementById('privateDataResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🔒 Private Data Test Results:</strong><br>
+                    ${results.map(result => `• ${result}`).join('<br>')}<br><br>
+                    <strong>Security Check:</strong><br>
+                    • account.balance = ${typeof account.balance} (undefined - private!)<br>
+                    • Direct access bandh ✅<br>
+                    • Sirf methods se access ✅
+                </div>
+            `;
+        }
+
+        function testModulePattern() {
+            // Simulate the Gokuldham Society module
+            const results = [
+                "Jethalal society mein add hua!",
+                "Babita society mein add hua!",
+                "Residents: Jethalal, Babita",
+                "₹5000 collect kiye. Total funds: ₹105000"
+            ];
+            
+            document.getElementById('modulePatternResult').innerHTML = `
+                <div class="success-message">
+                    <strong>📦 Module Pattern Test Results:</strong><br>
+                    ${results.map(result => `• ${result}`).join('<br>')}<br><br>
+                    <strong>Encapsulation Check:</strong><br>
+                    • Private residents array: Accessible nahi ✅<br>
+                    • Private societyFunds: Accessible nahi ✅<br>
+                    • Private secretCode: Accessible nahi ✅<br>
+                    • Sirf public API available ✅
+                </div>
+            `;
+        }
+
+        function testEventHandlers() {
+            document.getElementById('eventHandlersResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🎪 Event Handlers Test:</strong><br><br>
+                    <strong>Simulated Results:</strong><br>
+                    • Button 1 click hua! (Click #1)<br>
+                    • Button 1 click hua! (Click #2)<br>
+                    • Button 2 click hua! (Click #1)<br>
+                    • Button 1 click hua! (Click #3) - Maximum clicks tak pohach gaya!<br><br>
+                    <strong>Closure ke Fayde:</strong><br>
+                    ✅ Har handler ka alag click count<br>
+                    ✅ Event context preserved<br>
+                    ✅ Har handler ka private state<br>
+                    ✅ Saaf separation of concerns
+                </div>
+            `;
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            initializeCounter();
+            clearClosureDemo();
+        };
+    </script>
+</body>
+</html>

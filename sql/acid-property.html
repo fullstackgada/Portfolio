@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACID Properties ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-interactive" style="position:relative;">
+        <h1>ACID Properties ka Funda</h1>
+        <p>Understand how ACID Properties works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- ACID Overview -->
+            <div class="demo-section">
+                <h2 class="demo-title">🧪 ACID Properties ka Overview</h2>
+                
+                <div class="explanation">
+                    <strong>ACID:</strong> Database transactions ki char guarantee - Atomicity, Consistency, Isolation, Durability
+                </div>
+
+                <!-- ACID Memory Aid -->
+                <div class="saree-analogy">
+                    <h4>🧪 ACID = Transaction ki Chemistry</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">⚛️</div>
+                        <div><strong>A</strong>tomicity: Poora ya kuch nahi (Secretary bana to poora, adha nahi)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🎯</div>
+                        <div><strong>C</strong>onsistency: Data hamesha valid state mein (₹1000+₹200=₹1200)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🔒</div>
+                        <div><strong>I</strong>solation: Transactions ek-doosre mein dakhal na dein</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💾</div>
+                        <div><strong>D</strong>urability: Ho gaya to permanent (Babita ki muskaan jaise)</div>
+                    </div>
+                </div>
+
+                <!-- ACID Property Selector -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateProperty('atomicity')">
+                        ⚛️ Atomicity Demo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateProperty('consistency')">
+                        🎯 Consistency Demo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateProperty('isolation')">
+                        🔒 Isolation Demo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateProperty('durability')">
+                        💾 Durability Demo
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="acidResults">
+                    <div class="event-message one-message">
+                        Upar ke buttons click karo har ACID property dekhne ke liye!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Transaction Simulator -->
+            <div class="demo-section">
+                <h2 class="demo-title">💳 Society Account Transaction</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Live Demo:</strong> Gokuldham Society ke account mein transaction karke ACID properties dekho!
+                </div>
+
+                <!-- Account Status Display -->
+                <div class="demo-area" id="accountStatus">
+                    <div class="event-message one-message">
+                        <strong>🏦 Gokuldham Society Account</strong><br>
+                        Balance: ₹<span id="currentBalance">10000</span><br>
+                        Secretary: <span id="currentSecretary">Bhide</span><br>
+                        Status: <span id="accountStatus">Ready</span>
+                    </div>
+                </div>
+
+                <!-- Transaction Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="performTransaction('maintenance')">
+                        🏠 Maintenance Collection (₹500)
+                    </button>
+                    <button class="demo-btn" onclick="performTransaction('repair')">
+                        🔧 Society Repair (₹800)
+                    </button>
+                    <button class="demo-btn" onclick="performTransaction('festival')">
+                        🎉 Festival Fund (₹1200)
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="resetAccount()">
+                        🔄 Account Reset Karo
+                    </button>
+                </div>
+
+                <!-- Transaction Log -->
+                <div class="server-simulation">
+                    <h4>Transaction Log (ACID Tracking):</h4>
+                    <div class="server-log" id="transactionLog">
+                        ACID properties track karne ke liye ready...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Concurrent Transaction Demo -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🔄 Isolation Demo: Concurrent Transactions</h2>
+            
+            <div class="explanation">
+                <strong>Scenario:</strong> Jethalal aur Iyer dono ek saath society fund se withdraw karne ki koshish kar rahe hain!
+            </div>
+
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>👨 Jethalal ka Transaction</h3>
+                    <div class="form-group">
+                        <label>Withdraw Amount:</label>
+                        <input type="number" id="jethalalAmount" value="3000" min="100" max="5000" style="width: 100px;">
+                    </div>
+                    <button class="demo-btn first-btn" onclick="startConcurrentTransaction('jethalal')" id="jethalalBtn">
+                        💰 Jethalal ka Withdrawal Shuru Karo
+                    </button>
+                    <div id="jethalalStatus" class="result-panel" style="margin-top: 1rem;">
+                        <div class="result-content">Transaction shuru karne ke liye ready...</div>
+                    </div>
+                </div>
+
+                <div class="demo-card">
+                    <h3>👨‍🦲 Iyer ka Transaction</h3>
+                    <div class="form-group">
+                        <label>Withdraw Amount:</label>
+                        <input type="number" id="iyerAmount" value="2500" min="100" max="5000" style="width: 100px;">
+                    </div>
+                    <button class="demo-btn" onclick="startConcurrentTransaction('iyer')" id="iyerBtn">
+                        💰 Iyer ka Withdrawal Shuru Karo
+                    </button>
+                    <div id="iyerStatus" class="result-panel" style="margin-top: 1rem;">
+                        <div class="result-content">Transaction shuru karne ke liye ready...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-controls" style="margin-top: 1rem;">
+                <button class="demo-btn first-btn" onclick="simulateConcurrentWithoutLocking()">
+                    ⚠️ Bina Locking ke (Problem!)
+                </button>
+                <button class="demo-btn" onclick="simulateConcurrentWithLocking()">
+                    🔒 Proper Locking ke Saath (ACID)
+                </button>
+                <button class="demo-btn clear-btn" onclick="resetConcurrentDemo()">
+                    🗑️ Results Clear Karo
+                </button>
+            </div>
+
+            <div class="demo-area" id="concurrentResults">
+                <div class="event-message">
+                    Concurrent transactions try karo to Isolation ka action dekho!
+                </div>
+            </div>
+        </div>
+
+        <!-- ACID Violation Examples -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">⚠️ Jab ACID Violate Hota Hai Tab Kya Hota Hai?</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showViolation('atomicity-violation')">⚛️ Atomicity Violation</button>
+                <button class="tab" onclick="showViolation('consistency-violation')">🎯 Consistency Violation</button>
+                <button class="tab" onclick="showViolation('isolation-violation')">🔒 Isolation Violation</button>
+                <button class="tab" onclick="showViolation('durability-violation')">💾 Durability Violation</button>
+            </div>
+
+            <!-- Atomicity Violation -->
+            <div id="atomicity-violation" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- ❌ Atomicity Violation ka Example</div>
+                        <div class="code-line var-declaration">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'jethalal';</div>
+                        <div class="code-line error">  -- Yahan system crash ho gaya! 💥</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = balance + 1000 WHERE account_id = 'babita';</div>
+                        <div class="code-line var-declaration">COMMIT;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Result: Jethalal ka paisa kat gaya, Babita ko nahi mila!</div>
+                        <div class="code-line error">-- System se paisa gayab ho gaya 😱</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">-- ✅ Rollback ke saath Proper Atomicity</div>
+                        <div class="code-line var-declaration">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'jethalal';</div>
+                        <div class="code-line error">  -- System ne failure detect kiya</div>
+                        <div class="code-line var-assignment">  ROLLBACK; -- Sab changes wapas liye</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Result: Dono accounts unchanged, data safe!</div>
+                        <div class="code-line var-usage">-- Ya to poora success ya poora failure</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="simulateAtomicityViolation()">⚛️ Atomicity Issue Simulate Karo</button>
+                <div id="atomicityViolationResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Atomicity violation dekhne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Consistency Violation -->
+            <div id="consistency-violation" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- ❌ Consistency Violation ka Example</div>
+                        <div class="code-line var-declaration">-- Rule: Account balance ₹500 se kam nahi ho sakta</div>
+                        <div class="code-line var-usage">UPDATE accounts SET balance = 200 WHERE account_id = 'jethalal';</div>
+                        <div class="code-line error">-- Business rule violate hua! Balance < ₹500</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Rule: System mein total paisa same rehna chahiye</div>
+                        <div class="code-line var-usage">UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'jethalal';</div>
+                        <div class="code-line error">-- Kahin corresponding addition nahi! Paisa gayab!</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">-- ✅ Proper Consistency Checks</div>
+                        <div class="code-line var-declaration">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  -- Update se pehle constraints check karo</div>
+                        <div class="code-line var-usage">  IF (balance - 1000) >= 500 THEN</div>
+                        <div class="code-line var-usage">    UPDATE accounts SET balance = balance - 1000 WHERE account_id = 'jethalal';</div>
+                        <div class="code-line var-usage">    UPDATE accounts SET balance = balance + 1000 WHERE account_id = 'babita';</div>
+                        <div class="code-line var-usage">    COMMIT;</div>
+                        <div class="code-line var-usage">  ELSE</div>
+                        <div class="code-line var-assignment">    ROLLBACK; -- Consistency maintain karo</div>
+                        <div class="code-line var-usage">  END IF;</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="simulateConsistencyViolation()">🎯 Consistency Issue Simulate Karo</button>
+                <div id="consistencyViolationResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Consistency violation dekhne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Isolation Violation -->
+            <div id="isolation-violation" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- ❌ Isolation Violation (Dirty Read)</div>
+                        <div class="code-line var-declaration">-- Transaction 1 (Jethalal)</div>
+                        <div class="code-line var-usage">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = 15000 WHERE account_id = 'society';</div>
+                        <div class="code-line comment">  -- Transaction 2 (Iyer) uncommitted data padhta hai</div>
+                        <div class="code-line error">  -- Iyer dekhta hai balance = 15000 (dirty read!)</div>
+                        <div class="code-line var-assignment">ROLLBACK; -- Transaction 1 fail ho jata hai</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Problem: Iyer ne galat data ke base par decision liya!</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">-- ✅ Locking ke saath Proper Isolation</div>
+                        <div class="code-line var-declaration">-- Transaction 1 (Jethalal)</div>
+                        <div class="code-line var-usage">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  SELECT balance FROM accounts WHERE account_id = 'society' FOR UPDATE;</div>
+                        <div class="code-line var-usage">  -- Row lock ho gaya, Iyer ko wait karna padega</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = 15000 WHERE account_id = 'society';</div>
+                        <div class="code-line var-declaration">COMMIT; -- Lock release ho gaya</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Ab Iyer safely committed data padh sakta hai</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="simulateIsolationViolation()">🔒 Isolation Issue Simulate Karo</button>
+                <div id="isolationViolationResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Isolation violation dekhne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Durability Violation -->
+            <div id="durability-violation" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- ❌ Durability Violation ka Example</div>
+                        <div class="code-line var-declaration">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = balance + 5000 WHERE account_id = 'society';</div>
+                        <div class="code-line var-usage">  COMMIT; -- Transaction successfully committed</div>
+                        <div class="code-line"></div>
+                        <div class="code-line error">-- Power failure ho gaya! 💡⚡</div>
+                        <div class="code-line error">-- Data sirf memory mein tha, disk pe nahi likha gaya</div>
+                        <div class="code-line error">-- Restart ke baad: Changes gayab! 😱</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">-- ✅ Write-Ahead Logging ke saath Proper Durability</div>
+                        <div class="code-line var-declaration">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  -- Pehle log file mein likho (WAL)</div>
+                        <div class="code-line var-usage">  LOG: "UPDATE accounts SET balance = balance + 5000 WHERE account_id = 'society'"</div>
+                        <div class="code-line var-usage">  -- Log ko disk pe flush karo</div>
+                        <div class="code-line var-usage">  UPDATE accounts SET balance = balance + 5000 WHERE account_id = 'society';</div>
+                        <div class="code-line var-declaration">COMMIT; -- Guaranteed permanent</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Crash ke baad bhi: Log se changes recover ho sakte hain</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="simulateDurabilityViolation()">💾 Durability Issue Simulate Karo</button>
+                <div id="durabilityViolationResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Durability violation dekhne ke liye click karo...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACID Properties Comparison Table -->
+        <div class="comparison-section">
+            <h3>🧪 ACID Properties ka Detailed Comparison</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Definition</th>
+                        <th>Jethalal ki Misal</th>
+                        <th>Asli Example</th>
+                        <th>Violation ka Anjam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>⚛️ Atomicity</strong></td>
+                        <td>Poora ya kuch nahi - transaction completely succeed ya fail</td>
+                        <td>Secretary bana to poora, adha-secretary nahi hota</td>
+                        <td>Money transfer: Debit aur Credit dono ya kuch nahi</td>
+                        <td>Adhoore updates, data corruption, paisa gayab</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎯 Consistency</strong></td>
+                        <td>Database hamesha valid state mein rehta hai transaction ke pehle aur baad</td>
+                        <td>Society ka account: ₹1000+₹200=₹1200 (exactly)</td>
+                        <td>Business rules maintain, constraints satisfy hote hain</td>
+                        <td>Galat data, business rules toote, corrupt state</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔒 Isolation</strong></td>
+                        <td>Concurrent transactions ek doosre mein dakhal nahi dete</td>
+                        <td>Jethalal aur Iyer alag time mein Babita se baat karein</td>
+                        <td>Do users akhri item kharidne ki koshish - sirf ek succeed</td>
+                        <td>Dirty reads, phantom reads, data races</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💾 Durability</strong></td>
+                        <td>Committed changes permanently save hote hain</td>
+                        <td>Babita ki muskaan - ek baar dekhi to hamesha yaad!</td>
+                        <td>Power failure ke baad bhi data survive karta hai</td>
+                        <td>Data loss, transactions dobara karne padte hain</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Implementation Techniques -->
+        <div class="comparison-section">
+            <h3>🛠️ Databases ACID Kaise Implement Karte Hain</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Implementation Technique</th>
+                        <th>Database Feature</th>
+                        <th>Performance Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>⚛️ Atomicity</strong></td>
+                        <td>Transaction logs, Rollback mechanisms</td>
+                        <td>BEGIN/COMMIT/ROLLBACK statements</td>
+                        <td>Low - kam overhead</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎯 Consistency</strong></td>
+                        <td>Constraints, Triggers, Validation rules</td>
+                        <td>CHECK constraints, Foreign keys, Triggers</td>
+                        <td>Medium - validation ka overhead</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔒 Isolation</strong></td>
+                        <td>Locking, MVCC (Multi-Version Concurrency Control)</td>
+                        <td>Row/Table locks, Isolation levels</td>
+                        <td>High - concurrency kam kar sakta hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💾 Durability</strong></td>
+                        <td>Write-Ahead Logging (WAL), Disk syncing</td>
+                        <td>Transaction logs, Checkpoint mechanisms</td>
+                        <td>Medium - disk I/O ka overhead</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Real-world Scenarios -->
+        <div class="comparison-section">
+            <h3>🌍 Real-world ACID Scenarios</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>ACID Requirement</th>
+                        <th>Kya Galat Ho Sakta Hai</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🏦 ATM Withdrawal</strong></td>
+                        <td>Sabhi ACID properties zaroori</td>
+                        <td>Paisa kata par cash nahi nikla</td>
+                        <td>Rollback ke saath atomic transaction</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🛒 E-commerce Purchase</strong></td>
+                        <td>Atomicity + Consistency</td>
+                        <td>Payment liya par order create nahi hua</td>
+                        <td>Two-phase commit across systems</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📊 Analytics Updates</strong></td>
+                        <td>Consistency + Durability</td>
+                        <td>Reports mein galat numbers dikhte hain</td>
+                        <td>Validation ke saath batch updates</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎮 Gaming Leaderboard</strong></td>
+                        <td>Isolation + Consistency</td>
+                        <td>Kai players ek hi rank claim karte hain</td>
+                        <td>Optimistic locking ke saath retry</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📧 Email System</strong></td>
+                        <td>Durability + Atomicity</td>
+                        <td>Email sending ke dauraan lost ho jata hai</td>
+                        <td>Message queuing ke saath persistence</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    
+        let currentBalance = 10000;
+        let isTransactionInProgress = false;
+
+        // ACID Property demonstrations
+        function demonstrateProperty(property) {
+            const result = document.getElementById('acidResults');
+            
+            const demonstrations = {
+                atomicity: {
+                    title: "⚛️ Atomicity - Poora ya Kuch Nahi",
+                    content: `
+                        <strong>Scenario:</strong> Jethalal society secretary banne ki koshish kar raha hai<br><br>
+                        <strong>Zaroori Steps:</strong><br>
+                        1️⃣ Pehle wala secretary (Bhide) ko hatana<br>
+                        2️⃣ Jethalal ko add karna<br>
+                        3️⃣ Permissions update karna<br>
+                        4️⃣ Member records update karna<br><br>
+                        <strong>Atomicity Guarantee:</strong><br>
+                        ✅ Sab steps successful = Jethalal secretary ban gaya<br>
+                        ❌ Koi bhi step fail = Bhide secretary hi rahega<br>
+                        🚫 Adha-secretary kabhi nahi hoga!<br><br>
+                        <strong>Asli Database:</strong> BEGIN TRANSACTION ... COMMIT/ROLLBACK
+                    `,
+                    type: "success"
+                },
+                consistency: {
+                    title: "🎯 Consistency - Data ki Validity",
+                    content: `
+                        <strong>Scenario:</strong> Society account mein maintenance collection<br><br>
+                        <strong>Shuruaati State:</strong> Balance = ₹10,000<br>
+                        <strong>Transaction:</strong> Jethalal se ₹500 maintenance add karo<br>
+                        <strong>Expected Final State:</strong> Balance = ₹10,500<br><br>
+                        <strong>Business Rules Check:</strong><br>
+                        ✅ Balance negative nahi ho sakta<br>
+                        ✅ Sab paisa account mein hona chahiye<br>
+                        ✅ Bade amounts ke liye secretary approval chahiye<br><br>
+                        <strong>Consistency Guarantee:</strong><br>
+                        Database hamesha valid state mein rahega<br>
+                        Koi bhi rule violation = ROLLBACK
+                    `,
+                    type: "success"
+                },
+                isolation: {
+                    title: "🔒 Isolation - Koi Dakhal Nahi",
+                    content: `
+                        <strong>Scenario:</strong> Jethalal aur Iyer dono ek saath withdrawal<br><br>
+                        <strong>Bina Isolation:</strong><br>
+                        • Jethalal dekhta hai: ₹10,000<br>
+                        • Iyer bhi dekhta hai: ₹10,000<br>
+                        • Dono ₹8,000 withdraw karte hain<br>
+                        • Result: Balance = -₹6,000 😱<br><br>
+                        <strong>Isolation ke Saath:</strong><br>
+                        • Jethalal ko lock milta hai → Balance: ₹10,000 → ₹2,000<br>
+                        • Iyer wait karta hai → Updated balance dekhta hai: ₹2,000<br>
+                        • Iyer ka withdrawal fail (paise kam hain)<br>
+                        • Result: Balance = ₹2,000 ✅
+                    `,
+                    type: "success"
+                },
+                durability: {
+                    title: "💾 Durability - Permanent Storage",
+                    content: `
+                        <strong>Scenario:</strong> Festival fund collection transaction<br><br>
+                        <strong>Transaction Complete:</strong><br>
+                        • Balance updated: ₹10,000 → ₹12,000<br>
+                        • COMMIT successful<br>
+                        • "Transaction poora hua" message dikha<br><br>
+                        <strong>Achanak... Power Cut! ⚡</strong><br><br>
+                        <strong>System Restart ke Baad:</strong><br>
+                        ✅ Balance ab bhi dikhta hai: ₹12,000<br>
+                        ✅ Transaction permanent storage mein logged<br>
+                        ✅ Koi data loss nahi!<br><br>
+                        <strong>Durability Guarantee:</strong><br>
+                        Jaise Babita ki muskaan hamesha yaad rehti hai,<br>
+                        Waise committed data hamesha safe rehta hai!
+                    `,
+                    type: "success"
+                }
+            };
+            
+            const demo = demonstrations[property];
+            result.innerHTML = `
+                <div class="${demo.type}-message">
+                    <strong>${demo.title}</strong><br><br>
+                    ${demo.content}
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Society account operations
+        function updateAccountDisplay() {
+            document.getElementById('currentBalance').textContent = currentBalance;
+            document.getElementById('accountStatus').textContent = isTransactionInProgress ? 'Transaction Chal Raha Hai' : 'Ready';
+        }
+
+        function performTransaction(type) {
+            if (isTransactionInProgress) {
+                alert('Ek aur transaction chal raha hai. Thodi der wait karo!');
+                return;
+            }
+
+            isTransactionInProgress = true;
+            updateAccountDisplay();
+
+            const transactions = {
+                maintenance: {
+                    amount: 500,
+                    description: 'Maintenance Collection',
+                    type: 'credit'
+                },
+                repair: {
+                    amount: 800,
+                    description: 'Society Repair',
+                    type: 'debit'
+                },
+                festival: {
+                    amount: 1200,
+                    description: 'Festival Fund Collection',
+                    type: 'credit'
+                }
+            };
+
+            const transaction = transactions[type];
+            const oldBalance = currentBalance;
+
+            setTimeout(() => {
+                // Simulate ACID transaction
+                if (transaction.type === 'credit') {
+                    currentBalance += transaction.amount;
+                } else {
+                    if (currentBalance >= transaction.amount) {
+                        currentBalance -= transaction.amount;
+                    } else {
+                        // Transaction fails - insufficient funds
+                        isTransactionInProgress = false;
+                        updateAccountDisplay();
+                        document.getElementById('transactionLog').innerHTML = `
+                            <strong style="color: #f56565;">❌ Transaction Fail Hua!</strong><br>
+                            <strong>Type:</strong> ${transaction.description}<br>
+                            <strong>Amount:</strong> ₹${transaction.amount}<br>
+                            <strong>Wajah:</strong> Paise kam hain<br>
+                            <strong>ACID Properties:</strong><br>
+                            ⚛️ Atomicity: Poora rollback<br>
+                            🎯 Consistency: Balance rules maintain hue<br>
+                            🔒 Isolation: Koi dakhal nahi<br>
+                            💾 Durability: Fail state save nahi hua
+                        `;
+                        return;
+                    }
+                }
+
+                isTransactionInProgress = false;
+                updateAccountDisplay();
+
+                document.getElementById('transactionLog').innerHTML = `
+                    <strong style="color: #4caf50;">✅ Transaction Successful!</strong><br>
+                    <strong>Type:</strong> ${transaction.description}<br>
+                    <strong>Amount:</strong> ₹${transaction.amount} (${transaction.type})<br>
+                    <strong>Balance:</strong> ₹${oldBalance} → ₹${currentBalance}<br>
+                    <strong>ACID Properties Ensure Hue:</strong><br>
+                    ⚛️ Atomicity: Poora success<br>
+                    🎯 Consistency: Valid state maintain hua<br>
+                    🔒 Isolation: Exclusive access<br>
+                    💾 Durability: Changes permanently save hue
+                `;
+            }, 1500);
+        }
+
+        function resetAccount() {
+            currentBalance = 10000;
+            isTransactionInProgress = false;
+            updateAccountDisplay();
+            document.getElementById('transactionLog').innerHTML = 'ACID properties track karne ke liye ready...';
+        }
+
+        // Concurrent transaction simulation
+        function startConcurrentTransaction(user) {
+            const amount = parseInt(document.getElementById(user + 'Amount').value);
+            const statusDiv = document.getElementById(user + 'Status');
+            
+            statusDiv.innerHTML = `
+                <div class="result-content">
+                    <strong>🚀 ${user === 'jethalal' ? 'Jethalal' : 'Iyer'} Transaction Shuru Hua</strong><br>
+                    Withdraw ki koshish: ₹${amount}<br>
+                    Status: Lock acquire kar raha hai...
+                </div>
+            `;
+
+            // Disable button during transaction
+            document.getElementById(user + 'Btn').disabled = true;
+
+            setTimeout(() => {
+                document.getElementById(user + 'Btn').disabled = false;
+                statusDiv.innerHTML = `
+                    <div class="result-content">
+                        Transaction ready. Niche ke simulation buttons click karo alag-alag scenarios dekhne ke liye.
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function simulateConcurrentWithoutLocking() {
+            const jethalalAmount = parseInt(document.getElementById('jethalalAmount').value);
+            const iyerAmount = parseInt(document.getElementById('iyerAmount').value);
+            const initialBalance = currentBalance;
+
+            // Simulate race condition
+            document.getElementById('concurrentResults').innerHTML = `
+                <div class="error-message">
+                    <strong>⚠️ Bina Locking ke - Race Condition!</strong><br><br>
+                    <strong>Shuruaati Balance:</strong> ₹${initialBalance}<br><br>
+                    <strong>Ghatnao ka Sequence:</strong><br>
+                    1️⃣ Jethalal balance padhta hai: ₹${initialBalance}<br>
+                    2️⃣ Iyer bhi balance padhta hai: ₹${initialBalance} (same!)<br>
+                    3️⃣ Jethalal calculate karta hai: ₹${initialBalance} - ₹${jethalalAmount} = ₹${initialBalance - jethalalAmount}<br>
+                    4️⃣ Iyer calculate karta hai: ₹${initialBalance} - ₹${iyerAmount} = ₹${initialBalance - iyerAmount}<br>
+                    5️⃣ Dono apne results likhte hain!<br><br>
+                    <strong>Final Balance:</strong> ₹${initialBalance - Math.max(jethalalAmount, iyerAmount)} (Galat!)<br>
+                    <strong>Expected Balance:</strong> ₹${initialBalance - jethalalAmount - iyerAmount}<br>
+                    <strong>Paisa Gayab:</strong> ₹${Math.min(jethalalAmount, iyerAmount)}<br><br>
+                    <strong>ACID Violation:</strong><br>
+                    ❌ Isolation: Transactions ne dakhal diya<br>
+                    ❌ Consistency: Data corrupt ho gaya<br>
+                    ❌ Atomicity: Partial results mix hue
+                </div>
+            `;
+        }
+
+        function simulateConcurrentWithLocking() {
+            const jethalalAmount = parseInt(document.getElementById('jethalalAmount').value);
+            const iyerAmount = parseInt(document.getElementById('iyerAmount').value);
+            const initialBalance = currentBalance;
+
+            let newBalance = initialBalance;
+            let jethalalResult = "";
+            let iyerResult = "";
+
+            // Jethalal goes first (gets lock)
+            if (newBalance >= jethalalAmount) {
+                newBalance -= jethalalAmount;
+                jethalalResult = `✅ Success: ₹${jethalalAmount} withdraw kiya`;
+            } else {
+                jethalalResult = `❌ Fail: Paise kam hain`;
+            }
+
+            // Iyer waits, then gets updated balance
+            if (newBalance >= iyerAmount) {
+                newBalance -= iyerAmount;
+                iyerResult = `✅ Success: ₹${iyerAmount} withdraw kiya`;
+            } else {
+                iyerResult = `❌ Fail: Paise kam hain`;
+            }
+
+            currentBalance = newBalance;
+            updateAccountDisplay();
+
+            document.getElementById('concurrentResults').innerHTML = `
+                <div class="success-message">
+                    <strong>🔒 Proper Locking ke Saath - ACID Maintain!</strong><br><br>
+                    <strong>Shuruaati Balance:</strong> ₹${initialBalance}<br><br>
+                    <strong>Ghatnao ka Sequence:</strong><br>
+                    1️⃣ Jethalal ko lock milta hai<br>
+                    2️⃣ Jethalal padhta aur update karta hai: ₹${initialBalance} → ₹${initialBalance >= jethalalAmount ? initialBalance - jethalalAmount : initialBalance}<br>
+                    3️⃣ Jethalal lock release karta hai<br>
+                    4️⃣ Iyer ko lock milta hai<br>
+                    5️⃣ Iyer updated balance padhta aur process karta hai<br>
+                    6️⃣ Iyer lock release karta hai<br><br>
+                    <strong>Results:</strong><br>
+                    👨 Jethalal: ${jethalalResult}<br>
+                    👨‍🦲 Iyer: ${iyerResult}<br><br>
+                    <strong>Final Balance:</strong> ₹${newBalance} ✅<br><br>
+                    <strong>ACID Properties Maintain Hue:</strong><br>
+                    ✅ Isolation: Koi dakhal nahi<br>
+                    ✅ Consistency: Data integrity preserved<br>
+                    ✅ Atomicity: Har transaction poora hua<br>
+                    ✅ Durability: Changes permanently save hue
+                </div>
+            `;
+        }
+
+        function resetConcurrentDemo() {
+            document.getElementById('concurrentResults').innerHTML = `
+                <div class="event-message">
+                    Concurrent transactions try karo to Isolation ka action dekho!
+                </div>
+            `;
+            resetAccount();
+        }
+
+        // ACID violation simulations
+        function showViolation(violation) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(violation).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function simulateAtomicityViolation() {
+            document.getElementById('atomicityViolationResult').innerHTML = `
+                <div class="error-message">
+                    <strong>⚛️ Atomicity Violation Simulation</strong><br><br>
+                    <strong>Scenario:</strong> Jethalal aur Babita ke beech money transfer<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Step 1: Jethalal.balance = 5000 - 1000 = 4000 ✅<br>
+Step 2: System crash! 💥<br>
+Step 3: Babita.balance = 3000 + 1000 ❌ (Kabhi execute nahi hua)<br>
+                    </div>
+                    <strong>Result:</strong><br>
+                    • Jethalal ne ₹1000 kho diya<br>
+                    • Babita ko ₹1000 nahi mila<br>
+                    • System se paisa gayab ho gaya! 😱<br><br>
+                    <strong>Solution:</strong> Transaction log + Rollback mechanism
+                </div>
+            `;
+        }
+
+        function simulateConsistencyViolation() {
+            document.getElementById('consistencyViolationResult').innerHTML = `
+                <div class="error-message">
+                    <strong>🎯 Consistency Violation Simulation</strong><br><br>
+                    <strong>Scenario:</strong> Society account withdrawal minimum balance rule violate karta hai<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Business Rule: Minimum balance = ₹500<br>
+Current Balance: ₹800<br>
+Withdrawal Request: ₹600<br>
+New Balance: ₹800 - ₹600 = ₹200 ❌<br>
+Rule Violation: ₹200 < ₹500
+                    </div>
+                    <strong>Bina Consistency Check ke Result:</strong><br>
+                    • Account minimum balance se neeche chala gaya<br>
+                    • Business rule violate hua<br>
+                    • Invalid system state<br><br>
+                    <strong>ACID Solution:</strong> Transaction reject hua, rollback kiya gaya
+                </div>
+            `;
+        }
+
+        function simulateIsolationViolation() {
+            document.getElementById('isolationViolationResult').innerHTML = `
+                <div class="error-message">
+                    <strong>🔒 Isolation Violation Simulation</strong><br><br>
+                    <strong>Scenario:</strong> Jethalal aur Iyer ke beech dirty read problem<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+T1 (Jethalal): BEGIN TRANSACTION<br>
+T1: UPDATE balance = 15000 (uncommitted)<br>
+T2 (Iyer): SELECT balance → dekhta hai 15000 💀<br>
+T2: Galat data ke base par decision leta hai<br>
+T1: ROLLBACK (transaction fail ho jata hai)<br>
+T2: Ab outdated information ke saath kaam kar raha hai!
+                    </div>
+                    <strong>Result:</strong><br>
+                    • Iyer ne uncommitted data dekha (dirty read)<br>
+                    • Galat business decisions liye<br>
+                    • Transactions mein data inconsistency<br><br>
+                    <strong>Solution:</strong> Row-level locking, isolation levels
+                </div>
+            `;
+        }
+
+        function simulateDurabilityViolation() {
+            document.getElementById('durabilityViolationResult').innerHTML = `
+                <div class="error-message">
+                    <strong>💾 Durability Violation Simulation</strong><br><br>
+                    <strong>Scenario:</strong> Successful transaction ke baad power failure<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Transaction: Society fund mein ₹5000 add karo<br>
+UPDATE balance = 10000 + 5000 = 15000<br>
+COMMIT successful ✅<br>
+User dekhta hai: "Transaction poora hua"<br>
+<span style="color: #ff6f61;">💡 POWER FAILURE! ⚡</span><br>
+System restart...<br>
+Balance dikhta hai: ₹10000 (purana value) 😱
+                    </div>
+                    <strong>Problem:</strong><br>
+                    • Data sirf memory mein tha<br>
+                    • Permanent storage mein nahi likha gaya<br>
+                    • Committed transaction kho gaya!<br><br>
+                    <strong>Solution:</strong> Write-Ahead Logging (WAL), Disk syncing
+                </div>
+            `;
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            updateAccountDisplay();
+        };
+    </script>
+</body>
+</html>

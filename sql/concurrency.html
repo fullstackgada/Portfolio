@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concurrency Issues ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+       <div class="header-interactive" style="position:relative;">
+        <h1>Concurrency Issue ka Funda</h1>
+        <p>Understand how Concurrency Issue works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Concurrency Problem Simulator -->
+            <div class="demo-section">
+                <h2 class="demo-title">⚡ Concurrency Problem Simulator</h2>
+                
+                <div class="explanation">
+                    <strong>Problem:</strong> दो users एक ही product को एक साथ खरीदने की कोशिश कर रहे हैं!
+                </div>
+
+                <!-- Product Stock Display -->
+                <div class="demo-area" id="stockDisplay">
+                    <div class="event-message one-message">
+                        <strong>📱 iPhone 15 Pro</strong><br>
+                        <strong>Stock Available:</strong> <span id="currentStock">1</span><br>
+                        <strong>Price:</strong> ₹1,29,999
+                    </div>
+                </div>
+
+                <!-- User Simulation Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="simulateNormalPurchase()">
+                        ✅ Normal Purchase (No Concurrency)
+                    </button>
+                    <button class="demo-btn" onclick="simulateConcurrencyIssue()">
+                        ⚠️ Simulate Concurrency Issue
+                    </button>
+                    <button class="demo-btn" onclick="simulateWithLocking()">
+                        🔒 Purchase with Locking
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="resetStock()">
+                        🔄 Reset Stock
+                    </button>
+                </div>
+
+                <!-- Purchase Logs -->
+                <div class="server-simulation">
+                    <h4>Purchase Logs:</h4>
+                    <div class="server-log" id="purchaseLogs">
+                        Ready to simulate purchases...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solutions Demonstration -->
+            <div class="demo-section">
+                <h2 class="demo-title">🛡️ Concurrency Solutions</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>जेठालाल के Solutions:</strong> Different techniques to handle concurrent access properly.
+                </div>
+
+                <!-- Solution Tabs -->
+                <div class="tabs">
+                    <button class="tab active" onclick="showSolution('locking')">🔒 Locking</button>
+                    <button class="tab" onclick="showSolution('optimistic')">🎯 Optimistic</button>
+                    <button class="tab" onclick="showSolution('atomic')">⚛️ Atomic</button>
+                    <button class="tab" onclick="showSolution('ui-handling')">🖥️ UI Handling</button>
+                </div>
+
+                <!-- Solution Content -->
+                <div id="locking" class="tab-content active">
+                    <div class="code-block">
+                        <div class="code-line comment">-- Pessimistic Locking Approach</div>
+                        <div class="code-line var-declaration">BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">SELECT stock FROM products WHERE id = 1 FOR UPDATE;</div>
+                        <div class="code-line var-assignment">-- Row is now locked, other users must wait</div>
+                        <div class="code-line var-usage">IF stock > 0 THEN</div>
+                        <div class="code-line var-usage">  UPDATE products SET stock = stock - 1 WHERE id = 1;</div>
+                        <div class="code-line var-usage">  INSERT INTO orders (user_id, product_id) VALUES (?, ?);</div>
+                        <div class="code-line var-declaration">COMMIT;</div>
+                    </div>
+                    <div class="explanation">
+                        <strong>Advantage:</strong> Guaranteed consistency<br>
+                        <strong>Disadvantage:</strong> Performance impact, potential deadlocks
+                    </div>
+                </div>
+
+                <div id="optimistic" class="tab-content">
+                    <div class="code-block">
+                        <div class="code-line comment">-- Optimistic Concurrency Control</div>
+                        <div class="code-line var-declaration">SELECT stock, version FROM products WHERE id = 1;</div>
+                        <div class="code-line var-assignment">-- Client performs business logic</div>
+                        <div class="code-line var-usage">UPDATE products SET</div>
+                        <div class="code-line var-usage">  stock = stock - 1,</div>
+                        <div class="code-line var-usage">  version = version + 1</div>
+                        <div class="code-line var-usage">WHERE id = 1 AND version = @original_version;</div>
+                        <div class="code-line var-assignment">-- If affected rows = 0, then conflict occurred</div>
+                    </div>
+                    <div class="explanation">
+                        <strong>Advantage:</strong> Better performance, no blocking<br>
+                        <strong>Disadvantage:</strong> Retry logic needed
+                    </div>
+                </div>
+
+                <div id="atomic" class="tab-content">
+                    <div class="code-block">
+                        <div class="code-line comment">-- Atomic Transaction</div>
+                        <div class="code-line var-declaration">CREATE PROCEDURE BuyProduct(@userId INT, @productId INT)</div>
+                        <div class="code-line var-declaration">AS BEGIN</div>
+                        <div class="code-line var-usage">  BEGIN TRANSACTION</div>
+                        <div class="code-line var-usage">  DECLARE @stock INT</div>
+                        <div class="code-line var-usage">  SELECT @stock = stock FROM products WHERE id = @productId</div>
+                        <div class="code-line var-usage">  IF @stock > 0</div>
+                        <div class="code-line var-usage">    UPDATE products SET stock = stock - 1 WHERE id = @productId</div>
+                        <div class="code-line var-usage">    INSERT INTO orders VALUES(@userId, @productId, GETDATE())</div>
+                        <div class="code-line var-usage">    COMMIT</div>
+                        <div class="code-line var-usage">  ELSE</div>
+                        <div class="code-line var-usage">    ROLLBACK</div>
+                        <div class="code-line var-declaration">END</div>
+                    </div>
+                </div>
+
+                <div id="ui-handling" class="tab-content">
+                    <div class="code-block">
+                        <div class="code-line comment">// Frontend Concurrency Handling</div>
+                        <div class="code-line var-declaration">let isProcessing = false;</div>
+                        <div class="code-line var-declaration">function buyNow() {</div>
+                        <div class="code-line var-usage">  if (isProcessing) return;</div>
+                        <div class="code-line var-usage">  isProcessing = true;</div>
+                        <div class="code-line var-usage">  document.getElementById('buyBtn').disabled = true;</div>
+                        <div class="code-line var-usage">  </div>
+                        <div class="code-line var-usage">  fetch('/api/purchase', { method: 'POST' })</div>
+                        <div class="code-line var-usage">    .then(response => {</div>
+                        <div class="code-line var-usage">      isProcessing = false;</div>
+                        <div class="code-line var-usage">      document.getElementById('buyBtn').disabled = false;</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug and Monitoring Section -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🔍 Concurrency Debugging & Monitoring</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('debug-logs')">📋 Debug Logs</button>
+                <button class="tab" onclick="showTab('metrics')">📊 Metrics</button>
+                <button class="tab" onclick="showTab('solutions-comparison')">⚖️ Solutions Comparison</button>
+            </div>
+
+            <!-- Debug Logs Tab -->
+            <div id="debug-logs" class="tab-content active">
+                <h4>🕒 Timestamp Analysis</h4>
+                <div class="code-block" id="debugLogsDisplay">
+                    <div class="code-line comment">/* Simulate purchases to see debug logs */</div>
+                </div>
+                <button class="demo-btn" onclick="generateDebugLogs()">🔍 Generate Debug Logs</button>
+            </div>
+
+            <!-- Metrics Tab -->
+            <div id="metrics" class="tab-content">
+                <h4>📈 Concurrency Metrics</h4>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Without Protection</th>
+                            <th>With Protection</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Success Rate</strong></td>
+                            <td id="unprotectedSuccess">60%</td>
+                            <td id="protectedSuccess">100%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Data Integrity</strong></td>
+                            <td id="unprotectedIntegrity">❌ Compromised</td>
+                            <td id="protectedIntegrity">✅ Maintained</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Response Time</strong></td>
+                            <td id="unprotectedTime">150ms</td>
+                            <td id="protectedTime">280ms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Error Rate</strong></td>
+                            <td id="unprotectedErrors">40%</td>
+                            <td id="protectedErrors">0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Solutions Comparison Tab -->
+            <div id="solutions-comparison" class="tab-content">
+                <table class="comparison-table responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Solution</th>
+                            <th>✅ Pros</th>
+                            <th>❌ Cons</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>🔒 Pessimistic Locking</strong></td>
+                            <td>100% consistency guaranteed</td>
+                            <td>Performance impact, deadlock risk</td>
+                            <td>Critical operations, low concurrency</td>
+                        </tr>
+                        <tr>
+                            <td><strong>🎯 Optimistic Locking</strong></td>
+                            <td>Better performance, no blocking</td>
+                            <td>Retry logic needed, conflict resolution</td>
+                            <td>High read, low conflict scenarios</td>
+                        </tr>
+                        <tr>
+                            <td><strong>⚛️ Atomic Transactions</strong></td>
+                            <td>ACID compliance, data integrity</td>
+                            <td>Resource intensive</td>
+                            <td>Financial transactions, inventory</td>
+                        </tr>
+                        <tr>
+                            <td><strong>🖥️ UI Controls</strong></td>
+                            <td>User-friendly, immediate feedback</td>
+                            <td>Client-side only, not foolproof</td>
+                            <td>User experience enhancement</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStock = 1;
+        let purchaseLog = [];
+
+        // Simulate normal purchase
+        function simulateNormalPurchase() {
+            if (currentStock > 0) {
+                currentStock--;
+                const timestamp = new Date().toLocaleTimeString();
+                purchaseLog.push(`${timestamp} - User Jethalal: Purchase successful`);
+                
+                document.getElementById('currentStock').textContent = currentStock;
+                document.getElementById('purchaseLogs').innerHTML = `
+                    <strong style="color: #4caf50;">✅ Purchase Successful</strong><br>
+                    User: Jethalal purchased iPhone 15 Pro<br>
+                    Remaining Stock: ${currentStock}
+                `;
+            } else {
+                document.getElementById('purchaseLogs').innerHTML = `
+                    <strong style="color: #f56565;">❌ Out of Stock</strong><br>
+                    Cannot process purchase - no stock available
+                `;
+            }
+        }
+
+        // Simulate concurrency issue
+        function simulateConcurrencyIssue() {
+            const timestamp = new Date().toLocaleTimeString();
+            
+            // Simulate two users accessing at the same time
+            setTimeout(() => {
+                purchaseLog.push(`${timestamp} - User Jethalal: Checking stock (Stock: ${currentStock})`);
+                purchaseLog.push(`${timestamp} - User Iyer: Checking stock (Stock: ${currentStock})`);
+                
+                // Both see stock as available
+                if (currentStock > 0) {
+                    purchaseLog.push(`${timestamp} - User Jethalal: Stock available, proceeding...`);
+                    purchaseLog.push(`${timestamp} - User Iyer: Stock available, proceeding...`);
+                    
+                    // Both try to purchase
+                    setTimeout(() => {
+                        currentStock--;
+                        purchaseLog.push(`${timestamp + 1} - User Jethalal: Purchase successful`);
+                        purchaseLog.push(`${timestamp + 1} - User Iyer: Purchase successful`);
+                        
+                        document.getElementById('currentStock').textContent = currentStock;
+                        document.getElementById('purchaseLogs').innerHTML = `
+                            <strong style="color: #f56565;">⚠️ Concurrency Issue Detected!</strong><br>
+                            Both users got success message but only 1 item was in stock!<br>
+                            This leads to overselling and data inconsistency.<br>
+                            <strong>Stock should be: 0, Actual orders: 2</strong>
+                        `;
+                    }, 100);
+                }
+            }, 50);
+        }
+
+        // Simulate purchase with locking
+        function simulateWithLocking() {
+            const timestamp = new Date().toLocaleTimeString();
+            
+            // Simulate locking mechanism
+            setTimeout(() => {
+                purchaseLog.push(`${timestamp} - User Jethalal: Acquiring lock on product...`);
+                purchaseLog.push(`${timestamp} - User Iyer: Waiting for lock...`);
+                
+                // First user gets the lock
+                if (currentStock > 0) {
+                    currentStock--;
+                    purchaseLog.push(`${timestamp + 1} - User Jethalal: Lock acquired, purchase successful`);
+                    purchaseLog.push(`${timestamp + 2} - User Iyer: Lock acquired, but stock is 0 - purchase failed`);
+                    
+                    document.getElementById('currentStock').textContent = currentStock;
+                    document.getElementById('purchaseLogs').innerHTML = `
+                        <strong style="color: #4caf50;">✅ Locking Mechanism Working</strong><br>
+                        User Jethalal: Purchase successful (got the lock first)<br>
+                        User Iyer: Purchase failed (stock depleted)<br>
+                        <strong>Data integrity maintained!</strong>
+                    `;
+                }
+            }, 50);
+        }
+
+        // Reset stock
+        function resetStock() {
+            currentStock = 1;
+            purchaseLog = [];
+            document.getElementById('currentStock').textContent = currentStock;
+            document.getElementById('purchaseLogs').innerHTML = 'Ready to simulate purchases...';
+        }
+
+        // Show solution tabs
+        function showSolution(solutionName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(solutionName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Generate debug logs
+        function generateDebugLogs() {
+            const debugDisplay = document.getElementById('debugLogsDisplay');
+            const timestamp = new Date().toISOString();
+            
+            debugDisplay.innerHTML = `
+                <div class="code-line">${timestamp} - [DEBUG] User Jethalal accessing product ID: 1</div>
+                <div class="code-line">${timestamp} - [DEBUG] User Iyer accessing product ID: 1</div>
+                <div class="code-line">${timestamp} - [DEBUG] Current stock: 1</div>
+                <div class="code-line">${timestamp} - [DEBUG] User Jethalal: Stock check passed</div>
+                <div class="code-line">${timestamp} - [DEBUG] User Iyer: Stock check passed (SAME TIME!)</div>
+                <div class="code-line error">${timestamp} - [ERROR] Concurrency detected: Multiple users accessing same resource</div>
+                <div class="code-line">${timestamp} - [DEBUG] User Jethalal: Purchase successful</div>
+                <div class="code-line">${timestamp} - [DEBUG] User Iyer: Purchase successful (PROBLEM!)</div>
+                <div class="code-line error">${timestamp} - [ERROR] Data inconsistency: Stock oversold</div>
+            `;
+        }
+
+        // Tab functionality for debug section
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            resetStock();
+        };
+    </script>
+</body>
+</html>

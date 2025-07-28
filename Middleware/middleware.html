@@ -1,736 +1,929 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Middleware Demo - Fullstackgada</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .demo-section {
-            padding: 40px;
-        }
-
-        .explanation {
-            background: #f8f9fa;
-            border-left: 6px solid #4ecdc4;
-            padding: 25px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-        }
-
-        .character {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .jethalal {
-            color: #e74c3c;
-        }
-
-        .babita {
-            color: #9b59b6;
-        }
-
-        .society-analogy {
-            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px dashed #e17055;
-        }
-
-        .society-analogy h4 {
-            color: #d63031;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-
-        .pipeline-container {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            border: 2px solid #dee2e6;
-        }
-
-        .pipeline-title {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #333;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-
-        .middleware-pipeline {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .middleware-step {
-            background: white;
-            border: 3px solid #dee2e6;
-            border-radius: 15px;
-            padding: 20px;
-            min-width: 180px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .middleware-step.active {
-            border-color: #4ecdc4;
-            background: #e8f5e8;
-            transform: scale(1.05);
-        }
-
-        .middleware-step.rejected {
-            border-color: #e74c3c;
-            background: #ffe6e6;
-            animation: shake 0.5s ease-in-out;
-        }
-
-        .middleware-step.passed {
-            border-color: #27ae60;
-            background: #d4edda;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .step-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .step-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .step-description {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .arrow {
-            font-size: 2rem;
-            color: #4ecdc4;
-            margin: 0 10px;
-        }
-
-        .request-form {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin: 30px 0;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #4ecdc4;
-        }
-
-        .send-request-btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: transform 0.3s ease;
-            width: 100%;
-        }
-
-        .send-request-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .send-request-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .response-container {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 30px 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .response-title {
-            color: #4ecdc4;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .log-entry {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #4ecdc4;
-        }
-
-        .log-entry.error {
-            border-left-color: #e74c3c;
-            background: rgba(231, 76, 60, 0.1);
-        }
-
-        .log-entry.success {
-            border-left-color: #27ae60;
-            background: rgba(39, 174, 96, 0.1);
-        }
-
-        .middleware-controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .control-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .control-panel h4 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .toggle-switch {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .switch {
-            position: relative;
-            width: 50px;
-            height: 25px;
-            background: #ccc;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .switch.active {
-            background: #4ecdc4;
-        }
-
-        .switch::before {
-            content: '';
-            position: absolute;
-            width: 21px;
-            height: 21px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: left 0.3s ease;
-        }
-
-        .switch.active::before {
-            left: 27px;
-        }
-
-        .reset-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 20px;
-            transition: background 0.3s ease;
-        }
-
-        .reset-btn:hover {
-            background: #5a6268;
-        }
-
-        .api-endpoints {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .endpoint-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 5px solid #4ecdc4;
-        }
-
-        .endpoint-card h4 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .endpoint-card p {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
-        .endpoint-btn {
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s ease;
-        }
-
-        .endpoint-btn:hover {
-            background: #45b7aa;
-        }
-
-        @media (max-width: 768px) {
-            .middleware-pipeline {
-                flex-direction: column;
-            }
-            
-            .arrow {
-                transform: rotate(90deg);
-            }
-            
-            .demo-section {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <title>Middleware ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🛡️ Middleware Demo</h1>
-            <div class="subtitle">Jethalal & Babita की समझाई गई तकनीक</div>
+        <div class="header-interactive" style="position:relative;">
+        <h1>Middleware ka Funda</h1>
+        <p>Understand how Middleware works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
         </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
 
-        <div class="demo-section">
-            <div class="explanation">
-                <div class="character jethalal">🎭 जेठालाल:</div>
-                <p>बबिता जी, Middleware ठीक वैसे ही है जैसे आप सोसाइटी गेट से बाहर जाते समय हर चेकपॉइंट से गुज़रती हैं!</p>
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Middleware Concept Explanation -->
+            <div class="demo-section">
+                <h2 class="demo-title">🚪 Middleware Kya Hai?</h2>
                 
-                <div class="society-analogy">
-                    <h4>🏠 गोकुलधाम सोसाइटी का उदाहरण:</h4>
-                    <p><strong>1. वॉचमैन:</strong> "कहाँ जा रही हैं?" = Authentication Middleware</p>
-                    <p><strong>2. सिक्योरिटी गार्ड:</strong> बैग चेक = Validation Middleware</p>
-                    <p><strong>3. लॉग बुक:</strong> एंट्री करना = Logging Middleware</p>
-                    <p><strong>4. मुख्य गेट:</strong> बाहर जाना = Main API Endpoint</p>
+                <div class="explanation">
+                    <strong>Middleware:</strong> Functions jo request aur response ke beech mein kaam karte hain - bilkul society ke checkpoints jaise!
                 </div>
 
-                <div class="character babita">👩 बबिता जी:</div>
-                <p>वाह! तो हर middleware एक छोटा काम करता है और फिर request को आगे भेजता है। अगर कोई problem है तो वहीं रोक देता है!</p>
+                <!-- Society Gate Analogy -->
+                <div class="saree-analogy">
+                    <h4>🏢 Society Gate Checkpoint System</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👮</div>
+                        <div><strong>Watchman:</strong> Kahan ja rahe ho? (Request Validation)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🔍</div>
+                        <div><strong>Security Guard:</strong> Bag check karta hai (Authentication)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">📝</div>
+                        <div><strong>Log Book:</strong> Entry note karta hai (Logging)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🚪</div>
+                        <div><strong>Aakhir Mein:</strong> Babita ji bahar ja sakti hain (API Response)</div>
+                    </div>
+                </div>
+
+                <!-- Middleware Demo Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateMiddlewareFlow()">
+                        🚪 Poora Middleware Flow
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateMiddlewareReject()">
+                        🚫 Middleware Rejection
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateMiddlewareReuse()">
+                        ♻️ Middleware Reusability
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearMiddlewareDemo()">
+                        🗑️ Clear Karo
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="middlewareResults">
+                    <div class="event-message one-message">
+                        Upar ke buttons dabao Middleware ka action dekhne ke liye!
+                    </div>
+                </div>
             </div>
 
-            <div class="pipeline-container">
-                <div class="pipeline-title">🚦 API Request Pipeline</div>
-                <div class="middleware-pipeline">
-                    <div class="middleware-step" id="step1">
-                        <span class="step-icon">🔐</span>
-                        <div class="step-title">Authentication</div>
-                        <div class="step-description">Token चेक करना</div>
-                    </div>
-                    <span class="arrow">→</span>
-                    <div class="middleware-step" id="step2">
-                        <span class="step-icon">✅</span>
-                        <div class="step-title">Validation</div>
-                        <div class="step-description">Data validate करना</div>
-                    </div>
-                    <span class="arrow">→</span>
-                    <div class="middleware-step" id="step3">
-                        <span class="step-icon">📝</span>
-                        <div class="step-title">Logging</div>
-                        <div class="step-description">Request log करना</div>
-                    </div>
-                    <span class="arrow">→</span>
-                    <div class="middleware-step" id="step4">
-                        <span class="step-icon">🎯</span>
-                        <div class="step-title">API Endpoint</div>
-                        <div class="step-description">Main function</div>
-                    </div>
+            <!-- Live API Request Simulator -->
+            <div class="demo-section">
+                <h2 class="demo-title">🌐 Live API Request Flow</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Simulate Karo:</strong> Asli API request ke saath middleware pipeline dekho!
                 </div>
-            </div>
 
-            <div class="request-form">
-                <h3>🚀 API Request भेजें</h3>
+                <!-- Request Configuration -->
                 <div class="form-group">
-                    <label for="token">Authorization Token:</label>
-                    <input type="text" id="token" placeholder="your-secret-token">
-                </div>
-                <div class="form-group">
-                    <label for="userId">User ID:</label>
-                    <input type="text" id="userId" placeholder="123">
-                </div>
-                <div class="form-group">
-                    <label for="endpoint">API Endpoint:</label>
-                    <select id="endpoint">
-                        <option value="/user-profile">User Profile</option>
-                        <option value="/secure-data">Secure Data</option>
-                        <option value="/admin-panel">Admin Panel</option>
+                    <label>API Endpoint:</label>
+                    <select id="apiEndpoint">
+                        <option value="/user/profile">GET /user/profile</option>
+                        <option value="/user/update">POST /user/update</option>
+                        <option value="/admin/dashboard">GET /admin/dashboard</option>
+                        <option value="/public/news">GET /public/news</option>
                     </select>
                 </div>
-                <button class="send-request-btn" onclick="sendRequest()" id="sendBtn">
-                    🚀 Request भेजें
+
+                <div class="form-group">
+                    <label>Authorization Token:</label>
+                    <input type="text" id="authToken" placeholder="Token daalo (try: valid-token, expired-token, ya khali)" value="valid-token">
+                </div>
+
+                <div class="form-group">
+                    <label>User Role:</label>
+                    <select id="userRole">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                        <option value="guest">Guest</option>
+                    </select>
+                </div>
+
+                <!-- Send Request Button -->
+                <button class="demo-btn first-btn" onclick="sendAPIRequest()" id="sendRequestBtn">
+                    🚀 API Request Bhejo
                 </button>
-            </div>
 
-            <div class="middleware-controls">
-                <div class="control-panel">
-                    <h4>🔧 Middleware Controls</h4>
-                    <div class="toggle-switch">
-                        <span>Authentication</span>
-                        <div class="switch active" onclick="toggleMiddleware('auth')" id="authToggle"></div>
+                <!-- Middleware Pipeline Display -->
+                <div class="how-it-works" id="middlewarePipeline">
+                    <h4>🔄 Middleware Pipeline:</h4>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div>Request Logger - Aane wali requests ko log karta hai</div>
                     </div>
-                    <div class="toggle-switch">
-                        <span>Validation</span>
-                        <div class="switch active" onclick="toggleMiddleware('validation')" id="validationToggle"></div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div>Auth Middleware - Token check karta hai</div>
                     </div>
-                    <div class="toggle-switch">
-                        <span>Logging</span>
-                        <div class="switch active" onclick="toggleMiddleware('logging')" id="loggingToggle"></div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div>Role Checker - User ke permissions dekhta hai</div>
                     </div>
-                    <button class="reset-btn" onclick="resetPipeline()">Reset Pipeline</button>
-                </div>
-
-                <div class="control-panel">
-                    <h4>🎯 Quick Test Scenarios</h4>
-                    <button class="endpoint-btn" onclick="testScenario('valid')" style="margin: 5px; background: #27ae60;">
-                        ✅ Valid Request
-                    </button>
-                    <button class="endpoint-btn" onclick="testScenario('invalid-token')" style="margin: 5px; background: #e74c3c;">
-                        ❌ Invalid Token
-                    </button>
-                    <button class="endpoint-btn" onclick="testScenario('missing-data')" style="margin: 5px; background: #f39c12;">
-                        ⚠️ Missing Data
-                    </button>
-                    <button class="endpoint-btn" onclick="testScenario('admin-access')" style="margin: 5px; background: #9b59b6;">
-                        🔒 Admin Access
-                    </button>
-                </div>
-            </div>
-
-            <div class="response-container">
-                <div class="response-title">📊 Response & Logs</div>
-                <div id="responseLog">
-                    <div class="log-entry">
-                        <strong>Ready:</strong> API pipeline तैयार है। Request भेजने के लिए ऊपर form fill करें!
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div>Rate Limiter - Requests ki speed control karta hai</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div>Main API Handler - Business logic chalata hai</div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="api-endpoints">
-                <div class="endpoint-card">
-                    <h4>👤 User Profile API</h4>
-                    <p>Basic user information के लिए। Authentication और Validation की जरूरत है।</p>
-                    <button class="endpoint-btn" onclick="selectEndpoint('/user-profile')">Select</button>
+        <!-- Real-time Pipeline Visualization -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🎬 Real-time Middleware Execution</h2>
+            
+            <div class="explanation">
+                <strong>Live Tracking:</strong> Request ke saath-saath har middleware ka execution dekho!
+            </div>
+
+            <!-- Pipeline Visualization -->
+            <div class="memory-diagram" id="pipelineVisualization">
+                <div class="memory-slot" id="step1-logger">
+                    <div class="variable-name">1️⃣ Request Logger</div>
+                    <div class="variable-value">Request ka intezaar...</div>
                 </div>
-                <div class="endpoint-card">
-                    <h4>🔒 Secure Data API</h4>
-                    <p>Sensitive data के लिए। सभी middleware checks required हैं।</p>
-                    <button class="endpoint-btn" onclick="selectEndpoint('/secure-data')">Select</button>
+                <div class="memory-slot" id="step2-auth">
+                    <div class="variable-name">2️⃣ Authentication</div>
+                    <div class="variable-value">Intezaar...</div>
                 </div>
-                <div class="endpoint-card">
-                    <h4>⚡ Admin Panel API</h4>
-                    <p>Admin-only access। Extra security checks के साथ।</p>
-                    <button class="endpoint-btn" onclick="selectEndpoint('/admin-panel')">Select</button>
+                <div class="memory-slot" id="step3-role">
+                    <div class="variable-name">3️⃣ Role Authorization</div>
+                    <div class="variable-value">Intezaar...</div>
+                </div>
+                <div class="memory-slot" id="step4-rate">
+                    <div class="variable-name">4️⃣ Rate Limiting</div>
+                    <div class="variable-value">Intezaar...</div>
+                </div>
+                <div class="memory-slot" id="step5-api">
+                    <div class="variable-name">5️⃣ API Handler</div>
+                    <div class="variable-value">Intezaar...</div>
+                </div>
+                <div class="memory-slot" id="step6-response">
+                    <div class="variable-name">6️⃣ Response</div>
+                    <div class="variable-value">Intezaar...</div>
                 </div>
             </div>
+
+            <!-- Execution Log -->
+            <div class="server-simulation">
+                <h4>Execution Log:</h4>
+                <div class="server-log" id="executionLog">
+                    Middleware execution track karne ke liye tayyar...
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Examples Section -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">💻 Middleware Code ke Examples</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showMiddlewareExample('express-basic')">🚀 Express.js Basic</button>
+                <button class="tab" onclick="showMiddlewareExample('custom-middleware')">🔧 Custom Middleware</button>
+                <button class="tab" onclick="showMiddlewareExample('error-handling')">⚠️ Error Handling</button>
+                <button class="tab" onclick="showMiddlewareExample('middleware-chain')">🔗 Middleware Chain</button>
+            </div>
+
+            <!-- Express Basic Example -->
+            <div id="express-basic" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🚀 Express.js Middleware Basics</div>
+                        <div class="code-line var-declaration">const express = require('express');</div>
+                        <div class="code-line var-declaration">const app = express();</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Middleware 1: Request Logger (Watchman)</div>
+                        <div class="code-line var-usage">app.use((req, res, next) => {</div>
+                        <div class="code-line var-usage">  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);</div>
+                        <div class="code-line var-usage">  console.log('👮 Watchman: Kahan ja rahe ho?', req.url);</div>
+                        <div class="code-line var-usage">  next(); // Aage bhejo</div>
+                        <div class="code-line var-usage">});</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Middleware 2: Authentication (Security Guard)</div>
+                        <div class="code-line var-usage">app.use((req, res, next) => {</div>
+                        <div class="code-line var-usage">  const token = req.headers.authorization;</div>
+                        <div class="code-line var-usage">  if (!token) {</div>
+                        <div class="code-line var-usage">    console.log('🔍 Security Guard: ID card dikhao!');</div>
+                        <div class="code-line var-usage">    return res.status(401).json({ error: 'Token chahiye' });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-usage">  console.log('🔍 Security Guard: ID check ho gaya, jao!');</div>
+                        <div class="code-line var-usage">  next();</div>
+                        <div class="code-line var-usage">});</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// Main API Route (Aakhri Manzil)</div>
+                        <div class="code-line var-declaration">app.get('/user/profile', (req, res) => {</div>
+                        <div class="code-line var-usage">  console.log('🚪 API Handler: Request apni manzil tak pohunch gaya!');</div>
+                        <div class="code-line var-usage">  res.json({</div>
+                        <div class="code-line var-usage">    message: 'Welcome Babita Ji!',</div>
+                        <div class="code-line var-usage">    user: { name: 'Babita', role: 'user' }</div>
+                        <div class="code-line var-usage">  });</div>
+                        <div class="code-line var-declaration">});</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-assignment">app.listen(3000, () => {</div>
+                        <div class="code-line var-usage">  console.log('🏢 Society server port 3000 pe chal raha hai');</div>
+                        <div class="code-line var-assignment">});</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testExpressBasic()">🚀 Express Middleware Test Karo</button>
+                <div id="expressBasicResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Express middleware test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Custom Middleware Example -->
+            <div id="custom-middleware" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔧 Custom Middleware Functions</div>
+                        <div class="code-line comment">// 👮 Watchman Middleware</div>
+                        <div class="code-line var-declaration">function requestLogger(req, res, next) {</div>
+                        <div class="code-line var-usage">  const timestamp = new Date().toISOString();</div>
+                        <div class="code-line var-usage">  console.log(`[${timestamp}] ${req.method} ${req.url}`);</div>
+                        <div class="code-line var-usage">  req.requestTime = timestamp; // Request mein data daal do</div>
+                        <div class="code-line var-usage">  next(); // Aage bhejo</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// 🔍 Security Guard Middleware</div>
+                        <div class="code-line var-declaration">function authenticateToken(req, res, next) {</div>
+                        <div class="code-line var-usage">  const authHeader = req.headers['authorization'];</div>
+                        <div class="code-line var-usage">  const token = authHeader && authHeader.split(' ')[1];</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  if (!token) {</div>
+                        <div class="code-line var-usage">    return res.status(401).json({</div>
+                        <div class="code-line var-usage">      error: 'Access band hai. Token chahiye.',</div>
+                        <div class="code-line var-usage">      message: '🚫 Security Guard: ID card nahi dikhaya!'</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  // Token check karo (simple version)</div>
+                        <div class="code-line var-usage">  if (token === 'valid-token') {</div>
+                        <div class="code-line var-usage">    req.user = { id: 1, name: 'Babita', role: 'user' };</div>
+                        <div class="code-line var-usage">    next();</div>
+                        <div class="code-line var-usage">  } else {</div>
+                        <div class="code-line var-usage">    return res.status(403).json({</div>
+                        <div class="code-line var-usage">      error: 'Token galat hai',</div>
+                        <div class="code-line var-usage">      message: '🚫 Security Guard: Nakli ID card!'</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// 📝 Log Book Middleware</div>
+                        <div class="code-line var-declaration">function logEntry(req, res, next) {</div>
+                        <div class="code-line var-usage">  const entry = {</div>
+                        <div class="code-line var-usage">    user: req.user?.name || 'Pata nahi',</div>
+                        <div class="code-line var-usage">    action: `${req.method} ${req.url}`,</div>
+                        <div class="code-line var-usage">    timestamp: req.requestTime,</div>
+                        <div class="code-line var-usage">    ip: req.ip</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  console.log('📝 Log Book Entry:', entry);</div>
+                        <div class="code-line var-usage">  // Database mein save karna padega</div>
+                        <div class="code-line var-usage">  // await logToDatabase(entry);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  next();</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Usage: Middleware chain</div>
+                        <div class="code-line var-usage">app.use(requestLogger);</div>
+                        <div class="code-line var-usage">app.use(authenticateToken);</div>
+                        <div class="code-line var-usage">app.use(logEntry);</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testCustomMiddleware()">🔧 Custom Middleware Test Karo</button>
+                <div id="customMiddlewareResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Custom middleware test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Error Handling Example -->
+            <div id="error-handling" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ⚠️ Error Handling Middleware</div>
+                        <div class="code-line comment">// Global Error Handler (Aakhir mein)</div>
+                        <div class="code-line var-declaration">function errorHandler(err, req, res, next) {</div>
+                        <div class="code-line var-usage">  console.error('🚨 Error aaya:', err.message);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  // Error ke type ke hisaab se response</div>
+                        <div class="code-line var-usage">  if (err.name === 'ValidationError') {</div>
+                        <div class="code-line var-usage">    return res.status(400).json({</div>
+                        <div class="code-line var-usage">      error: 'Validation fail hua',</div>
+                        <div class="code-line var-usage">      message: '📝 Log Book: Galat information di hai!'</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  if (err.name === 'UnauthorizedError') {</div>
+                        <div class="code-line var-usage">    return res.status(401).json({</div>
+                        <div class="code-line var-usage">      error: 'Permission nahi hai',</div>
+                        <div class="code-line var-usage">      message: '🔍 Security Guard: Ijaazat nahi hai!'</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  // General server error</div>
+                        <div class="code-line var-usage">  res.status(500).json({</div>
+                        <div class="code-line var-usage">    error: 'Server mein kharabi',</div>
+                        <div class="code-line var-usage">    message: '🏢 Society mein koi problem hai!'</div>
+                        <div class="code-line var-usage">  });</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// Async Error Wrapper</div>
+                        <div class="code-line var-declaration">function asyncHandler(fn) {</div>
+                        <div class="code-line var-usage">  return (req, res, next) => {</div>
+                        <div class="code-line var-usage">    Promise.resolve(fn(req, res, next)).catch(next);</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Routes mein use</div>
+                        <div class="code-line var-usage">app.get('/user/profile', asyncHandler(async (req, res) => {</div>
+                        <div class="code-line var-usage">  // Ye async function hai, errors apne aap handle honge</div>
+                        <div class="code-line var-usage">  const user = await getUserFromDatabase(req.user.id);</div>
+                        <div class="code-line var-usage">  if (!user) {</div>
+                        <div class="code-line var-usage">    throw new Error('User nahi mila'); // Apne aap pakda jayega</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-usage">  res.json(user);</div>
+                        <div class="code-line var-usage">}));</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Error handler ko aakhir mein register karo</div>
+                        <div class="code-line var-usage">app.use(errorHandler);</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testErrorHandling()">⚠️ Error Handling Test Karo</button>
+                <div id="errorHandlingResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Error handling test karne ke liye click karo...</div>
+                </div>
+            </div>
+
+            <!-- Middleware Chain Example -->
+            <div id="middleware-chain" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔗 Poora Middleware Chain Setup</div>
+                        <div class="code-line var-declaration">const express = require('express');</div>
+                        <div class="code-line var-declaration">const app = express();</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// 1️⃣ Global Middlewares (Sab routes ke liye)</div>
+                        <div class="code-line var-usage">app.use(express.json()); // JSON parser</div>
+                        <div class="code-line var-usage">app.use(requestLogger); // Har request log karo</div>
+                        <div class="code-line var-usage">app.use(corsHandler); // CORS headers daalo</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// 2️⃣ Public Routes (Koi authentication nahi)</div>
+                        <div class="code-line var-usage">app.get('/public/news', (req, res) => {</div>
+                        <div class="code-line var-usage">  res.json({ news: 'Gokuldham Society mein nayi khabrein!' });</div>
+                        <div class="code-line var-usage">});</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// 3️⃣ Protected Routes (Authentication chahiye)</div>
+                        <div class="code-line var-usage">app.use('/user', authenticateToken); // Sab /user routes protected</div>
+                        <div class="code-line var-usage">app.get('/user/profile', logEntry, (req, res) => {</div>
+                        <div class="code-line var-usage">  res.json({ user: req.user });</div>
+                        <div class="code-line var-usage">});</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// 4️⃣ Admin Routes (Role-based access)</div>
+                        <div class="code-line var-usage">app.use('/admin', authenticateToken, requireAdmin);</div>
+                        <div class="code-line var-usage">app.get('/admin/dashboard', logEntry, (req, res) => {</div>
+                        <div class="code-line var-usage">  res.json({ message: 'Admin dashboard ka data' });</div>
+                        <div class="code-line var-usage">});</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">// 5️⃣ Route-specific Middleware</div>
+                        <div class="code-line var-declaration">function requireAdmin(req, res, next) {</div>
+                        <div class="code-line var-usage">  if (req.user.role !== 'admin') {</div>
+                        <div class="code-line var-usage">    return res.status(403).json({</div>
+                        <div class="code-line var-usage">      message: '🚫 Sirf Secretary ko ijaazat hai!'</div>
+                        <div class="code-line var-usage">    });</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-usage">  next();</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// 6️⃣ Rate Limiting Middleware</div>
+                        <div class="code-line var-declaration">function rateLimiter(maxRequests = 100) {</div>
+                        <div class="code-line var-usage">  const requests = new Map();</div>
+                        <div class="code-line var-usage">  return (req, res, next) => {</div>
+                        <div class="code-line var-usage">    const clientIP = req.ip;</div>
+                        <div class="code-line var-usage">    const now = Date.now();</div>
+                        <div class="code-line var-usage">    const windowStart = now - (60 * 1000); // 1 minute ka window</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    if (!requests.has(clientIP)) {</div>
+                        <div class="code-line var-usage">      requests.set(clientIP, []);</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    const userRequests = requests.get(clientIP);</div>
+                        <div class="code-line var-usage">    const recentRequests = userRequests.filter(time => time > windowStart);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    if (recentRequests.length >= maxRequests) {</div>
+                        <div class="code-line var-usage">      return res.status(429).json({</div>
+                        <div class="code-line var-usage">        message: '🚫 Bahut zyada requests! Thodi der wait karo!'</div>
+                        <div class="code-line var-usage">      });</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    recentRequests.push(now);</div>
+                        <div class="code-line var-usage">    requests.set(clientIP, recentRequests);</div>
+                        <div class="code-line var-usage">    next();</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testMiddlewareChain()">🔗 Middleware Chain Test Karo</button>
+                <div id="middlewareChainResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Middleware chain test karne ke liye click karo...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middleware Benefits & Types -->
+        <div class="comparison-section">
+            <h3>🎯 Middleware ke Types aur Benefits</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Middleware Type</th>
+                        <th>Kaam</th>
+                        <th>Jethalal ki Misal</th>
+                        <th>Asli Example</th>
+                        <th>Kab Use Karna</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🔍 Authentication</strong></td>
+                        <td>User ki pehchaan check karna</td>
+                        <td>Security Guard ka ID check</td>
+                        <td>JWT token check, session verification</td>
+                        <td>Protected routes, user ka data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📝 Logging</strong></td>
+                        <td>Request/Response track karna</td>
+                        <td>Log book mein entry likhna</td>
+                        <td>Morgan, Winston, custom loggers</td>
+                        <td>Debugging, analytics, audit ke liye</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🛡️ CORS</strong></td>
+                        <td>Cross-origin requests handle karna</td>
+                        <td>Bahari visitors ka permission check</td>
+                        <td>cors npm package, custom headers</td>
+                        <td>Frontend-backend alag domains pe</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⚠️ Error Handling</strong></td>
+                        <td>Errors ko smoothly handle karna</td>
+                        <td>Emergency response team</td>
+                        <td>try-catch wrappers, error boundaries</td>
+                        <td>Production apps, user experience</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📊 Rate Limiting</strong></td>
+                        <td>Requests ki frequency control karna</td>
+                        <td>Society mein visitors ki limit</td>
+                        <td>express-rate-limit, Redis-based</td>
+                        <td>API misuse rokna, DDoS se bachao</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔧 Body Parsing</strong></td>
+                        <td>Request data ko parse karna</td>
+                        <td>Courier package khol ke check karna</td>
+                        <td>express.json(), multer for files</td>
+                        <td>POST/PUT requests, file uploads</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎭 Compression</strong></td>
+                        <td>Response ka size chhota karna</td>
+                        <td>Suitcase mein kapde compress karna</td>
+                        <td>compression npm package</td>
+                        <td>Performance behtar karna, bandwidth bachana</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Middleware Best Practices -->
+        <div class="comparison-section">
+            <h3>💡 Middleware ke Best Practices</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Practice</th>
+                        <th>✅ Ye Karo</th>
+                        <th>❌ Ye Mat Karo</th>
+                        <th>Kyun?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Order Zaroori Hai</strong></td>
+                        <td>Logical tarike se middleware lagao</td>
+                        <td>Random order mein middleware daal dena</td>
+                        <td>Request flow smooth rehna chahiye</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hamesha next() Call Karo</strong></td>
+                        <td>next() call karo ya response bhejo</td>
+                        <td>next() bhool jana</td>
+                        <td>Request ruk jayegi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error Handling</strong></td>
+                        <td>try-catch use karo, next(error) call karo</td>
+                        <td>Errors ko ignore karna</td>
+                        <td>App crash ho sakti hai</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reusability</strong></td>
+                        <td>Generic middleware functions banao</td>
+                        <td>Har route ke liye duplicate code</td>
+                        <td>DRY principle, maintainability</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Light-weight middleware, async/await</td>
+                        <td>Middleware mein heavy kaam</td>
+                        <td>Request response time pe asar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security</strong></td>
+                        <td>Input validation, sanitization</td>
+                        <td>Raw user input pe bharosa karna</td>
+                        <td>Security risks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Real-world Scenarios -->
+        <div class="comparison-section">
+            <h3>🌍 Real-world Middleware Scenarios</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Zaroori Middleware</th>
+                        <th>Kaise Lagaya</th>
+                        <th>Faayde</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🛒 E-commerce API</strong></td>
+                        <td>Auth, Rate limiting, Logging, Validation</td>
+                        <td>JWT check, Request/min limits</td>
+                        <td>Surakshit shopping, misuse se bachao</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📱 Social Media App</strong></td>
+                        <td>Auth, Image processing, Content moderation</td>
+                        <td>Token check, Multer, AI filtering</td>
+                        <td>User safety, content quality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🏦 Banking System</strong></td>
+                        <td>Strong auth, Encryption, Audit logs</td>
+                        <td>2FA, SSL/TLS, Poora logging</td>
+                        <td>Security rules follow, fraud detection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📰 News Website</strong></td>
+                        <td>Caching, Compression, Analytics</td>
+                        <td>Redis cache, Gzip, User tracking</td>
+                        <td>Tez loading, user insights</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🎮 Gaming API</strong></td>
+                        <td>Real-time auth, Rate limiting, Analytics</td>
+                        <td>WebSocket auth, Game-specific limits</td>
+                        <td>Fair khel, performance dekho</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        let middlewareConfig = {
-            auth: true,
-            validation: true,
-            logging: true
-        };
+    
+        let isRequestInProgress = false;
 
-        let requestCount = 0;
-
-        function toggleMiddleware(type) {
-            middlewareConfig[type] = !middlewareConfig[type];
-            const toggle = document.getElementById(type + 'Toggle');
-            toggle.classList.toggle('active');
+        // Middleware flow demonstrations
+        function demonstrateMiddlewareFlow() {
+            const result = document.getElementById('middlewareResults');
             
-            addLog(`🔧 ${type} middleware ${middlewareConfig[type] ? 'enabled' : 'disabled'} किया गया`);
-        }
-
-        function resetPipeline() {
-            // Reset all steps
-            document.querySelectorAll('.middleware-step').forEach(step => {
-                step.className = 'middleware-step';
-            });
-            
-            // Clear logs
-            document.getElementById('responseLog').innerHTML = `
-                <div class="log-entry">
-                    <strong>Reset:</strong> Pipeline reset हो गया। नई request भेजें!
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>🚪 Poora Middleware Flow - Society Exit Process</strong><br><br>
+                    <strong>Request:</strong> Babita ji bahar jana chahti hain<br><br>
+                    <strong>Middleware Pipeline:</strong><br>
+                    1️⃣ <strong>Watchman (Logger):</strong> "Kahan ja rahi ho?" → Logged: "Babita going out"<br>
+                    2️⃣ <strong>Security Guard (Auth):</strong> ID card check → Verified: Valid resident<br>
+                    3️⃣ <strong>Log Book (Audit):</strong> Entry likhi → Time: ${new Date().toLocaleTimeString()}<br>
+                    4️⃣ <strong>Rate Limit:</strong> Frequency check → OK: Aaj zyada exits nahi<br>
+                    5️⃣ <strong>Aakhri Gate:</strong> Ijaazat mili → Babita ji bahar gayi!<br><br>
+                    <strong>Result:</strong><br>
+                    ✅ Sab middleware pass hue<br>
+                    ✅ Request successfully process hui<br>
+                    ✅ Proper audit trail bana<br>
+                    ✅ Security aur validation poori
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
-            
-            requestCount = 0;
         }
 
-        function addLog(message, type = 'info') {
-            const log = document.getElementById('responseLog');
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type}`;
-            entry.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
-            log.appendChild(entry);
-            log.scrollTop = log.scrollHeight;
+        function demonstrateMiddlewareReject() {
+            const result = document.getElementById('middlewareResults');
+            
+            result.innerHTML = `
+                <div class="error-message">
+                    <strong>🚫 Middleware Rejection - Request Rok Di</strong><br><br>
+                    <strong>Request:</strong> Koi ajnabi society mein ghusne ki koshish<br><br>
+                    <strong>Middleware Pipeline:</strong><br>
+                    1️⃣ <strong>Watchman (Logger):</strong> "Kahan ja rahe ho?" → Logged: "Unknown person"<br>
+                    2️⃣ <strong>Security Guard (Auth):</strong> ID card check → ❌ <strong>REJECTED!</strong><br><br>
+                    <strong>Error Response:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;"error": "Bina ijaazat entry nahi",<br>
+                    &nbsp;&nbsp;"message": "🚫 Security Guard: Aapka ID card valid nahi hai!",<br>
+                    &nbsp;&nbsp;"code": 401<br>
+                    }<br><br>
+                    <strong>Result:</strong><br>
+                    ❌ Request Security Guard level pe ruki<br>
+                    ❌ Log Book tak nahi pohunchi<br>
+                    ❌ Main API handler kabhi call nahi hua<br>
+                    ✅ System security maintain hui
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
         }
 
-        async function sendRequest() {
-            requestCount++;
-            const token = document.getElementById('token').value;
-            const userId = document.getElementById('userId').value;
-            const endpoint = document.getElementById('endpoint').value;
+        function demonstrateMiddlewareReuse() {
+            const result = document.getElementById('middlewareResults');
             
-            // Disable button
-            document.getElementById('sendBtn').disabled = true;
-            document.getElementById('sendBtn').textContent = 'Processing...';
-            
-            // Reset all steps
-            document.querySelectorAll('.middleware-step').forEach(step => {
-                step.className = 'middleware-step';
-            });
-            
-            addLog(`🚀 Request #${requestCount} शुरू की गई: ${endpoint}`);
-            
-            // Step 1: Authentication
-            await processStep('step1', 'Authentication', async () => {
-                if (!middlewareConfig.auth) {
-                    addLog('⚠️ Authentication middleware disabled है');
-                    return true;
-                }
-                
-                if (!token) {
-                    throw new Error('Token नहीं मिला! वॉचमैन ने रोक दिया: "ID कार्ड दिखाओ!"');
-                }
-                
-                if (token !== 'your-secret-token') {
-                    throw new Error('गलत token! वॉचमैन: "ये fake ID card है!"');
-                }
-                
-                addLog('✅ Authentication successful: Token verified');
-                return true;
-            });
-            
-            // Step 2: Validation
-            await processStep('step2', 'Validation', async () => {
-                if (!middlewareConfig.validation) {
-                    addLog('⚠️ Validation middleware disabled है');
-                    return true;
-                }
-                
-                if (!userId) {
-                    throw new Error('User ID नहीं मिली! सिक्योरिटी गार्ड: "बैग में ID proof नहीं है!"');
-                }
-                
-                if (endpoint === '/admin-panel' && userId !== 'admin123') {
-                    throw new Error('Admin access नहीं है! सिक्योरिटी: "आप admin area में नहीं जा सकते!"');
-                }
-                
-                addLog('✅ Validation successful: Data validated');
-                return true;
-            });
-            
-            // Step 3: Logging
-            await processStep('step3', 'Logging', async () => {
-                if (!middlewareConfig.logging) {
-                    addLog('⚠️ Logging middleware disabled है');
-                    return true;
-                }
-                
-                addLog('📝 Request logged: User activity recorded');
-                return true;
-            });
-            
-            // Step 4: Main API
-            await processStep('step4', 'API Endpoint', async () => {
-                const responses = {
-                    '/user-profile': { name: 'Babita Iyer', status: 'active', message: 'User profile data retrieved' },
-                    '/secure-data': { data: 'Top secret information', level: 'classified', message: 'Secure data accessed' },
-                    '/admin-panel': { panel: 'admin dashboard', privileges: 'full access', message: 'Admin panel loaded' }
-                };
-                
-                const response = responses[endpoint];
-                addLog(`🎯 API Response: ${JSON.stringify(response)}`, 'success');
-                return true;
-            });
-            
-            // Re-enable button
-            document.getElementById('sendBtn').disabled = false;
-            document.getElementById('sendBtn').textContent = '🚀 Request भेजें';
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>♻️ Middleware Reusability - Ek Watchman, Kai Gates</strong><br><br>
+                    <strong>Ek hi Auth Middleware ka Use:</strong><br><br>
+                    🚪 <strong>/user/profile</strong><br>
+                    • Watchman: "Profile dekhne ja rahe ho?"<br>
+                    • Security: ID verified ✅<br>
+                    • Result: Entry mili<br><br>
+                    🚪 <strong>/user/settings</strong><br>
+                    • Watchman: "Settings badalne ja rahe ho?"<br>
+                    • Security: Wahi ID, verified ✅<br>
+                    • Result: Entry mili<br><br>
+                    🚪 <strong>/admin/dashboard</strong><br>
+                    • Watchman: "Admin area mein ja rahe ho?"<br>
+                    • Security: ID verified, par admin nahi ❌<br>
+                    • Result: Entry nahi mili<br><br>
+                    <strong>Faayde:</strong><br>
+                    ✅ Ek baar code likha, kai jagah use<br>
+                    ✅ Sab APIs pe same security<br>
+                    ✅ Aasan maintenance aur updates<br>
+                    ✅ DRY principle follow hua
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
         }
 
-        async function processStep(stepId, stepName, processor) {
-            return new Promise((resolve) => {
-                setTimeout(async () => {
-                    const step = document.getElementById(stepId);
-                    step.classList.add('active');
-                    
-                    try {
-                        await processor();
-                        step.classList.remove('active');
-                        step.classList.add('passed');
-                        resolve(true);
-                    } catch (error) {
-                        step.classList.remove('active');
-                        step.classList.add('rejected');
-                        addLog(`❌ ${stepName} failed: ${error.message}`, 'error');
-                        
-                        // Re-enable button
-                        document.getElementById('sendBtn').disabled = false;
-                        document.getElementById('sendBtn').textContent = '🚀 Request भेजें';
-                        
-                        resolve(false);
-                    }
-                }, 1000);
-            });
+        function clearMiddlewareDemo() {
+            document.getElementById('middlewareResults').innerHTML = `
+                <div class="event-message one-message">
+                    Upar ke buttons dabao Middleware ka action dekhne ke liye!
+                </div>
+            `;
         }
 
-        function testScenario(scenario) {
-            const scenarios = {
-                'valid': {
-                    token: 'your-secret-token',
-                    userId: '123',
-                    endpoint: '/user-profile'
-                },
-                'invalid-token': {
-                    token: 'wrong-token',
-                    userId: '123',
-                    endpoint: '/secure-data'
-                },
-                'missing-data': {
-                    token: 'your-secret-token',
-                    userId: '',
-                    endpoint: '/user-profile'
-                },
-                'admin-access': {
-                    token: 'your-secret-token',
-                    userId: 'admin123',
-                    endpoint: '/admin-panel'
-                }
-            };
-            
-            const config = scenarios[scenario];
-            if (config) {
-                document.getElementById('token').value = config.token;
-                document.getElementById('userId').value = config.userId;
-                document.getElementById('endpoint').value = config.endpoint;
-                
-                addLog(`🎯 Test scenario loaded: ${scenario}`);
+        // API Request Simulation
+        function sendAPIRequest() {
+            if (isRequestInProgress) {
+                alert('Request pehle se chal rahi hai! Thodi der wait karo...');
+                return;
             }
+
+            isRequestInProgress = true;
+            const btn = document.getElementById('sendRequestBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Request Process Ho Rahi Hai...';
+
+            const endpoint = document.getElementById('apiEndpoint').value;
+            const token = document.getElementById('authToken').value;
+            const role = document.getElementById('userRole').value;
+
+            // Reset pipeline visualization
+            resetPipelineVisualization();
+
+            // Start pipeline execution
+            executePipeline(endpoint, token, role).then(() => {
+                isRequestInProgress = false;
+                btn.disabled = false;
+                btn.textContent = '🚀 API Request Bhejo';
+            });
         }
 
-        function selectEndpoint(endpoint) {
-            document.getElementById('endpoint').value = endpoint;
-            addLog(`📍 Endpoint selected: ${endpoint}`);
+        function resetPipelineVisualization() {
+            const steps = ['step1-logger', 'step2-auth', 'step3-role', 'step4-rate', 'step5-api', 'step6-response'];
+            steps.forEach(step => {
+                const element = document.getElementById(step);
+                element.className = 'memory-slot';
+                element.querySelector('.variable-value').textContent = 'Intezaar...';
+            });
+            document.getElementById('executionLog').innerHTML = 'Middleware execution track karne ke liye tayyar...';
         }
 
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', function() {
-            addLog('🏠 गोकुलधाम Middleware Pipeline ready!');
-        });
+        async function executePipeline(endpoint, token, role) {
+            const log = document.getElementById('executionLog');
+            let logContent = '';
+
+            // Step 1: Request Logger
+            await delay(500);
+            updateStep('step1-logger', 'processing', `Logging: ${endpoint}`);
+            logContent += `<strong style="color: #356c67;">👮 Watchman:</strong> "${endpoint}" request aayi hai<br>`;
+            log.innerHTML = logContent;
+
+            // Step 2: Authentication
+            await delay(700);
+            if (!token) {
+                updateStep('step2-auth', 'error', 'Koi token nahi diya');
+                logContent += `<strong style="color: #f56565;">🔍 Security Guard:</strong> Token nahi diya! Request reject hui.<br>`;
+                log.innerHTML = logContent;
+                return;
+            } else if (token === 'expired-token') {
+                updateStep('step2-auth', 'error', 'Token ka time khatam');
+                logContent += `<strong style="color: #f56565;">🔍 Security Guard:</strong> Token expire ho gaya! Request reject hui.<br>`;
+                log.innerHTML = logContent;
+                return;
+            } else {
+                updateStep('step2-auth', 'success', 'Token check ho gaya');
+                logContent += `<strong style="color: #4caf50;">🔍 Security Guard:</strong> Token valid hai, aage jao!<br>`;
+                log.innerHTML = logContent;
+            }
+
+            // Step 3: Role Authorization
+            await delay(600);
+            if (endpoint.includes('/admin') && role !== 'admin') {
+                updateStep('step3-role', 'error', 'Permission nahi hai');
+                logContent += `<strong style="color: #f56565;">👨‍💼 Role Checker:</strong> Admin area mein jaane ka haq nahi hai!<br>`;
+                log.innerHTML = logContent;
+                return;
+            } else {
+                updateStep('step3-role', 'success', `Role: ${role} ko ijaazat hai`);
+                logContent += `<strong style="color: #4caf50;">👨‍🚀 Role Checker:</strong> ${role} role ko ijaazat hai!<br>`;
+                log.innerHTML = logContent;
+            }
+
+            // Step 4: Rate Limiting
+            await delay(400);
+            updateStep('step4-rate', 'success', 'Rate limit theek hai');
+            logContent += `<strong style="color: #4caf50;">⏱️ Rate Limiter:</strong> Request speed normal hai!<br>`;
+            log.innerHTML = logContent;
+
+            // Step 5: API Handler
+            await delay(600);
+            updateStep('step5-api', 'success', 'Business logic chal gaya');
+            logContent += `<strong style="color: #4caf50;">🎯 API Handler:</strong> Business logic ka kaam ho gaya!<br>`;
+            log.innerHTML = logContent;
+
+            // Step 6: Response
+            await delay(500);
+            updateStep('step6-response', 'success', 'Jawab bhej diya');
+            logContent += `<strong style="color: #4caf50;">📤 Response:</strong> Success jawab bhej diya gaya!<br>`;
+            log.innerHTML = logContent;
+        }
+
+        function updateStep(stepId, status, message) {
+            const element = document.getElementById(stepId);
+            element.className = `memory-slot ${status === 'error' ? '🚫' : status === 'success' ? '' : 'hoisted'}`;
+            element.querySelector('.variable-value').innerHTML = message;
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Code example test functions
+        function testExpressBasic() {
+            document.getElementById('expressBasicResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🚖️ Express Middleware Test Results:</strong><br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+                        [2024-01-15T14:00:00.000Z] GET /user/profile<br>
+                        👮 Watchman: Kahan ja rahe ho? /user/profile<br>
+                        🔍 Security Guard: ID check ho gaya, jao!<br>
+                        🚪 API Handler: Request apni manzil tak pohunch gaya!<br>
+                        Response: {"message":"Welcome Babita Ji!","user":"{name":"Babita","role":"user":"}}
+                    </div>
+                    <strong>Pipeline Success:</strong><br>
+                    ✅ Request theek se log hua<br>
+                    ✅ Authentication pass hua<br>
+                    ✅ API jawab banaya gaya<br>
+                    ✅ Client ko data mil gaya
+                </div>
+            `;
+        }
+
+        function testCustomMiddleware() {
+            document.getElementByIdcustomMiddleware('Result').innerHTML = `
+                <div class="success-message">
+                    <strong>🔧 Custom Middleware Test Results:</strong><br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+                        [2024-01-15T14:00:00.000Z] POST /user/update<br>
+                        👮 Request Logger: Request mein time daala gaya<br>
+                        🔍 Authentication: Babita ji ka token check hua<br>
+                        📝 Log Entry: {user: "Babita", action: "POST /user/update", timestamp: "2024-01-15T14:00:00.000Z", ip: "127.0.0.1"}<br>
+                        🎯 API Handler: User profile update success hua
+                    </div>
+                    <strong>Custom Middleware ke Faayde:</strong><br>
+                    ✅ Reusable functions banaye<br>
+                    ✅ Request mein data add hua<br>
+                    ✅ Proper audit trail bana<br>
+                    ✅ Kaam ka clear division
+                </div>
+            `;
+        }
+
+        function testErrorHandling() {
+            document.getElementById('errorHandlingResult').innerHTML = `
+                <div class="error-message">
+                    <strong>⚠️ Error Handling Test Results:</strong><br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+                        [2024-01-15T14:00:00.000Z] GET /user/profile<br>
+                        👮 Request Logger: Request log hua<br>
+                        🔍 Authentication: Auth pass hua<br>
+                        🎯 API Handler: Database connection fail hua!<br>
+                        🚨 Error Handler: Server error pakda gaya<br>
+                        📤 Response: {"error":"Server mein kharabi","message":"🏢 Society mein koi problem hai!"}
+                    </div>
+                    <strong>Error Handling Success:</strong><br>
+                    ✅ Error ko smoothly pakda gaya<br>
+                    ✅ User ko friendly message mila<br>
+                    ✅ App crash nahi hui<br>
+                    ✅ Error debugging ke liye log hua
+                </div>
+            `;
+        }
+
+        function testMiddlewareChain() {
+            document.getElementById('middlewareChainResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🔗 Middleware Chain Test Results:</strong><br><br>
+                    <strong>Route: /admin/dashboard</strong><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+                        <1️⃣ JSON Parser: Request body parse hua<br>
+                        <2️⃣ Request Logger: Admin dashboard access log hua<br>
+                        <3️⃣ CORS Handler: Headers daale gaye<br>
+                        <4️⃣ Auth Middleware: Token check hua<br>
+                        <5️⃣ Admin Check: Admin role verified hua<br>
+                        <6️⃣ Log Entry: Access record hua<br>
+                        <7️⃣ Rate Limiter: Request allowed hai<br>
+                        <8️⃣ API Handler: Dashboard data bheja gaya
+                    </div>
+                    <strong>Poora Chain Success:</strong><br>
+                    ✅ 8 middleware sahi order mein chale<br>
+                    ✅ Security, logging, validation poori hui<br>
+                    ✅ Admin access sahi se control hua<br>
+                    ✅ Response optimize hua
+                </div>
+            `;
+        }
+
+        // Show code examples
+        function showMiddlewareExample(example) {
+            // Sab tab contents hide karo
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Sab tabs se active class hatao
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Chuna hua tab content dikhao
+            document.getElementById(example).classList.add('active');
+            
+            // Clicked tab ko active class do
+            event.target.classList.add('active');
+        }
+
+        // Demo initialize karo
+        window.onload = function() {
+            clearMiddlewareDemo();
+            resetPipelineVisualization();
+        };
     </script>
 </body>
 </html>

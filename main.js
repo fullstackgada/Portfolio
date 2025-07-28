@@ -217,7 +217,7 @@ function handlePayment(type) {
       paymentData = {
         amount: 5000, // Amount in paise (₹50)
         description: 'Buy Me Jalebi Fafda - Support content creation',
-        message: "Jalebi Fafda! Arre yaar, tum toh sach mein Gujarati dil wale ho! 🥨",
+        message: "Jalebi Fafda! Arre yaar, tum toh sach mein dil wale ho! 🥨",
         displayAmount: '₹50'
       };
       break;

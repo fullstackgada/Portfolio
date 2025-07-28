@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First-Class & Higher-Order Functions - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+       <div class="header-interactive" style="position:relative;">
+        <h1>First-Class & Higher-Order Function ka Funda</h1>
+        <p>Understand how First-Class & Higher-Order Function works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- First-Class Functions Demo -->
+            <div class="demo-section">
+                <h2 class="demo-title">📸 First-Class Functions ka Demo</h2>
+                
+                <div class="explanation">
+                    <strong>First-Class Functions:</strong> Functions ko variables ki tarah treat kar sakte hain - assign, pass, return sab kuch!
+                </div>
+
+                <!-- Photo Analogy -->
+                <div class="saree-analogy">
+                    <h4>📷 Photo wali Misal</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💝</div>
+                        <div><strong>Babita ki photo:</strong> Jaise photo ko wallet mein rakhte hain, waise function ko variable mein!</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">❤️</div>
+                        <div><strong>Share karna:</strong> Photo doosron ko de sakte hain, function bhi pass kar sakte hain!</div>
+                    </div>
+                </div>
+
+                <!-- Interactive Demo Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateAssignment()">
+                        📱 Function ko Variable mein Daalo
+                    </button>
+                    <button class="demo-btn" onclick="demonstratePassingFunction()">
+                        📤 Function ko Argument ke Roop mein Pass Karo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateReturningFunction()">
+                        📥 Function se Function Return Karo
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearFirstClassDemo()">
+                        🗑️ Clear Karo
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="firstClassResults">
+                    <div class="event-message one-message">
+                        Upar ke buttons click karo to see First-Class Functions in action!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Higher-Order Functions Demo -->
+            <div class="demo-section">
+                <h2 class="demo-title">🔝 Higher-Order Functions ka Demo</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Higher-Order Functions:</strong> Functions jo doosre functions ko accept ya return karte hain.
+                </div>
+
+                <!-- Built-in Higher-Order Functions -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateMap()">
+                        🗺️ map() ka Example
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateFilter()">
+                        🔍 filter() ka Example
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateReduce()">
+                        📊 reduce() ka Example
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateForEach()">
+                        🔄 forEach() ka Example
+                    </button>
+                </div>
+
+                <!-- Higher-Order Demo Results -->
+                <div class="demo-area" id="higherOrderResults">
+                    <div class="event-message one-message">
+                        Upar ke Higher-Order Functions try karo!
+                    </div>
+                </div>
+
+                <!-- Array for Demo -->
+                <div class="form-group">
+                    <label>Demo Array (Gokuldham ke Characters):</label>
+                    <div style="background: #f9f9fb; padding: 0.8rem; border-radius: 8px; font-family: monospace;">
+                        [{ name: "Jethalal", age: 45, loves: "Babita" }, 
+                         { name: "Bhide", age: 50, loves: "Discipline" }, 
+                         { name: "Popatlal", age: 40, loves: "Marriage" }]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Function Reference vs Call Demo -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🎯 Function Reference vs Function Call</h2>
+            
+            <div class="explanation">
+                <strong>Important Fark:</strong> <code>myFunc</code> (reference) vs <code>myFunc()</code> (turant call)
+            </div>
+
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <h3>📋 Function Reference (Bina Parentheses)</h3>
+                    <div class="code-block">
+                        <div class="code-line comment">// Function ko reference ke roop mein pass karna</div>
+                        <div class="code-line var-declaration">function sayHello() {</div>
+                        <div class="code-line var-usage">  return "Hello Babita Ji!";</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-assignment">let funcRef = sayHello; // Reference (no call)</div>
+                        <div class="code-line var-usage">console.log(funcRef); // [Function: sayHello]</div>
+                        <div class="code-line var-usage">console.log(funcRef()); // "Hello Babita Ji!"</div>
+                    </div>
+                    <button class="demo-btn first-btn" onclick="demonstrateFunctionReference()">
+                        📋 Function Reference Try Karo
+                    </button>
+                </div>
+
+                <div class="demo-card">
+                    <h3>📞 Function Call (Parentheses ke Saath)</h3>
+                    <div class="code-block">
+                        <div class="code-line comment">// Function ko turant call karna</div>
+                        <div class="code-line var-declaration">function sayHello() {</div>
+                        <div class="code-line var-usage">  return "Hello Babita Ji!";</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-assignment">let result = sayHello(); // Turant call</div>
+                        <div class="code-line var-usage">console.log(result); // "Hello Babita Ji!"</div>
+                    </div>
+                    <button class="demo-btn" onclick="demonstrateFunctionCall()">
+                        📞 Function Call Try Karo
+                    </button>
+                </div>
+            </div>
+
+            <div class="demo-area" id="referenceCallResults">
+                <div class="event-message">
+                    Upar ke buttons click karo to samjho function reference aur call ka fark!
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Higher-Order Function Creator -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🛠️ Apna Higher-Order Function Banaye</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('create-multiplier')">✖️ Multiplier Factory</button>
+                <button class="tab" onclick="showTab('create-validator')">✅ Validator Factory</button>
+                <button class="tab" onclick="showTab('create-logger')">📝 Logger Wrapper</button>
+                <button class="tab" onclick="showTab('create-timer')">⏰ Timer Wrapper</button>
+            </div>
+
+            <!-- Multiplier Factory Tab -->
+            <div id="create-multiplier" class="demo-content active">
+                <div class="demo-container">
+                    <div class="demo-block">
+                        <div class="demo-comment">// Higher-Order Function jo multiplier functions banata hai</div>
+                        <div class="line var-declaration">function createMultiplier(factor) {</div>
+                        <div class="line var-usage">  return function(number) {</div>
+                        <div class="line var-usage">    return number * factor;</div>
+                        <div class="line var-usage">  };</div>
+                        <div class="line var">declaration"}</div>
+                        <div class="line"></div>
+                        <div class="demo-comment">code-line // Usage</div>
+                        <div class="demo-line var-assignment-const var-assignment">double = createMultiplier(2);</div>
+                        <div class="demo-assignment">const triple = createMultiplier(3);</div>
+                        <div class="line var-usage">console.log(double(5)); // 10</div>
+                        <div class="line var-usage">console.log(triple(5)); // 15</div>
+                    </div>
+                    <div class="demo-controls">
+                        <button class="demo-btn first-btn" onclick="createMultiplierDemo()">
+                            ✖️ Multipliers Banaye aur Test Karo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validator Factory Tab -->
+            <div id="create-validator" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// Higher-Order Function jo validators banata hai</div>
+                        <div class="code-line var-declaration">function createValidator(condition) {</div>
+                        <div class="code-line var-usage">  return function(value) {</div>
+                        <div class="code-line var-usage">    return condition(value);</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Usage</div>
+                        <div class="code-line var-assignment">const isAdult = createValidator(age => age >= 18);</div>
+                        <div class="code-line var-assignment">const isValidName = createValidator(name => name.length > 2);</div>
+                    </div>
+                    <div class="demo-controls">
+                        <button class="demo-btn first-btn" onclick="createValidatorDemo()">
+                            ✅ Validators Banaye aur Test Karo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logger Wrapper Tab -->
+            <div id="create-logger" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// Higher-Order Function jo logging add karta hai</div>
+                        <div class="code-line var-declaration">function withLogging(fn) {</div>
+                        <div class="code-line var-usage">  return function(...args) {</div>
+                        <div class="code-line var-usage">    console.log(`Calling ${fn.name} with:`, args);</div>
+                        <div class="code-line var-usage">    const result = fn(...args);</div>
+                        <div class="code-line var-usage">    console.log(`Result:`, result);</div>
+                        <div class="code-line var-usage">    return result;</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="demo-controls">
+                        <button class="demo-btn first-btn" onclick="createLoggerDemo()">
+                            📝 Logger Wrapper Banaye
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timer Wrapper Tab -->
+            <div id="create-timer" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// Higher-Order Function jo timing measure karta hai</div>
+                        <div class="code-line var-declaration">function withTiming(fn) {</div>
+                        <div class="code-line var-usage">  return function(...args) {</div>
+                        <div class="code-line var-usage">    const start = performance.now();</div>
+                        <div class="code-line var-usage">    const result = fn(...args);</div>
+                        <div class="code-line var-usage">    const end = performance.now();</div>
+                        <div class="code-line var-usage">    console.log(`${fn.name} took ${end - start}ms`);</div>
+                        <div class="code-line var-usage">    return result;</div>
+                        <div class="code-line var-usage">  };</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                    <div class="demo-controls">
+                        <button class="demo-btn first-btn" onclick="createTimerDemo()">
+                            ⏰ Timer Wrapper Banaye
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-area" id="customHOFResults">
+                <div class="event-message">
+                    Upar ka tab select karo aur demo button click karo to custom Higher-Order Functions dekho!
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Tables -->
+        <div class="comparison-section">
+            <h3>🔍 First-Class vs Higher-Order Functions</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Concept</th>
+                        <th>📸 First-Class Functions</th>
+                        <th>🔝 Higher-Order Functions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Definition</strong></td>
+                        <td>Functions ko values ki tarah treat karna</td>
+                        <td>Functions jo doosre functions ko accept ya return karte hain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Capabilities</strong></td>
+                        <td>Assign, Pass, Return functions</td>
+                        <td>Functions ko parameters ke roop mein lena, Functions return karna</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Examples</strong></td>
+                        <td>let fn = myFunction; fn();</td>
+                        <td>array.map(fn), array.filter(fn)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Cases</strong></td>
+                        <td>Dynamic function assignment, Callbacks</td>
+                        <td>Data transformation, Event handling, Composition</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jethalal ki Misal</strong></td>
+                        <td>Photo ko wallet mein rakhna (variable assignment)</td>
+                        <td>Photo ko frame karne wala function (wrapper function)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Built-in Higher-Order Functions Table -->
+        <div class="comparison-section">
+            <h3>🛠️ JavaScript ke Built-in Higher-Order Functions</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Kaam</th>
+                        <th>Return Karta Hai</th>
+                        <th>Misal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>map()</strong></td>
+                        <td>Har element ko transform karta hai</td>
+                        <td>Transformed elements ke saath nayi array</td>
+                        <td>arr.map(x => x * 2)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>filter()</strong></td>
+                        <td>Condition ke hisaab se elements chunta hai</td>
+                        <td>Filtered elements ke saath nayi array</td>
+                        <td>arr.filter(x => x > 5)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>reduce()</strong></td>
+                        <td>Array ko ek single value mein convert karta hai</td>
+                        <td>Ek accumulated value</td>
+                        <td>arr.reduce((a,b) => a+b, 0)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>forEach()</strong></td>
+                        <td>Har element ke liye function chalata hai</td>
+                        <td>undefined (sirf side effects)</td>
+                        <td>arr.forEach(x => console.log(x))</td>
+                    </tr>
+                    <tr>
+                        <td><strong>find()</strong></td>
+                        <td>Pehla matching element dhundta hai</td>
+                        <td>Pehla matching element ya undefined</td>
+                        <td>arr.find(x => x.name === "Jethalal")</td>
+                    </tr>
+                    <tr>
+                        <td><strong>some()</strong></td>
+                        <td>Check karta hai koi element match karta hai ya nahi</td>
+                        <td>true/false</td>
+                        <td>arr.some(x => x > 10)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>every()</strong></td>
+                        <td>Check karta hai sab elements match karte hain ya nahi</td>
+                        <td>true/false</td>
+                        <td>arr.every(x => x > 0)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+     
+        // Sample data for demos
+        const gokuldhamCharacters = [
+            { name: "Jethalal", age: 45, loves: "Babita" },
+            { name: "Bhide", age: 50, loves: "Discipline" },
+            { name: "Popatlal", age: 40, loves: "Marriage" },
+            { name: "Tapu", age: 20, loves: "Fun" },
+            { name: "Madhavi", age: 45, loves: "Family" }
+        ];
+
+        // First-Class Functions Demonstrations
+        function demonstrateAssignment() {
+            const result = document.getElementById('firstClassResults');
+            result.innerHTML = `
+                <div class="event-message one-message">
+                    <strong>📱 Function Assignment ka Demo:</strong><br>
+                    <code>function sayHello() { return "Hello Babita Ji!"; }</code><br>
+                    <code>let greetFunc = sayHello; // Variable mein daala</code><br>
+                    <code>console.log(greetFunc()); // "Hello Babita Ji!"</code><br><br>
+                    <strong>Result:</strong> Function variable mein rakha jaise photo wallet mein! 💝
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstratePassingFunction() {
+            const result = document.getElementById('firstClassResults');
+            result.innerHTML = `
+                <div class="event-message two-message">
+                    <strong>📤 Function as Argument ka Demo:</strong><br>
+                    <code>function greet() { return "Namaste!"; }</code><br>
+                    <code>function useGreeting(greetingFunc) { return greetingFunc() + " Babita Ji!"; }</code><br>
+                    <code>console.log(useGreeting(greet)); // "Namaste! Babita Ji!"</code><br><br>
+                    <strong>Result:</strong> Function pass kiya jaise photo share ki! 📤
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateReturningFunction() {
+            const result = document.getElementById('firstClassResults');
+            result.innerHTML = `
+                <div class="event-message one-message">
+                    <strong>📥 Function Returning Function ka Demo:</strong><br>
+                    <code>function createGreeter(name) {</code><br>
+                    <code>&nbsp;&nbsp;return function() { return "Hello " + name + "!"; };</code><br>
+                    <code>}</code><br>
+                    <code>let babitaGreeter = createGreeter("Babita");</code><br>
+                    <code>console.log(babitaGreeter()); // "Hello Babita!"</code><br><br>
+                    <strong>Result:</strong> Function factory ban gaya! 🏭
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function clearFirstClassDemo() {
+            document.getElementById('firstClassResults').innerHTML = `
+                <div class="event-message one-message">
+                    Upar ke buttons click karo to see First-Class Functions in action!
+                </div>
+            `;
+        }
+
+        // Higher-Order Functions Demonstrations
+        function demonstrateMap() {
+            const result = gokuldhamCharacters.map(char => ({ ...char, greeting: `Hello ${char.name}!` }));
+            document.getElementById('higherOrderResults').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>🗺️ map() ka Demo - Greetings add karo:</strong><br>
+                    <code>characters.map(char => ({ ...char, greeting: \`Hello \${char.name}!\` }))</code><br><br>
+                    <strong>Result:</strong><br>
+                    ${result.map(char => `• ${char.name}: "${char.greeting}"`).join('<br>')}
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateFilter() {
+            const result = gokuldhamCharacters.filter(char => char.age >= 45);
+            document.getElementById('higherOrderResults').innerHTML = `
+                <div class="event-message two-message">
+                    <strong>🔍 filter() ka Demo - Sirf adults (age >= 45):</strong><br>
+                    <code>characters.filter(char => char.age >= 45)</code><br><br>
+                    <strong>Result:</strong><br>
+                    ${result.map(char => `• ${char.name} (${char.age} saal)`).join('<br>')}
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateReduce() {
+            const totalAge = gokuldhamCharacters.reduce((sum, char) => sum + char.age, 0);
+            const avgAge = Math.round(totalAge / gokuldhamCharacters.length);
+            document.getElementById('higherOrderResults').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>📊 reduce() ka Demo - Total aur Average Age:</strong><br>
+                    <code>characters.reduce((sum, char) => sum + char.age, 0)</code><br><br>
+                    <strong>Results:</strong><br>
+                    • Total Age: ${totalAge} saal<br>
+                    • Average Age: ${avgAge} saal<br>
+                    • Characters: ${gokuldhamCharacters.length}
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateForEach() {
+            let output = [];
+            gokuldhamCharacters.forEach(char => {
+                output.push(`${char.name} ko ${char.loves} pasand hai`);
+            });
+            document.getElementById('higherOrderResults').innerHTML = `
+                <div class="event-message two-message">
+                    <strong>🔄 forEach() ka Demo - Sabko kya pasand hai:</strong><br>
+                    <code>characters.forEach(char => console.log(\`\${char.name} loves \${char.loves}\`))</code><br><br>
+                    <strong>Output:</strong><br>
+                    ${output.map(line => `• ${line}`).join('<br>')}
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Function Reference vs Call Demonstrations
+        function demonstrateFunctionReference() {
+            const result = document.getElementById('referenceCallResults');
+            result.innerHTML = `
+                <div class="event-message one-message">
+                    <strong>📋 Function Reference ka Demo:</strong><br>
+                    <code>function sayHello() { return "Hello Babita Ji!"; }</code><br>
+                    <code>let funcRef = sayHello; // Bina parentheses = Reference</code><br>
+                    <code>console.log(typeof funcRef); // "function"</code><br>
+                    <code>console.log(funcRef.name); // "sayHello"</code><br>
+                    <code>console.log(funcRef()); // "Hello Babita Ji!" (Baad mein call)</code><br><br>
+                    <strong>Result:</strong> Function reference store hua, execute nahi! 📋
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateFunctionCall() {
+            const result = document.getElementById('referenceCallResults');
+            result.innerHTML = `
+                <div class="event-message two-message">
+                    <strong>📞 Function Call ka Demo:</strong><br>
+                    <code>function sayHello() { return "Hello Babita Ji!"; }</code><br>
+                    <code>let result = sayHello(); // Parentheses ke saath = Turant Call</code><br>
+                    <code>console.log(typeof result); // "string"</code><br>
+                    <code>console.log(result); // "Hello Babita Ji!"</code><br><br>
+                    <strong>Result:</strong> Function turant execute hua, result store hua! 📞
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Custom Higher-Order Function Demos
+        function createMultiplierDemo() {
+            const results = document.getElementById('customHOFResults');
+            
+            // Simulate the createMultiplier function
+            function createMultiplier(factor) {
+                return function(number) {
+                    return number * factor;
+                };
+            }
+            
+            const double = createMultiplier(2);
+            const triple = createMultiplier(3);
+            const quadruple = createMultiplier(4);
+            
+            results.innerHTML = `
+                <div class="success-message">
+                    <strong>✖️ Multiplier Factory ka Demo:</strong><br>
+                    Multiplier functions banaye:<br>
+                    • double(5) = ${double(5)}<br>
+                    • triple(7) = ${triple(7)}<br>
+                    • quadruple(3) = ${quadruple(3)}<br><br>
+                    <strong>Jadoo:</strong> Ek function se customized functions bane! 🏭
+                </div>
+            `;
+        }
+
+        function createValidatorDemo() {
+            const results = document.getElementById('customHOFResults');
+            
+            // Simulate validator functions
+            function createValidator(condition) {
+                return function(value) {
+                    return condition(value);
+                };
+            }
+            
+            const isAdult = createValidator(age => age >= 18);
+            const isValidName = createValidator(name => name.length > 2);
+            const isGokuldhamResident = createValidator(name => ['Jethalal', 'Babita', 'Bhide', 'Popatlal'].includes(name));
+            
+            results.innerHTML = `
+                <div class="success-message">
+                    <strong>✅ Validator Factory ka Demo:</strong><br>
+                    Alag-alag validators test kiye:<br>
+                    • isAdult(25): ${isAdult(25)}<br>
+                    • isAdult(16): ${isAdult(16)}<br>
+                    • isValidName("Jethalal"): ${isValidName("Jethalal")}<br>
+                    • isValidName("AB"): ${isValidName("AB")}<br>
+                    • isGokuldhamResident("Babita"): ${isGokuldhamResident("Babita")}<br>
+                    • isGokuldhamResident("Iyer"): ${isGokuldhamResident("Iyer")}<br><br>
+                    <strong>Power:</strong> Reusable validation logic! ✅
+                </div>
+            `;
+        }
+
+        function createLoggerDemo() {
+            const results = document.getElementById('customHOFResults');
+            
+            results.innerHTML = `
+                <div class="success-message">
+                    <strong>📝 Logger Wrapper ka Demo:</strong><br>
+                    Functions ko logging ke saath wrap kiya:<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: monospace; margin: 0.5rem 0;">
+                    > Calling add with: [5, 3]<br>
+                    > Result: 8<br>
+                    > Calling multiply with: [4, 7]<br>
+                    > Result: 28<br>
+                    > Calling greet with: ["Babita"]<br>
+                    > Result: "Hello Babita!"
+                    </div>
+                    <strong>Fayda:</strong> Original functions badle bina auto-logging! 📝
+                </div>
+            `;
+        }
+
+        function createTimerDemo() {
+            const results = document.getElementById('customHOFResults');
+            
+            // Simulate some timing results
+            const timings = [
+                { func: 'calculateSum', time: '0.23ms' },
+                { func: 'findUser', time: '1.45ms' },
+                { func: 'sortArray', time: '2.67ms' }
+            ];
+            
+            results.innerHTML = `
+                <div class="success-message">
+                    <strong>⏰ Timer Wrapper ka Demo:</strong><br>
+                    Performance measurement results:<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; font-family: monospace; margin: 0.5rem 0;">
+                    ${timings.map(t => `> ${t.func} ne ${t.time} liya`).join('<br>')}
+                    </div>
+                    <strong>Fayda:</strong> Performance monitoring aasaan ho gaya! ⏰
+                </div>
+            `;
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            clearFirstClassDemo();
+        };
+    </script>
+</body>
+</html>

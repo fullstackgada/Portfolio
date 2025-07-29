@@ -1,586 +1,272 @@
-    <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Transactions - Fullstackgada</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        .scenario-selector {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .scenario-btn {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            margin: 0 10px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        }
-
-        .scenario-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-
-        .scenario-btn.active {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .demo-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 40px;
-        }
-
-        .sql-code {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 30px;
-            border-radius: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sql-code::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #4CAF50, #2196F3, #ff9800);
-        }
-
-        .sql-keyword {
-            color: #569cd6;
-            font-weight: bold;
-        }
-
-        .sql-string {
-            color: #ce9178;
-        }
-
-        .sql-number {
-            color: #b5cea8;
-        }
-
-        .sql-comment {
-            color: #6a9955;
-            font-style: italic;
-        }
-
-        .sql-error {
-            color: #f44336;
-            background: rgba(244, 67, 54, 0.1);
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-
-        .execution-flow {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .step {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: #ddd;
-            transition: all 0.3s ease;
-        }
-
-        .step.pending {
-            background: #f5f5f5;
-            border: 2px solid #ddd;
-        }
-
-        .step.success {
-            background: linear-gradient(135deg, #e8f5e8 0%, #d4f4d4 100%);
-            border: 2px solid #4CAF50;
-            transform: scale(1.02);
-        }
-
-        .step.success::before {
-            background: #4CAF50;
-        }
-
-        .step.error {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            border: 2px solid #f44336;
-            transform: scale(1.02);
-        }
-
-        .step.error::before {
-            background: #f44336;
-        }
-
-        .step.rollback {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            border: 2px solid #ff9800;
-        }
-
-        .step.rollback::before {
-            background: #ff9800;
-        }
-
-        .step-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .step.pending .step-icon {
-            background: #ddd;
-            color: #999;
-        }
-
-        .step.success .step-icon {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .step.error .step-icon {
-            background: #f44336;
-            color: white;
-        }
-
-        .step.rollback .step-icon {
-            background: #ff9800;
-            color: white;
-        }
-
-        .step-content h3 {
-            margin-bottom: 8px;
-            font-size: 1.2em;
-        }
-
-        .step-content p {
-            color: #666;
-            font-size: 0.95em;
-        }
-
-        .control-buttons {
-            text-align: center;
-            margin: 40px 0;
-        }
-
-        .control-btn {
-            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            margin: 0 10px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-        }
-
-        .control-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
-        }
-
-        .control-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .result-panel {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 15px;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-        }
-
-        .result-panel.success {
-            background: linear-gradient(135deg, #e8f5e8 0%, #d4f4d4 100%);
-            color: #2e7d32;
-            border: 2px solid #4CAF50;
-        }
-
-        .result-panel.error {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            color: #c62828;
-            border: 2px solid #f44336;
-        }
-
-        .dialogue-box {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border-left: 5px solid #2196F3;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 10px;
-            font-style: italic;
-            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.1);
-        }
-
-        .character {
-            font-weight: bold;
-            color: #1976D2;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .step.executing {
-            animation: pulse 1s infinite;
-        }
-
-        @media (max-width: 768px) {
-            .demo-area {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-        }
-    </style>
+    <title>SQL Transactions ka Funda- Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎭 SQL Transactions Interactive Demo</h1>
-            <p>Learn database transactions with Jethalal & Bhide's story!</p>
+<div class="container">
+    <!-- Header -->
+    <div class="header-interactive" style="position:relative;">
+        <h1>SQL Transactions ka Funda</h1>
+        <p>Understand how SQL Transactions works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
         </div>
-        
-        <div class="content">
-            <div class="dialogue-box">
-                <span class="character">Jethalal:</span> "भिडे! ट्रांजेक्शन एक ऐसा प्रोसेस है जिसमे कई स्टेप्स एक साथ पूरे होते है — अगर कोई एक भी फेल हो गया, तो सब रद्द यानी रोलबैक!"
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+    <!-- Demo Grid -->
+    <div class="demo-grid">
+        <!-- Transaction Concepts -->
+        <div class="demo-section">
+            <h2 class="demo-title">🔄 SQL Transactions Explorer</h2>
+            <div class="explanation">
+                <b>Transactions:</b> Sab kuch ek saath ya phir bilkul nahi! Stock ghatana, order daalna, payment — ya toh sab ho ya ek bhi nahi.
             </div>
-            
-            <div class="scenario-selector">
-                <button class="scenario-btn active" onclick="setScenario('success')">✅ Success Scenario</button>
-                <button class="scenario-btn" onclick="setScenario('failure')">❌ Failure Scenario</button>
+            <div class="demo-controls">
+                <button class="demo-btn first-btn" onclick="startTransaction(true)">
+                    ✅ Successful Transaction
+                </button>
+                <button class="demo-btn" onclick="startTransaction(false)">
+                    ❌ Transaction mein Error (Rollback)
+                </button>
+                <button class="demo-btn clear-btn" onclick="clearTransDemo()">
+                    🔄 Demo Reset Karo
+                </button>
             </div>
-            
-            <div class="demo-area">
-                <div class="sql-code" id="sqlCode">
-                    <div class="sql-comment">-- Starting a new transaction</div>
-                    <span class="sql-keyword">BEGIN TRANSACTION</span>;<br><br>
-                    
-                    <div class="sql-comment">-- Step 1: Insert new order</div>
-                    <span class="sql-keyword">INSERT INTO</span> Orders (OrderID, ProductName, Quantity)<br>
-                    <span class="sql-keyword">VALUES</span> (<span class="sql-number">101</span>, <span class="sql-string">'Papad'</span>, <span class="sql-number">2</span>);<br><br>
-                    
-                    <div class="sql-comment">-- Step 2: Record payment</div>
-                    <span class="sql-keyword">INSERT INTO</span> Payments (PaymentID, OrderID, PaymentMode)<br>
-                    <span class="sql-keyword">VALUES</span> (<span class="sql-number">201</span>, <span class="sql-number">101</span>, <span class="sql-string">'UPI'</span>);<br><br>
-                    
-                    <div class="sql-comment">-- If everything succeeds, commit the transaction</div>
-                    <span class="sql-keyword">COMMIT</span>;<br><br>
-                    
-                    <div class="sql-comment">-- If any error occurs, rollback everything</div>
-                    <span class="sql-keyword">ROLLBACK</span>;
+            <!-- Visual Transaction Steps -->
+            <div class="memory-diagram" id="transSteps">
+                <div class="memory-slot" id="step1">
+                    <b>BEGIN</b> <br> (Transaction shuru)
                 </div>
-                
-                <div class="execution-flow">
-                    <h3 style="margin-bottom: 20px; color: #333;">🔄 Transaction Execution Flow</h3>
-                    
-                    <div class="step pending" id="step1">
-                        <div class="step-icon">1</div>
-                        <div class="step-content">
-                            <h3>BEGIN TRANSACTION</h3>
-                            <p>Starting transaction - creating a safe boundary</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step pending" id="step2">
-                        <div class="step-icon">2</div>
-                        <div class="step-content">
-                            <h3>Insert Order</h3>
-                            <p>Adding new order to Orders table</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step pending" id="step3">
-                        <div class="step-icon">3</div>
-                        <div class="step-content">
-                            <h3>Insert Payment</h3>
-                            <p>Recording payment information</p>
-                        </div>
-                    </div>
-                    
-                    <div class="step pending" id="step4">
-                        <div class="step-icon">4</div>
-                        <div class="step-content">
-                            <h3>COMMIT / ROLLBACK</h3>
-                            <p>Make changes permanent or undo everything</p>
-                        </div>
-                    </div>
+                <div class="memory-slot" id="step2">
+                    <b>Stock -1</b> <br> (Stock kam kiya)
+                </div>
+                <div class="memory-slot" id="step3">
+                    <b>Order Added</b> <br> (Order daala)
+                </div>
+                <div class="memory-slot" id="step4">
+                    <b>Payment</b> <br> (Payment hua)
+                </div>
+                <div class="memory-slot tdz" id="step5">
+                    <b>Commit ya Rollback?</b>
                 </div>
             </div>
-            
-            <div class="control-buttons">
-                <button class="control-btn" onclick="executeTransaction()" id="executeBtn">🚀 Execute Transaction</button>
-                <button class="control-btn" onclick="resetDemo()" id="resetBtn">🔄 Reset Demo</button>
+            <!-- Transaction Output -->
+            <div class="demo-area" id="transOutput">
+                <div class="event-message one-message">
+                    <b>Demo:</b> Upar ke button dabao aur dekho transaction kaise kaam karta hai!
+                </div>
             </div>
-            
-            <div class="result-panel" id="resultPanel" style="display: none;">
-                <div id="resultMessage"></div>
+        </div>
+
+        <!-- Analogy Section -->
+        <div class="demo-section">
+            <h2 class="demo-title">🏠 Gokuldham ka Analogy</h2>
+            <div class="saree-analogy">
+                <h4>Transaction = Shaadi ka Mandap!</h4>
+                <div class="saree-step">
+                    <div class="saree-emoji">🪔</div>
+                    <div>Teen rasmein chal rahi hain: <b>Haldi, Phere, Mangalsutra</b>... Ek bhi chhuti toh shaadi cancel (Rollback)!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">🎉</div>
+                    <div>Sab rasmein poori? <b>Commit</b> – Shaadi pakki!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">😨</div>
+                    <div>Beech mein bijli chali gayi? – Rollback – Sab wapas, jaise kuch hua hi nahi.</div>
+                </div>
             </div>
-            
-            <div class="dialogue-box" id="dialogueBox" style="display: none;">
-                <span class="character" id="speaker"></span> <span id="dialogue"></span>
+            <div class="how-it-works">
+                <h4>💡 Transaction ke Properties (ACID)</h4>
+                <div class="step"><div class="step-number">A</div>Atomicity: Sab ya kuch bhi nahi</div>
+                <div class="step"><div class="step-number">C</div>Consistency: Data hamesha sahi rules pe</div>
+                <div class="step"><div class="step-number">I</div>Isolation: Ek transaction doosre se alag</div>
+                <div class="step"><div class="step-number">D</div>Durability: Ek baar commit hua – data safe</div>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentScenario = 'success';
-        let isExecuting = false;
+    <!-- Transactional Tables and SQL -->
+    <div class="demo-section">
+        <h2 class="demo-title">🔢 Example: Orders aur Stock Table</h2>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('orders-tab')">Orders</button>
+            <button class="tab" onclick="showTab('stock-tab')">Stock</button>
+            <button class="tab" onclick="showTab('sql-tab')">SQL Transaction</button>
+        </div>
+        <div id="orders-tab" class="tab-content active">
+            <h4>🛒 Orders Table</h4>
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>OrderID</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersRows">
+                </tbody>
+            </table>
+        </div>
+        <div id="stock-tab" class="tab-content">
+            <h4>📦 Stock Table</h4>
+            <table class="responsive-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>StockLeft</th>
+                    </tr>
+                </thead>
+                <tbody id="stockRows">
+                </tbody>
+            </table>
+        </div>
+        <div id="sql-tab" class="tab-content">
+            <h4>💻 Transaction SQL ka Example</h4>
+            <div class="code-block" id="sqlDemo">
+<pre>
+BEGIN;
+/* Step 1: Stock kam karo */
+UPDATE Stock SET count = count - 1 WHERE product='Soap';
 
-        const scenarios = {
-            success: {
-                steps: [
-                    { status: 'success', message: 'Transaction started successfully' },
-                    { status: 'success', message: 'Order inserted successfully' },
-                    { status: 'success', message: 'Payment recorded successfully' },
-                    { status: 'success', message: 'Transaction committed - all changes saved!' }
-                ],
-                dialogue: {
-                    speaker: 'Jethalal:',
-                    message: 'देखा भिडे! सब स्टेप्स सफल रहे, इसलिए COMMIT हो गया। अब डेटाबेस में सब कुछ सेव है!'
-                },
-                resultClass: 'success',
-                resultMessage: '🎉 Transaction Successful! All data saved permanently.'
-            },
-            failure: {
-                steps: [
-                    { status: 'success', message: 'Transaction started successfully' },
-                    { status: 'success', message: 'Order inserted successfully' },
-                    { status: 'error', message: 'Error: Payment insertion failed!' },
-                    { status: 'rollback', message: 'Transaction rolled back - all changes undone!' }
-                ],
-                dialogue: {
-                    speaker: 'Jethalal:',
-                    message: 'भिडे! पेमेंट में एरर आया, इसलिए पूरा ट्रांजेक्शन ROLLBACK हो गया। कुछ भी सेव नहीं हुआ!'
-                },
-                resultClass: 'error',
-                resultMessage: '⚠️ Transaction Failed! All changes have been rolled back.'
-            }
-        };
+/* Step 2: Order daalo */
+INSERT INTO Orders(product, qty, status) VALUES ('Soap', 1, 'Pending');
 
-        function setScenario(scenario) {
-            currentScenario = scenario;
-            
-            // Update button states
-            document.querySelectorAll('.scenario-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Update SQL code for failure scenario
-            if (scenario === 'failure') {
-                document.getElementById('sqlCode').innerHTML = `
-                    <div class="sql-comment">-- Starting a new transaction</div>
-                    <span class="sql-keyword">BEGIN TRANSACTION</span>;<br><br>
-                    
-                    <div class="sql-comment">-- Step 1: Insert new order</div>
-                    <span class="sql-keyword">INSERT INTO</span> Orders (OrderID, ProductName, Quantity)<br>
-                    <span class="sql-keyword">VALUES</span> (<span class="sql-number">101</span>, <span class="sql-string">'Papad'</span>, <span class="sql-number">2</span>);<br><br>
-                    
-                    <div class="sql-comment">-- Step 2: Insert payment (error: amount column missing)</div>
-                    <span class="sql-keyword">INSERT INTO</span> Payments (PaymentID, OrderID, PaymentMode)<br>
-                    <span class="sql-keyword">VALUES</span> (<span class="sql-error">201, 101, 'UPI'</span>); <span class="sql-comment">-- Missing required Amount field!</span><br><br>
-                    
-                    <div class="sql-comment">-- Error occurred, automatic rollback</div>
-                    <span class="sql-keyword">ROLLBACK</span>;
-                `;
-            } else {
-                document.getElementById('sqlCode').innerHTML = `
-                    <div class="sql-comment">-- Starting a new transaction</div>
-                    <span class="sql-keyword">BEGIN TRANSACTION</span>;<br><br>
-                    
-                    <div class="sql-comment">-- Step 1: Insert new order</div>
-                    <span class="sql-keyword">INSERT INTO</span> Orders (OrderID, ProductName, Quantity)<br>
-                    <span class="sql-keyword">VALUES</span> (<span class="sql-number">101</span>, <span class="sql-string">'Papad'</span>, <span class="sql-number">2</span>);<br><br>
-                    
-                    <div class="sql-comment">-- Step 2: Record payment</div>
-                    <span class="sql-keyword">INSERT INTO</span> Payments (PaymentID, OrderID, PaymentMode)<br>
-                    <span class="sql-keyword">VALUES</span> (<span class="sql-number">201</span>, <span class="sql-number">101</span>, <span class="sql-string">'UPI'</span>);<br><br>
-                    
-                    <div class="sql-comment">-- All steps successful, commit the transaction</div>
-                    <span class="sql-keyword">COMMIT</span>;
-                `;
-            }
-            
-            resetDemo();
-        }
+/* Step 3: Payment */
+-- Yahan payment step imagine karo
 
-        function executeTransaction() {
-            if (isExecuting) return;
+/* Sab theek hai */
+COMMIT;
+
+/* Agar koi ERROR */
+ROLLBACK;
+</pre>
+            </div>
+            <div class="explanation">
+                <b>Sirf COMMIT ke baad data pakka!</b> Error hua toh sab wapas (ROLLBACK).
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/** "Database" data for Orders/Stock demo **/
+let stockTable = [{product:"Soap", count:5}, {product:"Shampoo", count:3}];
+let ordersTable = [
+    {orderid: 1, product: "Soap", qty: 1, status:"Delivered" }, 
+    {orderid: 2, product: "Shampoo", qty: 1, status:"Delivered" }
+];
+
+function renderTables() {
+    // Orders
+    let orderHtml = '';
+    ordersTable.forEach(o=>{
+        orderHtml += `<tr>
+            <td>${o.orderid}</td>
+            <td>${o.product}</td>
+            <td>${o.qty}</td>
+            <td>${o.status}</td>
+        </tr>`;
+    });
+    document.getElementById("ordersRows").innerHTML = orderHtml || "<tr><td colspan='4'>Koi Orders Nahi</td></tr>";
+    // Stock
+    let stockHtml = '';
+    stockTable.forEach(s=>{
+        stockHtml += `<tr>
+            <td>${s.product}</td>
+            <td>${s.count}</td>
+        </tr>`;
+    });
+    document.getElementById("stockRows").innerHTML = stockHtml;
+}
+renderTables();
+
+/** Transaction Simulation **/
+function startTransaction(success) {
+    // Reset visuals
+    document.querySelectorAll('.memory-slot').forEach(e=>e.classList.remove('error','hoisted','tdz'));
+    // Step 1: Begin
+    document.getElementById('step1').classList.add('hoisted');
+    document.getElementById('transOutput').innerHTML = "<div class='event-message one-message'>Transaction shuru...<br>BEGIN;</div>";
+
+    setTimeout(()=>{
+        // Step 2: Stock minus
+        document.getElementById('step2').classList.add('hoisted');
+        stockTable[0].count--;
+        renderTables();
+        document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Stock kam kiya!</div>";
+        
+        setTimeout(()=>{
+            // Step 3: Order insert
+            document.getElementById('step3').classList.add('hoisted');
+            let nextId = ordersTable.length ? Math.max(...ordersTable.map(o=>o.orderid))+1 : 1;
+            ordersTable.push({orderid: nextId, product:"Soap", qty:1, status:"Pending"});
+            renderTables();
+            document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Order daala!</div>";
             
-            isExecuting = true;
-            document.getElementById('executeBtn').disabled = true;
-            document.getElementById('resultPanel').style.display = 'none';
-            document.getElementById('dialogueBox').style.display = 'none';
-            
-            const steps = scenarios[currentScenario].steps;
-            
-            steps.forEach((step, index) => {
-                setTimeout(() => {
-                    const stepElement = document.getElementById(`step${index + 1}`);
-                    stepElement.classList.remove('pending', 'executing');
-                    stepElement.classList.add(step.status);
-                    
-                    const icon = stepElement.querySelector('.step-icon');
-                    if (step.status === 'success') {
-                        icon.textContent = '✓';
-                    } else if (step.status === 'error') {
-                        icon.textContent = '✗';
-                    } else if (step.status === 'rollback') {
-                        icon.textContent = '↶';
+            setTimeout(()=>{
+                // Step 4: Payment
+                document.getElementById('step4').classList.add('hoisted');
+                document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Payment processing...</div>";
+                
+                setTimeout(()=>{
+                    // Step 5: Final
+                    document.getElementById('step5').classList.remove('tdz');
+                    if(success){
+                        document.getElementById('step5').classList.add('hoisted');
+                        ordersTable[ordersTable.length-1].status="Delivered";
+                        renderTables();
+                        document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'><b>COMMIT; Sab kaam success — Data pakka!</b></div>";
+                    } else {
+                        document.getElementById('step5').classList.add('error');
+                        // ROLLBACK: revert stock, remove order
+                        stockTable[0].count++;
+                        ordersTable.pop();
+                        renderTables();
+                        document.getElementById('transOutput').innerHTML += "<div class='event-message two-message'><b>ERROR! System crash — ROLLBACK; <br>Sab wapas, jaise kuch hua hi nahi.</b></div>";
                     }
-                    
-                    stepElement.querySelector('p').textContent = step.message;
-                    
-                    // Show result after last step
-                    if (index === steps.length - 1) {
-                        setTimeout(() => {
-                            showResult();
-                        }, 500);
-                    }
-                }, (index + 1) * 1000);
-            });
-        }
+                },700);
+            },700);
+        },700);
+    },600);
+}
 
-        function showResult() {
-            const scenario = scenarios[currentScenario];
-            const resultPanel = document.getElementById('resultPanel');
-            const dialogueBox = document.getElementById('dialogueBox');
-            
-            resultPanel.className = `result-panel ${scenario.resultClass}`;
-            resultPanel.style.display = 'block';
-            document.getElementById('resultMessage').textContent = scenario.resultMessage;
-            
-            setTimeout(() => {
-                dialogueBox.style.display = 'block';
-                document.getElementById('speaker').textContent = scenario.dialogue.speaker;
-                document.getElementById('dialogue').textContent = scenario.dialogue.message;
-            }, 500);
-            
-            isExecuting = false;
-            document.getElementById('executeBtn').disabled = false;
-        }
+/* Reset Transaction Demo */
+function clearTransDemo(){
+    // Reset data
+    stockTable = [{product:"Soap", count:5}, {product:"Shampoo", count:3}];
+    ordersTable = [
+        {orderid: 1, product: "Soap", qty: 1, status:"Delivered" }, 
+        {orderid: 2, product: "Shampoo", qty: 1, status:"Delivered" }
+    ];
+    renderTables();
+    // Reset visuals
+    document.querySelectorAll('.memory-slot').forEach(e=>e.classList.remove('error','hoisted','tdz'));
+    document.getElementById('step5').classList.add('tdz');
+    document.getElementById('transOutput').innerHTML = "<div class='event-message one-message'><b>Demo:</b> Upar ke button dabao aur dekho transaction kaise kaam karta hai!</div>";
+}
 
-        function resetDemo() {
-            isExecuting = false;
-            document.getElementById('executeBtn').disabled = false;
-            document.getElementById('resultPanel').style.display = 'none';
-            document.getElementById('dialogueBox').style.display = 'none';
-            
-            // Reset all steps
-            for (let i = 1; i <= 4; i++) {
-                const stepElement = document.getElementById(`step${i}`);
-                stepElement.className = 'step pending';
-                stepElement.querySelector('.step-icon').textContent = i;
-            }
-            
-            // Reset step descriptions
-            document.getElementById('step1').querySelector('p').textContent = 'Starting transaction - creating a safe boundary';
-            document.getElementById('step2').querySelector('p').textContent = 'Adding new order to Orders table';
-            document.getElementById('step3').querySelector('p').textContent = 'Recording payment information';
-            document.getElementById('step4').querySelector('p').textContent = 'Make changes permanent or undo everything';
-        }
-
-        // Initialize the demo
-        resetDemo();
-    </script>
+/* Tabs */
+function showTab(tabName) {
+    let tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(t=>t.classList.remove('active'));
+    document.getElementById(tabName).classList.add('active');
+    let tabBtns = document.querySelectorAll('.tab');
+    tabBtns.forEach(t=>t.classList.remove('active'));
+    event.target.classList.add('active');
+}
+</script>
 </body>
 </html>

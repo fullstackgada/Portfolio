@@ -1,520 +1,266 @@
 <!DOCTYPE html>
-<html lang="hi-en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debouncing Demo - Jethalal Style</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Debouncing - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
+        /* Additional styles specific to typing demo */
+        .typing-input {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 1rem;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            margin: 0.5rem 0;
             box-sizing: border-box;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .demo-section {
-            padding: 40px;
-        }
-
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .demo-box {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 30px;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .demo-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-        }
-
-        .demo-box.without-debounce::before {
-            background: linear-gradient(45deg, #ff4757, #c44569);
-        }
-
-        .demo-box.with-debounce::before {
-            background: linear-gradient(45deg, #5f27cd, #00d2d3);
-        }
-
-        .demo-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-
-        .demo-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .emoji {
-            font-size: 2rem;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .log-container {
-            background: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 10px;
-            height: 300px;
-            overflow-y: auto;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .log-entry {
-            margin-bottom: 8px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            animation: slideIn 0.3s ease;
-        }
-
-        .log-entry.search {
-            background: rgba(52, 152, 219, 0.2);
-            border-left: 3px solid #3498db;
-        }
-
-        .log-entry.debounced {
-            background: rgba(46, 204, 113, 0.2);
-            border-left: 3px solid #2ecc71;
-        }
-
-        .counter {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-left: 10px;
-            animation: pulse 0.5s ease;
-        }
-
-        .counter.debounced-counter {
-            background: #27ae60;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
- .explanation {
-            background: #f8f9fa;
-            border-left: 6px solid #4ecdc4;
-            padding: 25px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-        }
-
-        .character {
-            font-weight: bold;
+        .search-results {
+            margin-top: 1rem;
+            background: #f0f4f8;
+            padding: 1rem;
+            border-radius: 6px;
+            min-height: 80px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
             color: #333;
-            margin-bottom: 10px;
-        }
-
-        .jethalal {
-            color: #e74c3c;
-        }
-
-        .babita {
-            color: #9b59b6;
-        }
-     .popatlal-analogy {
-            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px dashed #e17055;
-        }
-
-        .popatlal-analogy h4 {
-            color: #d63031;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        .demo-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .demo-box {
-            background: #fff;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .demo-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        .demo-box h3 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            text-align: center;
-        }
-
-        .explanation h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-       
-        .clear-btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .clear-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 8px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 768px) {
-            .comparison {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .demo-section {
-                padding: 20px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎭 Debouncing Demo - Jethalal Style</h1>
-            <p class="subtitle">समझिए डीबाउंसिंग को Jethalal के अंदाज़ में!</p>
+<div class="container">
+
+    <!-- Header -->
+     <div class="header-interactive" style="position:relative;">
+        <h1>Debouncing ka Funda</h1>
+        <p>Understand how Debouncing works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
         </div>
-
-        <div class="demo-section">
-            <div class="comparison">
-                <div class="demo-box without-debounce">
-                    <h3 class="demo-title">
-                        <span class="emoji">🏃‍♂️</span>
-                        Without Debounce
-                    </h3>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-number" id="withoutCount">0</div>
-                            <div class="stat-label">API Calls</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="withoutRate">0</div>
-                            <div class="stat-label">Calls/sec</div>
-                        </div>
-                    </div>
-                    <input type="text" class="search-input" id="searchWithout" placeholder="Type here... हर अक्षर पर search!" />
-                    <button class="clear-btn" onclick="clearLogs('withoutLog')">Clear Logs</button>
-                    <div class="log-container" id="withoutLog">
-                        <div class="log-entry">💭 Popatlal की तरह - हर अक्षर पर तुरंत action!</div>
-                    </div>
-                </div>
-
-                <div class="demo-box with-debounce">
-                    <h3 class="demo-title">
-                        <span class="emoji">🧘‍♂️</span>
-                        With Debounce
-                    </h3>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <div class="stat-number" id="withCount">0</div>
-                            <div class="stat-label">API Calls</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="withRate">0</div>
-                            <div class="stat-label">Calls/sec</div>
-                        </div>
-                    </div>
-                    <input type="text" class="search-input" id="searchWith" placeholder="Type here... 500ms बाद search!" />
-                    <button class="clear-btn" onclick="clearLogs('withLog')">Clear Logs</button>
-                    <div class="log-container" id="withLog">
-                        <div class="log-entry">🤔 Jethalal की तरह - पहले सोचो, फिर करो!</div>
-                    </div>
-                </div>
-            </div>
-
-             <div class="demo-section">
-            <div class="explanation">
-                <div class="character jethalal">🎭 जेठालाल:</div>
-                <p>बबिता जी, डीबाउंसिंग वैसे ही है जैसे पोपटलाल को समझाना! हर नए रिश्ते पर मिठाई बांटने की बजाय, थोड़ा इंतज़ार करके confirm करना चाहिए ना?</p>
-                
-                <div class="popatlal-analogy">
-                    <h4>🤵 पोपटलाल का उदाहरण:</h4>
-                    <p><strong>बिना डीबाउंसिंग:</strong> हर रिश्ते पर तुरंत मिठाई बांटना = हर keystroke पर API call</p>
-                    <p><strong>डीबाउंसिंग के साथ:</strong> कुछ देर इंतज़ार करके confirm करना = typing रुकने पर API call</p>
-                </div>
-
-                <div class="character babita">👩 बबिता जी:</div>
-                <p>वाह जेठाजी! तो मतलब सर्वर को बार-बार परेशान नहीं करना, बल्कि सही समय पर एक ही बार search करना!</p>
-            </div>
-            
-        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
         </div>
     </div>
 
-    <script>
-        // Counters for tracking API calls
-        let withoutDebounceCount = 0;
-        let withDebounceCount = 0;
-        let startTime = Date.now();
+    <!-- Demo Grid -->
+    <div class="demo-grid">
 
-        // Debounce utility function
-        function debounce(func, delay = 300) {
-            let timerId;
-            return function (...args) {
-                clearTimeout(timerId);
-                timerId = setTimeout(() => func.apply(this, args), delay);
-            };
-        }
+        <!-- Debouncing Concept Explanation -->
+        <div class="demo-section">
+            <h2 class="demo-title">⏳ Debouncing Kya Hai?</h2>
+            <div class="explanation">
+                <strong>Debouncing:</strong> Baar-baar hone wale events ko rok kar sirf last event ke baad function ko run karna.<br>
+                Jaise Popatlal mithai tabhi baant-ta hai jab pura rishta confirm ho jaye!
+            </div>
 
-        // Search functions
-        function searchWithoutDebounce(value) {
-            if (value.trim() === '') return;
-            
-            withoutDebounceCount++;
-            const timestamp = new Date().toLocaleTimeString();
-            const rate = Math.round((withoutDebounceCount / ((Date.now() - startTime) / 1000)) * 10) / 10;
-            
-            document.getElementById('withoutCount').textContent = withoutDebounceCount;
-            document.getElementById('withoutRate').textContent = rate;
-            
-            addLogEntry('withoutLog', 
-                `🔍 API Call #${withoutDebounceCount} - "${value}" (${timestamp})`, 
-                'search'
-            );
-        }
+            <div class="saree-analogy">
+                <h4>🍬 Popatlal ka Sweet Debounce Analogy</h4>
+                <div class="saree-step">
+                    <div class="saree-emoji">📞</div>
+                    <div><strong>Fast-Fast Calls:</strong> Rishta aaya → mithai baanto → rishta toot gaya → fir se drama!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">⏳</div>
+                    <div><strong>Debouncing:</strong> Thodi der ruk jao, agar rishta nahi toota toh mithai baanto!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">😌</div>
+                    <div><strong>Result:</strong> Server confuse nahi hota, aur performance mast rehti hai!</div>
+                </div>
+            </div>
 
-        function searchWithDebounce(value) {
-            if (value.trim() === '') return;
-            
-            withDebounceCount++;
-            const timestamp = new Date().toLocaleTimeString();
-            const rate = Math.round((withDebounceCount / ((Date.now() - startTime) / 1000)) * 10) / 10;
-            
-            document.getElementById('withCount').textContent = withDebounceCount;
-            document.getElementById('withRate').textContent = rate;
-            
-            addLogEntry('withLog', 
-                `✅ Smart API Call #${withDebounceCount} - "${value}" (${timestamp})`, 
-                'debounced'
-            );
-        }
+            <!-- Debounce Demo Controls -->
+            <div class="demo-controls">
+                <button class="demo-btn" onclick="demonstrateNoDebounceTyping()">
+                    ⌨️ Typing Search bina Debouncing ke
+                </button>
+                <button class="demo-btn clear-btn" onclick="clearDebounceDemo()">
+                    🗑️ Demo Clear Karo
+                </button>
+            </div>
 
-        // Add log entry function
-        function addLogEntry(containerId, message, type) {
-            const container = document.getElementById(containerId);
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type}`;
-            entry.textContent = message;
-            
-            container.appendChild(entry);
-            container.scrollTop = container.scrollHeight;
-            
-            // Keep only last 50 entries
-            while (container.children.length > 50) {
-                container.removeChild(container.firstChild);
-            }
-        }
+            <!-- Demo Results -->
+            <div class="demo-area" id="debounceDemoArea">
+                <div class="event-message one-message">
+                    Upar ke buttons click karo to try typing search with/without debouncing!
+                </div>
+            </div>
+        </div>
 
-        // Clear logs function
-        function clearLogs(containerId) {
-            const container = document.getElementById(containerId);
-            const initialMessage = containerId === 'withoutLog' ? 
-                '💭 Popatlal की तरह - हर अक्षर पर तुरंत action!' : 
-                '🤔 Jethalal की तरह - पहले सोचो, फिर करो!';
-            
-            container.innerHTML = `<div class="log-entry">${initialMessage}</div>`;
-            
-            if (containerId === 'withoutLog') {
-                withoutDebounceCount = 0;
-                document.getElementById('withoutCount').textContent = '0';
-                document.getElementById('withoutRate').textContent = '0';
-            } else {
-                withDebounceCount = 0;
-                document.getElementById('withCount').textContent = '0';
-                document.getElementById('withRate').textContent = '0';
-            }
-            
-            startTime = Date.now();
-        }
+        <!-- Live Typing Simulator -->
+        <div class="demo-section">
+            <h2 class="demo-title">🎮 Live Search Input Simulator</h2>
+            <div class="explanation one-explanation">
+                <strong>Demo:</strong> Niche box mein type karo aur dekho kaise debounced search server calls ko kam karta hai.
+            </div>
+            <input type="text" id="searchInput" class="typing-input" placeholder="Yahan search type karo..." autocomplete="off" />
+            <div class="search-results" id="searchResults">Search results yahan dikhenge...</div>
+            <div style="margin-top: 0.5rem;">
+                <label for="debounceDelay">Debounce Delay (milliseconds): </label>
+                <select id="debounceDelay" onchange="changeDebounceDelay()">
+                    <option value="200">200 ms (Jaldi)</option>
+                    <option value="500" selected>500 ms (Default)</option>
+                    <option value="1000">1000 ms (Dheere)</option>
+                    <option value="1500">1500 ms (Aur Dheere)</option>
+                </select>
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <button id="clearLiveSearchBtn" class="demo-btn clear-btn">🗑️ Live Search Clear Karo</button>
+            </div>
+        </div>
+    </div>
 
-        // Initialize event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchWithoutInput = document.getElementById('searchWithout');
-            const searchWithInput = document.getElementById('searchWith');
-            
-            // Without debounce - immediate search
-            searchWithoutInput.addEventListener('input', function(e) {
-                searchWithoutDebounce(e.target.value);
-            });
-            
-            // With debounce - delayed search
-            const debouncedSearch = debounce(searchWithDebounce, 500);
-            searchWithInput.addEventListener('input', function(e) {
-                // Show pending indicator
-                if (e.target.value.trim()) {
-                    addLogEntry('withLog', 
-                        `⏳ Waiting for user to stop typing... "${e.target.value}"`, 
-                        'search'
-                    );
-                }
-                debouncedSearch(e.target.value);
-            });
+    <!-- Benefits & Best Practices -->
+    <div class="comparison-section">
+        <h3>🚀 Debouncing ke Fayde</h3>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Fayde</th>
+                    <th>Kyun?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Server Load</strong></td>
+                    <td>Requests ki sankhya kam hoti hai</td>
+                    <td>Bina zarurat ke requests ko rokta hai</td>
+                </tr>
+                <tr>
+                    <td><strong>Performance</strong></td>
+                    <td>Webpage smooth chalta hai</td>
+                    <td>Bar-bar ka kaam rukta hai, resources bachta hai</td>
+                </tr>
+                <tr>
+                    <td><strong>User Experience</strong></td>
+                    <td>Search sahi time pe chalta hai</td>
+                    <td>Delay ke baad meaningful result dikhta hai</td>
+                </tr>
+                <tr>
+                    <td><strong>Error Handling</strong></td>
+                    <td>Load spikes se bachta hai</td>
+                    <td>Kam time mein kam errors aate hain</td>
+                </tr>
+                <tr>
+                    <td><strong>Implementation</strong></td>
+                    <td>Callback management asaan ho jata hai</td>
+                    <td>Events ke chaotic execution ko control karta hai</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-            // Add some fun interactions
-            searchWithoutInput.addEventListener('focus', function() {
-                addLogEntry('withoutLog', '🎯 Ready for immediate action!', 'search');
-            });
+<script>
+    // Debounce function implementation
+    function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
 
-            searchWithInput.addEventListener('focus', function() {
-                addLogEntry('withLog', '🧘‍♂️ Patience is the key!', 'debounced');
-            });
+    // Simulate search API call
+    function fakeSearchApi(query) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                // fake search results based on query
+                const results = query ? [`"${query}" ke liye result`, `"${query}" ke liye aur ek result`] : [];
+                resolve(results);
+            }, 500); // simulating 500ms API latency
         });
+    }
 
-        // Add some motivational messages
-        setInterval(() => {
-            const messages = [
-                'डीबाउंसिंग = Smart Programming! 🧠',
-                'Server को राहत, User को speed! 🚀',
-                'Jethalal Style = Efficient Style! 💪',
-                'कम API calls = खुश Developer! 😊'
-            ];
-            
-            if (Math.random() > 0.7) { // 30% chance every 10 seconds
-                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-                if (document.getElementById('withLog').children.length > 1) {
-                    addLogEntry('withLog', randomMessage, 'debounced');
+    // Demonstrate typing search without debouncing
+    function demonstrateNoDebounceTyping() {
+        const demoArea = document.getElementById("debounceDemoArea");
+        demoArea.innerHTML = `
+            <div>
+                <input type="text" id="noDebounceInput" class="typing-input" placeholder="Yahan type karo (bina debounce)..."/>
+                <div class="search-results" id="noDebounceResults">Type karna shuru karo toh turant search results dekho...</div>
+                <small style="color: #555;">Search function har keystroke pe chalta hai bina debounce ke.</small>
+            </div>
+        `;
+
+        const input = document.getElementById("noDebounceInput");
+        const resultsDiv = document.getElementById("noDebounceResults");
+
+        function handleSearch() {
+            const query = input.value.trim();
+            resultsDiv.textContent = `Search kar raha hai: "${query}" ...`;
+            fakeSearchApi(query).then((results) => {
+                if (results.length === 0) {
+                    resultsDiv.textContent = "Koi result nahi mila.";
+                } else {
+                    resultsDiv.textContent = results.join("\n");
                 }
-            }
-        }, 10000);
-    </script>
+            });
+        }
+
+        input.addEventListener("input", handleSearch);
+    }
+
+    function clearDebounceDemo() {
+        document.getElementById("debounceDemoArea").innerHTML = `
+            <div class="event-message one-message">
+                Upar ke buttons click karo to try typing search with/without debouncing!
+            </div>
+        `;
+    }
+
+    // Live Simulator debounce implementation
+    let liveDebounceTimeout;
+    let liveSearchCount = 0;
+    const searchInput = document.getElementById("searchInput");
+    const searchResults = document.getElementById("searchResults");
+    const debounceDelaySelector = document.getElementById("debounceDelay");
+
+    function handleLiveSearch() {
+        clearTimeout(liveDebounceTimeout);
+        liveDebounceTimeout = setTimeout(() => {
+            const query = searchInput.value.trim();
+            liveSearchCount++;
+            searchResults.textContent = `Search kar raha hai: "${query}" (Search count: ${liveSearchCount}) ...`;
+            fakeSearchApi(query).then((results) => {
+                if (results.length === 0) {
+                    searchResults.textContent = "Koi result nahi mila.";
+                } else {
+                    searchResults.textContent = results.join("\n");
+                }
+            });
+        }, parseInt(debounceDelaySelector.value));
+    }
+
+    function changeDebounceDelay() {
+        // Immediately clear any pending search and reset count for clarity
+        clearTimeout(liveDebounceTimeout);
+        liveSearchCount = 0;
+        searchResults.textContent = "Debounce delay badal gaya, ab type karo...";
+    }
+
+    window.onload = () => {
+        clearDebounceDemo();
+
+        searchInput.addEventListener("input", handleLiveSearch);
+        debounceDelaySelector.addEventListener("change", changeDebounceDelay);
+
+        const clearBtn = document.getElementById("clearLiveSearchBtn");
+        clearBtn?.addEventListener("click", () => {
+            searchInput.value = "";
+            searchResults.textContent = "Search results yahan dikhenge...";
+            clearTimeout(liveDebounceTimeout);
+            liveSearchCount = 0;
+        });
+    };
+</script>
 </body>
 </html>

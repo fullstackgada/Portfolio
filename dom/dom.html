@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOM ka Funda - Fullstackgada Interactive Demo</title>
+    <title>DOM ka Funda - Fullstackgada</title>
     <link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
-        <div class="header-interactive" style="position:relative;">
+       <div class="header-interactive" style="position:relative;">
         <h1>DOM ka Funda</h1>
         <p>Understand how DOM works with Fullstackgada</p>
        <div class="explore-diagrams-btn-wrapper">
@@ -29,61 +28,32 @@
             <!-- DOM Concept Explanation -->
             <div class="demo-section">
                 <h2 class="demo-title">🌳 What is DOM?</h2>
-                
                 <div class="explanation">
-                    <strong>DOM (Document Object Model):</strong> HTML page का tree structure जिसे JavaScript से access और modify कर सकते हैं!
+                    <strong>DOM:</strong> HTML ka tree structure jise JavaScript se modify kar sakte hain!
                 </div>
-
-                <!-- Bridge Analogy -->
                 <div class="saree-analogy">
-                    <h4>🌉 DOM - The Bridge Between HTML & JavaScript</h4>
-                    <div class="saree-step">
-                        <div class="saree-emoji">📄</div>
-                        <div><strong>HTML:</strong> Static structure (Daya का गुजराती में बोलना)</div>
-                    </div>
-                    <div class="saree-step">
-                        <div class="saree-emoji">🌉</div>
-                        <div><strong>DOM:</strong> Bridge (Jethalal का translation)</div>
-                    </div>
-                    <div class="saree-step">
-                        <div class="saree-emoji">⚡</div>
-                        <div><strong>JavaScript:</strong> Dynamic control (Babita को Hindi में समझाना)</div>
-                    </div>
+                    <h4>🌉 DOM - HTML & JavaScript ka Bridge</h4>
+                    <div class="saree-step"><div class="saree-emoji">📄</div><div><strong>HTML:</strong> Static structure</div></div>
+                    <div class="saree-step"><div class="saree-emoji">🌉</div><div><strong>DOM:</strong> Bridge</div></div>
+                    <div class="saree-step"><div class="saree-emoji">⚡</div><div><strong>JavaScript:</strong> Dynamic control</div></div>
                 </div>
-
-                <!-- DOM Demo Controls -->
                 <div class="demo-controls">
-                    <button class="demo-btn first-btn" onclick="demonstrateDOMStructure()">
-                        🌳 DOM Tree Structure
-                    </button>
-                    <button class="demo-btn" onclick="demonstrateElementAccess()">
-                        🎯 Element Access Methods
-                    </button>
-                    <button class="demo-btn" onclick="demonstrateManipulation()">
-                        ✨ DOM Manipulation
-                    </button>
-                    <button class="demo-btn clear-btn" onclick="clearDOMDemo()">
-                        🗑️ Clear
-                    </button>
+                    <button class="demo-btn first-btn" onclick="demonstrateDOMStructure()">🌳 DOM Tree</button>
+                    <button class="demo-btn" onclick="demonstrateElementAccess()">🎯 Element Access</button>
+                    <button class="demo-btn" onclick="demonstrateManipulation()">✨ Manipulation</button>
+                    <button class="demo-btn clear-btn" onclick="clearDOMDemo()">🗑️ Clear</button>
                 </div>
-
-                <!-- Demo Results -->
                 <div class="demo-area" id="domResults">
-                    <div class="event-message one-message">
-                        Click above buttons to explore DOM concepts!
-                    </div>
+                    <div class="event-message one-message">Click buttons to explore DOM!</div>
                 </div>
             </div>
 
             <!-- Live DOM Playground -->
             <div class="demo-section">
-                <h2 class="demo-title">🎮 Live DOM Playground</h2>
-                
+                <h2 class="demo-title">🎮 DOM Playground</h2>
                 <div class="explanation one-explanation">
-                    <strong>Interactive Test:</strong> Real DOM manipulation को hands-on experience करें!
+                    <strong>Test:</strong> Try real DOM manipulation!
                 </div>
-
-                <!-- Live HTML Elements for Testing -->
                 <div class="demo-area" style="border: 2px solid #4caf50; padding: 1rem; margin: 1rem 0;">
                     <h3 id="playgroundTitle">Hello Daya</h3>
                     <p id="playgroundText">This is original text</p>
@@ -94,91 +64,44 @@
                     </div>
                     <div id="dynamicContent"></div>
                 </div>
-
-                <!-- DOM Manipulation Controls -->
                 <div class="demo-controls">
-                    <button class="demo-btn first-btn" onclick="setupBasicExample()">
-                        📝 Setup Basic Example
-                    </button>
-                    <button class="demo-btn" onclick="setupAdvancedExample()">
-                        🚀 Setup Advanced Example
-                    </button>
-                    <button class="demo-btn" onclick="showDOMInspection()">
-                        🔍 Inspect DOM Tree
-                    </button>
-                    <button class="demo-btn clear-btn" onclick="resetPlayground()">
-                        🔄 Reset Playground
-                    </button>
+                    <button class="demo-btn first-btn" onclick="setupBasicExample()">📝 Basic</button>
+                    <button class="demo-btn" onclick="setupAdvancedExample()">🚀 Advanced</button>
+                    <button class="demo-btn" onclick="showDOMInspection()">🔍 Inspect</button>
+                    <button class="demo-btn clear-btn" onclick="resetPlayground()">🔄 Reset</button>
                 </div>
-
-                <!-- Code Display -->
                 <div class="code-block" id="playgroundCode">
-                    <div class="code-line comment">// DOM Manipulation Code will appear here</div>
-                    <div class="code-line">Click buttons above to generate code examples!</div>
+                    <div class="code-line comment">// DOM Manipulation Code here</div>
+                    <div class="code-line">Click buttons to see examples!</div>
                 </div>
             </div>
         </div>
 
         <!-- DOM Methods Deep Dive -->
         <div class="demo-section" style="grid-column: 1 / -1;">
-            <h2 class="demo-title">🛠️ DOM Methods Deep Dive</h2>
-            
-            <div class="explanation">
-                <strong>Complete Guide:</strong> सभी important DOM methods और properties को examples के साथ समझें!
-            </div>
-
+            <h2 class="demo-title">🛠️ DOM Methods</h2>
             <div class="tabs">
-                <button class="tab active" onclick="showDOMMethod('element-selection')">🎯 Element Selection</button>
-                <button class="tab" onclick="showDOMMethod('content-manipulation')">📝 Content Manipulation</button>
-                <button class="tab" onclick="showDOMMethod('style-manipulation')">🎨 Style Manipulation</button>
-                <button class="tab" onclick="showDOMMethod('event-handling')">⚡ Event Handling</button>
+                <button class="tab active" onclick="showDOMMethod('element-selection')">🎯 Selection</button>
+                <button class="tab" onclick="showDOMMethod('content-manipulation')">📝 Content</button>
+                <button class="tab" onclick="showDOMMethod('style-manipulation')">🎨 Style</button>
+                <button class="tab" onclick="showDOMMethod('event-handling')">⚡ Events</button>
             </div>
 
             <!-- Element Selection -->
             <div id="element-selection" class="tab-content active">
                 <div class="code-container">
                     <div class="code-block">
-                        <div class="code-line comment">// 🎯 Element Selection Methods</div>
-                        <div class="code-line comment">// 1️⃣ Single Element Selection</div>
-                        <div class="code-line var-declaration">// By ID - सबसे common method</div>
-                        <div class="code-line var-usage">const titleElement = document.getElementById('title');</div>
-                        <div class="code-line var-usage">console.log(titleElement); // <h1 id="title">Hello Daya</h1></div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-declaration">// By Class Name - पहला element मिलता है</div>
-                        <div class="code-line var-usage">const firstBtn = document.querySelector('.demo-btn');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-declaration">// By Tag Name - पहला matching tag</div>
-                        <div class="code-line var-usage">const firstPara = document.querySelector('p');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-declaration">// CSS Selector - किसी भी CSS selector का use</div>
-                        <div class="code-line var-usage">const specificBtn = document.querySelector('button[id="changeTextBtn"]');</div>
-                        <div class="code-line var-usage">const nestedElement = document.querySelector('.demo-section h2');</div>
-                    </div>
-                    <div class="code-block">
-                        <div class="code-line comment">// 2️⃣ Multiple Elements Selection</div>
-                        <div class="code-line var-declaration">// All elements with same class</div>
-                        <div class="code-line var-usage">const allButtons = document.querySelectorAll('.demo-btn');</div>
-                        <div class="code-line var-usage">console.log(allButtons.length); // Array-like NodeList</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-declaration">// All elements with same tag</div>
-                        <div class="code-line var-usage">const allParas = document.querySelectorAll('p');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-declaration">// Complex CSS selectors</div>
-                        <div class="code-line var-usage">const demoSectionBtns = document.querySelectorAll('.demo-section button');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// Loop through multiple elements</div>
-                        <div class="code-line var-usage">allButtons.forEach((btn, index) => {</div>
-                        <div class="code-line var-usage">  console.log(`Button ${index}: ${btn.textContent}`);</div>
-                        <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// Convert NodeList to Array (if needed)</div>
-                        <div class="code-line var-usage">const btnArray = Array.from(allButtons);</div>
-                        <div class="code-line var-usage">const btnArray2 = [...allButtons]; // ES6 spread operator</div>
+                        <div class="code-line comment">// 🎯 Element Selection</div>
+                        <div class="code-line var-usage">const title = document.getElementById('title');</div>
+                        <div class="code-line var-usage">const btn = document.querySelector('.demo-btn');</div>
+                        <div class="code-line var-usage">const para = document.querySelector('p');</div>
+                        <div class="code-line var-usage">const allBtns = document.querySelectorAll('.demo-btn');</div>
+                        <div class="code-line var-usage">allBtns.forEach(btn => console.log(btn.textContent));</div>
                     </div>
                 </div>
-                <button class="demo-btn first-btn" onclick="testElementSelection()">🎯 Test Element Selection</button>
+                <button class="demo-btn first-btn" onclick="testElementSelection()">🎯 Test</button>
                 <div id="elementSelectionResult" class="result-panel" style="margin-top: 1rem;">
-                    <div class="result-content">Click to test element selection methods...</div>
+                    <div class="result-content">Click to test selection...</div>
                 </div>
             </div>
 
@@ -186,55 +109,20 @@
             <div id="content-manipulation" class="tab-content">
                 <div class="code-container">
                     <div class="code-block">
-                        <div class="code-line comment">// 📝 Content Manipulation Methods</div>
-                        <div class="code-line comment">// 1️⃣ Text Content Changes</div>
-                        <div class="code-line var-declaration">const heading = document.getElementById('playgroundTitle');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// innerText - केवल visible text</div>
-                        <div class="code-line var-usage">heading.innerText = 'Hello Babita Ji!';</div>
-                        <div class="code-line var-usage">console.log(heading.innerText);</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// textContent - सभी text including hidden</div>
-                        <div class="code-line var-usage">heading.textContent = 'Hello Beautiful Babita!';</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 2️⃣ HTML Content Changes</div>
-                        <div class="code-line var-usage">// innerHTML - HTML tags के साथ</div>
-                        <div class="code-line var-usage">heading.innerHTML = '<em>Hello <strong>Babita</strong> Ji!</em>';</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 3️⃣ Attribute Manipulation</div>
+                        <div class="code-line comment">// 📝 Content Manipulation</div>
+                        <div class="code-line var-usage">const heading = document.getElementById('playgroundTitle');</div>
+                        <div class="code-line var-usage">heading.textContent = 'Hello Babita Ji!';</div>
+                        <div class="code-line var-usage">heading.innerHTML = '<em>Hello Babita!</em>';</div>
                         <div class="code-line var-usage">const btn = document.getElementById('changeTextBtn');</div>
-                        <div class="code-line var-usage">btn.setAttribute('disabled', 'true'); // Disable button</div>
-                        <div class="code-line var-usage">btn.removeAttribute('disabled'); // Enable button</div>
-                        <div class="code-line var-usage">console.log(btn.getAttribute('class')); // Get attribute</div>
-                    </div>
-                    <div class="code-block">
-                        <div class="code-line comment">// 4️⃣ Element Creation & Addition</div>
-                        <div class="code-line var-declaration">// Create new element</div>
+                        <div class="code-line var-usage">btn.setAttribute('disabled', 'true');</div>
                         <div class="code-line var-usage">const newPara = document.createElement('p');</div>
-                        <div class="code-line var-usage">newPara.textContent = 'यह dynamically बना element है!';</div>
-                        <div class="code-line var-usage">newPara.className = 'dynamic-element';</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-declaration">// Add to DOM</div>
-                        <div class="code-line var-usage">const container = document.getElementById('dynamicContent');</div>
-                        <div class="code-line var-usage">container.appendChild(newPara); // End में add करो</div>
-                        <div class="code-line var-usage">container.prepend(newPara); // Beginning में add करो</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 5️⃣ Element Removal</div>
-                        <div class="code-line var-usage">// Modern way</div>
-                        <div class="code-line var-usage">newPara.remove(); // Element को directly remove करो</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Old way (still works)</div>
-                        <div class="code-line var-usage">container.removeChild(newPara);</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 6️⃣ Element Replacement</div>
-                        <div class="code-line var-usage">const newElement = document.createElement('div');</div>
-                        <div class="code-line var-usage">newElement.textContent = 'Replacement element';</div>
-                        <div class="code-line var-usage">oldElement.replaceWith(newElement);</div>
+                        <div class="code-line var-usage">newPara.textContent = 'Dynamic element!';</div>
+                        <div class="code-line var-usage">document.getElementById('dynamicContent').appendChild(newPara);</div>
                     </div>
                 </div>
-                <button class="demo-btn first-btn" onclick="testContentManipulation()">📝 Test Content Manipulation</button>
+                <button class="demo-btn first-btn" onclick="testContentManipulation()">📝 Test</button>
                 <div id="contentManipulationResult" class="result-panel" style="margin-top: 1rem;">
-                    <div class="result-content">Click to test content manipulation methods...</div>
+                    <div class="result-content">Click to test content...</div>
                 </div>
             </div>
 
@@ -242,67 +130,18 @@
             <div id="style-manipulation" class="tab-content">
                 <div class="code-container">
                     <div class="code-block">
-                        <div class="code-line comment">// 🎨 Style Manipulation Methods</div>
-                        <div class="code-line comment">// 1️⃣ Direct Style Properties</div>
-                        <div class="code-line var-declaration">const element = document.getElementById('playgroundTitle');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Individual CSS properties</div>
-                        <div class="code-line var-usage">element.style.color = '#e91e63'; // Pink color</div>
-                        <div class="code-line var-usage">element.style.backgroundColor = '#f0f0f0';</div>
-                        <div class="code-line var-usage">element.style.fontSize = '2rem';</div>
-                        <div class="code-line var-usage">element.style.textAlign = 'center';</div>
-                        <div class="code-line var-usage">element.style.padding = '1rem';</div>
-                        <div class="code-line var-usage">element.style.borderRadius = '8px';</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// Multiple styles at once</div>
-                        <div class="code-line var-usage">element.style.cssText = 'color: blue; font-size: 1.5rem; margin: 1rem;';</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 2️⃣ CSS Classes Manipulation</div>
-                        <div class="code-line var-usage">// Add class</div>
-                        <div class="code-line var-usage">element.classList.add('highlight', 'animated');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Remove class</div>
-                        <div class="code-line var-usage">element.classList.remove('old-style');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Toggle class (add if not present, remove if present)</div>
+                        <div class="code-line comment">// 🎨 Style Manipulation</div>
+                        <div class="code-line var-usage">const element = document.getElementById('playgroundTitle');</div>
+                        <div class="code-line var-usage">element.style.color = '#e91e63';</div>
+                        <div class="code-line var-usage">element.classList.add('highlight');</div>
                         <div class="code-line var-usage">element.classList.toggle('active');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Check if class exists</div>
-                        <div class="code-line var-usage">if (element.classList.contains('highlight')) {</div>
-                        <div class="code-line var-usage">  console.log('Element is highlighted!');</div>
-                        <div class="code-line var-usage">}</div>
-                    </div>
-                    <div class="code-block">
-                        <div class="code-line comment">// 3️⃣ Computed Styles (Read-only)</div>
-                        <div class="code-line var-declaration">// Get actual applied styles</div>
                         <div class="code-line var-usage">const styles = window.getComputedStyle(element);</div>
-                        <div class="code-line var-usage">console.log('Current color:', styles.color);</div>
-                        <div class="code-line var-usage">console.log('Current font-size:', styles.fontSize);</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 4️⃣ Element Dimensions & Position</div>
-                        <div class="code-line var-usage">console.log('Width:', element.offsetWidth);</div>
-                        <div class="code-line var-usage">console.log('Height:', element.offsetHeight);</div>
-                        <div class="code-line var-usage">console.log('Top position:', element.offsetTop);</div>
-                        <div class="code-line var-usage">console.log('Left position:', element.offsetLeft);</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 5️⃣ Visibility Control</div>
-                        <div class="code-line var-usage">// Hide element (keeps space)</div>
-                        <div class="code-line var-usage">element.style.visibility = 'hidden';</div>
-                        <div class="code-line var-usage">element.style.visibility = 'visible';</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Hide element (removes from layout)</div>
-                        <div class="code-line var-usage">element.style.display = 'none';</div>
-                        <div class="code-line var-usage">element.style.display = 'block'; // or 'flex', 'inline', etc.</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 6️⃣ CSS Custom Properties (CSS Variables)</div>
-                        <div class="code-line var-usage">document.documentElement.style.setProperty('--main-color', '#4caf50');</div>
-                        <div class="code-line var-usage">const mainColor = getComputedStyle(document.documentElement)</div>
-                        <div class="code-line var-usage">  .getPropertyValue('--main-color');</div>
+                        <div class="code-line var-usage">console.log(styles.color);</div>
                     </div>
                 </div>
-                <button class="demo-btn first-btn" onclick="testStyleManipulation()">🎨 Test Style Manipulation</button>
+                <button class="demo-btn first-btn" onclick="testStyleManipulation()">🎨 Test</button>
                 <div id="styleManipulationResult" class="result-panel" style="margin-top: 1rem;">
-                    <div class="result-content">Click to test style manipulation methods...</div>
+                    <div class="result-content">Click to test styles...</div>
                 </div>
             </div>
 
@@ -310,221 +149,93 @@
             <div id="event-handling" class="tab-content">
                 <div class="code-container">
                     <div class="code-block">
-                        <div class="code-line comment">// ⚡ Event Handling Methods</div>
-                        <div class="code-line comment">// 1️⃣ Basic Event Listeners</div>
-                        <div class="code-line var-declaration">const button = document.getElementById('changeTextBtn');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Click event</div>
-                        <div class="code-line var-usage">button.addEventListener('click', function() {</div>
-                        <div class="code-line var-usage">  console.log('Button clicked!');</div>
-                        <div class="code-line var-usage">  alert('Hello Babita Ji!');</div>
-                        <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Arrow function syntax</div>
+                        <div class="code-line comment">// ⚡ Event Handling</div>
+                        <div class="code-line var-usage">const button = document.getElementById('changeTextBtn');</div>
                         <div class="code-line var-usage">button.addEventListener('click', () => {</div>
                         <div class="code-line var-usage">  document.getElementById('playgroundTitle').textContent = 'Hello Babita Ji!';</div>
                         <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 2️⃣ Mouse Events</div>
                         <div class="code-line var-usage">button.addEventListener('mouseenter', () => {</div>
                         <div class="code-line var-usage">  button.style.backgroundColor = '#4caf50';</div>
                         <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">button.addEventListener('mouseleave', () => {</div>
-                        <div class="code-line var-usage">  button.style.backgroundColor = '';</div>
-                        <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 3️⃣ Keyboard Events</div>
-                        <div class="code-line var-usage">document.addEventListener('keydown', (event) => {</div>
-                        <div class="code-line var-usage">  if (event.key === 'Enter') {</div>
-                        <div class="code-line var-usage">    console.log('Enter key pressed!');</div>
-                        <div class="code-line var-usage">  }</div>
-                        <div class="code-line var-usage">});</div>
-                    </div>
-                    <div class="code-block">
-                        <div class="code-line comment">// 4️⃣ Form Events</div>
-                        <div class="code-line var-usage">const form = document.querySelector('form');</div>
-                        <div class="code-line var-usage">const input = document.querySelector('input');</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Form submission</div>
-                        <div class="code-line var-usage">form.addEventListener('submit', (event) => {</div>
-                        <div class="code-line var-usage">  event.preventDefault(); // Form को submit होने से रोको</div>
-                        <div class="code-line var-usage">  console.log('Form submitted!');</div>
-                        <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">// Input changes</div>
-                        <div class="code-line var-usage">input.addEventListener('input', (event) => {</div>
-                        <div class="code-line var-usage">  console.log('Input value:', event.target.value);</div>
-                        <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 5️⃣ Event Object Properties</div>
-                        <div class="code-line var-usage">button.addEventListener('click', (event) => {</div>
-                        <div class="code-line var-usage">  console.log('Event type:', event.type); // 'click'</div>
-                        <div class="code-line var-usage">  console.log('Target element:', event.target); // clicked element</div>
-                        <div class="code-line var-usage">  console.log('Mouse X:', event.clientX);</div>
-                        <div class="code-line var-usage">  console.log('Mouse Y:', event.clientY);</div>
-                        <div class="code-line var-usage">  console.log('Timestamp:', event.timeStamp);</div>
-                        <div class="code-line var-usage">});</div>
-                        <div class="code-line"></div>
-                        <div class="code-line comment">// 6️⃣ Remove Event Listeners</div>
-                        <div class="code-line var-declaration">function handleClick() {</div>
-                        <div class="code-line var-usage">  console.log('Clicked!');</div>
-                        <div class="code-line var-declaration">}</div>
-                        <div class="code-line"></div>
-                        <div class="code-line var-usage">button.addEventListener('click', handleClick);</div>
-                        <div class="code-line var-usage">button.removeEventListener('click', handleClick);</div>
                     </div>
                 </div>
-                <button class="demo-btn first-btn" onclick="testEventHandling()">⚡ Test Event Handling</button>
+                <button class="demo-btn first-btn" onclick="testEventHandling()">⚡ Test</button>
                 <div id="eventHandlingResult" class="result-panel" style="margin-top: 1rem;">
-                    <div class="result-content">Click to test event handling methods...</div>
+                    <div class="result-content">Click to test events...</div>
                 </div>
             </div>
         </div>
 
         <!-- DOM Tree Visualization -->
         <div class="demo-section" style="grid-column: 1 / -1;">
-            <h2 class="demo-title">🌳 DOM Tree Visualization</h2>
-            
-            <div class="explanation">
-                <strong>Visual Understanding:</strong> DOM कैसे tree structure में organize होता है!
-            </div>
-
+            <h2 class="demo-title">🌳 DOM Tree</h2>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <!-- HTML Code -->
                 <div>
-                    <h4>📄 HTML Structure</h4>
+                    <h4>📄 HTML</h4>
                     <div class="code-block">
-                        <div class="code-line comment">&lt;!-- Sample HTML Structure --&gt;</div>
                         <div class="code-line var-declaration">&lt;html&gt;</div>
-                        <div class="code-line var-usage">&nbsp;&nbsp;&lt;head&gt;</div>
-                        <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;DOM Demo&lt;/title&gt;</div>
-                        <div class="code-line var-usage">&nbsp;&nbsp;&lt;/head&gt;</div>
+                        <div class="code-line var-usage">&nbsp;&nbsp;&lt;head&gt;&lt;title&gt;DOM Demo&lt;/title&gt;&lt;/head&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&lt;body&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1 id="title"&gt;Hello Daya&lt;/h1&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="text"&gt;Original text&lt;/p&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;button id="btn"&gt;Click Me&lt;/button&gt;</div>
-                        <div class="code-line var-usage">&nbsp;&nbsp;&lt;/body&gt;</div>
                         <div class="code-line var-declaration">&lt;/html&gt;</div>
                     </div>
                 </div>
-
-                <!-- DOM Tree Visualization -->
                 <div>
-                    <h4>🌳 DOM Tree Structure</h4>
+                    <h4>🌳 DOM Tree</h4>
                     <div class="memory-diagram">
-                        <div class="memory-slot">
-                            <div class="variable-name">📄 document</div>
-                            <div class="variable-value">Root node</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 1rem;">
-                            <div class="variable-name">🏠 html</div>
-                            <div class="variable-value">Document element</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 2rem;">
-                            <div class="variable-name">🧠 head</div>
-                            <div class="variable-value">Meta information</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 3rem;">
-                            <div class="variable-name">📰 title</div>
-                            <div class="variable-value">"DOM Demo"</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 2rem;">
-                            <div class="variable-name">🎭 body</div>
-                            <div class="variable-value">Visible content</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 3rem;">
-                            <div class="variable-name">📝 h1#title</div>
-                            <div class="variable-value">"Hello Daya"</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 3rem;">
-                            <div class="variable-name">📄 p.text</div>
-                            <div class="variable-value">"Original text"</div>
-                        </div>
-                        <div class="memory-slot" style="margin-left: 3rem;">
-                            <div class="variable-name">🔘 button#btn</div>
-                            <div class="variable-value">"Click Me"</div>
-                        </div>
+                        <div class="memory-slot"><div class="variable-name">📄 document</div><div class="variable-value">Root</div></div>
+                        <div class="memory-slot" style="margin-left: 1rem;"><div class="variable-name">🏠 html</div><div class="variable-value">Document</div></div>
+                        <div class="memory-slot" style="margin-left: 2rem;"><div class="variable-name">🧠 head</div><div class="variable-value">Meta</div></div>
+                        <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📰 title</div><div class="variable-value">"DOM Demo"</div></div>
+                        <div class="memory-slot" style="margin-left: 2rem;"><div class="variable-name">🎭 body</div><div class="variable-value">Content</div></div>
+                        <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📝 h1#title</div><div class="variable-value">"Hello Daya"</div></div>
+                        <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📄 p.text</div><div class="variable-value">"Original text"</div></div>
+                        <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">🔘 button#btn</div><div class="variable-value">"Click Me"</div></div>
                     </div>
                 </div>
             </div>
-
-            <!-- DOM Navigation -->
-            <div style="margin-top: 1rem;">
-                <h4>🧭 DOM Navigation Properties</h4>
-                <div class="code-block">
-                    <div class="code-line comment">// DOM Tree Navigation Examples</div>
-                    <div class="code-line var-declaration">const titleElement = document.getElementById('title');</div>
-                    <div class="code-line"></div>
-                    <div class="code-line var-usage">// Parent node</div>
-                    <div class="code-line var-usage">console.log(titleElement.parentNode); // body element</div>
-                    <div class="code-line var-usage">console.log(titleElement.parentElement); // body element</div>
-                    <div class="code-line"></div>
-                    <div class="code-line var-usage">// Child nodes</div>
-                    <div class="code-line var-usage">const body = document.body;</div>
-                    <div class="code-line var-usage">console.log(body.childNodes); // All child nodes (including text nodes)</div>
-                    <div class="code-line var-usage">console.log(body.children); // Only element nodes</div>
-                    <div class="code-line var-usage">console.log(body.firstChild); // First child (may be text node)</div>
-                    <div class="code-line var-usage">console.log(body.firstElementChild); // First element child</div>
-                    <div class="code-line var-usage">console.log(body.lastElementChild); // Last element child</div>
-                    <div class="code-line"></div>
-                    <div class="code-line var-usage">// Sibling nodes</div>
-                    <div class="code-line var-usage">console.log(titleElement.nextSibling); // Next node (may be text)</div>
-                    <div class="code-line var-usage">console.log(titleElement.nextElementSibling); // Next element</div>
-                    <div class="code-line var-usage">console.log(titleElement.previousElementSibling); // Previous element</div>
-                </div>
+            <h4>🧭 DOM Navigation</h4>
+            <div class="code-block">
+                <div class="code-line var-usage">const title = document.getElementById('title');</div>
+                <div class="code-line var-usage">console.log(title.parentElement); // body</div>
+                <div class="code-line var-usage">console.log(document.body.children); // elements only</div>
+                <div class="code-line var-usage">console.log(title.nextElementSibling); // next element</div>
             </div>
         </div>
 
         <!-- DOM Performance & Best Practices -->
         <div class="comparison-section">
-            <h3>🚀 DOM Performance & Best Practices</h3>
-            
+            <h3>🚀 Best Practices</h3>
             <table class="comparison-table responsive-table">
                 <thead>
-                    <tr>
-                        <th>Practice</th>
-                        <th>✅ Recommended</th>
-                        <th>❌ Avoid</th>
-                        <th>Why?</th>
-                    </tr>
+                    <tr><th>Practice</th><th>✅ Do</th><th>❌ Avoid</th><th>Why?</th></tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Element Selection</strong></td>
-                        <td>Cache elements: <code>const btn = document.getElementById('btn')</code></td>
-                        <td>Repeated selection: <code>document.getElementById('btn')</code></td>
-                        <td>DOM queries are expensive, cache reduces repeated lookups</td>
+                        <td><strong>Selection</strong></td>
+                        <td>Cache: <code>const btn = document.getElementById('btn')</code></td>
+                        <td>Repeated: <code>document.getElementById('btn')</code></td>
+                        <td>DOM queries are expensive</td>
                     </tr>
                     <tr>
-                        <td><strong>Batch DOM Updates</strong></td>
-                        <td>Use DocumentFragment or batch updates</td>
-                        <td>Individual DOM modifications in loops</td>
-                        <td>Each DOM change triggers reflow/repaint</td>
+                        <td><strong>Updates</strong></td>
+                        <td>Batch with DocumentFragment</td>
+                        <td>Individual updates in loops</td>
+                        <td>Reduces reflows</td>
                     </tr>
                     <tr>
-                        <td><strong>Event Delegation</strong></td>
-                        <td>Add event listener to parent, check event.target</td>
-                        <td>Add individual listeners to each child element</td>
-                        <td>Reduces memory usage and handles dynamic elements</td>
+                        <td><strong>Events</strong></td>
+                        <td>Event delegation on parent</td>
+                        <td>Listeners on each child</td>
+                        <td>Reduces memory usage</td>
                     </tr>
                     <tr>
-                        <td><strong>CSS Classes vs Inline Styles</strong></td>
-                        <td>Use classList.add/remove for styling</td>
-                        <td>Multiple individual style property changes</td>
-                        <td>CSS classes are more performant and maintainable</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Content Updates</strong></td>
-                        <td>Use textContent for plain text</td>
-                        <td>Using innerHTML for simple text changes</td>
-                        <td>innerHTML parsing is slower and can be security risk</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Memory Management</strong></td>
-                        <td>Remove event listeners when elements are removed</td>
-                        <td>Leaving event listeners attached to removed elements</td>
-                        <td>Prevents memory leaks and improves performance</td>
+                        <td><strong>Styles</strong></td>
+                        <td>Use classList.add/remove</td>
+                        <td>Multiple style changes</td>
+                        <td>More maintainable</td>
                     </tr>
                 </tbody>
             </table>
@@ -532,152 +243,75 @@
 
         <!-- DOM Methods Comparison -->
         <div class="comparison-section">
-            <h3>🛠️ DOM Methods Comparison</h3>
-            
+            <h3>🛠️ Methods Comparison</h3>
             <table class="comparison-table responsive-table">
                 <thead>
-                    <tr>
-                        <th>Method</th>
-                        <th>Purpose</th>
-                        <th>Returns</th>
-                        <th>Use Case</th>
-                    </tr>
+                    <tr><th>Method</th><th>Purpose</th><th>Returns</th><th>Use Case</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>getElementById()</strong></td>
-                        <td>Select element by ID</td>
-                        <td>Single element or null</td>
-                        <td>When you know the exact ID</td>
-                    </tr>
-                    <tr>
-                        <td><strong>querySelector()</strong></td>
-                        <td>Select first matching CSS selector</td>
-                        <td>Single element or null</td>
-                        <td>Complex selectors, first match needed</td>
-                    </tr>
-                    <tr>
-                        <td><strong>querySelectorAll()</strong></td>
-                        <td>Select all matching CSS selectors</td>
-                        <td>NodeList (array-like)</td>
-                        <td>Multiple elements, bulk operations</td>
-                    </tr>
-                    <tr>
-                        <td><strong>innerHTML</strong></td>
-                        <td>Get/set HTML content</td>
-                        <td>HTML string</td>
-                        <td>When you need to add HTML tags</td>
-                    </tr>
-                    <tr>
-                        <td><strong>textContent</strong></td>
-                        <td>Get/set text content only</td>
-                        <td>Plain text string</td>
-                        <td>When you only need text, safer than innerHTML</td>
-                    </tr>
-                    <tr>
-                        <td><strong>addEventListener()</strong></td>
-                        <td>Attach event listener</td>
-                        <td>undefined</td>
-                        <td>Interactive elements, multiple listeners per event</td>
-                    </tr>
-                    <tr>
-                        <td><strong>createElement()</strong></td>
-                        <td>Create new DOM element</td>
-                        <td>New element node</td>
-                        <td>Dynamic content creation</td>
-                    </tr>
-                    <tr>
-                        <td><strong>appendChild()</strong></td>
-                        <td>Add child element at end</td>
-                        <td>Appended element</td>
-                        <td>Adding elements to containers</td>
-                    </tr>
+                    <tr><td><strong>getElementById()</strong></td><td>Select by ID</td><td>Element/null</td><td>Known ID</td></tr>
+                    <tr><td><strong>querySelector()</strong></td><td>First CSS match</td><td>Element/null</td><td>Complex selectors</td></tr>
+                    <tr><td><strong>querySelectorAll()</strong></td><td>All CSS matches</td><td>NodeList</td><td>Bulk operations</td></tr>
+                    <tr><td><strong>textContent</strong></td><td>Get/set text</td><td>Text</td><td>Safe text updates</td></tr>
+                    <tr><td><strong>addEventListener()</strong></td><td>Add event</td><td>undefined</td><td>Interactive elements</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-    
-        // DOM demonstration functions
         function demonstrateDOMStructure() {
-            const result = document.getElementById('domResults');
-            result.innerHTML = `
+            document.getElementById('domResults').innerHTML = `
                 <div class="success-message">
-                    <strong>🌳 DOM Tree Structure Explained</strong><br><br>
-                    <strong>HTML Structure:</strong><br>
-                    📄 document (root)<br>
+                    <strong>🌳 DOM Tree</strong><br>
+                    📄 document<br>
                     &nbsp;&nbsp;🏠 html<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;🧠 head → 📰 title<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;🎭 body → 📝 h1, 📄 p, 🔘 button<br><br>
-                    <strong>JavaScript Access:</strong><br>
-                    • <code>document.getElementById('title')</code> → h1 element<br>
-                    • <code>document.querySelector('button')</code> → first button<br>
-                    • <code>document.body</code> → body element<br><br>
-                    <strong>यही है DOM का जादू!</strong> हर HTML element एक JavaScript object बन जाता है!
+                    &nbsp;&nbsp;&nbsp;&nbsp;🎭 body → 📝 h1, 📄 p, 🔘 button<br>
+                    <strong>Access:</strong><br>
+                    • <code>document.getElementById('title')</code><br>
+                    • <code>document.querySelector('button')</code><br>
                     <div class="message-time">${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
         }
 
         function demonstrateElementAccess() {
-            const result = document.getElementById('domResults');
-            
-            // Count actual elements for demonstration
             const allBtns = document.querySelectorAll('button').length;
             const allDivs = document.querySelectorAll('div').length;
-            const elementsWithClass = document.querySelectorAll('.demo-btn').length;
-            
-            result.innerHTML = `
+            document.getElementById('domResults').innerHTML = `
                 <div class="success-message">
-                    <strong>🎯 Element Access Methods Demo</strong><br><br>
-                    <strong>Live Results from this page:</strong><br>
-                    • <code>getElementById('domResults')</code> = Found this result div ✅<br>
-                    • <code>querySelectorAll('button')</code> = Found ${allBtns} buttons<br>
-                    • <code>querySelectorAll('div')</code> = Found ${allDivs} divs<br>
-                    • <code>querySelectorAll('.demo-btn')</code> = Found ${elementsWithClass} demo buttons<br><br>
-                    <strong>Smart Selection:</strong><br>
-                    • Single element: <code>querySelector()</code><br>
-                    • Multiple elements: <code>querySelectorAll()</code><br>
-                    • By ID: <code>getElementById()</code> (fastest)<br><br>
-                    <strong>DOM Selection में भी efficiency matter करती है!</strong>
+                    <strong>🎯 Element Access</strong><br>
+                    • Found ${allBtns} buttons<br>
+                    • Found ${allDivs} divs<br>
+                    <strong>Methods:</strong><br>
+                    • <code>getElementById()</code> (fastest)<br>
+                    • <code>querySelectorAll()</code> (multiple elements)<br>
                     <div class="message-time">${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
         }
 
         function demonstrateManipulation() {
-            const result = document.getElementById('domResults');
-            
-            // Actually manipulate the playground title for demonstration
             const title = document.getElementById('playgroundTitle');
             const originalText = title.textContent;
-            
-            // Change it temporarily
             title.textContent = 'Hello Babita Ji! 💖';
             title.style.color = '#e91e63';
             title.style.transform = 'scale(1.1)';
-            
-            // Reset after 3 seconds
             setTimeout(() => {
                 title.textContent = originalText;
                 title.style.color = '';
                 title.style.transform = '';
             }, 3000);
-            
-            result.innerHTML = `
+            document.getElementById('domResults').innerHTML = `
                 <div class="success-message">
-                    <strong>✨ DOM Manipulation Demo</strong><br><br>
-                    <strong>Watch the playground title above!</strong><br>
-                    • Text changed: "Hello Daya" → "Hello Babita Ji!"<br>
-                    • Color changed to pink<br>
-                    • Size increased with transform<br>
-                    • Will reset in 3 seconds<br><br>
-                    <strong>Methods Used:</strong><br>
-                    • <code>element.textContent = 'new text'</code><br>
-                    • <code>element.style.color = '#e91e63'</code><br>
-                    • <code>element.style.transform = 'scale(1.1)'</code><br><br>
-                    <strong>Real-time DOM manipulation in action!</strong> 🎭
+                    <strong>✨ Manipulation</strong><br>
+                    • Text changed to "Hello Babita Ji!"<br>
+                    • Color to pink<br>
+                    • Resets in 3s<br>
+                    <strong>Methods:</strong><br>
+                    • <code>textContent</code><br>
+                    • <code>style.color</code><br>
                     <div class="message-time">${new Date().toLocaleTimeString()}</div>
                 </div>
             `;
@@ -685,56 +319,38 @@
 
         function clearDOMDemo() {
             document.getElementById('domResults').innerHTML = `
-                <div class="event-message one-message">
-                    Click above buttons to explore DOM concepts!
-                </div>
+                <div class="event-message one-message">Click buttons to explore DOM!</div>
             `;
         }
 
-        // Playground setup functions
         function setupBasicExample() {
-            const code = document.getElementById('playgroundCode');
-            
-            // Clear any existing event listeners and reset
             resetPlayground();
-            
+            const code = document.getElementById('playgroundCode');
             code.innerHTML = `
-                <div class="code-line comment">// 📝 Basic DOM Manipulation Example</div>
-                <div class="code-line var-declaration">// 1. Select elements</div>
+                <div class="code-line comment">// 📝 Basic Example</div>
                 <div class="code-line var-usage">const title = document.getElementById('playgroundTitle');</div>
                 <div class="code-line var-usage">const btn = document.getElementById('changeTextBtn');</div>
-                <div class="code-line"></div>
-                <div class="code-line var-declaration">// 2. Add event listener</div>
-                <div class="code-line var-usage">btn.addEventListener('click', function() {</div>
+                <div class="code-line var-usage">btn.addEventListener('click', () => {</div>
                 <div class="code-line var-usage">  title.textContent = 'Hello Babita Ji!';</div>
                 <div class="code-line var-usage">  title.style.color = '#e91e63';</div>
                 <div class="code-line var-usage">});</div>
             `;
-            
-            // Actually implement the functionality
             const title = document.getElementById('playgroundTitle');
             const btn = document.getElementById('changeTextBtn');
-            
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', () => {
                 title.textContent = 'Hello Babita Ji!';
                 title.style.color = '#e91e63';
             });
         }
 
         function setupAdvancedExample() {
-            const code = document.getElementById('playgroundCode');
-            
-            // Clear any existing event listeners and reset
             resetPlayground();
-            
+            const code = document.getElementById('playgroundCode');
             code.innerHTML = `
-                <div class="code-line comment">// 🚀 Advanced DOM Manipulation Example</div>
-                <div class="code-line var-declaration">// 1. Select multiple elements</div>
+                <div class="code-line comment">// 🚀 Advanced Example</div>
                 <div class="code-line var-usage">const allBtns = document.querySelectorAll('#changeTextBtn, #changeColorBtn, #addElementBtn');</div>
                 <div class="code-line var-usage">const title = document.getElementById('playgroundTitle');</div>
                 <div class="code-line var-usage">const container = document.getElementById('dynamicContent');</div>
-                <div class="code-line"></div>
-                <div class="code-line var-declaration">// 2. Add functionality to each button</div>
                 <div class="code-line var-usage">allBtns.forEach((btn, index) => {</div>
                 <div class="code-line var-usage">  btn.addEventListener('click', () => {</div>
                 <div class="code-line var-usage">    if (index === 0) title.textContent = 'Hello Babita Ji!';</div>
@@ -747,12 +363,9 @@
                 <div class="code-line var-usage">  });</div>
                 <div class="code-line var-usage">});</div>
             `;
-            
-            // Actually implement the functionality
             const allBtns = document.querySelectorAll('#changeTextBtn, #changeColorBtn, #addElementBtn');
             const title = document.getElementById('playgroundTitle');
             const container = document.getElementById('dynamicContent');
-            
             allBtns.forEach((btn, index) => {
                 btn.addEventListener('click', () => {
                     if (index === 0) title.textContent = 'Hello Babita Ji!';
@@ -776,84 +389,48 @@
         }
 
         function showDOMInspection() {
-            const code = document.getElementById('playgroundCode');
-            
-            // Get real DOM information
             const title = document.getElementById('playgroundTitle');
             const allElements = document.querySelectorAll('*').length;
             const allDivs = document.querySelectorAll('div').length;
             const allButtons = document.querySelectorAll('button').length;
-            
-            code.innerHTML = `
-                <div class="code-line comment">// 🔍 DOM Tree Inspection Results</div>
-                <div class="code-line var-declaration">// Current page DOM statistics:</div>
+            document.getElementById('playgroundCode').innerHTML = `
+                <div class="code-line comment">// 🔍 DOM Inspection</div>
                 <div class="code-line var-usage">Total elements: ${allElements}</div>
                 <div class="code-line var-usage">Total divs: ${allDivs}</div>
                 <div class="code-line var-usage">Total buttons: ${allButtons}</div>
-                <div class="code-line"></div>
-                <div class="code-line var-declaration">// Title element properties:</div>
-                <div class="code-line var-usage">ID: "${title.id}"</div>
-                <div class="code-line var-usage">Tag Name: "${title.tagName}"</div>
-                <div class="code-line var-usage">Text Content: "${title.textContent}"</div>
-                <div class="code-line var-usage">Parent: ${title.parentElement.tagName}</div>
-                <div class="code-line"></div>
-                <div class="code-line comment">// DOM Navigation:</div>
-                <div class="code-line var-usage">document.body.children.length: ${document.body.children.length}</div>
-                <div class="code-line var-usage">document.title: "${document.title}"</div>
+                <div class="code-line var-usage">Title ID: "${title.id}"</div>
+                <div class="code-line var-usage">Title Tag: "${title.tagName}"</div>
+                <div class="code-line var-usage">Title Text: "${title.textContent}"</div>
             `;
         }
 
         function resetPlayground() {
-            // Reset title
             const title = document.getElementById('playgroundTitle');
             title.textContent = 'Hello Daya';
             title.style.cssText = '';
-            
-            // Reset text
-            const text = document.getElementById('playgroundText');
-            text.textContent = 'This is original text';
-            text.style.cssText = '';
-            
-            // Clear dynamic content
-            const container = document.getElementById('dynamicContent');
-            container.innerHTML = '';
-            
-            // Remove all event listeners by cloning elements
+            document.getElementById('playgroundText').textContent = 'This is original text';
+            document.getElementById('dynamicContent').innerHTML = '';
             const buttons = document.querySelectorAll('#changeTextBtn, #changeColorBtn, #addElementBtn');
             buttons.forEach(btn => {
                 const newBtn = btn.cloneNode(true);
                 btn.parentNode.replaceChild(newBtn, btn);
             });
-            
-            // Reset code display
-            const code = document.getElementById('playgroundCode');
-            code.innerHTML = `
-                <div class="code-line comment">// DOM Manipulation Code will appear here</div>
-                <div class="code-line">Click buttons above to generate code examples!</div>
+            document.getElementById('playgroundCode').innerHTML = `
+                <div class="code-line comment">// DOM Manipulation Code here</div>
+                <div class="code-line">Click buttons to see examples!</div>
             `;
         }
 
-        // Test functions for DOM methods
         function testElementSelection() {
-            const results = [];
-            
-            // Test different selection methods
             const byId = document.getElementById('playgroundTitle');
             const byQuery = document.querySelector('h3');
             const allBtns = document.querySelectorAll('.demo-btn');
-            const allDivs = document.querySelectorAll('div');
-            
-            results.push(`getElementById: ${byId ? 'Found element with id "' + byId.id + '"' : 'Not found'}`);
-            results.push(`querySelector('h3'): ${byQuery ? 'Found first h3 element' : 'Not found'}`);
-            results.push(`querySelectorAll('.demo-btn'): Found ${allBtns.length} elements`);
-            results.push(`querySelectorAll('div'): Found ${allDivs.length} elements`);
-            
             document.getElementById('elementSelectionResult').innerHTML = `
                 <div class="success-message">
-                    <strong>🎯 Element Selection Test Results:</strong><br><br>
-                    ${results.map(result => `• ${result}`).join('<br>')}<br><br>
-                    <strong>Performance Tip:</strong> getElementById() is fastest for single elements!<br>
-                    <strong>Flexibility Tip:</strong> querySelector() accepts any CSS selector!
+                    <strong>🎯 Selection Results:</strong><br>
+                    • getElementById: ${byId ? 'Found "' + byId.id + '"' : 'Not found'}<br>
+                    • querySelector('h3'): ${byQuery ? 'Found h3' : 'Not found'}<br>
+                    • querySelectorAll('.demo-btn'): ${allBtns.length} buttons<br>
                 </div>
             `;
         }
@@ -863,32 +440,19 @@
             testDiv.id = 'testElement';
             testDiv.innerHTML = '<span>Original</span> content';
             document.body.appendChild(testDiv);
-            
-            const results = [];
-            
-            // Test different content manipulation methods
-            results.push(`Original innerHTML: "${testDiv.innerHTML}"`);
-            results.push(`Original textContent: "${testDiv.textContent}"`);
-            results.push(`Original innerText: "${testDiv.innerText}"`);
-            
-            // Modify content
-            testDiv.innerHTML = '<em>Modified</em> HTML content';
-            results.push(`After innerHTML change: "${testDiv.innerHTML}"`);
-            
-            testDiv.textContent = 'Plain text content';
-            results.push(`After textContent change: "${testDiv.textContent}"`);
-            
-            // Clean up
+            const results = [
+                `Original innerHTML: "${testDiv.innerHTML}"`,
+                `Original textContent: "${testDiv.textContent}"`
+            ];
+            testDiv.innerHTML = '<em>Modified</em> content';
+            results.push(`After innerHTML: "${testDiv.innerHTML}"`);
+            testDiv.textContent = 'Plain text';
+            results.push(`After textContent: "${testDiv.textContent}"`);
             testDiv.remove();
-            
             document.getElementById('contentManipulationResult').innerHTML = `
                 <div class="success-message">
-                    <strong>📝 Content Manipulation Test Results:</strong><br><br>
-                    ${results.map(result => `• ${result}`).join('<br>')}<br><br>
-                    <strong>Key Differences:</strong><br>
-                    • innerHTML: Includes HTML tags<br>
-                    • textContent: Plain text only, includes hidden text<br>
-                    • innerText: Plain text only, respects styling
+                    <strong>📝 Content Results:</strong><br>
+                    ${results.map(r => `• ${r}`).join('<br>')}<br>
                 </div>
             `;
         }
@@ -896,120 +460,56 @@
         function testStyleManipulation() {
             const title = document.getElementById('playgroundTitle');
             const originalStyle = title.style.cssText;
-            const originalClassName = title.className;
-            
-            const results = [];
-            
-            // Test direct style manipulation
             title.style.color = 'blue';
-            title.style.fontSize = '2rem';
             title.style.background = 'yellow';
-            results.push('Direct styles applied: color, fontSize, background');
-            
-            // Test CSS classes
-            title.classList.add('highlight', 'animated');
-            results.push(`Added classes: ${Array.from(title.classList).join(', ')}`);
-            
-            const hasHighlight = title.classList.contains('highlight');
-            results.push(`Contains 'highlight' class: ${hasHighlight}`);
-            
-            // Test computed styles
             const computedStyle = window.getComputedStyle(title);
-            results.push(`Computed color: ${computedStyle.color}`);
-            results.push(`Computed font-size: ${computedStyle.fontSize}`);
-            
-            // Restore original styles
-            setTimeout(() => {
-                title.style.cssText = originalStyle;
-                title.className = originalClassName;
-            }, 3000);
-            
             document.getElementById('styleManipulationResult').innerHTML = `
                 <div class="success-message">
-                    <strong>🎨 Style Manipulation Test Results:</strong><br><br>
-                    ${results.map(result => `• ${result}`).join('<br>')}<br><br>
-                    <strong>Watch the playground title above!</strong><br>
-                    Styles will reset in 3 seconds.<br><br>
-                    <strong>Best Practice:</strong> Use CSS classes for styling when possible!
+                    <strong>🎨 Style Results:</strong><br>
+                    • Applied color: blue<br>
+                    • Applied background: yellow<br>
+                    • Computed color: ${computedStyle.color}<br>
+                    Resets in 3s<br>
                 </div>
             `;
+            setTimeout(() => {
+                title.style.cssText = originalStyle;
+            }, 3000);
         }
 
         function testEventHandling() {
             let clickCount = 0;
-            let eventData = [];
-            
-            // Create a test button
             const testBtn = document.createElement('button');
-            testBtn.textContent = 'Test Event Button';
+            testBtn.textContent = 'Test Event';
             testBtn.className = 'demo-btn';
             testBtn.style.margin = '0.5rem';
-            
-            // Add various event listeners
-            testBtn.addEventListener('click', (event) => {
+            testBtn.addEventListener('click', () => {
                 clickCount++;
-                eventData.push({
-                    type: event.type,
-                    timestamp: event.timeStamp,
-                    target: event.target.tagName,
-                    clientX: event.clientX,
-                    clientY: event.clientY
-                });
+                document.getElementById('clickCount').textContent = clickCount;
             });
-            
-            testBtn.addEventListener('mouseenter', () => {
-                testBtn.style.background = '#4caf50';
-            });
-            
-            testBtn.addEventListener('mouseleave', () => {
-                testBtn.style.background = '';
-            });
-            
-            // Add to result panel
+            testBtn.addEventListener('mouseenter', () => testBtn.style.background = '#4caf50');
+            testBtn.addEventListener('mouseleave', () => testBtn.style.background = '');
             const resultPanel = document.getElementById('eventHandlingResult');
             resultPanel.innerHTML = `
                 <div class="success-message">
-                    <strong>⚡ Event Handling Test Setup:</strong><br><br>
-                    Click the button below to test events!<br><br>
+                    <strong>⚡ Event Test:</strong><br>
+                    Click the button below!<br>
                     <div style="text-align: center; margin: 1rem 0;"></div>
                     <div id="eventStats">
-                        <strong>Click Count:</strong> <span id="clickCount">0</span><br>
-                        <strong>Last Event Data:</strong> <span id="lastEvent">None</span>
+                        <strong>Clicks:</strong> <span id="clickCount">0</span>
                     </div>
                 </div>
             `;
-            
-            // Insert button
             resultPanel.querySelector('div[style*="text-align: center"]').appendChild(testBtn);
-            
-            // Update click handler to show stats
-            testBtn.addEventListener('click', () => {
-                document.getElementById('clickCount').textContent = clickCount;
-                const lastEvent = eventData[eventData.length - 1];
-                document.getElementById('lastEvent').textContent = 
-                    `${lastEvent.type} at (${lastEvent.clientX}, ${lastEvent.clientY})`;
-            });
         }
 
-        // Show DOM method tabs
         function showDOMMethod(method) {
-            // Hide all tab contents
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
-            
-            // Remove active class from all tabs
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.getElementById(method).classList.add('active');
-            
-            // Add active class to clicked tab
             event.target.classList.add('active');
         }
 
-    
-        // Initialize demo
         window.onload = function() {
             clearDOMDemo();
             resetPlayground();

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Indexing ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+           <div class="header-interactive" style="position:relative;">
+        <h1>Database Indexing ka Funda</h1>
+        <p>Understand how Database Indexing works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>  
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Search Performance Demo -->
+            <div class="demo-section">
+                <h2 class="demo-title">🚀 Search Performance ka Demo</h2>
+                
+                <div class="explanation">
+                    <strong>Bhide ki Pareshani:</strong> Website pe search bahut slow! Bina index ke database har record ko check karta hai.
+                </div>
+
+                <!-- Search Controls -->
+                <div class="form-group">
+                    <label for="searchQuery">Product Search Karo:</label>
+                    <input type="text" id="searchQuery" placeholder="Product ka naam daalo..." oninput="validateInput()" />
+                </div>
+
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="searchWithoutIndex()">
+                        🐌 Bina Index ke Search
+                    </button>
+                    <button class="demo-btn first-btn" onclick="searchWithIndex()">
+                        ⚡ Index ke Saath Search
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="resetSearchDemo()">
+                        🔄 Reset Karo
+                    </button>
+                </div>
+
+                <!-- Performance Comparison -->
+                <div class="demo-area" id="performanceResult">
+                    <div class="event-message one-message">
+                        <strong>Performance ka Comparison:</strong><br>
+                        Product ka naam daal ke dono search methods try karo aur fark dekho!
+                    </div>
+                </div>
+
+                <!-- Visual Progress Bar -->
+                <div id="searchProgress" style="display: none;">
+                    <div style="background: #f0f0f0; height: 20px; border-radius: 10px; margin: 1rem 0;">
+                        <div id="progressBar" style="background: #ff6f61; height: 100%; border-radius: 10px; width: 0%; transition: width 0.1s;"></div>
+                    </div>
+                    <div id="progressText">Search chal raha hai...</div>
+                </div>
+            </div>
+
+            <!-- Index Types Explorer -->
+            <div class="demo-section">
+                <h2 class="demo-title">📚 Index Types ka Explorer</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Jethalal ka Gyaan:</strong> Alag-alag needs ke liye alag-alag indexes!
+                </div>
+
+                <!-- Index Type Buttons -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="showIndexType('single')">
+                        📖 Single Column Index
+                    </button>
+                    <button class="demo-btn" onclick="showIndexType('composite')">
+                        📚 Composite Index
+                    </button>
+                </div>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="showIndexType('unique')">
+                        ⭐ Unique Index
+                    </button>
+                    <button class="demo-btn" onclick="showIndexType('fulltext')">
+                        🔍 Full-Text Index
+                    </button>
+                </div>
+
+                <!-- Index Explanation Display -->
+                <div class="demo-area" id="indexExplanation">
+                    <div class="event-message one-message">
+                        <strong>Index Types:</strong><br>
+                        Koi bhi index type click karo aur explanation ke saath SQL examples dekho!
+                    </div>
+                </div>
+
+                <!-- Book Analogy -->
+                <div class="saree-analogy" id="bookAnalogy">
+                    <h4>📖 Book Index ka Analogy</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">📑</div>
+                        <div>Kitab ke peechhe Index page hota hai - Topic A page 50 pe, Topic B page 75 pe</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">⚡</div>
+                        <div>Database Index bhi waisa hi - Record A row 1000 mein, Record B row 2500 mein</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🎯</div>
+                        <div>Direct jump kar jate hain, har page nahi dekhna padta!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Table Demo -->
+        <div class="demo-section">
+            <h2 class="demo-title">🛒 Products Table aur Index Management</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('table-tab')">Products Table</button>
+                <button class="tab" onclick="showTab('indexes-tab')">Current Indexes</button>
+                <button class="tab" onclick="showTab('sql-commands-tab')">SQL Commands</button>
+            </div>
+
+            <!-- Products Table Tab -->
+            <div id="table-tab" class="tab-content active">
+                <h4>🛒 Products Table (Sample Data)</h4>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>ProductID</th>
+                            <th>🔍 Name (Indexed)</th>
+                            <th>🔍 Category (Indexed)</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr><td>1</td><td>Soap</td><td>Personal Care</td><td>₹45</td><td>Premium bathing soap with natural ingredients</td></tr>
+                        <tr><td>2</td><td>Shampoo</td><td>Personal Care</td><td>₹120</td><td>Anti-dandruff shampoo for healthy hair</td></tr>
+                        <tr><td>3</td><td>Rice</td><td>Grocery</td><td>₹80</td><td>Basmati rice 1kg pack premium quality</td></tr>
+                        <tr><td>4</td><td>Oil</td><td>Grocery</td><td>₹150</td><td>Mustard oil cold pressed organic</td></tr>
+                        <tr><td>5</td><td>Papad</td><td>Snacks</td><td>₹25</td><td>Crispy papad made from lentils</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="demo-controls" style="margin-top: 1rem;">
+                    <button class="demo-btn first-btn" onclick="createIndex()">
+                        ➕ Index Banaye
+                    </button>
+                    <button class="demo-btn" onclick="dropIndex()">
+                        🗑️ Index Hatao
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="showIndexes()">
+                        👁️ Sab Indexes Dikhao
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Indexes Tab -->
+            <div id="indexes-tab" class="tab-content">
+                <h4>📋 Current Indexes</h4>
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Index Name</th>
+                            <th>Table</th>
+                            <th>Columns</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="indexesTableBody">
+                        <tr><td>idx_product_name</td><td>Products</td><td>Name</td><td>Single Column</td><td>✅ Active</td></tr>
+                        <tr><td>idx_category_price</td><td>Products</td><td>Category, Price</td><td>Composite</td><td>✅ Active</td></tr>
+                        <tr><td>idx_product_id</td><td>Products</td><td>ProductID</td><td>Unique</td><td>✅ Active</td></tr>
+                    </tbody>
+                </table>
+                <div class="explanation">
+                    <strong>Index ke Fayde:</strong><br>
+                    🔍 <strong>Name Index:</strong> Product search jaldi<br>
+                    🧩 <strong>Composite Index:</strong> Category + Price filter tez<br>
+                    ⭐ <strong>Unique Index:</strong> Koi duplicate ProductIDs nahi
+                </div>
+            </div>
+
+            <!-- SQL Commands Tab -->
+            <div id="sql-commands-tab" class="tab-content">
+                <h4>💻 Index Management ke SQL Commands</h4>
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">/* Index Banaye */</div>
+                        <div class="code-line var-declaration">-- Single Column Index</div>
+                        <div class="code-line var-usage">CREATE INDEX idx_product_name ON Products(Name);</div>
+                        <div class="code-line var-declaration">-- Composite Index</div>
+                        <div class="code-line var-usage">CREATE INDEX idx_category_price ON Products(Category, Price);</div>
+                        <div class="code-line var-declaration">-- Unique Index</div>
+                        <div class="code-line var-usage">CREATE UNIQUE INDEX idx_product_id ON Products(ProductID);</div>
+                        <div class="code-line var-declaration">-- Full-Text Index</div>
+                        <div class="code-line var-usage">CREATE FULLTEXT INDEX idx_description ON Products(Description);</div>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-line comment">/* Index Manage Karo */</div>
+                        <div class="code-line var-declaration">-- Sab Indexes Dikhao</div>
+                        <div class="code-line var-usage">SHOW INDEX FROM Products;</div>
+                        <div class="code-line var-declaration">-- Index Hatao</div>
+                        <div class="code-line var-usage">DROP INDEX idx_product_name ON Products;</div>
+                        <div class="code-line var-declaration">-- Index Usage Check Karo</div>
+                        <div class="code-line var-usage">EXPLAIN SELECT * FROM Products WHERE Name = 'Soap';</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Practices Comparison -->
+        <div class="comparison-section" id="indexBestPractices">
+            <h3>📌 Indexing ke Best Practices</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>✅ Accha Practice</th>
+                        <th>❌ Galat Practice</th>
+                        <th>Jethalal ki Salah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Column Selection</strong></td>
+                        <td>Jo columns baar-baar search ya filter hote hain</td>
+                        <td>Har column pe index</td>
+                        <td>Jahan baar-baar search, wahan index lagao</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Index Count</strong></td>
+                        <td>Soch-samajhkar indexing</td>
+                        <td>Bahut saare indexes</td>
+                        <td>Dhyaan se lagao, warna INSERT slow ho jayega</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Composite Indexes</strong></td>
+                        <td>Sabse selective column pehle</td>
+                        <td>Random column order</td>
+                        <td>Jo zyada unique, woh pehle rakho</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Maintenance</strong></td>
+                        <td>Monitor karo aur unused hatao</td>
+                        <td>Banake bhool jao</td>
+                        <td>Check karte raho kaun se kaam aa rahe hain</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentIndexType = null;
+
+        // Index types with explanations
+        const indexTypes = {
+            single: {
+                title: "📖 Single Column Index",
+                definition: "Ek column pe banaya index jo us column ki search ko tez karta hai.",
+                sql: "CREATE INDEX idx_product_name ON Products(Name);",
+                example: "Product name se search karne ke liye",
+                analogy: "Kitab ke peechhe Topic Index - ek topic, ek page number"
+            },
+            composite: {
+                title: "📚 Composite Index",
+                definition: "Do ya zyada columns ko milakar banaya index.",
+                sql: "CREATE INDEX idx_category_price ON Products(Category, Price);",
+                example: "Category aur Price dono se filter karne ke liye",
+                analogy: "Phone book - pehle surname phir first name se khojna"
+            },
+            unique: {
+                title: "⭐ Unique Index",
+                definition: "Index jo duplicate values ko allow nahi karta.",
+                sql: "CREATE UNIQUE INDEX idx_product_id ON Products(ProductID);",
+                example: "ProductID unique rakhne ke liye",
+                analogy: "Aadhaar number - har person ka alag hona chahiye"
+            },
+            fulltext: {
+                title: "🔍 Full-Text Index",
+                definition: "Text content mein words search karne ke liye special index.",
+                sql: "CREATE FULLTEXT INDEX idx_description ON Products(Description);",
+                example: "Product description mein specific words dhoondne ke liye",
+                analogy: "Google search - poore paragraph mein keywords dhoondna"
+            }
+        };
+
+         // Validate input and toggle button states
+        function validateInput() {
+            const query = document.getElementById('searchQuery').value.trim();
+            const searchWithoutIndexBtn = document.getElementById('searchWithoutIndexBtn');
+            const searchWithIndexBtn = document.getElementById('searchWithIndexBtn');
+            
+            if (query.length > 0) {
+                searchWithoutIndexBtn.disabled = false;
+                searchWithIndexBtn.disabled = false;
+            } else {
+                searchWithoutIndexBtn.disabled = true;
+                searchWithIndexBtn.disabled = true;
+            }
+        }
+
+       // Search performance simulation
+        function searchWithoutIndex() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (query.length === 0) {
+                alert("Product ka naam daalo pehle!");
+                return;
+            }
+            simulateSearch(query, false);
+        }
+
+        function searchWithIndex() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (query.length === 0) {
+                alert("Product ka naam daalo pehle!");
+                return;
+            }
+            simulateSearch(query, true);
+        }
+
+        function simulateSearch(query, hasIndex) {
+            document.getElementById('searchProgress').style.display = 'block';
+            document.getElementById('performanceResult').innerHTML = '';
+            
+            const totalRecords = hasIndex ? 5 : 10000; // Simulated record count
+            const searchTime = hasIndex ? 500 : 3000; // Simulated time
+            let progress = 0;
+            
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const interval = setInterval(() => {
+                progress += hasIndex ? 20 : 2;
+                progressBar.style.width = Math.min(progress, 100) + '%';
+                
+                if (hasIndex) {
+                    progressText.textContent = `⚡ Index ke saath search... ${Math.min(progress, 100)}%`;
+                } else {
+                    progressText.textContent = `🐌 Bina index ke har record check kar raha... ${Math.min(progress, 100)}%`;
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    showSearchResults(query, hasIndex, searchTime, totalRecords);
+                }
+            }, hasIndex ? 25 : 150);
+        }
+
+        function showSearchResults(query, hasIndex, time, records) {
+            setTimeout(() => {
+                document.getElementById('searchProgress').style.display = 'none';
+                document.getElementById('performanceResult').innerHTML = `
+                    <div class="event-message ${hasIndex ? 'one' : 'two'}-message">
+                        <strong>${hasIndex ? '⚡ Index ke Saath' : '🐌 Bina Index ke'}:</strong><br>
+                        Query: "${query}"<br>
+                        Records Check Kiye: ${records.toLocaleString()}<br>
+                        Time Laga: ${time}ms<br>
+                        <strong>${hasIndex ? 'Direct result pe jump!' : 'Har ek record check kiya!'}</strong>
+                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        function resetSearchDemo() {
+            document.getElementById('searchQuery').value = '';
+            document.getElementById('searchProgress').style.display = 'none';
+            document.getElementById('performanceResult').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>Performance ka Comparison:</strong><br>
+                    Product ka naam daal ke dono search methods try karo aur fark dekho!
+                </div>
+            `;
+        }
+
+        // Show index type explanation
+        function showIndexType(indexType) {
+            currentIndexType = indexType;
+            const index = indexTypes[indexType];
+            
+            document.getElementById('indexExplanation').innerHTML = `
+                <div class="event-message one-message">
+                    <strong>${index.title}</strong><br>
+                    <strong>Definition:</strong> ${index.definition}<br><br>
+                    <strong>SQL:</strong><br>
+                    <code>${index.sql}</code><br><br>
+                    <strong>Use Case:</strong> ${index.example}<br>
+                    <strong>Analogy:</strong> ${index.analogy}
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        // Index management functions
+        function createIndex() {
+            const indexName = prompt("Index ka naam daalo:", "idx_new_index");
+            if (indexName) {
+                const indexesTable = document.getElementById('indexesTableBody');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${indexName}</td>
+                    <td>Products</td>
+                    <td>Custom</td>
+                    <td>Single Column</td>
+                    <td>✅ Active</td>
+                `;
+                indexesTable.appendChild(newRow);
+                
+                alert(`Index "${indexName}" ban gaya!`);
+            }
+        }
+
+        function dropIndex() {
+            const indexName = prompt("Hataane ke liye index ka naam daalo:", "idx_product_name");
+            if (indexName) {
+                const confirmed = confirm(`Sure ho, "${indexName}" index hataana hai?`);
+                if (confirmed) {
+                    alert(`Index "${indexName}" hata diya gaya!`);
+                }
+            }
+        }
+
+        function showIndexes() {
+            alert("Current indexes 'Current Indexes' tab mein dikh rahe hain!");
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }     
+
+        // Initialize demo
+        window.onload = function() {
+            resetSearchDemo();
+        };
+    </script>
+</body>
+</html>

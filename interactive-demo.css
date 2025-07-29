@@ -738,6 +738,7 @@ td{
         font-size: 1.1rem;
     }
 
+
     .explore-diagrams-btn-wrapper,
     .follow-btn-wrapper {
         position: static !important;
@@ -753,8 +754,11 @@ td{
         margin: 0.1rem auto;
         font-size: 1rem;
         padding: 0.7rem 0.5rem;
-        display: inline-block;
         float: none;
+         display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.5rem; /* Space between icon and text */
     }
     .demo-section {
         padding: 1.5rem;

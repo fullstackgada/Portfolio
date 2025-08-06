@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OLTP & OLAP - Fullstackgada Interactive Demo</title>
+    <link rel="stylesheet" href="/interactive-demo.css" />
+    <style>
+        /* Spinner CSS for optional polish */
+        .spinner {
+            border: 4px solid #eee;
+            border-top: 4px solid #267d00;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+   <div class="header-interactive" style="position:relative;">
+        <h1>OLTP & OLAP ka Funda</h1>
+        <p>Understand how OLTP & OLAP works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+    <!-- Head-to-head visual -->
+    <div class="comparison-section">
+        <h3>⚡ OLTP vs 🧠 OLAP (Jaldi Comparison)</h3>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>⚡ OLTP (Mehta saab ki jaldi diary)</th>
+                    <th>🧠 OLAP (Popatlal ka Analysis Mode)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Purpose</td><td>Roz ka kaam (insert/update/delete)</td><td>Complex reports, trend analysis, summaries</td></tr>
+                <tr><td>Example</td><td>ATM se paise nikalna, ticket booking, order process</td><td>Sales dashboard, saal bhar ka trend, product analysis</td></tr>
+                <tr><td>Data Volume</td><td>Mb–Gb, sirf latest data</td><td>Gb–Tb–Pb, saalon ka purana data</td></tr>
+                <tr><td>Operation Speed</td><td>Milliseconds mein, real-time</td><td>Seconds/minutes, heavy queries</td></tr>
+                <tr><td>Users</td><td>Bahut saare, ek saath (customers/front-office)</td><td>Thodi si, special log (analysts, managers)</td></tr>
+                <tr><td>DB Example</td><td>MySQL, PostgreSQL, MS SQL OLTP</td><td>Snowflake, BigQuery, MS SQL OLAP cubes</td></tr>
+                <tr><td>Design</td><td>Normalized (kam redundancy)</td><td>Denormalized (tez aggregates ke liye)</td></tr>
+                <tr><td>Integrity</td><td>Bahut high (ACID)</td><td>Medium (batches/reports ke liye consistency)</td></tr>
+                <tr><td>Analogies</td><td>Mehta saab ki roz ki diary (“live updates!”)</td><td>Popatlal ka life analysis (“sab purana data khangalo!”)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Analogy: Mehta vs Popatlal -->
+    <div class="saree-analogy">
+        <h4>🎩 OLTP – Mehta saab ki Fast Diary | 🧑‍💻 OLAP – Popatlal ka Analysis</h4>
+        <div class="saree-step">
+            <div class="saree-emoji">📓</div>
+            <div><strong>OLTP:</strong> "Mehta saab" – har chhoti cheez turant likho<br>
+             <span>Tez, chhote, atomic operations!</span>
+             </div>
+        </div>
+        <div class="saree-step">
+            <div class="saree-emoji">🔬</div>
+            <div><strong>OLAP:</strong> "Popatlal" – pichhle 20 saal ki personal jaanch<br>
+             <span>Bada data reports, analysis, slice aur dice</span>
+             </div>
+        </div>
+    </div>
+
+    <!-- Interactive Scenarios -->
+    <div class="demo-section">
+        <h2 class="demo-title">🎮 OLTP-OLAP Real-world Demo Activities</h2>
+        <div class="memory-diagram">
+            <div class="memory-slot" onclick="scenarioOLTP()">
+                <div class="variable-name">⚡ OLTP Real-Time Transaction</div>
+                <div class="variable-value">ATM cash withdrawal, Online ticket booking</div>
+            </div>
+            <div class="memory-slot" onclick="scenarioOLAP()">
+                <div class="variable-name">🧠 OLAP Analytical Query</div>
+                <div class="variable-value">Saal-bhar ka sales report, Customer trends</div>
+            </div>
+        </div>
+        <div class="demo-area" id="oltpOlapDemo">
+            <div class="event-message one-message">Upar ke cards pe click karke dono systems ka demo dekho!</div>
+        </div>
+    </div>
+
+    <!-- One system for both? -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🤔 Kya ek hi system OLTP aur OLAP dono ke liye?</h2>
+        <div class="success-message">
+            <strong>Technically possible, lekin...!</strong><br>
+            OLTP aur OLAP ka workload alag hai. Ek hi system (Hybrid) pe dono chalane se slow ho sakta hai.<br>
+            <b>Best practice:</b> Alag rakho!<br>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li>OLTP transactions – transactional database (tez, live use)</li>
+                <li>OLAP reports/analytics – data warehouse (bada, batch, analysis ke liye optimized)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+/* Scenario Simulations with 'Working...' feedback */
+function scenarioOLTP() {
+    // Pehle 'Working...' message dikhao with spinner
+    document.getElementById('oltpOlapDemo').innerHTML = `
+      <div class="event-message one-message">
+        <span class="spinner"></span>Process ho raha hai... thodi der wait karo ⚡
+      </div>
+    `;
+    // Thodi der baad OLTP scenario details dikhao
+    setTimeout(function() {
+      document.getElementById('oltpOlapDemo').innerHTML = `
+        <div class="success-message">
+          <strong>⚡ OLTP Scenario: Railway Ticket Booking</strong><br>
+          <ol style="list-style-type: decimal; padding-left: 20px;">
+            <li>User details daalta hai</li>
+            <li>"Book Now" dabaya: Turant new booking INSERT</li>
+            <li>System seat availability check karta hai, seat lock karta hai</li>
+            <li>Seat status atomically update (ek row change)</li>
+            <li>Seconds mein confirmation dikhta hai</li>
+            <li style="color:#267d00">Transaction success – Tez, ek saath, kam data use</li>
+          </ol>
+          <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+      `;
+    }, 1200); // 1.2 seconds delay
+}
+
+function scenarioOLAP() {
+    // Pehle 'Working...' message dikhao with spinner
+    document.getElementById('oltpOlapDemo').innerHTML = `
+      <div class="event-message one-message">
+        <span class="spinner"></span>Bhaari analysis chal raha hai... thodi der wait karo 🧠
+      </div>
+    `;
+    // Thodi der baad OLAP scenario details dikhao
+    setTimeout(function() {
+      document.getElementById('oltpOlapDemo').innerHTML = `
+        <div class="success-message">
+          <strong>🧠 OLAP Scenario: Sales Growth Report</strong><br>
+          <ul style="list-style-type: disc; padding-left: 20px;">
+            <li>Query: Pichhle 5 saal ka sales, city-wise breakdown</li>
+            <li>System laakhon (ya karodon) rows scan/aggregate karta hai</li>
+            <li>Complex calculations, multiple joins, group by</li>
+            <li>Processing mein seconds/minutes lagte hain</li>
+            <li>Final chart/report manager ko email/download hota hai</li>
+            <li style="color:#b15cbe">Bada, heavy, sirf analysis ke liye (live customer operations nahi)</li>
+          </ul>
+          <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+      `;
+    }, 1800); // 1.8 seconds delay
+}
+</script>
+</body>
+</html>

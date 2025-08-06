@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Call Stack - Push and Pop</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .operations-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+
+        .operation-section {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .operation-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .push-title {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .pop-title {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .stack-demo {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 40px;
+            min-height: 300px;
+        }
+
+        .stack-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stack-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            min-height: 200px;
+            justify-content: flex-end;
+        }
+
+        .stack-frame {
+            width: 140px;
+            height: 45px;
+            margin: 3px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 13px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+        }
+
+        .main-frame {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .first-frame {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .second-frame {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .new-function {
+            background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+            animation: slideIn 0.8s ease;
+        }
+
+        .removing-function {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            animation: slideOut 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            0% { 
+                transform: translateY(-30px) scale(0.8);
+                opacity: 0;
+            }
+            100% { 
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            0% { 
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-30px) scale(0.8);
+                opacity: 0.5;
+            }
+        }
+
+        .arrow {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .push-arrow {
+            right: -50px;
+            top: -20px;
+        }
+
+        .pop-arrow {
+            right: -50px;
+            top: 20px;
+        }
+
+        .arrow-symbol {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .push-symbol {
+            color: #27ae60;
+            transform: rotate(-90deg);
+        }
+
+        .pop-symbol {
+            color: #e74c3c;
+            transform: rotate(90deg);
+        }
+
+        .arrow-label {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            min-width: 80px;
+        }
+
+        .push-label {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .pop-label {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .code-section {
+            background: #2c3e50;
+            border-radius: 12px;
+            padding: 30px;
+            color: #ecf0f1;
+            font-family: 'Courier New', monospace;
+            margin-top: 30px;
+        }
+
+        .code-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-align: center;
+        }
+
+        .code-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .code-column {
+            background: #34495e;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .code-column-title {
+            color: #f39c12;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .code-line {
+            margin: 6px 0;
+            line-height: 1.4;
+        }
+
+        .function-keyword { color: #e74c3c; }
+        .function-name { color: #f39c12; }
+        .function-call { color: #27ae60; }
+        .comment { color: #95a5a6; font-style: italic; }
+
+        .concept-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .concept-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .concept-description {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .lifo-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .operations-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .code-columns {
+                grid-template-columns: 1fr;
+            }
+            
+            .stack-demo {
+                gap: 25px;
+            }
+            
+            .stack-frame {
+                width: 120px;
+                height: 40px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">🔄 JavaScript Call Stack: PUSH & POP Operations</div>
+        
+        <div class="operations-container">
+            <!-- PUSH Operation -->
+            <div class="operation-section">
+                <div class="operation-title push-title">
+                    ⬆️ PUSH Operation
+                </div>
+                
+                <div class="stack-demo">
+                    <div class="stack-column">
+                        <div class="stack-label">BEFORE CALL</div>
+                        <div class="stack">
+                            <div class="stack-frame first-frame">firstFunction()</div>
+                            <div class="stack-frame main-frame">main()</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stack-column">
+                        <div class="stack-label">AFTER CALL</div>
+                        <div class="stack">
+                            <div class="stack-frame second-frame new-function">secondFunction()</div>
+                            <div class="stack-frame first-frame">firstFunction()</div>
+                            <div class="stack-frame main-frame">main()</div>
+                            
+                            <div class="arrow push-arrow">
+                                <div class="arrow-symbol push-symbol">➤</div>
+                                <div class="arrow-label push-label">PUSH<br>New Function</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- POP Operation -->
+            <div class="operation-section">
+                <div class="operation-title pop-title">
+                    ⬇️ POP Operation
+                </div>
+                
+                <div class="stack-demo">
+                    <div class="stack-column">
+                        <div class="stack-label">BEFORE RETURN</div>
+                        <div class="stack">
+                            <div class="stack-frame second-frame removing-function">secondFunction() ✓</div>
+                            <div class="stack-frame first-frame">firstFunction()</div>
+                            <div class="stack-frame main-frame">main()</div>
+                            
+                            <div class="arrow pop-arrow">
+                                <div class="arrow-symbol pop-symbol">➤</div>
+                                <div class="arrow-label pop-label">POP<br>Function Done</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stack-column">
+                        <div class="stack-label">AFTER RETURN</div>
+                        <div class="stack">
+                            <div class="stack-frame first-frame">firstFunction()</div>
+                            <div class="stack-frame main-frame">main()</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="code-section">
+            <div class="code-title">📝 Complete JavaScript Example</div>
+            
+            <div class="code-columns">
+                <div class="code-column">
+                    <div class="code-column-title">Function Definitions</div>
+                    
+                    <div class="code-line">
+                        <span class="function-keyword">function</span> <span class="function-name">main</span>() {
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="comment">// PUSH: firstFunction</span>
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="function-call">firstFunction</span>();
+                    </div>
+                    <div class="code-line">}</div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="function-keyword">function</span> <span class="function-name">firstFunction</span>() {
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="comment">// PUSH: secondFunction</span>
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="function-call">secondFunction</span>();
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="comment">// Control returns here after POP</span>
+                    </div>
+                    <div class="code-line">}</div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="function-keyword">function</span> <span class="function-name">secondFunction</span>() {
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="comment">// Function completes → POP</span>
+                    </div>
+                    <div class="code-line">
+                        &nbsp;&nbsp;<span class="function-keyword">return</span> <span class="comment">"done"</span>;
+                    </div>
+                    <div class="code-line">}</div>
+                </div>
+                
+                <div class="code-column">
+                    <div class="code-column-title">Execution Flow</div>
+                    
+                    <div class="code-line">
+                        <span class="comment">// 1. Start execution</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="function-call">main</span>(); <span class="comment">// PUSH: main</span>
+                    </div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="comment">// 2. Inside main()</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="function-call">firstFunction</span>(); <span class="comment">// PUSH: firstFunction</span>
+                    </div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="comment">// 3. Inside firstFunction()</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="function-call">secondFunction</span>(); <span class="comment">// PUSH: secondFunction</span>
+                    </div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="comment">// 4. secondFunction() completes</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="comment">// POP: secondFunction</span>
+                    </div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="comment">// 5. firstFunction() completes</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="comment">// POP: firstFunction</span>
+                    </div>
+                    
+                    <div class="code-line" style="margin-top: 15px;">
+                        <span class="comment">// 6. main() completes</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="comment">// POP: main → Stack empty</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="concept-box">
+            <div class="concept-title">🎯 Key Concept: LIFO Stack Behavior</div>
+            <div class="concept-description">
+                <strong>PUSH:</strong> When a function is called, it's added to the top of the stack<br>
+                <strong>POP:</strong> When a function completes, it's removed from the top of the stack<br>
+                The call stack operates on <strong>Last In, First Out</strong> principle
+            </div>
+            <div class="lifo-badge">LIFO: Last In, First Out</div>
+        </div>
+    </div>
+</body>
+</html>

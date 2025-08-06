@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Optimization | Jethalal aur Bhide</title>
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+<div class="container">
+    <div class="header-interactive" style="position:relative;">
+        <h1>Query Optimization ka Funda</h1>
+        <p>Understand how Query Optimization works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+    <div class="demo-grid">
+        <!-- Slow Query Panel -->
+        <div class="demo-section">
+            <h2 class="demo-title">🐌 Bhide ki Slow Query</h2>
+            <div class="explanation">
+                <strong>Problem:</strong> Ratnagiri ke customers nikaalne mein query hang ho rahi hai — Table mein laakhon rows hain!
+            </div>
+            <div class="saree-analogy">
+                <h4>🛵 Purana Scooter, Slow Database</h4>
+                <div class="saree-step"><div class="saree-emoji">🐢</div><div>SELECT * — saara load ek saath</div></div>
+                <div class="saree-step"><div class="saree-emoji">🔍</div><div>City pe koi Index nahi — database dheeme chalta hai</div></div>
+                <div class="saree-step"><div class="saree-emoji">🔥</div><div>Optimization se Ferrari bana do!</div></div>
+            </div>
+            <div class="demo-controls">
+                <button class="demo-btn first-btn" onclick="showBadQuery()">🐌 Buri Query</button>
+                <button class="demo-btn" onclick="showGoodQuery()">⚡ Optimized Query</button>
+                <button class="demo-btn clear-btn" onclick="clearPerformanceCmp()">🗑️ Clear Karo</button>
+            </div>
+            <div class="demo-area" id="perfArea">
+                <div class="event-message one-message">
+                    Buri/Optimized query ke examples dekho!
+                </div>
+            </div>
+        </div>
+
+        <!-- Jethalal's 5 Tips -->
+        <div class="demo-section">
+            <h2 class="demo-title">💡 Jethalal ke 5 Optimization Tips</h2>
+            <div class="memory-diagram">
+                <div class="memory-slot" onclick="showTip(1)">
+                    <div class="variable-name">1️⃣ Sirf zarurat ke columns SELECT karo</div>
+                    <div class="variable-value">Hotel wala logic: jitna khana, utna hi mangao!</div>
+                </div>
+                <div class="memory-slot" onclick="showTip(2)">
+                    <div class="variable-name">2️⃣ City Column pe Index lagao</div>
+                    <div class="variable-value">Babita ko crowd mein turant spot karna!</div>
+                </div>
+                <div class="memory-slot" onclick="showTip(3)">
+                    <div class="variable-name">3️⃣ Composite Index</div>
+                    <div class="variable-value">Combo pack – city+age pe index</div>
+                </div>
+                <div class="memory-slot" onclick="showTip(4)">
+                    <div class="variable-name">4️⃣ Indexed column pe function mat lagao</div>
+                    <div class="variable-value">Database ko UPPER/LOWER mein mat daalo</div>
+                </div>
+                <div class="memory-slot" onclick="showTip(5)">
+                    <div class="variable-name">5️⃣ Execution Plan dekho</div>
+                    <div class="variable-value">Papad bel rahe ho — andar se database jal raha hai!</div>
+                </div>
+            </div>
+            <div class="demo-area" id="tipArea">
+                <div class="event-message">
+                    Upar kisi tip pe click karo!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playground -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🎮 Query Playground (Live Experiment Karo)</h2>
+        <div class="explanation">
+        SELECT jo laakhon records ke saath hai? Selective columns try karo, index toggle karo, aur performance dekho!
+        </div>
+        <div style="display: flex;gap: 2rem;justify-content: center;flex-direction: column;">
+            <div>
+                <div class="form-group">
+                    <label>Columns: </label>
+                    <label><input type="checkbox" checked id="colName" onchange="updateQuery()"> customer_name</label>
+                    <label><input type="checkbox" checked id="colCity" onchange="updateQuery()"> city</label>
+                    <label><input type="checkbox" id="colPhone" onchange="updateQuery()"> phone</label>
+                    <label><input type="checkbox" id="colEmail" onchange="updateQuery()"> email</label>
+                </div>
+                <div class="form-group">
+                    <label>WHERE City:</label>
+                    <input id="whereCity" value="Ratnagiri" size="12" onchange="updateQuery()" />
+                    <label><input type="checkbox" id="useIndex" checked onchange="updateQuery()"> Index Use Karo</label>
+                </div>
+                <div class="form-group">
+                    <label>Table Size:</label>
+                    <select id="tblSize" onchange="updateQuery()">
+                        <option value="10000">10,000</option>
+                        <option value="100000">1,00,000</option>
+                        <option value="1000000" selected>10,00,000</option>
+                    </select>
+                </div>
+                <button class="demo-btn first-btn" onclick="queryExecute()">▶️ Query Chalaao</button>
+            </div>
+            <div>
+                <div class="code-block" id="sqlArea">Yahan SQL code dikhega</div>
+                <div class="server-simulation"><div class="server-log" id="perfOut">Query chalaao to performance dekho...</div></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Slow/Fast query demo
+function showBadQuery() {
+    document.getElementById('perfArea').innerHTML =
+        `<div class="error-message"><strong>
+        SELECT * FROM customers WHERE city = 'Ratnagiri';</strong><br>
+        <b>1M rows ka table</b><br>
+        🐌 Koi index nahi — Table scan ho raha hai <br>
+        ⏱️ <b>12+ seconds</b>, CPU spike ho gaya<br>
+        🔍 Table examined: <b>1,000,000 rows</b><br>
+        <span style="color:#e74c3c;">Problem: SELECT * (heavy hai), No index — Dheema chal raha!</span></div>`;
+}
+function showGoodQuery() {
+    document.getElementById('perfArea').innerHTML =
+        `<div class="success-message"><strong>
+        SELECT customer_name, city FROM customers WHERE city = 'Ratnagiri';<br>
+        CREATE INDEX idx_city ON customers(city);</strong><br>
+        <b>1M rows ka table</b><br>
+        ⚡ Index Seek — Direct matches mil jaate hain<br>
+        ⏱️ <b>0.09 seconds</b>, CPU: bahut low<br>
+        🔍 Examined: <b>500 rows</b><br>
+        <span style="color:#27ae60;">Optimized: Sirf zaruri data, city index use hua!</span></div>`;
+}
+function clearPerformanceCmp() {
+    document.getElementById('perfArea').innerHTML =
+        `<div class="event-message one-message">
+            Buri/Optimized query ke examples dekho!
+        </div>`;
+}
+
+// Jethalal ke 5 tips, with code
+function showTip(n) {
+    const tips = [
+        null,
+        `
+            <b>1️⃣ Sirf zaruri columns SELECT karo:</b><br>
+            <code>SELECT customer_name, city FROM customers WHERE city = 'Ratnagiri';</code><br>
+            <span>SELECT * mat karo — network, memory, CPU sab barbaad!</span>
+        `,
+        `
+            <b>2️⃣ City Column pe Index lagao:</b><br>
+            <code>CREATE INDEX idx_city ON customers(city);</code><br>
+            <span>Index se database direct jump karke result dega!</span>
+        `,
+        `
+            <b>3️⃣ Composite Index:</b><br>
+            <code>CREATE INDEX idx_city_age ON customers(city, age);</code><br>
+            <span>WHERE mein kai columns hain – to combo index sabse tez!</span>
+        `,
+        `
+            <b>4️⃣ Indexed column pe function mat lagao:</b><br>
+            <code>SELECT * FROM customers WHERE UPPER(city) = 'RATNAGIRI';</code> 🚫<br>
+            <span>Function lagaane se index bekaar! <code>city='Ratnagiri'</code> seedha karo.</span>
+        `,
+        `
+            <b>5️⃣ Execution Plan dekho:</b><br>
+            <code>SET STATISTICS IO ON;<br>-- Ya fir Ctrl+M use karo</code><br>
+            <span>Execution Plan se pata chalega, index use ho raha hai ya nahi!</span>
+        `,
+    ];
+    document.getElementById('tipArea').innerHTML =
+        `<div class="success-message">${tips[n]}</div>`;
+}
+
+// Query Playground
+function updateQuery() {
+    const cols = [];
+    if(document.getElementById('colName').checked) cols.push('customer_name');
+    if(document.getElementById('colCity').checked) cols.push('city');
+    if(document.getElementById('colPhone').checked) cols.push('phone');
+    if(document.getElementById('colEmail').checked) cols.push('email');
+    const city = document.getElementById('whereCity').value;
+    const useIdx = document.getElementById('useIndex').checked;
+    let sql = `SELECT ${cols.length?cols.join(', '):'*'} FROM customers`;
+    if(city) sql += ` WHERE city = '${city}'`;
+    sql += ';';
+    if(useIdx && city) sql = `CREATE INDEX idx_city ON customers(city);\n` + sql;
+    document.getElementById('sqlArea').innerText = sql;
+}
+function queryExecute() {
+    // Simulate performance
+    const useIdx = document.getElementById('useIndex').checked;
+    const city = document.getElementById('whereCity').value.trim();
+    const sz = parseInt(document.getElementById('tblSize').value,10)||1000000;
+    if(!city) {
+        document.getElementById('perfOut').innerText = 'Koi WHERE city = ... query nahi: Poora table scan hoga!';
+        return;
+    }
+    let time, scan, output;
+    if (useIdx) {
+        time = 80; // ms
+        scan = 500;
+        output = `<b>⚡ Index Seek</b> ⏱️ ${time} ms<br>Scanned: ${scan} rows<br>Fast aur efficient result!</b>`;
+    } else {
+        time = 12000; // ms
+        scan = sz;
+        output = `<b>🐢 Table Scan</b> ⏱️ ${time} ms<br>Scanned: ${scan} rows<br>Dardnaak slow hai!</b>`;
+    }
+    document.getElementById('perfOut').innerHTML = output;
+}
+updateQuery();
+
+</script>
+</body>
+</html>

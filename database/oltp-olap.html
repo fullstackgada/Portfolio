@@ -139,6 +139,8 @@ function scenarioOLTP() {
             <li style="color:#267d00">Transaction success – Tez, ek saath, kam data use</li>
           </ol>
           <div class="message-time">${new Date().toLocaleTimeString()}</div>
+          <button onclick="showOLTPDetails()" class="explore-diagrams-btn">Learn More</button>
+          <div id="oltpDetails"></div>
         </div>
       `;
     }, 1200); // 1.2 seconds delay
@@ -165,9 +167,61 @@ function scenarioOLAP() {
             <li style="color:#b15cbe">Bada, heavy, sirf analysis ke liye (live customer operations nahi)</li>
           </ul>
           <div class="message-time">${new Date().toLocaleTimeString()}</div>
+          <button onclick="showOLAPDetails()" class="explore-diagrams-btn">Learn More</button>
+          <div id="olapDetails"></div>
         </div>
       `;
     }, 1800); // 1.8 seconds delay
+}
+
+function showOLTPDetails() {
+    // Show spinner while loading details
+    document.getElementById('oltpDetails').innerHTML = `
+      <div class="event-message one-message">
+        <span class="spinner"></span>Loading details... thodi der wait karo ⚡
+      </div>
+    `;
+    // Show detailed explanation after delay
+    setTimeout(function() {
+      document.getElementById('oltpDetails').innerHTML = `
+        <div class="success-message">
+          <strong>⚡ OLTP Detailed Explanation</strong><br>
+          <p>OLTP systems are designed for high-speed, real-time transactions with small data volumes. In the railway ticket booking example:</p>
+          <ul style="list-style-type: disc; padding-left: 20px;">
+            <li><strong>ACID Compliance:</strong> Ensures every transaction is atomic, consistent, isolated, and durable.</li>
+            <li><strong>Concurrency:</strong> Handles thousands of users simultaneously with minimal latency.</li>
+            <li><strong>Database Design:</strong> Uses normalized tables to reduce redundancy and ensure data integrity.</li>
+            <li><strong>Example Query:</strong> <code>INSERT INTO bookings (user_id, seat_id, status) VALUES (123, 456, 'confirmed');</code></li>
+          </ul>
+          <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+      `;
+    }, 1000); // 1 second delay
+}
+
+function showOLAPDetails() {
+    // Show spinner while loading details
+    document.getElementById('olapDetails').innerHTML = `
+      <div class="event-message one-message">
+        <span class="spinner"></span>Loading details... thodi der wait karo 🧠
+      </div>
+    `;
+    // Show detailed explanation after delay
+    setTimeout(function() {
+      document.getElementById('olapDetails').innerHTML = `
+        <div class="success-message">
+          <strong>🧠 OLAP Detailed Explanation</strong><br>
+          <p>OLAP systems are optimized for complex analytical queries over large datasets, often historical data.</p>
+          <ul style="list-style-type: disc; padding-left: 20px;">
+            <li><strong>Data Warehouse:</strong> Stores denormalized data for fast aggregations and joins.</li>
+            <li><strong>Query Types:</strong> Involves GROUP BY, JOIN, and aggregations like SUM, AVG over millions of rows.</li>
+            <li><strong>Use Case:</strong> Generates reports like "Top 5 cities by sales in 2024".</li>
+            <li><strong>Example Query:</strong> <code>SELECT city, SUM(sales) FROM sales_data WHERE year=2024 GROUP BY city;</code></li>
+          </ul>
+          <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+      `;
+    }, 1000); // 1 second delay
 }
 </script>
 </body>

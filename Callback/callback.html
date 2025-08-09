@@ -1,596 +1,153 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Callback System - Bhide's Tuition Website</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-            overflow-x: auto;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .character-dialog {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 15px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border-left: 5px solid #2196F3;
-        }
-
-        .character-name {
-            font-weight: bold;
-            color: #2196F3;
-            margin-bottom: 8px;
-            font-size: 18px;
-        }
-
-        .jethalal { border-left-color: #4CAF50; }
-        .jethalal .character-name { color: #4CAF50; }
-
-        .bhide { border-left-color: #FF9800; }
-        .bhide .character-name { color: #FF9800; }
-
-        .diagram-container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            margin: 30px 0;
-        }
-
-        .callback-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .flow-step {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .function-box {
-            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
-            border: 3px solid #2196F3;
-            border-radius: 15px;
-            padding: 20px;
-            min-width: 250px;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .function-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(33, 150, 243, 0.3);
-        }
-
-        .function-box.active {
-            background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
-            border-color: #4CAF50;
-            animation: pulse 2s infinite;
-        }
-
-        .function-box.processing {
-            background: linear-gradient(145deg, #fff3e0, #ffe0b2);
-            border-color: #FF9800;
-            animation: processing 1.5s infinite;
-        }
-
-        .function-box.success {
-            background: linear-gradient(145deg, #e8f5e8, #c8e6c9);
-            border-color: #4CAF50;
-        }
-
-        .function-box.error {
-            background: linear-gradient(145deg, #ffebee, #ffcdd2);
-            border-color: #f44336;
-        }
-
-        .function-title {
-            font-weight: bold;
-            color: #1976d2;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .function-desc {
-            font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .arrow {
-            font-size: 24px;
-            color: #FF9800;
-            animation: bounce 2s infinite;
-        }
-
-        .callback-arrow {
-            font-size: 30px;
-            color: #4CAF50;
-            transform: rotate(180deg);
-            animation: callback-pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
-        }
-
-        @keyframes processing {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        @keyframes callback-pulse {
-            0% { color: #4CAF50; }
-            50% { color: #2E7D32; }
-            100% { color: #4CAF50; }
-        }
-
-        .control-panel {
-            background: linear-gradient(145deg, #673ab7, #512da8);
-            color: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
-            text-align: center;
-        }
-
-        .demo-button {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .demo-button:hover {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.5);
-            transform: translateY(-2px);
-        }
-
-        .demo-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .status-display {
-            background: #f5f5f5;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            min-height: 200px;
-            border: 2px solid #ddd;
-        }
-
-        .log-entry {
-            margin: 5px 0;
-            padding: 8px 12px;
-            border-radius: 5px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .log-info { background: #e3f2fd; color: #1976d2; }
-        .log-success { background: #e8f5e8; color: #2e7d32; }
-        .log-error { background: #ffebee; color: #c62828; }
-        .log-warning { background: #fff3e0; color: #f57c00; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .code-example {
-            background: #263238;
-            color: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-
-        .code-comment {
-            color: #66bb6a;
-        }
-
-        .code-string {
-            color: #ffab91;
-        }
-
-        .code-keyword {
-            color: #81c784;
-        }
-
-        .explanation-box {
-            background: linear-gradient(145deg, #ffc107, #ff8f00);
-            color: #333;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            border-left: 5px solid #ff6f00;
-        }
-
-        .explanation-box h3 {
-            margin-bottom: 15px;
-            color: #e65100;
-        }
-
-        .student-info {
-            background: linear-gradient(145deg, #e1f5fe, #b3e5fc);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 4px solid #0288d1;
-        }
-
-        .payment-status {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin: 5px;
-        }
-
-        .status-pending { background: #fff3e0; color: #f57c00; }
-        .status-processing { background: #e3f2fd; color: #1976d2; }
-        .status-success { background: #e8f5e8; color: #2e7d32; }
-        .status-failed { background: #ffebee; color: #c62828; }
-
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2em; }
-            .flow-step { flex-direction: column; }
-            .function-box { min-width: 200px; }
-            .demo-button { display: block; margin: 10px 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Callback ka Funda - Fullstackgada Interactive Demo</title>
+<link rel="icon" type="image/png" href="/image/favicon.ico">
+<link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📚 Callback System - भिड़े की ट्यूशन Website 📚</h1>
-            <p>Interactive Payment Processing with Callbacks</p>
+<div class="container">
+
+   <div class="header-interactive" style="position:relative;">
+        <h1>Callback ka Funda</h1>
+        <p>Understand how Callback works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
         </div>
-
-        <div class="character-dialog bhide">
-            <div class="character-name">भिड़े:</div>
-            <div>अरे जेठालाल! मेरी वेबसाइट पर payment confirmation की समस्या है। बार-बार check करना पड़ता है!</div>
-        </div>
-
-        <div class="character-dialog jethalal">
-            <div class="character-name">जेठालाल:</div>
-            <div>अरे भिड़े! Callback का use कर! जैसे बच्चे कहते हैं "होमवर्क हो जाए तो फोन करना" - वैसे ही payment हो जाए तो automatic notification मिल जाएगा!</div>
-        </div>
-
-        <div class="diagram-container">
-            <h2 style="text-align: center; margin-bottom: 30px; color: #1976d2;">🔄 Callback Flow Diagram</h2>
-            
-            <div class="callback-flow">
-                <div class="flow-step">
-                    <div class="function-box" id="student-action">
-                        <div class="function-title">👨‍🎓 Student Action</div>
-                        <div class="function-desc">
-                            स्टूडेंट "Pay Now" button दबाता है<br>
-                            Amount: ₹5000<br>
-                            Course: Mathematics
-                        </div>
-                    </div>
-                    
-                    <div class="arrow">➡️</div>
-                    
-                    <div class="function-box" id="payment-gateway">
-                        <div class="function-title">💳 Payment Gateway</div>
-                        <div class="function-desc">
-                            Payment processing शुरू<br>
-                            Bank verification<br>
-                            Transaction ID generate
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flow-step">
-                    <div class="callback-arrow">⤴️</div>
-                    <div style="text-align: center; color: #4CAF50; font-weight: bold;">
-                        Callback Function Triggers!<br>
-                        "जब payment हो जाए, तब ये function चलाना!"
-                    </div>
-                </div>
-
-                <div class="flow-step">
-                    <div class="function-box" id="callback-function">
-                        <div class="function-title">📞 Callback Function</div>
-                        <div class="function-desc">
-                            1. Database update करो<br>
-                            2. Email भेजो<br>
-                            3. Dashboard refresh करो
-                        </div>
-                    </div>
-                    
-                    <div class="arrow">➡️</div>
-                    
-                    <div class="function-box" id="notification-system">
-                        <div class="function-title">🔔 Notification System</div>
-                        <div class="function-desc">
-                            भिड़े को SMS<br>
-                            स्टूडेंट को Email<br>
-                            Dashboard update
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="control-panel">
-                <h3 style="margin-bottom: 20px;">🎮 Payment Demo Controls</h3>
-                <button class="demo-button" onclick="startPaymentDemo('success')" id="success-btn">
-                    ✅ Successful Payment Demo
-                </button>
-                <button class="demo-button" onclick="startPaymentDemo('failed')" id="failed-btn">
-                    ❌ Failed Payment Demo
-                </button>
-                <button class="demo-button" onclick="resetDemo()" id="reset-btn">
-                    🔄 Reset Demo
-                </button>
-            </div>
-
-            <div class="student-info">
-                <h4>📋 Current Transaction:</h4>
-                <div><strong>Student:</strong> <span id="student-name">सोढी</span></div>
-                <div><strong>Amount:</strong> ₹<span id="amount">5000</span></div>
-                <div><strong>Course:</strong> <span id="course">Mathematics</span></div>
-                <div><strong>Status:</strong> <span class="payment-status status-pending" id="payment-status">Pending</span></div>
-            </div>
-
-            <div class="status-display" id="log-display">
-                <strong>📊 System Logs:</strong><br>
-                <div class="log-entry log-info">System ready for payment processing...</div>
-            </div>
-        </div>
-
-        <div class="code-example">
-            <div class="code-comment">// भिड़े के payment system का callback code</div>
-            <br>
-            <span class="code-keyword">function</span> processPayment(studentName, amount, <span class="code-keyword">callback</span>) {<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`${studentName} का ${amount} रुपये का payment शुरू...`</span>);<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// Payment gateway से response आने तक wait करें</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() => {<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">let</span> paymentSuccess = <span class="code-keyword">true</span>; <span class="code-comment">// Bank से response</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (paymentSuccess) {<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// Success callback चलाओ</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">callback</span>(<span class="code-keyword">null</span>, { studentName, amount, paymentStatus: <span class="code-string">"सफल"</span> });<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// Error callback चलाओ</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">callback</span>(<span class="code-string">"Payment failed!"</span>, <span class="code-keyword">null</span>);<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;}, 2000);<br>
-            }
-        </div>
-
-        <div class="explanation-box">
-            <h3>🎯 Callback के फायदे:</h3>
-            <ul>
-                <li><strong>Automatic Response:</strong> Payment complete होते ही automatic action</li>
-                <li><strong>No Manual Checking:</strong> बार-बार status check करने की जरूरत नहीं</li>
-                <li><strong>Real-time Updates:</strong> Instant notification भिड़े और student को</li>
-                <li><strong>Error Handling:</strong> Payment fail होने पर भी proper notification</li>
-                <li><strong>Better User Experience:</strong> Students को instant confirmation</li>
-            </ul>
-        </div>
-
-        <div class="character-dialog bhide">
-            <div class="character-name">भिड़े:</div>
-            <div>वाह जेठालाल! अब समझ आया! Callback से मेरा system automatically सब handle कर लेगा! 🎉</div>
-        </div>
-
-        <div class="character-dialog jethalal">
-            <div class="character-name">जेठालाल:</div>
-            <div>बिल्कुल भिड़े! अब जा मजे कर! और आप लोग follow जरूर करलेना! 😄</div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
         </div>
     </div>
 
-    <script>
-        let isProcessing = false;
-        let logCount = 1;
+    <!-- Analogy -->
+    <div class="demo-section">
+        <h2 class="demo-title">📞 Callback Kya Hai?</h2>
+        <div class="explanation">
+            <strong>Callback:</strong> "Bhai, kaam ho jaaye to mujhe bata dena!" wala funda.
+        </div>
 
-        function addLog(message, type = 'info') {
-            const logDisplay = document.getElementById('log-display');
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-entry log-${type}`;
-            logEntry.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
-            logDisplay.appendChild(logEntry);
-            logDisplay.scrollTop = logDisplay.scrollHeight;
+        <div class="saree-analogy">
+            <h4>🧒 Baccha-Homework Analogy</h4>
+            <div class="saree-step">
+                <div class="saree-emoji">🧒</div>
+                <div>Baccha: "Sir, mera homework complete hote hi check kar dena."</div>
+            </div>
+            <div class="saree-step">
+                <div class="saree-emoji">👨‍🏫</div>
+                <div>Teacher: "Thik hai beta, kaam hote hi phone karo."</div>
+            </div>
+            <div class="saree-step">
+                <div class="saree-emoji">📞</div>
+                <div>Homework complete → Baccha calls sir = <strong>Callback Trigger</strong>.</div>
+            </div>
+        </div>
+
+        <div class="demo-controls">
+            <button class="demo-btn first-btn" onclick="showPaymentCallback()">
+                💳 Payment Callback Example
+            </button>
+            <button class="demo-btn" onclick="showSimpleCode()">
+                💻 Simple Code Example
+            </button>
+            <button class="demo-btn clear-btn" onclick="clearCallbackDemo()">
+                🗑️ Clear
+            </button>
+        </div>
+
+        <div class="demo-area" id="callbackResults">
+            <div class="event-message one-message">
+                Click above buttons to explore Callback in action!
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Playground -->
+    <div class="demo-section">
+        <h2 class="demo-title">🎮 Live Callback Playground</h2>
+        <div class="explanation one-explanation">
+            <strong>Scenario:</strong> Payment gateway ko bolte ho - "Ho jaaye to mujhe callback maar dena".
+        </div>
+        <div style="border:2px solid #27ae60; padding:1rem; border-radius:8px;">
+            <button class="demo-btn first-btn" onclick="startPayment()">🚀 Start Payment</button>
+            <div id="playStatus" style="margin-top:1rem;">Payment Status: <em>Pending...</em></div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script>
+
+/* Demo functions */
+function showPaymentCallback(){
+    document.getElementById('callbackResults').innerHTML=`
+        <div class="success-message">
+            <strong>💳 Payment Callback Flow:</strong><br>
+            1️⃣ User ne tuition ka payment start kiya.<br>
+            2️⃣ Payment gateway kaam karega.<br>
+            3️⃣ Jaise hi done ya fail hua → <strong>Callback function</strong> ko call!<br><br>
+            <em>Jaisa bola tha, kaam hote hi koi tumhe phone kare.</em><br>
+            <pre>
+paymentGateway.process(amount, function callback(status) {
+    if(status==='success'){
+        confirmAdmission();
+    } else {
+        showError();
+    }
+});
+            </pre>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>`;
+}
+function showSimpleCode(){
+    document.getElementById('callbackResults').innerHTML=`
+        <div class="success-message">
+            <strong>💻 Simple Callback Example:</strong>
+            <pre>
+function kaamKaro(callbackFn){
+    console.log("Kaam shuru...");
+    setTimeout(()=> {
+        console.log("Kaam done ✅");
+        callbackFn();
+    }, 2000);
+}
+
+kaamKaro(function(){
+    console.log("Callback: Kaam hone ka signal mil gaya!");
+});
+            </pre>
+            Output:
+            <pre>
+Kaam shuru...
+[2 sec wait...]
+Kaam done ✅
+Callback: Kaam hone ka signal mil gaya!
+            </pre>
+        </div>`;
+}
+function clearCallbackDemo(){
+    document.getElementById('callbackResults').innerHTML='<div class="event-message one-message">Click above buttons to explore Callback in action!</div>';
+}
+
+/* Playground: Simulated payment */
+function startPayment(){
+    const statusDiv=document.getElementById('playStatus');
+    statusDiv.innerHTML="Payment Status: Processing...";
+    setTimeout(()=>{
+        const success = Math.random() > 0.3;
+        if(success){
+            statusDiv.innerHTML="Payment Status: ✅ Success! (Callback triggered)";
+        } else {
+            statusDiv.innerHTML="Payment Status: ❌ Failed! (Callback triggered)";
         }
-
-        function updatePaymentStatus(status, statusText) {
-            const statusElement = document.getElementById('payment-status');
-            statusElement.className = `payment-status status-${status}`;
-            statusElement.textContent = statusText;
-        }
-
-        function resetBoxes() {
-            const boxes = document.querySelectorAll('.function-box');
-            boxes.forEach(box => {
-                box.className = 'function-box';
-            });
-        }
-
-        function activateBox(boxId, className = 'active') {
-            const box = document.getElementById(boxId);
-            box.className = `function-box ${className}`;
-        }
-
-        function startPaymentDemo(type) {
-            if (isProcessing) return;
-            
-            isProcessing = true;
-            document.getElementById('success-btn').disabled = true;
-            document.getElementById('failed-btn').disabled = true;
-            
-            resetBoxes();
-            updatePaymentStatus('processing', 'Processing...');
-            
-            // Step 1: Student Action
-            addLog('👨‍🎓 सोढी: "Mathematics course के लिए ₹5000 pay करता हूँ"', 'info');
-            activateBox('student-action', 'active');
-            
-            setTimeout(() => {
-                // Step 2: Payment Gateway
-                addLog('💳 Payment Gateway: Processing transaction...', 'warning');
-                activateBox('student-action', 'success');
-                activateBox('payment-gateway', 'processing');
-                
-                setTimeout(() => {
-                    // Step 3: Callback Execution
-                    addLog('📞 Callback Function: Payment gateway response received!', 'info');
-                    activateBox('payment-gateway', 'success');
-                    activateBox('callback-function', 'processing');
-                    
-                    setTimeout(() => {
-                        if (type === 'success') {
-                            // Success Flow
-                            addLog('✅ Payment Successful! Executing success callback...', 'success');
-                            updatePaymentStatus('success', 'Payment Successful ✅');
-                            activateBox('callback-function', 'success');
-                            activateBox('notification-system', 'processing');
-                            
-                            setTimeout(() => {
-                                addLog('📧 भिड़े को SMS: "सोढी का ₹5000 payment successful!"', 'success');
-                                addLog('📧 सोढी को Email: "Admission confirmed for Mathematics!"', 'success');
-                                addLog('🔄 Dashboard Updated: New student enrolled', 'success');
-                                activateBox('notification-system', 'success');
-                                
-                                setTimeout(() => {
-                                    addLog('🎉 Complete! भिड़े: "अरे वाह! Automatic हो गया!"', 'success');
-                                    isProcessing = false;
-                                    document.getElementById('success-btn').disabled = false;
-                                    document.getElementById('failed-btn').disabled = false;
-                                }, 1000);
-                            }, 1500);
-                        } else {
-                            // Failed Flow
-                            addLog('❌ Payment Failed! Executing error callback...', 'error');
-                            updatePaymentStatus('failed', 'Payment Failed ❌');
-                            activateBox('callback-function', 'error');
-                            activateBox('notification-system', 'processing');
-                            
-                            setTimeout(() => {
-                                addLog('📧 भिड़े को SMS: "सोढी का payment fail हो गया"', 'error');
-                                addLog('📧 सोढी को Email: "Payment failed, please try again"', 'error');
-                                addLog('🔄 Dashboard Updated: Payment attempt logged', 'warning');
-                                activateBox('notification-system', 'error');
-                                
-                                setTimeout(() => {
-                                    addLog('⚠️ भिड़े: "कोई बात नहीं, automatic notification आ गया!"', 'info');
-                                    isProcessing = false;
-                                    document.getElementById('success-btn').disabled = false;
-                                    document.getElementById('failed-btn').disabled = false;
-                                }, 1000);
-                            }, 1500);
-                        }
-                    }, 2000);
-                }, 2000);
-            }, 1500);
-        }
-
-        function resetDemo() {
-            isProcessing = false;
-            resetBoxes();
-            updatePaymentStatus('pending', 'Pending');
-            
-            document.getElementById('log-display').innerHTML = '<strong>📊 System Logs:</strong><br><div class="log-entry log-info">System ready for payment processing...</div>';
-            
-            document.getElementById('success-btn').disabled = false;
-            document.getElementById('failed-btn').disabled = false;
-            
-            addLog('🔄 Demo reset complete!', 'info');
-        }
-
-        // Auto demo on page load
-        setTimeout(() => {
-            addLog('🎉 Payment system ready! Click buttons to see callback in action!', 'success');
-        }, 1000);
-
-        // Real-time callback example
-        function realTimeCallback(error, result) {
-            if (error) {
-                addLog(`❌ Error Callback: ${error}`, 'error');
-            } else {
-                addLog(`✅ Success Callback: ${result.studentName} - ₹${result.amount} - ${result.paymentStatus}`, 'success');
-            }
-        }
-
-        // Simulate actual callback function
-        function processPayment(studentName, amount, callback) {
-            addLog(`🔄 processPayment("${studentName}", ${amount}, callback) called`, 'info');
-            
-            setTimeout(() => {
-                let paymentSuccess = Math.random() > 0.3; // 70% success rate
-                if (paymentSuccess) {
-                    callback(null, { studentName, amount, paymentStatus: "सफल" });
-                } else {
-                    callback("Payment gateway error!", null);
-                }
-            }, 2000);
-        }
-    </script>
+    },2000);
+}
+</script>
 </body>
 </html>

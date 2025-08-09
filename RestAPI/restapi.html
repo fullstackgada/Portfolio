@@ -1,576 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REST API Interactive Diagram</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(45deg, #ff6b6b, #ffa726);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .main-content {
-            padding: 40px;
-        }
-
-        .api-flow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 40px 0;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .client, .server {
-            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            min-width: 250px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .client:hover, .server:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-
-        .client {
-            background: linear-gradient(145deg, #f3e5f5, #e1bee7);
-        }
-
-        .server {
-            background: linear-gradient(145deg, #e8f5e8, #c8e6c9);
-        }
-
-        .arrow {
-            font-size: 3em;
-            color: #ff6b6b;
-            animation: pulse 2s infinite;
-            margin: 0 20px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .methods-section {
-            margin: 50px 0;
-        }
-
-        .methods-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .method-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border-left: 5px solid;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .method-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .get { border-left-color: #4caf50; }
-        .post { border-left-color: #2196f3; }
-        .put { border-left-color: #ff9800; }
-        .delete { border-left-color: #f44336; }
-
-        .method-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .method-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 0.9em;
-        }
-
-        .get .method-badge { background: #4caf50; }
-        .post .method-badge { background: #2196f3; }
-        .put .method-badge { background: #ff9800; }
-        .delete .method-badge { background: #f44336; }
-
-        .demo-section {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 40px;
-            border-radius: 15px;
-            margin: 40px 0;
-        }
-
-        .demo-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 25px 0;
-        }
-
-        .demo-btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .demo-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .response-area {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            min-height: 150px;
-            overflow-x: auto;
-        }
-
-        .endpoint-url {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            margin: 10px 0;
-            border-left: 3px solid #ffa726;
-        }
-
-        .status-indicators {
-            display: flex;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-
-        .status {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-
-        .status-200 { background: #4caf50; color: white; }
-        .status-201 { background: #2196f3; color: white; }
-        .status-404 { background: #f44336; color: white; }
-
-        .fun-facts {
-            background: linear-gradient(45deg, #ffa726, #ff7043);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 30px 0;
-        }
-
-        .fun-facts h3 {
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .api-flow {
-                flex-direction: column;
-            }
-            
-            .arrow {
-                transform: rotate(90deg);
-                margin: 20px 0;
-            }
-            
-            .methods-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REST API - Fullstackgada Interactive Demo</title>
+<link rel="icon" type="image/png" href="/image/favicon.ico">
+<link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🌶️ भिड़े का REST API दुकान 🥒</h1>
-            <p>अचार-पापड़ का डिजिटल व्यापार!</p>
+<div class="container">
+    <div class="header-interactive" style="position:relative;">
+        <h1>REST API ka Funda</h1>
+        <p>Understand how REST API works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+    <!-- Concept Section -->
+    <div class="demo-grid">
+        <div class="demo-section">
+            <h2 class="demo-title">🏪 Yeh REST API Kya Cheez Hai?</h2>
+            <div class="explanation">
+                <strong>REST API:</strong> Ek tarah ka web service jo URL ke zariye data deta hai, aur HTTP methods se control hota hai. Simple, na?
+            </div>
+
+            <div class="saree-analogy">
+                <h4>🛍️ Dukaan wala Example</h4>
+                <div class="saree-step">
+                    <div class="saree-emoji">🛒</div>
+                    <div><strong>GET:</strong> Dukaan se samaan mangna — "/orders" se order ki list mil jayegi!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">➕</div>
+                    <div><strong>POST:</strong> Naya order daal dena — ekdum fresh order banega!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">✏️</div>
+                    <div><strong>PUT:</strong> Purane order mein thodi si tabdeeli — jaise order update karna!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">❌</div>
+                    <div><strong>DELETE:</strong> Kharaab order hatao — order cancel kar do!</div>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button class="demo-btn first-btn" onclick="showMethod('get')">📥 GET</button>
+                <button class="demo-btn" onclick="showMethod('post')">📤 POST</button>
+                <button class="demo-btn" onclick="showMethod('put')">✏️ PUT</button>
+                <button class="demo-btn" onclick="showMethod('delete')">🗑️ DELETE</button>
+                <button class="demo-btn clear-btn" onclick="clearDemo()">🗑️ Clear</button>
+            </div>
+
+            <div class="demo-area" id="methodResults">
+                <div class="event-message one-message">Upar ke buttons dabao aur REST methods ka maza lo!</div>
+            </div>
         </div>
 
-        <div class="main-content">
-            <div class="api-flow">
-                <div class="client">
-                    <h3>📱 Client (वेबसाइट)</h3>
-                    <p>भिड़े की अचार-पापड़ की वेबसाइट</p>
-                    <div class="endpoint-url">
-                        https://acharpapad.com
-                    </div>
-                </div>
-                
-                <div class="arrow">⟷</div>
-                
-                <div class="server">
-                    <h3>🏪 Server (API)</h3>
-                    <p>डेटा का भंडार</p>
-                    <div class="endpoint-url">
-                        /api/orders<br>
-                        /api/payments<br>
-                        /api/products
-                    </div>
-                </div>
+        <!-- Live Playground -->
+        <div class="demo-section">
+            <h2 class="demo-title">🎮 REST API ka Khel Khelo</h2>
+            <div class="explanation one-explanation">
+                <strong>Try Karo:</strong> Kisi bhi endpoint pe CRUD ka khel khelo!
             </div>
-
-            <div class="methods-section">
-                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">HTTP Methods - जेठालाल के तरीके</h2>
-                
-                <div class="methods-grid">
-                    <div class="method-card get" onclick="demonstrateMethod('GET')">
-                        <div class="method-header">
-                            <span class="method-badge">GET</span>
-                            <h3>डेटा माँगना</h3>
-                        </div>
-                        <p>📋 ऑर्डर्स की लिस्ट देखना</p>
-                        <p>💰 पेमेंट की जानकारी लेना</p>
-                        <div class="endpoint-url">GET /api/orders</div>
+            <div style="border:2px solid #ff6f61; padding:1rem; border-radius:8px;">
+                <select id="httpMethod">
+                    <option>GET</option>
+                    <option>POST</option>
+                    <option>PUT</option>
+                    <option>DELETE</option>
+                </select>
+                <input type="text" id="endpoint" placeholder="/orders" value="/orders" style="width:150px;">
+                <div class="form-group">
+                       <textarea id="payload" placeholder="JSON payload daalo (POST/PUT ke liye)" style="width:100%;height:80px;margin:1rem 0;"></textarea>
                     </div>
+                <div style="display:flex; gap:0.5rem;">
 
-                    <div class="method-card post" onclick="demonstrateMethod('POST')">
-                        <div class="method-header">
-                            <span class="method-badge">POST</span>
-                            <h3>नया डेटा जोड़ना</h3>
-                        </div>
-                        <p>🆕 नया ऑर्डर बनाना</p>
-                        <p>➕ नया प्रोडक्ट ऐड करना</p>
-                        <div class="endpoint-url">POST /api/orders</div>
-                    </div>
-
-                    <div class="method-card put" onclick="demonstrateMethod('PUT')">
-                        <div class="method-header">
-                            <span class="method-badge">PUT</span>
-                            <h3>डेटा अपडेट करना</h3>
-                        </div>
-                        <p>✏️ ऑर्डर में बदलाव</p>
-                        <p>📝 प्रोडक्ट डिटेल्स अपडेट</p>
-                        <div class="endpoint-url">PUT /api/orders/123</div>
-                    </div>
-
-                    <div class="method-card delete" onclick="demonstrateMethod('DELETE')">
-                        <div class="method-header">
-                            <span class="method-badge">DELETE</span>
-                            <h3>डेटा डिलीट करना</h3>
-                        </div>
-                        <p>❌ ऑर्डर कैंसिल करना</p>
-                        <p>🗑️ प्रोडक्ट हटाना</p>
-                        <div class="endpoint-url">DELETE /api/orders/123</div>
-                    </div>
+                <button class="demo-btn first-btn" onclick="runPlayground()">🚀 Send</button>
+                <button class="demo-btn clear-btn" onclick="clearPlayground()">🗑️ Clear</button>
                 </div>
-            </div>
-
-            <div class="demo-section">
-                <h2>🎮 Live API Demo - जेठालाल का प्रैक्टिकल!</h2>
-                <p>नीचे के बटन दबाकर देखें कि REST API कैसे काम करती है:</p>
-                
-                <div class="demo-controls">
-                    <button class="demo-btn" onclick="demoGetOrders()">📋 ऑर्डर्स देखें</button>
-                    <button class="demo-btn" onclick="demoCreateOrder()">🆕 नया ऑर्डर</button>
-                    <button class="demo-btn" onclick="demoUpdateOrder()">✏️ ऑर्डर अपडेट</button>
-                    <button class="demo-btn" onclick="demoDeleteOrder()">❌ ऑर्डर कैंसिल</button>
-                    <button class="demo-btn" onclick="demoGetPayments()">💰 पेमेंट्स देखें</button>
-                </div>
-
-                <div class="status-indicators">
-                    <span class="status status-200">200 OK - सफल!</span>
-                    <span class="status status-201">201 Created - बन गया!</span>
-                    <span class="status status-404">404 Not Found - नहीं मिला!</span>
-                </div>
-
-                <div id="responseArea" class="response-area">
-                    <div style="color: #ccc;">यहाँ API Response दिखेगा... ऊपर के बटन दबाएं!</div>
-                </div>
-            </div>
-
-            <div class="fun-facts">
-                <h3>🎭 जेठालाल के REST API के फायदे:</h3>
-                <ul style="margin-left: 20px; line-height: 1.8;">
-                    <li>📱 <strong>सिंपल:</strong> जैसे बापू जी का हिसाब-किताब - साफ और सीधा!</li>
-                    <li>🔄 <strong>Scalable:</strong> चाहे 10 ऑर्डर हों या 10,000 - सब संभव!</li>
-                    <li>🌐 <strong>Platform Independent:</strong> मोबाइल, वेब, कहीं भी चलेगा!</li>
-                    <li>⚡ <strong>Fast:</strong> पोपटलाल से भी तेज़ डेटा मिलेगा!</li>
-                    <li>🔒 <strong>Secure:</strong> तारक मेहता जी की तरह भरोसेमंद!</li>
-                </ul>
+                <div id="playResponse" style="margin-top:1rem;padding:0.5rem;background:#f4f4f4;border-radius:5px;font-family:monospace;"></div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Sample data for demo
-        const sampleOrders = [
-            { id: 1, customer: "रमेश शर्मा", item: "मिर्च का अचार", quantity: 2, amount: 400, status: "completed" },
-            { id: 2, customer: "सुनीता देवी", item: "आम का अचार", quantity: 1, amount: 250, status: "pending" },
-            { id: 3, customer: "राजेश कुमार", item: "मसाला पापड़", quantity: 5, amount: 300, status: "processing" }
-        ];
+    <!-- Comparison Table -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title"> REST API ka Ekdum Simple Summary</h2>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr><th>Method</th><th>Kaam Kya Hai</th><th>Example URL</th><th>Samjha Kya?</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>GET</td><td>Data nikaalo</td><td>/orders</td><td>Saare orders ki list le aao</td></tr>
+                <tr><td>POST</td><td>Naya banayi</td><td>/orders</td><td>Naya order daal do</td></tr>
+                <tr><td>PUT</td><td>Update karo</td><td>/orders/5</td><td>ID 5 wala order thik karo</td></tr>
+                <tr><td>DELETE</td><td>Hatao</td><td>/orders/5</td><td>ID 5 wala order cancel karo</td></tr>
+            </tbody>
+        </table>
+    </div>
 
-        const samplePayments = [
-            { id: 1, orderId: 1, amount: 400, method: "UPI", status: "completed", date: "2024-12-15" },
-            { id: 2, orderId: 2, amount: 250, method: "Cash", status: "pending", date: "2024-12-16" },
-            { id: 3, orderId: 3, amount: 300, method: "Card", status: "completed", date: "2024-12-17" }
-        ];
+   
+</div>
 
-        let orderCounter = 4;
+<script>
 
-        function showLoading() {
-            const responseArea = document.getElementById('responseArea');
-            responseArea.innerHTML = '<div class="loading"></div> API को कॉल कर रहे हैं...';
-        }
 
-        function simulateApiCall(callback, delay = 1500) {
-            showLoading();
-            setTimeout(callback, delay);
-        }
-
-        function demonstrateMethod(method) {
-            const responseArea = document.getElementById('responseArea');
-            const examples = {
-                'GET': `<strong>GET Request Example:</strong>
-<br><br>fetch('https://acharpapad.com/api/orders')
-  .then(response => response.json())
-  .then(data => console.log("भिड़े जी, आपके ऑर्डर:", data))
-  .catch(error => console.log("Error:", error));
-
-<br><br><em>🎯 Result: सभी ऑर्डर्स की लिस्ट मिलेगी!</em>`,
-                
-                'POST': `<strong>POST Request Example:</strong>
-<br><br>fetch('https://acharpapad.com/api/orders', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    customer: "गोकुलधाम वासी",
-    item: "तीखा अचार",
-    amount: 350
-  })
-})
-
-<br><br><em>🎯 Result: नया ऑर्डर बन जाएगा!</em>`,
-                
-                'PUT': `<strong>PUT Request Example:</strong>
-<br><br>fetch('https://acharpapad.com/api/orders/123', {
-  method: 'PUT',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    status: "completed",
-    deliveryAddress: "गोकुलधाम सोसायटी"
-  })
-})
-
-<br><br><em>🎯 Result: ऑर्डर अपडेट हो जाएगा!</em>`,
-                
-                'DELETE': `<strong>DELETE Request Example:</strong>
-<br><br>fetch('https://acharpapad.com/api/orders/123', {
-  method: 'DELETE'
-})
-  .then(response => {
-    if(response.ok) {
-      console.log("ऑर्डर कैंसिल हो गया!");
+function showMethod(m){
+    let txt='';
+    if(m==='get'){
+        txt=`<strong>📥 GET:</strong> /orders → Saare orders ka data ekdum JSON mein milega!`;
+    } else if(m==='post'){
+        txt=`<strong>📤 POST:</strong> /orders → Payload bhejo aur naya order ban jao!`;
+    } else if(m==='put'){
+        txt=`<strong>✏️ PUT:</strong> /orders/3 → Order 3 ko update karo, bas!`;
+    } else if(m==='delete'){
+        txt=`<strong>🗑️ DELETE:</strong> /orders/3 → Order 3 ko cancel kar do!`;
     }
-  })
-
-<br><br><em>🎯 Result: ऑर्डर डिलीट हो जाएगा!</em>`
-            };
-            
-            responseArea.innerHTML = examples[method];
-        }
-
-        function demoGetOrders() {
-            simulateApiCall(() => {
-                const responseArea = document.getElementById('responseArea');
-                responseArea.innerHTML = `<strong>✅ GET /api/orders - Response:</strong>
-<br><br>{
-  "status": "success",
-  "data": [
-${sampleOrders.map(order => `    {
-      "id": ${order.id},
-      "customer": "${order.customer}",
-      "item": "${order.item}",
-      "quantity": ${order.quantity},
-      "amount": ₹${order.amount},
-      "status": "${order.status}"
-    }`).join(',\n')}
-  ],
-  "total": ${sampleOrders.length}
+    document.getElementById('methodResults').innerHTML=`<div class="success-message">${txt}<div class="message-time">${new Date().toLocaleTimeString()}</div></div>`;
+}
+function clearDemo(){
+    document.getElementById('methodResults').innerHTML=`<div class="event-message one-message">Upar ke buttons dabao aur REST methods ka maza lo!</div>`;
+}
+function clearPlayground(){
+    document.getElementById('playResponse').innerHTML=` `;
+    document.getElementById('payload').value=` `;
 }
 
-<br><br><em>🎉 भिड़े जी, आपके सभी ऑर्डर्स हाजिर हैं!</em>`;
-            });
-        }
-
-        function demoCreateOrder() {
-            simulateApiCall(() => {
-                const newOrder = {
-                    id: orderCounter++,
-                    customer: "नया ग्राहक",
-                    item: "गुड़ का अचार",
-                    quantity: 1,
-                    amount: 180,
-                    status: "pending"
-                };
-                sampleOrders.push(newOrder);
-                
-                const responseArea = document.getElementById('responseArea');
-                responseArea.innerHTML = `<strong>✅ POST /api/orders - Response:</strong>
-<br><br>{
-  "status": "success",
-  "message": "नया ऑर्डर बन गया!",
-  "data": {
-    "id": ${newOrder.id},
-    "customer": "${newOrder.customer}",
-    "item": "${newOrder.item}",
-    "quantity": ${newOrder.quantity},
-    "amount": ₹${newOrder.amount},
-    "status": "${newOrder.status}",
-    "created_at": "${new Date().toISOString()}"
-  }
+function runPlayground(){
+    const method=document.getElementById('httpMethod').value;
+    const endpoint=document.getElementById('endpoint').value;
+    const payload=document.getElementById('payload').value;
+    const res={status:"success", method, endpoint, payload: payload? JSON.parse(payload):null, time:new Date().toLocaleTimeString()};
+    document.getElementById('playResponse').innerHTML=`Response:\n<pre>${JSON.stringify(res,null,2)}</pre>`;
 }
 
-<br><br><em>🎉 वाह! नया ऑर्डर बन गया है!</em>`;
-            });
-        }
-
-        function demoUpdateOrder() {
-            simulateApiCall(() => {
-                const responseArea = document.getElementById('responseArea');
-                responseArea.innerHTML = `<strong>✅ PUT /api/orders/1 - Response:</strong>
-<br><br>{
-  "status": "success",
-  "message": "ऑर्डर अपडेट हो गया!",
-  "data": {
-    "id": 1,
-    "customer": "रमेश शर्मा",
-    "item": "मिर्च का अचार",
-    "quantity": 3,
-    "amount": ₹600,
-    "status": "processing",
-    "updated_at": "${new Date().toISOString()}"
-  }
-}
-
-<br><br><em>🎉 अरे वाह! ऑर्डर अपडेट हो गया!</em>`;
-            });
-        }
-
-        function demoDeleteOrder() {
-            simulateApiCall(() => {
-                const responseArea = document.getElementById('responseArea');
-                responseArea.innerHTML = `<strong>✅ DELETE /api/orders/2 - Response:</strong>
-<br><br>{
-  "status": "success",
-  "message": "ऑर्डर कैंसिल हो गया!",
-  "deleted_order_id": 2,
-  "refund_status": "processing",
-  "deleted_at": "${new Date().toISOString()}"
-}
-
-<br><br><em>✅ हो गया काम! ऑर्डर कैंसिल हो गया!</em>`;
-            });
-        }
-
-        function demoGetPayments() {
-            simulateApiCall(() => {
-                const responseArea = document.getElementById('responseArea');
-                responseArea.innerHTML = `<strong>✅ GET /api/payments - Response:</strong>
-<br><br>{
-  "status": "success",
-  "data": [
-${samplePayments.map(payment => `    {
-      "id": ${payment.id},
-      "orderId": ${payment.orderId},
-      "amount": ₹${payment.amount},
-      "method": "${payment.method}",
-      "status": "${payment.status}",
-      "date": "${payment.date}"
-    }`).join(',\n')}
-  ],
-  "total_amount": ₹${samplePayments.reduce((sum, p) => sum + p.amount, 0)}
-}
-
-<br><br><em>💰 भिड़े जी, सारी पेमेंट्स का हिसाब हाजिर!</em>`;
-            });
-        }
-
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.method-card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px) scale(1.02)';
-                });
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                });
-            });
-        });
-    </script>
+</script>
 </body>
 </html>
-

@@ -1,478 +1,869 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Call Stack - Push and Pop</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 1400px;
-            width: 100%;
-        }
-
-        .title {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 40px;
-        }
-
-        .operations-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            margin-bottom: 40px;
-        }
-
-        .operation-section {
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .operation-title {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 12px;
-            border-radius: 8px;
-            color: white;
-        }
-
-        .push-title {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-        }
-
-        .pop-title {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-        }
-
-        .stack-demo {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 40px;
-            min-height: 300px;
-        }
-
-        .stack-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stack-label {
-            font-size: 14px;
-            font-weight: bold;
-            color: #7f8c8d;
-            margin-bottom: 15px;
-        }
-
-        .stack {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            min-height: 200px;
-            justify-content: flex-end;
-        }
-
-        .stack-frame {
-            width: 140px;
-            height: 45px;
-            margin: 3px 0;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-            font-size: 13px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transition: all 0.4s ease;
-        }
-
-        .main-frame {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-        }
-
-        .first-frame {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-        }
-
-        .second-frame {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-        }
-
-        .new-function {
-            background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-            animation: slideIn 0.8s ease;
-        }
-
-        .removing-function {
-            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
-            animation: slideOut 0.8s ease;
-        }
-
-        @keyframes slideIn {
-            0% { 
-                transform: translateY(-30px) scale(0.8);
-                opacity: 0;
-            }
-            100% { 
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOut {
-            0% { 
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-            100% { 
-                transform: translateY(-30px) scale(0.8);
-                opacity: 0.5;
-            }
-        }
-
-        .arrow {
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 10;
-        }
-
-        .push-arrow {
-            right: -50px;
-            top: -20px;
-        }
-
-        .pop-arrow {
-            right: -50px;
-            top: 20px;
-        }
-
-        .arrow-symbol {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .push-symbol {
-            color: #27ae60;
-            transform: rotate(-90deg);
-        }
-
-        .pop-symbol {
-            color: #e74c3c;
-            transform: rotate(90deg);
-        }
-
-        .arrow-label {
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            min-width: 80px;
-        }
-
-        .push-label {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-        }
-
-        .pop-label {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-        }
-
-        .code-section {
-            background: #2c3e50;
-            border-radius: 12px;
-            padding: 30px;
-            color: #ecf0f1;
-            font-family: 'Courier New', monospace;
-            margin-top: 30px;
-        }
-
-        .code-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #3498db;
-            text-align: center;
-        }
-
-        .code-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .code-column {
-            background: #34495e;
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .code-column-title {
-            color: #f39c12;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .code-line {
-            margin: 6px 0;
-            line-height: 1.4;
-        }
-
-        .function-keyword { color: #e74c3c; }
-        .function-name { color: #f39c12; }
-        .function-call { color: #27ae60; }
-        .comment { color: #95a5a6; font-style: italic; }
-
-        .concept-box {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .concept-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .concept-description {
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        .lifo-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            margin-top: 15px;
-            display: inline-block;
-        }
-
-        @media (max-width: 768px) {
-            .operations-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .code-columns {
-                grid-template-columns: 1fr;
-            }
-            
-            .stack-demo {
-                gap: 25px;
-            }
-            
-            .stack-frame {
-                width: 120px;
-                height: 40px;
-                font-size: 11px;
-            }
-        }
-    </style>
+   <title>Call Stack Funda - Fullstackgada Interactive Demo</title>
+    <link rel="icon" type="image/png" href="/image/favicon.ico">
+    <link rel="stylesheet" href="/interactive-demo.css">
 </head>
 <body>
     <div class="container">
-        <div class="title">🔄 JavaScript Call Stack: PUSH & POP Operations</div>
-        
-        <div class="operations-container">
-            <!-- PUSH Operation -->
-            <div class="operation-section">
-                <div class="operation-title push-title">
-                    ⬆️ PUSH Operation
-                </div>
-                
-                <div class="stack-demo">
-                    <div class="stack-column">
-                        <div class="stack-label">BEFORE CALL</div>
-                        <div class="stack">
-                            <div class="stack-frame first-frame">firstFunction()</div>
-                            <div class="stack-frame main-frame">main()</div>
-                        </div>
-                    </div>
-                    
-                    <div class="stack-column">
-                        <div class="stack-label">AFTER CALL</div>
-                        <div class="stack">
-                            <div class="stack-frame second-frame new-function">secondFunction()</div>
-                            <div class="stack-frame first-frame">firstFunction()</div>
-                            <div class="stack-frame main-frame">main()</div>
-                            
-                            <div class="arrow push-arrow">
-                                <div class="arrow-symbol push-symbol">➤</div>
-                                <div class="arrow-label push-label">PUSH<br>New Function</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- POP Operation -->
-            <div class="operation-section">
-                <div class="operation-title pop-title">
-                    ⬇️ POP Operation
-                </div>
-                
-                <div class="stack-demo">
-                    <div class="stack-column">
-                        <div class="stack-label">BEFORE RETURN</div>
-                        <div class="stack">
-                            <div class="stack-frame second-frame removing-function">secondFunction() ✓</div>
-                            <div class="stack-frame first-frame">firstFunction()</div>
-                            <div class="stack-frame main-frame">main()</div>
-                            
-                            <div class="arrow pop-arrow">
-                                <div class="arrow-symbol pop-symbol">➤</div>
-                                <div class="arrow-label pop-label">POP<br>Function Done</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="stack-column">
-                        <div class="stack-label">AFTER RETURN</div>
-                        <div class="stack">
-                            <div class="stack-frame first-frame">firstFunction()</div>
-                            <div class="stack-frame main-frame">main()</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Header Section -->
+            <div class="header-interactive" style="position:relative;">
+        <h1>Call Stack ka Funda</h1>
+        <p>Understand how Call Stack works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
         </div>
-        
-        <div class="code-section">
-            <div class="code-title">📝 Complete JavaScript Example</div>
-            
-            <div class="code-columns">
-                <div class="code-column">
-                    <div class="code-column-title">Function Definitions</div>
-                    
-                    <div class="code-line">
-                        <span class="function-keyword">function</span> <span class="function-name">main</span>() {
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="comment">// PUSH: firstFunction</span>
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="function-call">firstFunction</span>();
-                    </div>
-                    <div class="code-line">}</div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="function-keyword">function</span> <span class="function-name">firstFunction</span>() {
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="comment">// PUSH: secondFunction</span>
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="function-call">secondFunction</span>();
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="comment">// Control returns here after POP</span>
-                    </div>
-                    <div class="code-line">}</div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="function-keyword">function</span> <span class="function-name">secondFunction</span>() {
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="comment">// Function completes → POP</span>
-                    </div>
-                    <div class="code-line">
-                        &nbsp;&nbsp;<span class="function-keyword">return</span> <span class="comment">"done"</span>;
-                    </div>
-                    <div class="code-line">}</div>
-                </div>
-                
-                <div class="code-column">
-                    <div class="code-column-title">Execution Flow</div>
-                    
-                    <div class="code-line">
-                        <span class="comment">// 1. Start execution</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="function-call">main</span>(); <span class="comment">// PUSH: main</span>
-                    </div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="comment">// 2. Inside main()</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="function-call">firstFunction</span>(); <span class="comment">// PUSH: firstFunction</span>
-                    </div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="comment">// 3. Inside firstFunction()</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="function-call">secondFunction</span>(); <span class="comment">// PUSH: secondFunction</span>
-                    </div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="comment">// 4. secondFunction() completes</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="comment">// POP: secondFunction</span>
-                    </div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="comment">// 5. firstFunction() completes</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="comment">// POP: firstFunction</span>
-                    </div>
-                    
-                    <div class="code-line" style="margin-top: 15px;">
-                        <span class="comment">// 6. main() completes</span>
-                    </div>
-                    <div class="code-line">
-                        <span class="comment">// POP: main → Stack empty</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="concept-box">
-            <div class="concept-title">🎯 Key Concept: LIFO Stack Behavior</div>
-            <div class="concept-description">
-                <strong>PUSH:</strong> When a function is called, it's added to the top of the stack<br>
-                <strong>POP:</strong> When a function completes, it's removed from the top of the stack<br>
-                The call stack operates on <strong>Last In, First Out</strong> principle
-            </div>
-            <div class="lifo-badge">LIFO: Last In, First Out</div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
         </div>
     </div>
+
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Call Stack Concept Explanation -->
+            <div class="demo-section">
+                <h2 class="demo-title">📚 Call Stack Kya Hai?</h2>
+                
+                <div class="explanation">
+                    <strong>Call Stack:</strong> JavaScript ka memory structure जो function calls को LIFO (Last-In, First-Out) order में stack करता है!
+                </div>
+
+                <!-- Heart Analogy -->
+                <div class="saree-analogy">
+                    <h4>💖 Jethalal's Heart = Call Stack Analogy</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💕</div>
+                        <div><strong>Stack Base:</strong> Jethalal ka dil (main function)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">📞</div>
+                        <div><strong>Function Call:</strong> Babita ka phone call (stack mein add)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">❤️</div>
+                        <div><strong>Infinite Recursion:</strong> Babita खुद को बार-बार call करे (stack overflow!)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🛑</div>
+                        <div><strong>Base Condition:</strong> Call khatam karne ka tareeka</div>
+                    </div>
+                </div>
+
+                <!-- Call Stack Demo Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateNormalStack()">
+                        📚 Normal Function Stack
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateInfiniteRecursion()">
+                        🔥 Infinite Recursion Demo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateProperRecursion()">
+                        ✅ Proper Recursion
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearCallStackDemo()">
+                        🗑️ Clear
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="callStackResults">
+                    <div class="event-message one-message">
+                        Click above buttons to explore Call Stack in action!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Call Stack Visualizer -->
+            <div class="demo-section">
+                <h2 class="demo-title">👁️ Live Call Stack Visualizer</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Real-time:</strong> Function calls ka step-by-step execution देखें!
+                </div>
+
+                <!-- Stack Visualization -->
+                <div class="memory-diagram" id="stackVisualization">
+                    <div class="memory-slot" style="background: #e3f2fd;">
+                        <div class="variable-name">📚 Call Stack</div>
+                        <div class="variable-value">Empty - Ready for function calls</div>
+                    </div>
+                </div>
+
+                <!-- Function Examples -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="runSimpleFunction()">
+                        🏃‍♂️ Run Simple Function
+                    </button>
+                    <button class="demo-btn" onclick="runNestedFunctions()">
+                        🪆 Run Nested Functions
+                    </button>
+                    <button class="demo-btn" onclick="runRecursiveFunction()">
+                        🔄 Run Recursive Function
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearStack()">
+                        🧹 Clear Stack
+                    </button>
+                </div>
+
+                <!-- Code Display -->
+                <div class="code-block" id="currentCode">
+                    <div class="code-line comment">// Function code will appear here</div>
+                    <div class="code-line">Click buttons above to see function execution!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stack Overflow Prevention -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🛡️ Stack Overflow Se Kaise Bache?</h2>
+            
+            <div class="explanation">
+                <strong>Prevention Techniques:</strong> Infinite recursion se bachne ke practical tareeke!
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showPreventionMethod('base-condition')">🛑 Base Condition</button>
+                <button class="tab" onclick="showPreventionMethod('iteration-alternative')">🔄 Iteration Alternative</button>
+                <button class="tab" onclick="showPreventionMethod('tail-recursion')">🎯 Tail Recursion</button>
+                <button class="tab" onclick="showPreventionMethod('stack-monitoring')">📊 Stack Monitoring</button>
+            </div>
+
+            <!-- Base Condition -->
+            <div id="base-condition" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🛑 Base Condition - Recursion ka Breaking Point</div>
+                        <div class="code-line comment">// ❌ Babita का Infinite Recursion Problem</div>
+                        <div class="code-line var-declaration">function babitaFunction() {</div>
+                        <div class="code-line var-usage">  console.log("Babita calling...");</div>
+                        <div class="code-line var-usage">  babitaFunction(); // 🔥 Ye infinite loop banayega!</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// ✅ Correct Solution with Base Condition</div>
+                        <div class="code-line var-declaration">function babitaFunctionFixed(count = 0) {</div>
+                        <div class="code-line var-usage">  // Base condition - recursion rokne ka tareeka</div>
+                        <div class="code-line var-usage">  if (count >= 5) {</div>
+                        <div class="code-line var-usage">    console.log("Babita: Bas karo, ab rukti hoon! 😊");</div>
+                        <div class="code-line var-usage">    return; // Stack se bahar nikal jao</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  console.log(`Babita calling... ${count + 1}`);</div>
+                        <div class="code-line var-usage">  babitaFunctionFixed(count + 1); // Increment kar ke call karo</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Test karo</div>
+                        <div class="code-line var-usage">babitaFunctionFixed(); // Safe hai, sirf 5 times chalega</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testBaseCondition()">🛑 Test Base Condition</button>
+                <div id="baseConditionResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test base condition example...</div>
+                </div>
+            </div>
+
+            <!-- Iteration Alternative -->
+            <div id="iteration-alternative" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔄 Recursion Alternative - Loop Use Karo</div>
+                        <div class="code-line comment">// Problem: Calculate factorial recursively</div>
+                        <div class="code-line var-declaration">function factorialRecursive(n) {</div>
+                        <div class="code-line var-usage">  if (n <= 1) return 1; // Base condition</div>
+                        <div class="code-line var-usage">  return n * factorialRecursive(n - 1); // Recursive call</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// ✅ Better Solution - Iterative Approach</div>
+                        <div class="code-line var-declaration">function factorialIterative(n) {</div>
+                        <div class="code-line var-usage">  let result = 1;</div>
+                        <div class="code-line var-usage">  for (let i = 2; i <= n; i++) {</div>
+                        <div class="code-line var-usage">    result *= i;</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-usage">  return result;</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Fibonacci - Recursive vs Iterative</div>
+                        <div class="code-line var-declaration">function fibonacciIterative(n) {</div>
+                        <div class="code-line var-usage">  if (n <= 1) return n;</div>
+                        <div class="code-line var-usage">  let a = 0, b = 1;</div>
+                        <div class="code-line var-usage">  for (let i = 2; i <= n; i++) {</div>
+                        <div class="code-line var-usage">    [a, b] = [b, a + b]; // Swap and add</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-usage">  return b;</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Benefits: No stack overflow, better performance</div>
+                        <div class="code-line var-usage">console.log(factorialIterative(10));  // Safe</div>
+                        <div class="code-line var-usage">console.log(fibonacciIterative(50)); // Stack safe</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testIterativeAlternative()">🔄 Test Iterative Solutions</button>
+                <div id="iterativeResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test iterative alternatives...</div>
+                </div>
+            </div>
+
+            <!-- Tail Recursion -->
+            <div id="tail-recursion" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🎯 Tail Recursion - Optimized Recursion</div>
+                        <div class="code-line comment">// Normal Recursion (Stack heavy)</div>
+                        <div class="code-line var-declaration">function normalFactorial(n) {</div>
+                        <div class="code-line var-usage">  if (n <= 1) return 1;</div>
+                        <div class="code-line var-usage">  return n * normalFactorial(n - 1); // Stack mein pending operation</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// ✅ Tail Recursion (Stack optimized)</div>
+                        <div class="code-line var-declaration">function tailFactorial(n, accumulator = 1) {</div>
+                        <div class="code-line var-usage">  if (n <= 1) return accumulator;</div>
+                        <div class="code-line var-usage">  return tailFactorial(n - 1, n * accumulator); // No pending operation</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Tail Recursive Sum</div>
+                        <div class="code-line var-declaration">function tailSum(n, accumulator = 0) {</div>
+                        <div class="code-line var-usage">  if (n <= 0) return accumulator;</div>
+                        <div class="code-line var-usage">  return tailSum(n - 1, accumulator + n);</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Tail Recursive Array Processing</div>
+                        <div class="code-line var-declaration">function tailArraySum(arr, index = 0, sum = 0) {</div>
+                        <div class="code-line var-usage">  if (index >= arr.length) return sum;</div>
+                        <div class="code-line var-usage">  return tailArraySum(arr, index + 1, sum + arr[index]);</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Usage Examples</div>
+                        <div class="code-line var-usage">console.log(tailFactorial(5));    // 120</div>
+                        <div class="code-line var-usage">console.log(tailSum(100));        // 5050</div>
+                        <div class="code-line var-usage">console.log(tailArraySum([1,2,3,4,5])); // 15</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testTailRecursion()">🎯 Test Tail Recursion</button>
+                <div id="tailRecursionResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test tail recursion examples...</div>
+                </div>
+            </div>
+
+            <!-- Stack Monitoring -->
+            <div id="stack-monitoring" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 📊 Stack Monitoring - Depth Control</div>
+                        <div class="code-line var-declaration">function safeRecursion(n, depth = 0, maxDepth = 1000) {</div>
+                        <div class="code-line var-usage">  // Stack depth check</div>
+                        <div class="code-line var-usage">  if (depth > maxDepth) {</div>
+                        <div class="code-line var-usage">    throw new Error(`Stack overflow prevented! Max depth: ${maxDepth}`);</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  if (n <= 1) return 1;</div>
+                        <div class="code-line var-usage">  return n * safeRecursion(n - 1, depth + 1, maxDepth);</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Error Handling Wrapper</div>
+                        <div class="code-line var-declaration">function executeWithStackProtection(fn, ...args) {</div>
+                        <div class="code-line var-usage">  try {</div>
+                        <div class="code-line var-usage">    return fn(...args);</div>
+                        <div class="code-line var-usage">  } catch (error) {</div>
+                        <div class="code-line var-usage">    if (error.name === 'RangeError' && error.message.includes('Maximum call stack')) {</div>
+                        <div class="code-line var-usage">      console.error('🚨 Stack Overflow Detected!');</div>
+                        <div class="code-line var-usage">      console.error('💡 Suggestion: Add base condition or use iteration');</div>
+                        <div class="code-line var-usage">      return 'STACK_OVERFLOW_ERROR';</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line var-usage">    throw error; // Re-throw other errors</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Stack Size Detection</div>
+                        <div class="code-line var-declaration">function getMaxStackSize() {</div>
+                        <div class="code-line var-usage">  let depth = 0;</div>
+                        <div class="code-line var-usage">  function probe() {</div>
+                        <div class="code-line var-usage">    depth++;</div>
+                        <div class="code-line var-usage">    try { probe(); } catch (e) { return depth; }</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-usage">  return probe();</div>
+                        <div class="code-line var-declaration">}</div>
+                    </div>
+                </div>
+                <button class="demo-btn first-btn" onclick="testStackMonitoring()">📊 Test Stack Monitoring</button>
+                <div id="stackMonitoringResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test stack monitoring techniques...</div>
+                </div>
+            </div>
+        </div>
+
+       
+
+        <!-- Call Stack vs Other Concepts -->
+        <div class="comparison-section">
+            <h3>🆚 Call Stack vs Other JavaScript Concepts</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Concept</th>
+                        <th>Purpose</th>
+                        <th>How it Works</th>
+                        <th>When to Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>📚 Call Stack</strong></td>
+                        <td>Function execution order maintain करना</td>
+                        <td>LIFO - Last function in, first function out</td>
+                        <td>Synchronous function calls tracking</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔄 Event Loop</strong></td>
+                        <td>Asynchronous operations handle करना</td>
+                        <td>Callback queue से call stack में move करना</td>
+                        <td>setTimeout, API calls, DOM events</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💾 Memory Heap</strong></td>
+                        <td>Objects और variables store करना</td>
+                        <td>Dynamic memory allocation</td>
+                        <td>Complex data structures, closures</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📝 Execution Context</strong></td>
+                        <td>Code execution environment define करना</td>
+                        <td>Variables, scope, 'this' binding</td>
+                        <td>Every function call creates new context</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Recursion Best Practices -->
+        <div class="comparison-section">
+            <h3>💡 Recursion Best Practices</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Practice</th>
+                        <th>✅ Good Example</th>
+                        <th>❌ Bad Example</th>
+                        <th>Explanation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Base Condition</strong></td>
+                        <td><code>if (n <= 0) return 1;</code></td>
+                        <td><code>// No base condition</code></td>
+                        <td>हमेशा recursion रोकने का condition दो</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Parameter Progression</strong></td>
+                        <td><code>func(n - 1)</code> where n decreases</td>
+                        <td><code>func(n)</code> same parameter</td>
+                        <td>Parameters base condition की तरफ progress करें</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Depth Limit</strong></td>
+                        <td>Small inputs (n < 1000)</td>
+                        <td>Large inputs (n > 10000)</td>
+                        <td>Stack overflow से बचने के लिए</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Cases</strong></td>
+                        <td>Tree traversal, divide-and-conquer</td>
+                        <td>Simple loops, linear operations</td>
+                        <td>Complex problems के लिए recursion use करो</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Common Stack Overflow Scenarios -->
+        <div class="comparison-section">
+            <h3>🔥 Common Stack Overflow Scenarios</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Problem Code</th>
+                        <th>Solution</th>
+                        <th>Prevention</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Direct Recursion</strong></td>
+                        <td><code>function a() { a(); }</code></td>
+                        <td>Add base condition</td>
+                        <td>Always plan exit strategy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Indirect Recursion</strong></td>
+                        <td><code>function a() { b(); } function b() { a(); }</code></td>
+                        <td>Add counter/limit check</td>
+                        <td>Trace function call flow</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deep Recursion</strong></td>
+                        <td><code>factorial(50000)</code></td>
+                        <td>Use iteration or tail recursion</td>
+                        <td>Consider iterative alternatives</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wrong Base Case</strong></td>
+                        <td><code>if (n == 0)</code> but n never becomes 0</td>
+                        <td>Fix condition logic</td>
+                        <td>Test edge cases thoroughly</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+
+        let stackItems = [];
+        let isStackRunning = false;
+
+        // Call Stack demonstration functions
+        function demonstrateNormalStack() {
+            const result = document.getElementById('callStackResults');
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>📚 Normal Function Stack Flow</strong><br><br>
+                    <strong>Example:</strong> Function calls का proper order<br><br>
+                    <pre>
+function first() {
+    console.log("First function start");
+    second();
+    console.log("First function end");
+}
+
+function second() {
+    console.log("Second function start");
+    third();
+    console.log("Second function end");
+}
+
+function third() {
+    console.log("Third function");
+}
+
+first(); // Call karo
+                    </pre>
+                    <strong>Call Stack Order:</strong><br>
+                    1️⃣ first() pushed to stack<br>
+                    2️⃣ second() pushed to stack<br>
+                    3️⃣ third() pushed to stack<br>
+                    4️⃣ third() completed, popped from stack<br>
+                    5️⃣ second() completed, popped from stack<br>
+                    6️⃣ first() completed, popped from stack<br><br>
+                    <strong>LIFO Pattern:</strong> Last-In, First-Out perfectly working!
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateInfiniteRecursion() {
+            const result = document.getElementById('callStackResults');
+            
+            result.innerHTML = `
+                <div class="error-message">
+                    <strong>🔥 Infinite Recursion Problem</strong><br><br>
+                    <strong>⚠️ WARNING:</strong> Ye code run mat karo! Sirf example hai<br><br>
+                    <pre>
+function babitaFunction() {
+    console.log("Babita calling...");
+    babitaFunction(); // 🚨 Infinite recursion!
+}
+
+babitaFunction(); // Browser crash kar sakta hai!
+                    </pre>
+                    <strong>Problem Analysis:</strong><br>
+                    🔴 No base condition to stop recursion<br>
+                    🔴 Function calls itself indefinitely<br>
+                    🔴 Stack mein functions pile hote rehte hain<br>
+                    🔴 Memory limit exhaust ho jati hai<br>
+                    🔴 "RangeError: Maximum call stack size exceeded"<br><br>
+                    <strong>Call Stack State:</strong><br>
+                    babitaFunction() → babitaFunction() → babitaFunction() → ... ∞<br><br>
+                    <strong>Jethalal's Advice:</strong> "Base condition lagao, वरना दिल मे overflow हो जाएगा!" 💔
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateProperRecursion() {
+            const result = document.getElementById('callStackResults');
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>✅ Proper Recursion with Base Condition</strong><br><br>
+                    <strong>Fixed Example:</strong> Safe recursion pattern<br><br>
+                    <pre>
+function babitaFunctionFixed(count = 0) {
+    // 🛑 Base condition - recursion rokne ka tareeka
+    if (count >= 5) {
+        console.log("Babita: Bas karo, ab rukti hoon! 😊");
+        return; // Stack se bahar nikal jao
+    }
+    
+    console.log(\`Babita calling... \${count + 1}\`);
+    babitaFunctionFixed(count + 1); // Increment kar ke call karo
+}
+
+babitaFunctionFixed(); // Safe execution
+                    </pre>
+                    <strong>Execution Flow:</strong><br>
+                    1️⃣ babitaFunctionFixed(0) - "Babita calling... 1"<br>
+                    2️⃣ babitaFunctionFixed(1) - "Babita calling... 2"<br>
+                    3️⃣ babitaFunctionFixed(2) - "Babita calling... 3"<br>
+                    4️⃣ babitaFunctionFixed(3) - "Babita calling... 4"<br>
+                    5️⃣ babitaFunctionFixed(4) - "Babita calling... 5"<br>
+                    6️⃣ babitaFunctionFixed(5) - "Bas karo, ab rukti hoon!" ✅<br><br>
+                    <strong>Stack properly cleared!</strong> No overflow, happy recursion! 🎉
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function clearCallStackDemo() {
+            document.getElementById('callStackResults').innerHTML = `
+                <div class="event-message one-message">
+                    Click above buttons to explore Call Stack in action!
+                </div>
+            `;
+        }
+
+        // Live stack visualization functions
+        function updateStackVisualization() {
+            const container = document.getElementById('stackVisualization');
+            
+            if (stackItems.length === 0) {
+                container.innerHTML = `
+                    <div class="memory-slot" style="background: #e3f2fd;">
+                        <div class="variable-name">📚 Call Stack</div>
+                        <div class="variable-value">Empty - Ready for function calls</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            for (let i = stackItems.length - 1; i >= 0; i--) {
+                const item = stackItems[i];
+                const isTop = i === stackItems.length - 1;
+                html += `
+                    <div class="memory-slot" style="background: ${isTop ? '#ffeb3b' : '#f0f0f0'}; margin-bottom: 0.5rem;">
+                        <div class="variable-name">${item.name}</div>
+                        <div class="variable-value">${item.description}</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function pushToStack(name, description) {
+            stackItems.push({ name, description });
+            updateStackVisualization();
+        }
+
+        function popFromStack() {
+            const popped = stackItems.pop();
+            updateStackVisualization();
+            return popped;
+        }
+
+        function clearStack() {
+            stackItems = [];
+            updateStackVisualization();
+            document.getElementById('currentCode').innerHTML = `
+                <div class="code-line comment">// Function code will appear here</div>
+                <div class="code-line">Click buttons above to see function execution!</div>
+            `;
+        }
+
+        function runSimpleFunction() {
+            if (isStackRunning) return;
+            isStackRunning = true;
+            
+            document.getElementById('currentCode').innerHTML = `
+                <div class="code-line comment">// 🏃‍♂️ Simple Function Execution</div>
+                <div class="code-line var-declaration">function simpleFunction() {</div>
+                <div class="code-line var-usage">    console.log("Hello from simple function!");</div>
+                <div class="code-line var-usage">    return "Done";</div>
+                <div class="code-line var-declaration">}</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">simpleFunction(); // Call kar rahe hain</div>
+            `;
+
+            setTimeout(() => {
+                pushToStack('🏃‍♂️ simpleFunction()', 'Executing simple function');
+                
+                setTimeout(() => {
+                    popFromStack();
+                    isStackRunning = false;
+                }, 1000);
+            }, 500);
+        }
+
+        function runNestedFunctions() {
+            if (isStackRunning) return;
+            isStackRunning = true;
+            
+            document.getElementById('currentCode').innerHTML = `
+                <div class="code-line comment">// 🪆 Nested Functions Execution</div>
+                <div class="code-line var-declaration">function outer() {</div>
+                <div class="code-line var-usage">    console.log("Outer start");</div>
+                <div class="code-line var-usage">    middle();</div>
+                <div class="code-line var-usage">    console.log("Outer end");</div>
+                <div class="code-line var-declaration">}</div>
+                <div class="code-line var-declaration">function middle() {</div>
+                <div class="code-line var-usage">    console.log("Middle start");</div>
+                <div class="code-line var-usage">    inner();</div>
+                <div class="code-line var-usage">    console.log("Middle end");</div>
+                <div class="code-line var-declaration">}</div>
+                <div class="code-line var-declaration">function inner() {</div>
+                <div class="code-line var-usage">    console.log("Inner function");</div>
+                <div class="code-line var-declaration">}</div>
+            `;
+
+            let step = 0;
+            const steps = [
+                () => pushToStack('🪆 outer()', 'Outer function executing'),
+                () => pushToStack('🔄 middle()', 'Middle function called'),
+                () => pushToStack('🎯 inner()', 'Inner function called'),
+                () => popFromStack(), // inner completes
+                () => popFromStack(), // middle completes
+                () => popFromStack()  // outer completes
+            ];
+
+            function executeStep() {
+                if (step < steps.length) {
+                    steps[step]();
+                    step++;
+                    setTimeout(executeStep, 800);
+                } else {
+                    isStackRunning = false;
+                }
+            }
+
+            setTimeout(executeStep, 500);
+        }
+
+        function runRecursiveFunction() {
+            if (isStackRunning) return;
+            isStackRunning = true;
+            
+            document.getElementById('currentCode').innerHTML = `
+                <div class="code-line comment">// 🔄 Recursive Function (Safe with base condition)</div>
+                <div class="code-line var-declaration">function countdown(n) {</div>
+                <div class="code-line var-usage">    if (n <= 0) {</div>
+                <div class="code-line var-usage">        console.log("Blast off! 🚀");</div>
+                <div class="code-line var-usage">        return;</div>
+                <div class="code-line var-usage">    }</div>
+                <div class="code-line var-usage">    console.log(n);</div>
+                <div class="code-line var-usage">    countdown(n - 1);</div>
+                <div class="code-line var-declaration">}</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">countdown(3); // Starting countdown</div>
+            `;
+
+            const recursiveSteps = [
+                () => pushToStack('🔄 countdown(3)', 'n = 3, calling countdown(2)'),
+                () => pushToStack('🔄 countdown(2)', 'n = 2, calling countdown(1)'),
+                () => pushToStack('🔄 countdown(1)', 'n = 1, calling countdown(0)'),
+                () => pushToStack('🔄 countdown(0)', 'n = 0, base case reached!'),
+                () => popFromStack(), // countdown(0) completes
+                () => popFromStack(), // countdown(1) completes
+                () => popFromStack(), // countdown(2) completes
+                () => popFromStack()  // countdown(3) completes
+            ];
+
+            let step = 0;
+            function executeRecursiveStep() {
+                if (step < recursiveSteps.length) {
+                    recursiveSteps[step]();
+                    step++;
+                    setTimeout(executeRecursiveStep, 1000);
+                } else {
+                    isStackRunning = false;
+                }
+            }
+
+            setTimeout(executeRecursiveStep, 500);
+        }
+
+        // Prevention method test functions
+        function testBaseCondition() {
+            document.getElementById('baseConditionResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🛑 Base Condition Test Results</strong><br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Babita calling... 1<br>
+Babita calling... 2<br>
+Babita calling... 3<br>
+Babita calling... 4<br>
+Babita calling... 5<br>
+Babita: Bas karo, ab rukti hoon! 😊
+                    </div>
+                    <strong>Analysis:</strong><br>
+                    ✅ Base condition worked: count >= 5<br>
+                    ✅ Recursion stopped safely<br>
+                    ✅ No stack overflow<br>
+                    ✅ All function calls properly returned<br><br>
+                    <strong>Stack Depth:</strong> Maximum 6 levels (safe!)<br>
+                    <strong>Jethalal's Approval:</strong> "Perfect! अब Babita जी का दिल overflow नहीं होगा! 💖"
+                </div>
+            `;
+        }
+
+        function testIterativeAlternative() {
+            // Calculate factorial iteratively vs recursively
+            function factorialIterative(n) {
+                let result = 1;
+                for (let i = 2; i <= n; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+
+            function fibonacciIterative(n) {
+                if (n <= 1) return n;
+                let a = 0, b = 1;
+                for (let i = 2; i <= n; i++) {
+                    [a, b] = [b, a + b];
+                }
+                return b;
+            }
+
+            const factorial10 = factorialIterative(10);
+            const fibonacci15 = fibonacciIterative(15);
+
+            document.getElementById('iterativeResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🔄 Iterative Solutions Test Results</strong><br><br>
+                    <strong>Performance Comparison:</strong><br>
+                    📊 factorial(10) = ${factorial10} (iterative)<br>
+                    📊 fibonacci(15) = ${fibonacci15} (iterative)<br><br>
+                    <strong>Benefits:</strong><br>
+                    ✅ No stack overflow risk<br>
+                    ✅ Better memory efficiency<br>
+                    ✅ Faster execution for large inputs<br>
+                    ✅ Easier to debug and understand<br><br>
+                    <strong>When to Use:</strong><br>
+                    • Simple mathematical calculations<br>
+                    • Array/string processing<br>
+                    • When stack depth is a concern<br>
+                    • Performance-critical applications
+                </div>
+            `;
+        }
+
+        function testTailRecursion() {
+            function tailFactorial(n, accumulator = 1) {
+                if (n <= 1) return accumulator;
+                return tailFactorial(n - 1, n * accumulator);
+            }
+
+            function tailSum(n, accumulator = 0) {
+                if (n <= 0) return accumulator;
+                return tailSum(n - 1, accumulator + n);
+            }
+
+            const factorial5 = tailFactorial(5);
+            const sum10 = tailSum(10);
+
+            document.getElementById('tailRecursionResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🎯 Tail Recursion Test Results</strong><br><br>
+                    <strong>Execution Results:</strong><br>
+                    📊 tailFactorial(5) = ${factorial5}<br>
+                    📊 tailSum(10) = ${sum10}<br><br>
+                    <strong>Tail Recursion Benefits:</strong><br>
+                    ✅ Stack frame optimization possible<br>
+                    ✅ No pending operations after recursive call<br>
+                    ✅ Memory efficient (in optimized engines)<br>
+                    ✅ Maintains recursive structure elegance<br><br>
+                    <strong>Key Difference:</strong><br>
+                    Normal: return n * factorial(n-1) ❌ (pending multiplication)<br>
+                    Tail: return tailFactorial(n-1, n*acc) ✅ (no pending operation)
+                </div>
+            `;
+        }
+
+        function testStackMonitoring() {
+            function safeRecursion(n, depth = 0, maxDepth = 10) {
+                if (depth > maxDepth) {
+                    throw new Error(`Stack overflow prevented! Max depth: ${maxDepth}`);
+                }
+                if (n <= 1) return 1;
+                return n * safeRecursion(n - 1, depth + 1, maxDepth);
+            }
+
+            try {
+                const result = safeRecursion(8);
+                document.getElementById('stackMonitoringResult').innerHTML = `
+                    <div class="success-message">
+                        <strong>📊 Stack Monitoring Test Results</strong><br><br>
+                        <strong>Safe Execution:</strong><br>
+                        📊 safeRecursion(8) = ${result}<br>
+                        📊 Maximum depth reached: 8 levels<br>
+                        📊 Safety limit: 10 levels<br><br>
+                        <strong>Monitoring Benefits:</strong><br>
+                        ✅ Proactive overflow prevention<br>
+                        ✅ Controlled depth limiting<br>
+                        ✅ Clear error messages<br>
+                        ✅ Graceful failure handling<br><br>
+                        <strong>Production Tips:</strong><br>
+                        • Set reasonable depth limits<br>
+                        • Log stack depth in critical functions<br>
+                        • Use try-catch for stack overflow handling<br>
+                        • Monitor performance metrics
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('stackMonitoringResult').innerHTML = `
+                    <div class="error-message">
+                        <strong>🚨 Stack Protection Triggered</strong><br><br>
+                        <strong>Error:</strong> ${error.message}<br><br>
+                        This demonstrates how stack monitoring prevents overflow!
+                    </div>
+                `;
+            }
+        }
+
+        // Show prevention method tabs
+        function showPreventionMethod(method) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(method).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+
+        // Initialize demo
+        window.onload = function() {
+            clearCallStackDemo();
+            clearStack();
+        };
+    </script>
 </body>
 </html>

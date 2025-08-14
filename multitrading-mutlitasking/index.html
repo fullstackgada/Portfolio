@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multithreading (Single Road)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg:#111; --fg:#e8e8e8; --road:#2c2c2c; 
+      --accent:#00c2ff;
+      --car-colors: #ff4c4c, #ffd452, #6ecbff, #7bff6e, #ff7be2;
+    }
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+    header{padding:16px 20px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
+    h1{font-size:18px;margin:0}
+    .controls{display:flex;gap:8px}
+    button{background:var(--accent);color:#001018;border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+    button.secondary{background:#333;color:#ccc}
+    main{padding:20px;max-width:500px;margin:0 auto}
+    .legend{opacity:.85;margin-bottom:10px}
+    .stage{position:relative;height:100px;background:var(--road);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+    .laneMark{position:absolute;left:0;right:0;top:49px;height:2px;background:repeating-linear-gradient(90deg,#888 0 30px,transparent 30px 60px);opacity:.4}
+
+    /* Car Design */
+    .car{
+      position:absolute;
+      top:34px;
+      width:60px; height:32px;
+      border-radius:6px;
+      box-shadow:0 6px 15px rgba(0,0,0,.4);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:0 4px;
+    }
+    .headlights, .taillights {
+      width:6px; height:10px; border-radius:2px;
+    }
+    .headlights { background: #fff8b3; }
+    .taillights { background: #ff4c4c; }
+
+    .accident{position:absolute;top:24px;left:420px;font-size:26px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));display:none}
+    .status{margin-top:12px;font-size:14px;opacity:.9}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚦 Multithreading — एक ही सड़क, shared resource</h1>
+    <div class="controls">
+      <button id="runBtn">Run Multithreading</button>
+      <button id="resetBtn" class="secondary">Reset</button>
+    </div>
+  </header>
+  <main>
+    <p class="legend">Ek hi sadak hai, sabhi gaadiyaan usi par chal rahi hain. Aage accident hoga to peeche wali sab rukengi — shared resource lock jaisa.</p>
+    <div class="stage" id="stage">
+      <div class="laneMark"></div>
+      <div class="accident" id="acc">🚧</div>
+    </div>
+    <div class="status" id="status">Ready.</div>
+  </main>
+
+  <script>
+    const stage = document.getElementById('stage');
+    const acc = document.getElementById('acc');
+    const statusEl = document.getElementById('status');
+    const spacing = 80; // following distance
+    const carColors = getComputedStyle(document.documentElement).getPropertyValue('--car-colors').split(',');
+    let cars = [];
+    let pos = [];
+    let speed = 1;
+    let jam = false;
+    let timer = null;
+
+    function createCars(count){
+      cars = [];
+      pos = [];
+      for(let i=0;i<count;i++){
+        let car = document.createElement('div');
+        car.className = 'car';
+        car.style.background = carColors[i % carColors.length];
+        car.innerHTML = `<div class="headlights"></div><div class="taillights"></div>`;
+        stage.appendChild(car);
+        cars.push(car);
+        pos.push(-spacing * (i+1));
+      }
+    }
+
+    function layout(){
+      cars.forEach((c,i)=>{ c.style.left = pos[i] + 'px'; });
+    }
+    function reset(){
+      stage.querySelectorAll('.car').forEach(c => c.remove());
+      createCars(5);
+      jam = false; acc.style.display='none';
+      if (timer) cancelAnimationFrame(timer), timer=null;
+      layout();
+      statusEl.textContent = 'Reset. Click Run.';
+    }
+
+    function run(){
+      statusEl.textContent = 'Running….';
+      let startTs = performance.now();
+      const step = ()=>{
+        if (!jam) pos[0] += speed;
+        for (let i=1;i<cars.length;i++){
+          if (!jam && pos[i] + spacing < pos[i-1]) pos[i] += speed;
+        }
+        if (!jam && pos[0] >=255 && performance.now()-startTs > 7200){
+          jam = true; acc.style.display='block'; statusEl.textContent = '🚧 Accident! All Cars waiting…';
+          setTimeout(()=>{
+            jam=false; acc.style.display='none'; statusEl.textContent='Jam cleared. All resume.';
+          }, 10000);
+        }
+        layout();
+        timer = requestAnimationFrame(step);
+      };
+      timer = requestAnimationFrame(step);
+    }
+
+    document.getElementById('runBtn').onclick = run;
+    document.getElementById('resetBtn').onclick = reset;
+    reset();
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiprocessing (Separate Roads with Web Workers)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg:#0e0e0e; --fg:#eaeaea; --road:#2b2b2b; --accent:#00c2ff;
+      --car1:#ff4c4c; --car2:#ffd452; --car3:#6ecbff; --car4:#a5ff8a; --car5:#ff9eff;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    header{padding:16px 20px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
+    h1{font-size:18px;margin:0}
+    
+    .controls{display:flex;gap:8px}
+    button{background:var(--accent);color:#001018;border:0;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer}
+    button.secondary{background:#333;color:#ccc}
+    main{padding:20px;max-width:700px;margin:0 auto}
+    .legend{opacity:.9;margin-bottom:14px}
+    .row{display:grid;gap:14px}
+    .stage{position:relative;height:84px;background:var(--road);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+    .label{position:absolute;left:10px;top:8px;font-size:12px;opacity:.8}
+    .laneMark{position:absolute;left:0;right:0;top:41px;height:2px;background:repeating-linear-gradient(90deg,#888 0 30px,transparent 30px 60px);opacity:.35}
+   .car{
+      position:absolute;
+      top:34px;
+      width:60px; height:32px;
+      border-radius:6px;
+      box-shadow:0 6px 15px rgba(0,0,0,.4);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:0 4px;
+    }
+    .headlights, .taillights {
+      width:6px; height:10px; border-radius:2px;
+    }
+    .headlights { background: #fff8b3; }
+    .taillights { background: #ff4c4c; }
+
+    .accident{position:absolute;top:24px;left:420px;font-size:26px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));display:none}
+    .status{margin-top:12px;font-size:14px;opacity:.9}
+    .accident{position:absolute;top:18px;left:320px;font-size:26px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));display:none}
+    .status{margin-top:12px;font-size:14px;opacity:.95}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏎️ Multiprocessing — अलग-अलग सड़कें, independent processes</h1>
+    <div class="controls">
+      <button id="runBtn">Run Multiprocessing</button>
+      <button id="resetBtn" class="secondary">Reset</button>
+    </div>
+  </header>
+  <main>
+    <p class="legend">Har gaadi ke liye alag sadak. Ek sadak par accident ho jaaye to sirf wahi rukegi — baaki apni raftaar se chalengi.</p>
+
+    <div class="row" id="row">
+      <div class="stage" data-road="0">
+        <span class="label">Road 1</span>
+        <div class="laneMark"></div>
+        <div class="car" id="car0" style="background:var(--car1)"></div>
+        <div class="accident" id="acc0">🚧</div>
+      </div>
+      <div class="stage" data-road="1">
+        <span class="label">Road 2</span>
+        <div class="laneMark"></div>
+        <div class="car" id="car1" style="background:var(--car2)"></div>
+        <div class="accident" id="acc1">🚧</div>
+      </div>
+      <div class="stage" data-road="2">
+        <span class="label">Road 3</span>
+        <div class="laneMark"></div>
+        <div class="car" id="car2" style="background:var(--car3)"></div>
+        <div class="accident" id="acc2">🚧</div>
+      </div>
+     
+    </div>
+
+    <div class="status" id="status">Ready.</div>
+  </main>
+
+  <script>
+    function makeWorkerURL(){
+      const src = `
+        let pos = 0; let speed = 2; let roadIndex = 0; let hasAccident = false; let running = false; let rafId = 0;
+        function loop(){
+          if (!running) { rafId = requestAnimationFrame(loop); return; }
+          if (!hasAccident) pos += speed;
+          if (!hasAccident && roadIndex === 0 && pos >= 270){
+            hasAccident = true;
+            postMessage({type:'accident', pos});
+            setTimeout(()=>{ hasAccident=false; postMessage({type:'clear'}); }, 10000);
+          }
+          postMessage({type:'tick', pos});
+          rafId = requestAnimationFrame(loop);
+        }
+        onmessage = (e)=>{
+          const {cmd, value} = e.data || {};
+          if (cmd==='init'){ roadIndex = value.index; speed = value.speed; running=false; pos=0; hasAccident=false; cancelAnimationFrame(rafId); requestAnimationFrame(loop); }
+          if (cmd==='start'){ running = true; }
+          if (cmd==='stop'){ running = false; }
+          if (cmd==='reset'){ running=false; pos=0; hasAccident=false; postMessage({type:'tick', pos}); }
+        };
+      `;
+      const blob = new Blob([src], {type:'application/javascript'});
+      return URL.createObjectURL(blob);
+    }
+
+    const statusEl = document.getElementById('status');
+    const cars = [...document.querySelectorAll('.car')];
+    const accs = [...document.querySelectorAll('.accident')];
+    const speeds = [1, 1, 1, 1, 1];
+    let workers = [];
+
+    function reset(){
+      workers.forEach(w=>w.terminate());
+      workers = [];
+      cars.forEach(c=> c.style.left = '-60px');
+      accs.forEach(a=> a.style.display='none');
+      
+    }
+
+    function run(){
+      statusEl.textContent = 'Running….';
+      reset();
+      const url = makeWorkerURL();
+      for (let i=0;i<cars.length;i++){
+        const w = new Worker(url);
+        workers.push(w);
+        w.onmessage = (e)=>{
+          const msg = e.data;
+          if (msg.type==='tick'){
+            cars[i].style.left = (msg.pos) + 'px';
+          } else if (msg.type==='accident'){
+            accs[i].style.display='block';
+            statusEl.textContent = 'Road '+(i+1)+': accident — only this road paused.';
+          } else if (msg.type==='clear'){
+            accs[i].style.display='none';
+            statusEl.textContent = 'Road '+(i+1)+': cleared. Others were unaffected.';
+          }
+        };
+        w.postMessage({cmd:'init', value:{index:i, speed:speeds[i]}});
+      }
+      workers.forEach(w=> w.postMessage({cmd:'start'}));
+    }
+
+    document.getElementById('runBtn').onclick = run;
+    document.getElementById('resetBtn').onclick = reset;
+    reset();
+  </script>
+</body>
+</html>

@@ -1304,7 +1304,12 @@ body {
 .back-to-top:active {
     transform: translateY(-1px) scale(1.05);
 }
-
+.inter-flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 @media (max-width: 768px) {
     .back-to-top {
         bottom: 20px;

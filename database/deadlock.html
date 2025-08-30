@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deadlock ka Funda - Fullstackgada Interactive Demo</title>
+    <link rel="icon" type="image/png" href="/image/favicon.ico">
+    <link rel="stylesheet" href="/interactive-demo.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-interactive" style="position:relative;">
+        <h1>Deadlock ka Funda</h1>
+        <p>Understand how Deadlock works with Fullstackgada</p>
+       <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+        <!-- Demo Grid -->
+        <div class="demo-grid">
+            <!-- Deadlock Concept Explanation -->
+            <div class="demo-section">
+                <h2 class="demo-title">🔒 Deadlock Kya Hai?</h2>
+                
+                <div class="explanation">
+                    <strong>Deadlock:</strong> Jab do ya zyada processes ek-dusre ka intezaar karte-karte fas jaayein — na aage badh saken, na peeche!
+                </div>
+
+                <!-- Triangle Love Story Analogy -->
+                <div class="saree-analogy">
+                    <h4>💕 Gokuldham Love Triangle Deadlock</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨</div>
+                        <div><strong>Jethalal:</strong> Daya ko pakda hai, Babita ji chahiye</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨‍🦲</div>
+                        <div><strong>Iyer:</strong> Babita ko pakda hai, koi aur resource chahiye</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👩</div>
+                        <div><strong>Babita:</strong> Jetha ji ka intezaar kar rahi, Iyer ko chhoda nahi</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🔄</div>
+                        <div><strong>Result:</strong> Sabko circular wait — koi kisi ko nahi chhod raha!</div>
+                    </div>
+                </div>
+
+                <!-- Deadlock Demo Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="demonstrateDeadlock()">
+                        🔒 Deadlock Demo
+                    </button>
+                    <button class="demo-btn" onclick="demonstrateFourConditions()">
+                        4️⃣ Four Conditions
+                    </button>
+                    <button class="demo-btn" onclick="demonstratePrevention()">
+                        🛡️ Prevention Techniques
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="clearDeadlockDemo()">
+                        🗑️ Clear
+                    </button>
+                </div>
+
+                <!-- Demo Results -->
+                <div class="demo-area" id="deadlockResults">
+                    <div class="event-message one-message">
+                        Click above buttons to explore Deadlock concepts!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Deadlock Simulator -->
+            <div class="demo-section">
+                <h2 class="demo-title">🎮 Live Deadlock Simulator</h2>
+                
+                <div class="explanation one-explanation">
+                    <strong>Scenario:</strong> Do processes resources ke liye fight kar rahe hain!
+                </div>
+
+                <!-- Process Status Display -->
+                <div class="memory-diagram" id="processStatus">
+                    <div class="memory-slot" id="process1">
+                        <div class="variable-name">🔵 Process 1 (Jethalal)</div>
+                        <div class="variable-value">Status: Ready</div>
+                    </div>
+                    <div class="memory-slot" id="process2">
+                        <div class="variable-name">🔴 Process 2 (Iyer)</div>
+                        <div class="variable-value">Status: Ready</div>
+                    </div>
+                    <div class="memory-slot" id="resource1">
+                        <div class="variable-name">💎 Resource A (Babita ji)</div>
+                        <div class="variable-value">Owner: None</div>
+                    </div>
+                    <div class="memory-slot" id="resource2">
+                        <div class="variable-name">💍 Resource B (Daya)</div>
+                        <div class="variable-value">Owner: None</div>
+                    </div>
+                </div>
+
+                <!-- Simulation Controls -->
+                <div class="demo-controls">
+                    <button class="demo-btn first-btn" onclick="startDeadlockSimulation()" id="simulationBtn">
+                        🚀 Start Deadlock Simulation
+                    </button>
+                    <button class="demo-btn" onclick="resolveDeadlock()" id="resolveBtn" disabled>
+                        🔧 Resolve Deadlock
+                    </button>
+                    <button class="demo-btn clear-btn" onclick="resetSimulation()">
+                        🔄 Reset
+                    </button>
+                </div>
+
+                <!-- Simulation Log -->
+                <div class="server-simulation">
+                    <h4>Simulation Log:</h4>
+                    <div class="server-log" id="simulationLog">
+                        Ready to simulate deadlock...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Four Conditions Deep Dive -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">4️⃣ Deadlock ki char Conditions</h2>
+            
+            <div class="explanation">
+                <strong>Coffman Conditions:</strong> Yeh chaar conditions simultaneously honi chahiye deadlock ke liye!
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showCondition('mutual-exclusion')">🔐 Mutual Exclusion</button>
+                <button class="tab" onclick="showCondition('hold-and-wait')">⏳ Hold and Wait</button>
+                <button class="tab" onclick="showCondition('no-preemption')">🚫 No Preemption</button>
+                <button class="tab" onclick="showCondition('circular-wait')">🔄 Circular Wait</button>
+            </div>
+
+            <!-- Mutual Exclusion -->
+            <div id="mutual-exclusion" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔐 Mutual Exclusion Condition</div>
+                        <div class="code-line comment">// Ek resource sirf ek process use kar sakta hai</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">Resource babita = new Resource("Babita Ji");</div>
+                        <div class="code-line var-usage">babita.setExclusive(true); // Only one can access</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Jethalal tries to access</div>
+                        <div class="code-line var-usage">if(babita.isAvailable()) {</div>
+                        <div class="code-line var-usage">  babita.lockBy("Jethalal");</div>
+                        <div class="code-line var-usage">  System.out.println("Jethalal ne Babita ji ko lock kar diya!");</div>
+                        <div class="code-line var-usage">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Iyer tries to access same resource</div>
+                        <div class="code-line var-usage">if(babita.isAvailable()) {</div>
+                        <div class="code-line var-usage">  System.out.println("Iyer: Babita darling available nahi hai! 😢");</div>
+                        <div class="code-line var-usage">  // Will have to wait...</div>
+                        <div class="code-line var-usage">}</div>
+                    </div>
+                </div>
+                
+                <div class="saree-analogy">
+                    <h4>🔐 Mutual Exclusion Real Example:</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👩</div>
+                        <div><strong>Babita Ji:</strong> Ek time mein sirf ek hi person se baat kar sakti</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🖨️</div>
+                        <div><strong>Printer:</strong> Ek time mein sirf ek document print kar sakta</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💾</div>
+                        <div><strong>Database Lock:</strong> Ek record ko sirf ek transaction modify kar sakta</div>
+                    </div>
+                </div>
+                
+                <button class="demo-btn first-btn" onclick="testMutualExclusion()">🔐 Test Mutual Exclusion</button>
+                <div id="mutualExclusionResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test mutual exclusion condition...</div>
+                </div>
+            </div>
+
+            <!-- Hold and Wait -->
+            <div id="hold-and-wait" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// ⏳ Hold and Wait Condition</div>
+                        <div class="code-line comment">// Process kuch resources hold karta hai aur dusre ka wait karta hai</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">class Process {</div>
+                        <div class="code-line var-usage">  List<Resource> heldResources = new ArrayList<>();</div>
+                        <div class="code-line var-usage">  List<Resource> waitingFor = new ArrayList<>();</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  public void executeJethalal() {</div>
+                        <div class="code-line var-usage">    // Jethalal already has Daya</div>
+                        <div class="code-line var-usage">    heldResources.add(new Resource("Daya"));</div>
+                        <div class="code-line var-usage">    System.out.println("Jethalal: Daya mere paas hai!");</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">    // But wants Babita ji too</div>
+                        <div class="code-line var-usage">    waitingFor.add(new Resource("Babita"));</div>
+                        <div class="code-line var-usage">    System.out.println("Jethalal: Babita ji ka intezaar kar raha hoon!");</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Similarly Iyer holds Babita, wants something else</div>
+                        <div class="code-line var-usage">iyer.hold("Babita");</div>
+                        <div class="code-line var-usage">iyer.waitFor("SomeOtherResource");</div>
+                    </div>
+                </div>
+                
+                <div class="saree-analogy">
+                    <h4>⏳ Hold and Wait Scenarios:</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨</div>
+                        <div><strong>Jethalal:</strong> Daya को hold kiya, Babita का wait kar raha</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨‍🦲</div>
+                        <div><strong>Iyer:</strong> Babita को hold kiya, कुछ और resource चाहिए</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💻</div>
+                        <div><strong>Database:</strong> Table A locked, Table B का wait kar रहा</div>
+                    </div>
+                </div>
+                
+                <button class="demo-btn first-btn" onclick="testHoldAndWait()">⏳ Test Hold and Wait</button>
+                <div id="holdAndWaitResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test hold and wait condition...</div>
+                </div>
+            </div>
+
+            <!-- No Preemption -->
+            <div id="no-preemption" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🚫 No Preemption Condition</div>
+                        <div class="code-line comment">// Resource ko forcefully nahi chin sakte</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">class Resource {</div>
+                        <div class="code-line var-usage">  private String owner;</div>
+                        <div class="code-line var-usage">  private boolean canPreempt = false;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">  public boolean forceRelease(String newOwner) {</div>
+                        <div class="code-line var-usage">    if(!canPreempt) {</div>
+                        <div class="code-line var-usage">      System.out.println(owner + " ne kaha: Main khud chhodunga!");</div>
+                        <div class="code-line var-usage">      return false; // Cannot preempt</div>
+                        <div class="code-line var-usage">    }</div>
+                        <div class="code-line var-usage">    return true;</div>
+                        <div class="code-line var-usage">  }</div>
+                        <div class="code-line var-declaration">}</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Example usage</div>
+                        <div class="code-line var-usage">Resource babita = new Resource("Babita");</div>
+                        <div class="code-line var-usage">babita.lockBy("Iyer");</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">// Jethalal tries to preempt</div>
+                        <div class="code-line var-usage">if(!babita.forceRelease("Jethalal")) {</div>
+                        <div class="code-line var-usage">  System.out.println("Jethalal: Iyer bhai khud chhodenge tab hi milegi!");</div>
+                        <div class="code-line var-usage">}</div>
+                    </div>
+                </div>
+                
+                <div class="saree-analogy">
+                    <h4>🚫 No Preemption Examples:</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨‍🦲</div>
+                        <div><strong>Iyer:</strong> "Babita darling mere saath hai, koi zabardasti nahi kar sakta!"</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🖨️</div>
+                        <div><strong>Printer:</strong> Document print ho raha hai, beech mein nahi rok sakte</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">💾</div>
+                        <div><strong>File Lock:</strong> Process khud release karega, OS force nahi kar sakta</div>
+                    </div>
+                </div>
+                
+                <button class="demo-btn first-btn" onclick="testNoPreemption()">🚫 Test No Preemption</button>
+                <div id="noPreemptionResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test no preemption condition...</div>
+                </div>
+            </div>
+
+            <!-- Circular Wait -->
+            <div id="circular-wait" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">// 🔄 Circular Wait Condition</div>
+                        <div class="code-line comment">// Processes gol-gol wait kar rahe hain</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-declaration">// Circular dependency chain</div>
+                        <div class="code-line var-usage">Process jethalal = new Process("Jethalal");</div>
+                        <div class="code-line var-usage">Process iyer = new Process("Iyer");</div>
+                        <div class="code-line var-usage">Process popatlal = new Process("Popatlal");</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">// Jethalal holds Daya, wants Babita (held by Iyer)</div>
+                        <div class="code-line var-usage">jethalal.hold("Daya");</div>
+                        <div class="code-line var-usage">jethalal.waitFor("Babita"); // Iyer has this</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">// Iyer holds Babita, wants Rita (held by Popatlal)</div>
+                        <div class="code-line var-usage">iyer.hold("Babita");</div>
+                        <div class="code-line var-usage">iyer.waitFor("Rita"); // Popatlal has this</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">// Popatlal holds Rita, wants Daya (held by Jethalal)</div>
+                        <div class="code-line var-usage">popatlal.hold("Rita");</div>
+                        <div class="code-line var-usage">popatlal.waitFor("Daya"); // Back to Jethalal!</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">// Result: Circular wait - koi kisi ko nahi chhod raha!</div>
+                        <div class="code-line comment">// Jethalal -> Iyer -> Popatlal -> Jethalal (cycle!)</div>
+                    </div>
+                </div>
+                
+                <div class="saree-analogy">
+                    <h4>🔄 Circular Wait Visualization:</h4>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨➡️👩</div>
+                        <div><strong>Jethalal:</strong> Daya hai, Babita chahiye (Iyer ke paas)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨‍🦲➡️👩‍🦰</div>
+                        <div><strong>Iyer:</strong> Babita hai, Rita chahiye (Popatlal ke paas)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">👨‍💼➡️👩</div>
+                        <div><strong>Popatlal:</strong> Rita hai, Daya chahiye (Jethalal ke paas)</div>
+                    </div>
+                    <div class="saree-step">
+                        <div class="saree-emoji">🔄</div>
+                        <div><strong>Circle Complete:</strong> Sabko doosre ka intezaar, infinite loop!</div>
+                    </div>
+                </div>
+                
+                <button class="demo-btn first-btn" onclick="testCircularWait()">🔄 Test Circular Wait</button>
+                <div id="circularWaitResult" class="result-panel" style="margin-top: 1rem;">
+                    <div class="result-content">Click to test circular wait condition...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prevention Techniques -->
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🛡️ Deadlock Prevention Techniques</h2>
+            
+            <div class="explanation">
+                <strong>Prevention Strategy:</strong> Koi ek condition ko tod do, deadlock nahi hoga!
+            </div>
+
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Technique</th>
+                        <th>Kaise Kaam Karta Hai</th>
+                        <th>Jethalal's Example</th>
+                        <th>Pros/Cons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🔑 Resource Ordering</strong></td>
+                        <td>Resources ko hamesha same order mein allocate karo</td>
+                        <td>Pehle hamesha Daya, phir Babita - ulta nahi!</td>
+                        <td>✅ Simple | ❌ Restrictive</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⏰ Timeout</strong></td>
+                        <td>Zyada der wait karo to query cancel kar do</td>
+                        <td>5 minute wait kiya, ab chhod do intezaar!</td>
+                        <td>✅ Practical | ❌ May lose work</td>
+                    </tr>
+                    <tr>
+                        <td><strong>⚡ Short Transactions</strong></td>
+                        <td>Jaldi-jaldi kaam khatam kar do</td>
+                        <td>Babita se 2 minute baat, phir chhod do!</td>
+                        <td>✅ Reduces deadlock chance | ❌ May need multiple txns</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔍 Auto Detection</strong></td>
+                        <td>System khud deadlock pakad ke resolve kare</td>
+                        <td>Database samjh gaya - ek query ko rollback kar diya!</td>
+                        <td>✅ Automatic | ❌ Some work lost</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Real-world Examples -->
+        <div class="comparison-section">
+            <h3>🌍 Real-world Deadlock Examples</h3>
+            
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Deadlock Situation</th>
+                        <th>How it Happens</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🏦 Banking System</strong></td>
+                        <td>Two accounts transfer kar rahe hain</td>
+                        <td>Account A locks Account 1, Account B locks Account 2, dono ek-dusre ka wait</td>
+                        <td>Resource ordering - hamesha lower account number first</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🛒 E-commerce</strong></td>
+                        <td>Inventory update aur order processing</td>
+                        <td>Order locks product, inventory locks order table</td>
+                        <td>Short transactions, proper lock ordering</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📱 Phone System</strong></td>
+                        <td>Do calls simultaneously connect</td>
+                        <td>Call A dials B, Call B dials A at same time</td>
+                        <td>Call queueing, timeout mechanism</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🚗 Traffic Intersection</strong></td>
+                        <td>Chaar taraf se cars aa gayi</td>
+                        <td>Sabko straight jaana hai, koi peeche nahi hat sakta</td>
+                        <td>Traffic signals, roundabouts</td>
+                    </tr>
+                    <tr>
+                        <td><strong>💻 File System</strong></td>
+                        <td>Two processes file access kar rahe</td>
+                        <td>Process 1 ne File A lock kiya, File B chahiye. Process 2 ulta</td>
+                        <td>File locking hierarchy, deadlock detection</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+              let simulationRunning = false;
+
+        // Deadlock demonstration functions
+        function demonstrateDeadlock() {
+            const result = document.getElementById('deadlockResults');
+            
+            result.innerHTML = `
+                <div class="error-message">
+                    <strong>🔒 Classic Deadlock Scenario!</strong><br><br>
+                    <strong>The Setup:</strong><br>
+                    👨 Jethalal: Daya को hold kiya, Babita ji chahiye<br>
+                    👨‍🦲 Iyer: Babita को hold kiya, कुछ और resource chahiye<br>
+                    👩 Babita: Confused, kisko choose kare!<br><br>
+                    <strong>Result:</strong><br>
+                    🔄 Circular dependency - sab wait kar rahe<br>
+                    ⏰ Time waste ho raha<br>
+                    💻 System hang - koi progress nahi<br>
+                    😵 Database transactions stuck!<br><br>
+                    <strong>यही है Deadlock का मामला!</strong>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstrateFourConditions() {
+            const result = document.getElementById('deadlockResults');
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>4️⃣ Deadlock की चार शर्तें (Coffman Conditions)</strong><br><br>
+                    <strong>1️⃣ Mutual Exclusion:</strong><br>
+                    • Resource sirf ek process use kar sakta hai<br>
+                    • Example: Babita ji sirf ek ke saath baat kar sakti<br><br>
+                    <strong>2️⃣ Hold and Wait:</strong><br>
+                    • Kuch resource hold kiya, dusre ka wait kar raha<br>
+                    • Example: Jethalal - Daya hai, Babita chahiye<br><br>
+                    <strong>3️⃣ No Preemption:</strong><br>
+                    • Resource forcefully nahi chin sakte<br>
+                    • Example: Iyer khud chhodenge tab hi milegi<br><br>
+                    <strong>4️⃣ Circular Wait:</strong><br>
+                    • Processes circle meinwait kar rahe<br>
+                    • Example: A→B→C→A (infinite loop!)<br><br>
+                    <strong>चारों conditions = Guaranteed Deadlock! 🔒</strong>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function demonstratePrevention() {
+            const result = document.getElementById('deadlockResults');
+            
+            result.innerHTML = `
+                <div class="success-message">
+                    <strong>🛡️ Deadlock Prevention Techniques</strong><br><br>
+                    <strong>1️⃣ Resource Ordering:</strong><br>
+                    • Hamesha same order mein resources lo<br>
+                    • Pehle Daya, phir Babita - ulta nahi!<br><br>
+                    <strong>2️⃣ Timeouts:</strong><br>
+                    • 5 minute wait, phir cancel kar do<br>
+                    • Better than infinite waiting!<br><br>
+                    <strong>3️⃣ Short Transactions:</strong><br>
+                    • Jaldi-jaldi kaam khatam karo<br>
+                    • Less time = less deadlock chance<br><br>
+                    <strong>4️⃣ Auto Detection:</strong><br>
+                    • Database khud deadlock detect kare<br>
+                    • Automatically resolve kar de<br><br>
+                    <strong>Prevention is better than cure! 💊</strong>
+                    <div class="message-time">${new Date().toLocaleTimeString()}</div>
+                </div>
+            `;
+        }
+
+        function clearDeadlockDemo() {
+            document.getElementById('deadlockResults').innerHTML = `
+                <div class="event-message one-message">
+                    Click above buttons to explore Deadlock concepts!
+                </div>
+            `;
+        }
+
+        // Simulation functions
+        function startDeadlockSimulation() {
+            if (simulationRunning) return;
+            
+            simulationRunning = true;
+            const btn = document.getElementById('simulationBtn');
+            const resolveBtn = document.getElementById('resolveBtn');
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ Simulation Running...';
+            
+            // Step 1: Process 1 acquires Resource B
+            setTimeout(() => {
+                updateProcessStatus('process1', 'Has Resource B (Daya)', 'success');
+                updateResourceStatus('resource2', 'Owned by Process 1');
+                logMessage('🔵 Jethalal ne Daya ko acquire kar liya');
+            }, 500);
+            
+            // Step 2: Process 2 acquires Resource A
+            setTimeout(() => {
+                updateProcessStatus('process2', 'Has Resource A (Babita)', 'success');
+                updateResourceStatus('resource1', 'Owned by Process 2');
+                logMessage('🔴 Iyer ne Babita ji ko acquire kar liya');
+            }, 1000);
+            
+            // Step 3: Process 1 wants Resource A
+            setTimeout(() => {
+                updateProcessStatus('process1', 'Waiting for Resource A', 'waiting');
+                logMessage('🔵 Jethalal: Babita ji chahiye! (Iyer ke paas hai)');
+            }, 1500);
+            
+            // Step 4: Process 2 wants Resource B
+            setTimeout(() => {
+                updateProcessStatus('process2', 'Waiting for Resource B', 'waiting');
+                logMessage('🔴 Iyer: Koi aur resource chahiye! (Jethalal ke paas hai)');
+            }, 2000);
+            
+            // Step 5: Deadlock detected!
+            setTimeout(() => {
+                logMessage('🚨 DEADLOCK DETECTED! Circular wait condition met!');
+                logMessage('💀 Both processes stuck - कोई आगे नहीं बढ़ सकता!');
+                resolveBtn.disabled = false;
+            }, 2500);
+        }
+
+        function resolveDeadlock() {
+            logMessage('🔧 Resolving deadlock by terminating Process 2...');
+            
+            setTimeout(() => {
+                updateProcessStatus('process2', 'Terminated (Rollback)', 'error');
+                updateResourceStatus('resource1', 'Released');
+                logMessage('🔴 Iyer ka transaction rollback ho gaya');
+            }, 500);
+            
+            setTimeout(() => {
+                updateProcessStatus('process1', 'Acquired both resources', 'success');
+                updateResourceStatus('resource1', 'Owned by Process 1');
+                logMessage('🔵 Jethalal ko dono resources mil gaye!');
+                logMessage('✅ Deadlock resolved successfully!');
+            }, 1000);
+        }
+
+        function resetSimulation() {
+            simulationRunning = false;
+            
+            const btn = document.getElementById('simulationBtn');
+            const resolveBtn = document.getElementById('resolveBtn');
+            
+            btn.disabled = false;
+            btn.textContent = '🚀 Start Deadlock Simulation';
+            resolveBtn.disabled = true;
+            
+            // Reset all statuses
+            updateProcessStatus('process1', 'Ready', '');
+            updateProcessStatus('process2', 'Ready', '');
+            updateResourceStatus('resource1', 'Available');
+            updateResourceStatus('resource2', 'Available');
+            
+            document.getElementById('simulationLog').innerHTML = 'Ready to simulate deadlock...';
+        }
+
+        function updateProcessStatus(processId, status, className) {
+            const element = document.getElementById(processId);
+            element.className = `memory-slot ${className}`;
+            element.querySelector('.variable-value').textContent = status;
+        }
+
+        function updateResourceStatus(resourceId, status) {
+            const element = document.getElementById(resourceId);
+            element.querySelector('.variable-value').textContent = status;
+        }
+
+        function logMessage(message) {
+            const log = document.getElementById('simulationLog');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Condition testing functions
+        function testMutualExclusion() {
+            document.getElementById('mutualExclusionResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🔐 Mutual Exclusion Test Results:</strong><br><br>
+                    <strong>Scenario:</strong> Babita ji with Iyer, Jethalal wants access<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Resource: Babita Ji<br>
+Status: LOCKED by Iyer<br>
+<br>
+Jethalal.requestAccess() → DENIED<br>
+Reason: Mutual Exclusion - Only one at a time!<br>
+Jethalal must wait until Iyer releases resource.
+                    </div>
+                    <strong>✅ Condition Met:</strong> Exclusive access enforced!
+                </div>
+            `;
+        }
+
+        function testHoldAndWait() {
+            document.getElementById('holdAndWaitResult').innerHTML = `
+                <div class="success-message">
+                    <strong>⏳ Hold and Wait Test Results:</strong><br><br>
+                    <strong>Current State:</strong><br>
+                    • Jethalal: Holding Daya ✓, Waiting for Babita ⏳<br>
+                    • Iyer: Holding Babita ✓, Waiting for something else ⏳<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Process Status:<br>
+Jethalal: [HOLDING: Daya] [WAITING: Babita]<br>
+Iyer: [HOLDING: Babita] [WAITING: Other Resource]<br>
+<br>
+Both processes: ✓ Holding resources ✓ Waiting for more
+                    </div>
+                    <strong>✅ Condition Met:</strong> Hold and Wait scenario active!
+                </div>
+            `;
+        }
+
+        function testNoPreemption() {
+            document.getElementById('noPreemptionResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🚫 No Preemption Test Results:</strong><br><br>
+                    <strong>Attempt:</strong> Jethalal trying to forcefully take Babita from Iyer<br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+System.forcePreempt(Babita, from: Iyer, to: Jethalal);<br>
+<br>
+ERROR: Preemption not allowed!<br>
+Iyer: "Main khud chhodunga jab mann karega!"<br>
+Jethalal: "Intezaar karna padega... 😞"<br>
+<br>
+Result: PREEMPTION FAILED
+                    </div>
+                    <strong>✅ Condition Met:</strong> Resources cannot be forcefully taken!
+                </div>
+            `;
+        }
+
+        function testCircularWait() {
+            document.getElementById('circularWaitResult').innerHTML = `
+                <div class="success-message">
+                    <strong>🔄 Circular Wait Test Results:</strong><br><br>
+                    <strong>Circular Dependency Chain Detected:</strong><br><br>
+                    <div style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; margin: 0.5rem 0; font-family: monospace;">
+Dependency Chain Analysis:<br>
+<br>
+Jethalal → (wants) → Babita → (held by) → Iyer<br>
+Iyer → (wants) → Rita → (held by) → Popatlal<br>
+Popatlal → (wants) → Daya → (held by) → Jethalal<br>
+<br>
+CYCLE DETECTED: Jethalal → Iyer → Popatlal → Jethalal<br>
+<br>
+Status: INFINITE CIRCULAR WAIT! 🔄
+                    </div>
+                    <strong>✅ Condition Met:</strong> Perfect circular wait scenario!<br>
+                    <strong>💀 Result:</strong> Deadlock inevitable!
+                </div>
+            `;
+        }
+
+        // Show condition tabs
+        function showCondition(condition) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(condition).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Initialize demo
+        window.onload = function() {
+            clearDeadlockDemo();
+            resetSimulation();
+        };
+    </script>
+</body>
+</html>

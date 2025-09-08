@@ -319,53 +319,7 @@
             </div>
         </div>
 
-        <!-- ACID Properties Comparison Table -->
-        <div class="comparison-section">
-            <h3>🧪 ACID Properties ka Detailed Comparison</h3>
-            
-            <table class="comparison-table responsive-table">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Definition</th>
-                        <th>Jethalal ki Misal</th>
-                        <th>Asli Example</th>
-                        <th>Violation ka Anjam</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>⚛️ Atomicity</strong></td>
-                        <td>Poora ya kuch nahi - transaction completely succeed ya fail</td>
-                        <td>Secretary bana to poora, adha-secretary nahi hota</td>
-                        <td>Money transfer: Debit aur Credit dono ya kuch nahi</td>
-                        <td>Adhoore updates, data corruption, paisa gayab</td>
-                    </tr>
-                    <tr>
-                        <td><strong>🎯 Consistency</strong></td>
-                        <td>Database hamesha valid state mein rehta hai transaction ke pehle aur baad</td>
-                        <td>Society ka account: ₹1000+₹200=₹1200 (exactly)</td>
-                        <td>Business rules maintain, constraints satisfy hote hain</td>
-                        <td>Galat data, business rules toote, corrupt state</td>
-                    </tr>
-                    <tr>
-                        <td><strong>🔒 Isolation</strong></td>
-                        <td>Concurrent transactions ek doosre mein dakhal nahi dete</td>
-                        <td>Jethalal aur Iyer alag time mein Babita se baat karein</td>
-                        <td>Do users akhri item kharidne ki koshish - sirf ek succeed</td>
-                        <td>Dirty reads, phantom reads, data races</td>
-                    </tr>
-                    <tr>
-                        <td><strong>💾 Durability</strong></td>
-                        <td>Committed changes permanently save hote hain</td>
-                        <td>Babita ki muskaan - ek baar dekhi to hamesha yaad!</td>
-                        <td>Power failure ke baad bhi data survive karta hai</td>
-                        <td>Data loss, transactions dobara karne padte hain</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
+    
         <!-- Implementation Techniques -->
         <div class="comparison-section">
             <h3>🛠️ Databases ACID Kaise Implement Karte Hain</h3>

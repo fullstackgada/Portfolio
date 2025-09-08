@@ -42,30 +42,6 @@
         </div>
     </div>
 
-    <!-- Head-to-head visual -->
-    <div class="comparison-section">
-        <h3>⚡ OLTP vs 🧠 OLAP (Jaldi Comparison)</h3>
-        <table class="comparison-table responsive-table">
-            <thead>
-                <tr>
-                    <th>Feature</th>
-                    <th>⚡ OLTP (Mehta saab ki jaldi diary)</th>
-                    <th>🧠 OLAP (Popatlal ka Analysis Mode)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Purpose</td><td>Roz ka kaam (insert/update/delete)</td><td>Complex reports, trend analysis, summaries</td></tr>
-                <tr><td>Example</td><td>ATM se paise nikalna, ticket booking, order process</td><td>Sales dashboard, saal bhar ka trend, product analysis</td></tr>
-                <tr><td>Data Volume</td><td>Mb–Gb, sirf latest data</td><td>Gb–Tb–Pb, saalon ka purana data</td></tr>
-                <tr><td>Operation Speed</td><td>Milliseconds mein, real-time</td><td>Seconds/minutes, heavy queries</td></tr>
-                <tr><td>Users</td><td>Bahut saare, ek saath (customers/front-office)</td><td>Thodi si, special log (analysts, managers)</td></tr>
-                <tr><td>DB Example</td><td>MySQL, PostgreSQL, MS SQL OLTP</td><td>Snowflake, BigQuery, MS SQL OLAP cubes</td></tr>
-                <tr><td>Design</td><td>Normalized (kam redundancy)</td><td>Denormalized (tez aggregates ke liye)</td></tr>
-                <tr><td>Integrity</td><td>Bahut high (ACID)</td><td>Medium (batches/reports ke liye consistency)</td></tr>
-                <tr><td>Analogies</td><td>Mehta saab ki roz ki diary (“live updates!”)</td><td>Popatlal ka life analysis (“sab purana data khangalo!”)</td></tr>
-            </tbody>
-        </table>
-    </div>
 
     <!-- Analogy: Mehta vs Popatlal -->
     <div class="saree-analogy">
@@ -114,6 +90,31 @@
                 <li>OLAP reports/analytics – data warehouse (bada, batch, analysis ke liye optimized)</li>
             </ul>
         </div>
+    </div>
+
+    <!-- Head-to-head visual -->
+    <div class="comparison-section">
+        <h3>⚡ OLTP vs 🧠 OLAP (Jaldi Comparison)</h3>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>⚡ OLTP (Mehta saab ki jaldi diary)</th>
+                    <th>🧠 OLAP (Popatlal ka Analysis Mode)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Purpose</td><td>Roz ka kaam (insert/update/delete)</td><td>Complex reports, trend analysis, summaries</td></tr>
+                <tr><td>Example</td><td>ATM se paise nikalna, ticket booking, order process</td><td>Sales dashboard, saal bhar ka trend, product analysis</td></tr>
+                <tr><td>Data Volume</td><td>Mb–Gb, sirf latest data</td><td>Gb–Tb–Pb, saalon ka purana data</td></tr>
+                <tr><td>Operation Speed</td><td>Milliseconds mein, real-time</td><td>Seconds/minutes, heavy queries</td></tr>
+                <tr><td>Users</td><td>Bahut saare, ek saath (customers/front-office)</td><td>Thodi si, special log (analysts, managers)</td></tr>
+                <tr><td>DB Example</td><td>MySQL, PostgreSQL, MS SQL OLTP</td><td>Snowflake, BigQuery, MS SQL OLAP cubes</td></tr>
+                <tr><td>Design</td><td>Normalized (kam redundancy)</td><td>Denormalized (tez aggregates ke liye)</td></tr>
+                <tr><td>Integrity</td><td>Bahut high (ACID)</td><td>Medium (batches/reports ke liye consistency)</td></tr>
+                <tr><td>Analogies</td><td>Mehta saab ki roz ki diary (“live updates!”)</td><td>Popatlal ka life analysis (“sab purana data khangalo!”)</td></tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

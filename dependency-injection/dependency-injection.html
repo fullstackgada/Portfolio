@@ -1,44 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dependency Injection Interactive Demo | Fullstackgada</title>
-    <meta name="description" content="Discover Dependency Injection (DI) with our interactive demo! Learn tight vs loose coupling, DI benefits, and real-world Angular and Spring Boot examples.">
-    <meta name="keywords" content="Dependency Injection, DI, loose coupling, tight coupling, software design, Angular DI, Spring Boot DI, JavaScript DI, programming tutorial, coding demo">
-    <meta name="author" content="Fullstackgada">
-    <meta name="robots" content="index, follow">
-    <link rel="stylesheet" href="/interactive-demo.css">
-    <link rel="canonical" href="https://fullstackgada.netlify.app/dependency-injection/dependency-injection.html">
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="preload" href="/interactive-demo.css" as="style">
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="Dependency Injection Interactive Demo | Fullstackgada">
-    <meta property="og:description" content="Discover Dependency Injection with an interactive demo! Learn tight vs loose coupling, DI benefits, and Angular/Spring Boot examples.">
-    <meta property="og:url" content="https://fullstackgada.netlify.app/dependency-injection/dependency-injection.html">
-    <meta property="og:type" content="article">
-    <meta property="og:image" content="https://fullstackgada.netlify.app/dependency-injection/Capture.webp">
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dependency Injection Interactive Demo | Fullstackgada">
-    <meta name="twitter:description" content="Learn Dependency Injection with an interactive demo, covering tight vs loose coupling and real-world examples.">
-    <meta name="twitter:image" content="https://fullstackgada.netlify.app/dependency-injection/Capture.webp">
-    <!-- Schema Markup -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "Dependency Injection Interactive Demo",
-      "description": "Explore Dependency Injection (DI) with an interactive demo, covering tight vs loose coupling, benefits, and examples in Angular and Spring Boot.",
-      "author": {
-        "@type": "Person",
-        "name": "Fullstackgada"
-      },
-      "url": "https://fullstackgada.netlify.app/dependency-injection/dependency-injection.html",
-      "datePublished": "2025-09-07"
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dependency Injection Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Discover Dependency Injection (DI) with our interactive demo! Learn tight vs loose coupling, DI benefits, and real-world Angular and Spring Boot examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/dependency-injection/dependency-injection">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Dependency Injection Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover Dependency Injection with an interactive demo! Learn tight vs loose coupling, DI benefits, and Angular/Spring Boot examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/dependency-injection/dependency-injection">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/dependency-injection/Capture.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dependency Injection Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn Dependency Injection with an interactive demo, covering tight vs loose coupling and real-world examples.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/dependency-injection/Capture.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Dependency Injection Interactive Demo",
+    "description": "Explore Dependency Injection (DI) with an interactive demo, covering tight vs loose coupling, benefits, and examples in Angular and Spring Boot.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/dependency-injection/dependency-injection",
+    "datePublished": "2025-09-07",
+    "dateModified": "2025-09-08",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
     }
-    </script>
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Dependency Injection?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dependency Injection (DI) is a software design pattern that allows objects to receive their dependencies from an external source rather than creating them internally. It helps achieve loose coupling and makes applications more flexible and testable."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is Dependency Injection important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dependency Injection is important because it promotes loose coupling, improves testability by allowing easy mocking of dependencies, enhances maintainability, and enables cleaner, modular software design."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are real-world examples of Dependency Injection?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dependency Injection is widely used in frameworks like Angular (for managing services and components) and Spring Boot (for managing beans and services). These frameworks handle object creation and dependency management automatically, improving developer productivity."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
 <div class="container">
 

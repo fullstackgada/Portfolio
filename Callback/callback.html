@@ -1,68 +1,147 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Callback ka Funda - Fullstackgada Interactive Demo</title>
-<link rel="icon" type="image/png" href="/image/favicon.ico">
-<link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Callback Functions Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore Callback Functions with an interactive demo! Learn how callbacks work, see real-world examples, and try a live payment simulation.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/callback/callback">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Callback Functions Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover Callback Functions with an interactive demo! Learn asynchronous programming and try a live payment simulation.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/callback/callback">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/callback/Capture.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Callback Functions Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn Callback Functions with an interactive demo, covering asynchronous programming and real-world examples.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/callback/Capture.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Callback Functions Interactive Demo",
+    "description": "Explore Callback Functions with an interactive demo, covering asynchronous programming, payment gateway examples, and live simulations.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/callback/callback",
+    "datePublished": "2025-09-08",
+    "dateModified": "2025-09-08",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a callback function in JavaScript?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A callback function is a function passed as an argument to another function and executed later. It is often used in JavaScript for asynchronous tasks like handling API responses, events, or timers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why are callback functions important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Callback functions are important because they allow JavaScript to handle asynchronous operations, such as network requests and file reading, without blocking the main thread. This keeps applications responsive and efficient."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are real-world examples of callback functions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common real-world examples of callbacks include payment gateway notifications, event listeners in JavaScript (like onclick), and functions like setTimeout or setInterval where another function executes after a delay."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
 <div class="container">
 
-   <div class="header-interactive" style="position:relative;">
-        <h1>Callback ka Funda</h1>
-        <p>Understand how Callback works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
+    <!-- Header -->
+    <div class="header-interactive" style="position:relative;">
+        <h1>Callback Functions Interactive Demo</h1>
+        <p>Master Callbacks with Fullstackgada’s Fun Approach! 📞</p>
+        <div class="explore-diagrams-btn-wrapper">
             <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+                <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
             </a>
         </div>
-       <div class="follow-btn-wrapper">
+        <div class="follow-btn-wrapper">
             <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
+                <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+            </a>
         </div>
     </div>
 
     <!-- Analogy -->
     <div class="demo-section">
-        <h2 class="demo-title">📞 Callback Kya Hai?</h2>
+        <h2 class="demo-title">📞 What are Callback Functions?</h2>
         <div class="explanation">
-            <strong>Callback:</strong> "Bhai, kaam ho jaaye to mujhe bata dena!" wala funda.
+            <strong>Callback:</strong> A function passed as an argument to another function, called when a task is complete.
         </div>
 
         <div class="saree-analogy">
-            <h4>🧒 Baccha-Homework Analogy</h4>
+            <h4>🧒 Homework Analogy</h4>
             <div class="saree-step">
                 <div class="saree-emoji">🧒</div>
-                <div>Baccha: "Sir, mera homework complete hote hi check kar dena."</div>
+                <div>Student: "Teacher, check my homework once it’s done."</div>
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">👨‍🏫</div>
-                <div>Teacher: "Thik hai beta, kaam hote hi phone karo."</div>
+                <div>Teacher: "Sure, call me when it’s ready."</div>
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">📞</div>
-                <div>Homework complete → Baccha calls sir = <strong>Callback Trigger</strong>.</div>
+                <div>Homework done → Student calls teacher = <strong>Callback Trigger</strong>.</div>
             </div>
         </div>
 
         <div class="demo-controls">
-            <button class="demo-btn first-btn" onclick="showPaymentCallback()">
-                💳 Payment Callback Example
-            </button>
-            <button class="demo-btn" onclick="showSimpleCode()">
-                💻 Simple Code Example
-            </button>
-            <button class="demo-btn clear-btn" onclick="clearCallbackDemo()">
-                🗑️ Clear
-            </button>
+            <button class="demo-btn first-btn" onclick="showPaymentCallback()">💳 Payment Callback Example</button>
+            <button class="demo-btn" onclick="showSimpleCode()">💻 Simple Code Example</button>
+            <button class="demo-btn clear-btn" onclick="clearCallbackDemo()">🗑️ Clear</button>
         </div>
 
         <div class="demo-area" id="callbackResults">
             <div class="event-message one-message">
-                Click above buttons to explore Callback in action!
+                Click the buttons above to explore Callbacks in action!
             </div>
         </div>
     </div>
@@ -71,31 +150,114 @@
     <div class="demo-section">
         <h2 class="demo-title">🎮 Live Callback Playground</h2>
         <div class="explanation one-explanation">
-            <strong>Scenario:</strong> Payment gateway ko bolte ho - "Ho jaaye to mujhe callback maar dena".
+            <strong>Scenario:</strong> Tell the payment gateway, "Call me back when the payment is done!"
         </div>
         <div style="border:2px solid #27ae60; padding:1rem; border-radius:8px;">
-            <button class="demo-btn first-btn" onclick="startPayment()">🚀 Start Payment</button>
+            <button class="demo-btn first-btn" onclick="startPayment()" role="button" aria-label="Start Payment Simulation">🚀 Start Payment</button>
             <div id="playStatus" style="margin-top:1rem;">Payment Status: <em>Pending...</em></div>
         </div>
     </div>
 
-    
+    <!-- Benefits Table -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🎯 Benefits of Callbacks</h2>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Benefit</th>
+                    <th>Without Callbacks</th>
+                    <th>With Callbacks</th>
+                    <th>Fun Explanation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Asynchronous Handling</td>
+                    <td>Blocking code (wait for tasks)</td>
+                    <td>Non-blocking (handle tasks later)</td>
+                    <td>Don’t wait for the payment—just get a call when it’s done!</td>
+                </tr>
+                <tr>
+                    <td>Flexibility</td>
+                    <td>Fixed task flow</td>
+                    <td>Custom callback logic</td>
+                    <td>Choose what happens after the task!</td>
+                </tr>
+                <tr>
+                    <td>Code Modularity</td>
+                    <td>Tightly coupled logic</td>
+                    <td>Reusable functions</td>
+                    <td>Write one callback, use it anywhere!</td>
+                </tr>
+                <tr>
+                    <td>Error Handling</td>
+                    <td>Hard to manage errors</td>
+                    <td>Handle errors in callback</td>
+                    <td>Know if the payment failed without checking manually!</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Real-world Examples -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🌍 Real-World Callback Examples</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- JavaScript Callback -->
+            <div class="demo-card">
+                <h4>🟨 JavaScript Callback</h4>
+                <div class="code-block" style="font-size: 0.9rem;">
+                    <div class="code-line comment">// Event listener with callback</div>
+                    <div class="code-line var-usage">document.getElementById('btn').addEventListener('click', function() {</div>
+                    <div class="code-line var-usage">  console.log('Button clicked!');</div>
+                    <div class="code-line var-usage">});</div>
+                </div>
+            </div>
+            <!-- Node.js Callback -->
+            <div class="demo-card">
+                <h4>📡 Node.js Callback</h4>
+                <div class="code-block" style="font-size: 0.9rem;">
+                    <div class="code-line comment">// File reading with callback</div>
+                    <div class="code-line var-usage">const fs = require('fs');</div>
+                    <div class="code-line var-usage">fs.readFile('file.txt', (err, data) => {</div>
+                    <div class="code-line var-usage">  if (err) throw err;</div>
+                    <div class="code-line var-usage">  console.log(data);</div>
+                    <div class="code-line var-usage">});</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pro Tips -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">💡 Pro Tips for Callbacks</h2>
+        <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+            <ul>
+                <li><strong>🔄 Avoid Callback Hell:</strong> Use Promises or async/await for complex flows.</li>
+                <li><strong>🛠️ Error Handling:</strong> Always check for errors in callbacks.</li>
+                <li><strong>📦 Modularize:</strong> Keep callback functions reusable and concise.</li>
+                <li><strong>⏱️ Async First:</strong> Use callbacks for asynchronous tasks like API calls.</li>
+            </ul>
+            <div style="margin-top: 1rem; font-style: italic; color: #2d3748;">
+                <strong>Pro Tip:</strong> "Callbacks are like a phone call—don’t miss the signal!" 😄
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-
 /* Demo functions */
-function showPaymentCallback(){
-    document.getElementById('callbackResults').innerHTML=`
+function showPaymentCallback() {
+    document.getElementById('callbackResults').innerHTML = `
         <div class="success-message">
             <strong>💳 Payment Callback Flow:</strong><br>
-            1️⃣ User ne tuition ka payment start kiya.<br>
-            2️⃣ Payment gateway kaam karega.<br>
-            3️⃣ Jaise hi done ya fail hua → <strong>Callback function</strong> ko call!<br><br>
-            <em>Jaisa bola tha, kaam hote hi koi tumhe phone kare.</em><br>
-            <pre>
+            1️⃣ User starts a tuition payment.<br>
+            2️⃣ Payment gateway processes it.<br>
+            3️⃣ On success or failure → <strong>Callback function</strong> is called!<br><br>
+            <em>Like telling someone to call you when the job is done.</em><br>
+            <pre style="background:#2c3e50;color:#27ae60;padding:0.5rem;">
 paymentGateway.process(amount, function callback(status) {
-    if(status==='success'){
+    if (status === 'success') {
         confirmAdmission();
     } else {
         showError();
@@ -105,48 +267,52 @@ paymentGateway.process(amount, function callback(status) {
             <div class="message-time">${new Date().toLocaleTimeString()}</div>
         </div>`;
 }
-function showSimpleCode(){
-    document.getElementById('callbackResults').innerHTML=`
+
+function showSimpleCode() {
+    document.getElementById('callbackResults').innerHTML = `
         <div class="success-message">
             <strong>💻 Simple Callback Example:</strong>
-            <pre>
-function kaamKaro(callbackFn){
-    console.log("Kaam shuru...");
-    setTimeout(()=> {
-        console.log("Kaam done ✅");
+            <pre style="background:#2c3e50;color:#27ae60;padding:0.5rem;">
+function doTask(callbackFn) {
+    console.log("Task started...");
+    setTimeout(() => {
+        console.log("Task done ✅");
         callbackFn();
     }, 2000);
 }
 
-kaamKaro(function(){
-    console.log("Callback: Kaam hone ka signal mil gaya!");
+doTask(function() {
+    console.log("Callback: Task completion signal received!");
 });
             </pre>
             Output:
-            <pre>
-Kaam shuru...
+            <pre style="background:#2c3e50;color:#f1c40f;padding:0.5rem;">
+Task started...
 [2 sec wait...]
-Kaam done ✅
-Callback: Kaam hone ka signal mil gaya!
+Task done ✅
+Callback: Task completion signal received!
             </pre>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
         </div>`;
 }
-function clearCallbackDemo(){
-    document.getElementById('callbackResults').innerHTML='<div class="event-message one-message">Click above buttons to explore Callback in action!</div>';
+
+function clearCallbackDemo() {
+    document.getElementById('callbackResults').innerHTML = 
+        '<div class="event-message one-message">Click the buttons above to explore Callbacks in action!</div>';
 }
 
 /* Playground: Simulated payment */
-function startPayment(){
-    const statusDiv=document.getElementById('playStatus');
-    statusDiv.innerHTML="Payment Status: Processing...";
-    setTimeout(()=>{
+function startPayment() {
+    const statusDiv = document.getElementById('playStatus');
+    statusDiv.innerHTML = "Payment Status: Processing...";
+    setTimeout(() => {
         const success = Math.random() > 0.3;
-        if(success){
-            statusDiv.innerHTML="Payment Status: ✅ Success! (Callback triggered)";
+        if (success) {
+            statusDiv.innerHTML = "Payment Status: ✅ Success! (Callback triggered)";
         } else {
-            statusDiv.innerHTML="Payment Status: ❌ Failed! (Callback triggered)";
+            statusDiv.innerHTML = "Payment Status: ❌ Failed! (Callback triggered)";
         }
-    },2000);
+    }, 2000);
 }
 </script>
 </body>

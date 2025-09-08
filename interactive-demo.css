@@ -908,7 +908,7 @@ td{
 
 /* Comparison Section */
 .comparison-section {
-    display: none;
+    display: contents;
     margin-top: 2rem;
     background: #fff;
     padding: 2rem;
@@ -1112,7 +1112,7 @@ td{
     width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
-    background: #7a7a7a;
+    background: #979797;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(53, 108, 103, 0.1);
@@ -1342,4 +1342,7 @@ select {
     .metric-value {
         font-size: 1.5rem;
     }
+    .display-content {
+    display: block !important;
+}
 }

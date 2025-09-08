@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAP Theorem Interactive Demo | Fullstackgada</title>
+    <meta name="description" content="Discover CAP Theorem with an interactive demo! Learn Consistency, Availability, and Partition Tolerance in distributed systems with real-world examples.">
+    <meta name="keywords" content="CAP Theorem, distributed systems, consistency, availability, partition tolerance, database design, system architecture, MongoDB, Cassandra">
+    <meta name="author" content="Fullstackgada">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="/interactive-demo.css">
+    <link rel="canonical" href="https://fullstackgada.netlify.app/database/cap-theorem.html">
+    <link rel="icon" type="image/png" href="/image/favicon.ico">
+    <link rel="preload" href="/interactive-demo.css" as="style">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="CAP Theorem Interactive Demo | Fullstackgada">
+    <meta property="og:description" content="Explore CAP Theorem with an interactive demo! Understand Consistency, Availability, and Partition Tolerance with real-world examples.">
+    <meta property="og:url" content="https://fullstackgada.netlify.app/database/cap-theorem.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/cap-theorem.webp">
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CAP Theorem Interactive Demo | Fullstackgada">
+    <meta name="twitter:description" content="Learn CAP Theorem through an interactive demo, covering Consistency, Availability, and Partition Tolerance.">
+    <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/cap-theorem.webp">
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "CAP Theorem Interactive Demo",
+      "description": "Explore CAP Theorem with an interactive demo, covering Consistency, Availability, and Partition Tolerance in distributed systems with real-world examples.",
+      "author": {
+        "@type": "Person",
+        "name": "Fullstackgada"
+      },
+      "url": "https://fullstackgada.netlify.app/database/cap-theorem.html",
+      "datePublished": "2025-09-07"
+    }
+    </script>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="header-interactive">
+        <h1>CAP Theorem Interactive Demo</h1>
+        <p>Master Consistency, Availability, and Partition Tolerance with Fun!</p>
+      <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+
+    <!-- What is CAP Theorem -->
+    <div class="demo-section">
+        <h2 class="demo-title">🎯 What is CAP Theorem?</h2>
+        <div class="explanation">
+            The <strong>CAP Theorem</strong> (Brewer's Theorem) states that a distributed system can only guarantee <strong>two out of three</strong> properties: Consistency, Availability, and Partition Tolerance.
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1rem 0;">
+            <!-- Consistency -->
+            <div style="border: 2px solid #3498db; padding: 1rem; border-radius: 8px;">
+                <h3>🔄 Consistency</h3>
+                <p><strong>Definition:</strong> All nodes show the same data at the same time. Every read gets the latest write or an error.</p>
+                <p><strong>Example:</strong> A bank account shows $300 on all platforms (app, ATM, web) after a $200 transfer.</p>
+                <button class="demo-btn" onclick="showConsistencyDemo()" role="button" aria-label="Show Consistency Demo">Demo Consistency</button>
+            </div>
+            
+            <!-- Availability -->
+            <div style="border: 2px solid #27ae60; padding: 1rem; border-radius: 8px;">
+                <h3>⚡ Availability</h3>
+                <p><strong>Definition:</strong> The system remains operational and responds to all requests, even if data isn’t the latest.</p>
+                <p><strong>Example:</strong> A banking app responds at 2 AM, even during maintenance, never showing “Service Unavailable.”</p>
+                <button class="demo-btn" onclick="showAvailabilityDemo()" role="button" aria-label="Show Availability Demo">Demo Availability</button>
+            </div>
+            
+            <!-- Partition Tolerance -->
+            <div style="border: 2px solid #e74c3c; padding: 1rem; border-radius: 8px;">
+                <h3>🌐 Partition Tolerance</h3>
+                <p><strong>Definition:</strong> The system continues to operate despite network failures between nodes.</p>
+                <p><strong>Example:</strong> Servers in different cities lose connection, but users can still access local data.</p>
+                <button class="demo-btn" onclick="showPartitionDemo()" role="button" aria-label="Show Partition Tolerance Demo">Demo Partition Tolerance</button>
+            </div>
+        </div>
+        
+        <div class="demo-area" id="capDemoResults" style="margin-top: 1rem;">
+            <div class="event-message">Click a demo button to explore CAP principles!</div>
+        </div>
+    </div>
+
+    <!-- CAP Triangle -->
+    <div class="demo-section" style="grid-column: 1 / -1;">
+        <h2 class="demo-title">⚖️ CAP Theorem Trade-offs</h2>
+        <div class="explanation">
+            <strong>Core Principle:</strong> You can only choose two out of three properties. Explore the combinations:
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <!-- CP Systems -->
+            <div class="demo-card" onclick="showCPSystem()" role="button" aria-label="Show CP System Details">
+                <h3>CP - Consistency + Partition Tolerance</h3>
+                <p><strong>Sacrifice:</strong> Availability</p>
+                <p><strong>Use Case:</strong> Banking, Financial systems</p>
+                <p><strong>Examples:</strong> MongoDB, Redis, HBase</p>
+                <div style="color: #e74c3c; font-weight: bold;">May be temporarily unavailable</div>
+            </div>
+            
+            <!-- AP Systems -->
+            <div class="demo-card" onclick="showAPSystem()" role="button" aria-label="Show AP System Details">
+                <h3>AP - Availability + Partition Tolerance</h3>
+                <p><strong>Sacrifice:</strong> Consistency</p>
+                <p><strong>Use Case:</strong> Social media, Content delivery</p>
+                <p><strong>Examples:</strong> Cassandra, DynamoDB, CouchDB</p>
+                <div style="color: #f39c12; font-weight: bold;">May show stale data</div>
+            </div>
+            
+            <!-- CA Systems -->
+            <div class="demo-card" onclick="showCASystem()" role="button" aria-label="Show CA System Details">
+                <h3>CA - Consistency + Availability</h3>
+                <p><strong>Sacrifice:</strong> Partition Tolerance</p>
+                <p><strong>Use Case:</strong> Single-node or local networks</p>
+                <p><strong>Examples:</strong> PostgreSQL, MySQL (single node)</p>
+                <div style="color: #9b59b6; font-weight: bold;">Fails during network splits</div>
+            </div>
+        </div>
+        
+        <div class="demo-area" id="systemTypeResults" style="margin-top: 1rem;">
+            <div class="event-message">Click a system type to see detailed examples!</div>
+        </div>
+    </div>
+
+    <!-- Real-World Scenarios -->
+    <div class="demo-section" style="grid-column: 1 / -1;">
+        <h2 class="demo-title">🌍 Real-World CAP Theorem Applications</h2>
+        
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>System Type</th>
+                    <th>CAP Choice</th>
+                    <th>Example</th>
+                    <th>Business Impact</th>
+                    <th>Trade-off Justification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Banking Systems</strong></td>
+                    <td>CP</td>
+                    <td>Account balances, transactions</td>
+                    <td>Accurate data is critical</td>
+                    <td>Better to pause than show incorrect data</td>
+                </tr>
+                <tr>
+                    <td><strong>Social Media</strong></td>
+                    <td>AP</td>
+                    <td>Social posts, feeds</td>
+                    <td>Prioritizes user engagement</td>
+                    <td>Users tolerate slightly outdated posts</td>
+                </tr>
+                <tr>
+                    <td><strong>E-commerce Catalog</strong></td>
+                    <td>AP</td>
+                    <td>Product listings</td>
+                    <td>Uninterrupted shopping experience</td>
+                    <td>Slightly outdated info is acceptable</td>
+                </tr>
+                <tr>
+                    <td><strong>Stock Trading</strong></td>
+                    <td>CP</td>
+                    <td>Real-time stock prices</td>
+                    <td>Accuracy prevents financial loss</td>
+                    <td>Trading halts better than wrong prices</td>
+                </tr>
+                <tr>
+                    <td><strong>Content Management</strong></td>
+                    <td>CA</td>
+                    <td>Corporate wikis</td>
+                    <td>Reliable in controlled networks</td>
+                    <td>Partitions rare in local networks</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Network Partition Simulator -->
+    <div class="demo-section" style="grid-column: 1 / -1;">
+        <h2 class="demo-title">🔧 Network Partition Simulator</h2>
+        <div class="explanation">
+            Simulate how systems handle network partitions. Select a system type and observe the behavior:
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+            <div style="margin-bottom: 1rem;">
+                <label for="systemType"><strong>Choose System Type:</strong></label>
+                <select id="systemType" style="margin-left: 1rem; padding: 0.5rem;" aria-label="Select system type">
+                    <option value="cp">CP System (Banking)</option>
+                    <option value="ap">AP System (Social Media)</option>
+                    <option value="ca">CA System (Local Database)</option>
+                </select>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                <div id="node1" class="memory-slot" style="background: #27ae60; color: white;">
+                    <div class="variable-name">Server A</div>
+                    <div class="variable-value">Status: Online</div>
+                </div>
+                <div id="connection" class="memory-slot" style="background: #3498db; color: white;">
+                    <div class="variable-name">Network Connection</div>
+                    <div class="variable-value">Status: Connected</div>
+                </div>
+                <div id="node2" class="memory-slot" style="background: #27ae60; color: white;">
+                    <div class="variable-name">Server B</div>
+                    <div class="variable-value">Status: Online</div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;text-align: center; margin: 1rem 0;">
+                <button class="demo-btn first-btn" onclick="simulatePartition()" role="button" aria-label="Simulate Network Partition">🔌 Simulate Partition</button>
+                <button class="demo-btn" onclick="restoreConnection()" role="button" aria-label="Restore Network Connection">🔗 Restore Connection</button>
+                <button class="demo-btn" onclick="sendUserRequest()" role="button" aria-label="Send User Request">👤 Send Request</button>
+            </div>
+            
+            <div id="simulationResults" style="margin-top: 1rem; padding: 1rem; background: #ffffff; border-radius: 8px;">
+                <div><strong>Simulation Status:</strong> Ready to begin</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="demo-section" style="grid-column: 1 / -1;">
+        <h2 class="demo-title">❓ CAP Theorem FAQ</h2>
+        
+        <div style="margin: 1rem 0;">
+            <details style="margin: 0.5rem 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                <summary style="font-weight: bold; cursor: pointer;">What happens without a network partition?</summary>
+                <p>In a healthy network, all three properties (Consistency, Availability, Partition Tolerance) can be maintained. CAP constraints apply only during partitions.</p>
+            </details>
+            
+            <details style="margin: 0.5rem 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                <summary style="font-weight: bold; cursor: pointer;">Is CAP Theorem still relevant today?</summary>
+                <p>Yes, network partitions remain a challenge in modern cloud systems. CAP guides architects in designing resilient systems.</p>
+            </details>
+            
+            <details style="margin: 0.5rem 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                <summary style="font-weight: bold; cursor: pointer;">What is eventual consistency in CAP?</summary>
+                <p>AP systems often use eventual consistency, where data syncs over time, unlike the strong consistency of CP systems.</p>
+            </details>
+            
+            <details style="margin: 0.5rem 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                <summary style="font-weight: bold; cursor: pointer;">How does CAP relate to ACID?</summary>
+                <p>CAP addresses distributed system behavior across nodes, while ACID focuses on transaction properties within a single database.</p>
+            </details>
+        </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="demo-section" style="grid-column: 1 / -1;">
+        <h2 class="demo-title">🎓 Key Takeaways</h2>
+        <div style="background: #e8f5e9; padding: 1rem; border-radius: 8px;">
+            <ul>
+                <li><strong>Trade-off Principle:</strong> CAP Theorem limits distributed systems to two out of three properties.</li>
+                <li><strong>Business-Driven Choices:</strong> CP for finance, AP for social platforms, CA for local systems.</li>
+                <li><strong>Partition Tolerance is Key:</strong> Network failures are inevitable in distributed systems.</li>
+                <li><strong>Tailor to Use Case:</strong> Match system design to your consistency and availability needs.</li>
+                <li><strong>Modern Approaches:</strong> Hybrid systems with tunable consistency are increasingly common.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+// Demo Functions
+function showConsistencyDemo() {
+    document.getElementById('capDemoResults').innerHTML = `
+        <div class="success-message">
+            <h4>🔄 Consistency Demo</h4>
+            <p><strong>Scenario:</strong> Bank account balance after a $200 transfer</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0;">
+                <div style="background: #27ae60; color: white; padding: 0.5rem; text-align: center; border-radius: 4px;">
+                    <div>Mobile App</div>
+                    <div><strong>$300</strong></div>
+                </div>
+                <div style="background: #27ae60; color: white; padding: 0.5rem; text-align: center; border-radius: 4px;">
+                    <div>ATM</div>
+                    <div><strong>$300</strong></div>
+                </div>
+                <div style="background: #27ae60; color: white; padding: 0.5rem; text-align: center; border-radius: 4px;">
+                    <div>Web Banking</div>
+                    <div><strong>$300</strong></div>
+                </div>
+            </div>
+            <p><strong>✅ Consistent:</strong> All platforms show the same balance simultaneously.</p>
+            <p><strong>Strong Consistency:</strong> Every read reflects the latest write or returns an error.</p>
+        </div>
+    `;
+}
+
+function showAvailabilityDemo() {
+    document.getElementById('capDemoResults').innerHTML = `
+        <div class="success-message">
+            <h4>⚡ Availability Demo</h4>
+            <p><strong>Scenario:</strong> System responses under various conditions</p>
+            <div style="margin: 1rem 0;">
+                <div style="background: #27ae60; color: white; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px;">
+                    <strong>2:00 AM Request:</strong> ✅ "Balance: $300" (Responds during maintenance)
+                </div>
+                <div style="background: #27ae60; color: white; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px;">
+                    <strong>High Traffic:</strong> ✅ "Transaction processed" (Handles load)
+                </div>
+                <div style="background: #27ae60; color: white; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px;">
+                    <strong>Server Issues:</strong> ✅ "Service available" (Never unavailable)
+                </div>
+            </div>
+            <p><strong>✅ Available:</strong> System always responds to requests.</p>
+            <p><strong>High Availability:</strong> Operational 24/7, regardless of conditions.</p>
+        </div>
+    `;
+}
+
+function showPartitionDemo() {
+    document.getElementById('capDemoResults').innerHTML = `
+        <div class="success-message">
+            <h4>🌐 Partition Tolerance Demo</h4>
+            <p><strong>Scenario:</strong> Network failure between servers</p>
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; margin: 1rem 0; align-items: center;">
+                <div style="background: #27ae60; color: white; padding: 0.5rem; text-align: center; border-radius: 4px;">
+                    <div>Server A</div>
+                    <div>Status: ✅ Online</div>
+                    <div>Data: $300</div>
+                </div>
+                <div style="background: #e74c3c; color: white; padding: 0.5rem; text-align: center; border-radius: 4px;">
+                    <div>❌</div>
+                    <div>Network</div>
+                    <div>Partition</div>
+                </div>
+                <div style="background: #27ae60; color: white; padding: 0.5rem; text-align: center; border-radius: 4px;">
+                    <div>Server B</div>
+                    <div>Status: ✅ Online</div>
+                    <div>Data: $300</div>
+                </div>
+            </div>
+            <p><strong>✅ Partition Tolerant:</strong> Servers continue serving users with available data.</p>
+            <p><strong>Network Resilience:</strong> System operates despite communication failures.</p>
+        </div>
+    `;
+}
+
+function showCPSystem() {
+    document.getElementById('systemTypeResults').innerHTML = `
+        <div class="success-message">
+            <h4>CP System: Consistency + Partition Tolerance</h4>
+            <p><strong>Priority:</strong> Data accuracy over availability</p>
+            <div style="background: #3498db; color: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>Banking Example:</strong><br>
+                • During partition: "Service temporarily unavailable"<br>
+                • Ensures accurate data<br>
+                • Users wait, but data remains reliable<br>
+                • ACID-compliant transactions
+            </div>
+            <p><strong>Examples:</strong> MongoDB, Redis Cluster, HBase</p>
+            <p><strong>Best For:</strong> Finance, inventory, booking systems</p>
+        </div>
+    `;
+}
+
+function showAPSystem() {
+    document.getElementById('systemTypeResults').innerHTML = `
+        <div class="success-message">
+            <h4>AP System: Availability + Partition Tolerance</h4>
+            <p><strong>Priority:</strong> Responsiveness over perfect consistency</p>
+            <div style="background: #27ae60; color: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>Social Media Example:</strong><br>
+                • During partition: Shows last known data<br>
+                • Users see slightly outdated posts<br>
+                • Platform stays responsive<br>
+                • Eventually consistent
+            </div>
+            <p><strong>Examples:</strong> Cassandra, DynamoDB, CouchDB</p>
+            <p><strong>Best For:</strong> Social networks, content delivery, e-commerce catalogs</p>
+        </div>
+    `;
+}
+
+function showCASystem() {
+    document.getElementById('systemTypeResults').innerHTML = `
+        <div class="success-message">
+            <h4>CA System: Consistency + Availability</h4>
+            <p><strong>Priority:</strong> Perfect data and responsiveness in controlled networks</p>
+            <div style="background: #9b59b6; color: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <strong>Corporate Database Example:</strong><br>
+                • Single datacenter or reliable network<br>
+                • Consistent and highly available<br>
+                • Fails during network partitions<br>
+                • Ideal for controlled environments
+            </div>
+            <p><strong>Examples:</strong> PostgreSQL (single node), MySQL (single node)</p>
+            <p><strong>Best For:</strong> Internal systems, corporate intranets</p>
+        </div>
+    `;
+}
+
+// Network Partition Simulator
+let partitionActive = false;
+
+function simulatePartition() {
+    partitionActive = true;
+    const connectionNode = document.getElementById('connection');
+    connectionNode.style.background = '#e74c3c';
+    connectionNode.innerHTML = '<div class="variable-name">Network Connection</div><div class="variable-value">Status: ❌ Partitioned</div>';
+    
+    const systemType = document.getElementById('systemType').value || 'cp'; // Default to CP if none selected
+    let result = '';
+    
+    if (systemType === 'cp') {
+        result = `
+            <div style="background: #e74c3c; color: white; padding: 1rem; border-radius: 4px;">
+                <strong>CP System Response:</strong><br>
+                ❌ "Service temporarily unavailable"<br>
+                • Prioritizes data consistency<br>
+                • Sacrifices availability during partition<br>
+                • Resumes after network restoration
+            </div>
+        `;
+    } else if (systemType === 'ap') {
+        result = `
+            <div style="background: #f39c12; color: white; padding: 1rem; border-radius: 4px;">
+                <strong>AP System Response:</strong><br>
+                ✅ "Data available (may be outdated)"<br>
+                • Remains responsive<br>
+                • May show stale data<br>
+                • Eventually consistent
+            </div>
+        `;
+    } else {
+        result = `
+            <div style="background: #9b59b6; color: white; padding: 1rem; border-radius: 4px;">
+                <strong>CA System Response:</strong><br>
+                💥 System fails<br>
+                • Cannot handle partitions<br>
+                • Becomes fully unavailable<br>
+                • Requires manual recovery
+            </div>
+        `;
+    }
+    
+    document.getElementById('simulationResults').innerHTML = result;
+}
+
+function restoreConnection() {
+    partitionActive = false;
+    const connectionNode = document.getElementById('connection');
+    connectionNode.style.background = '#3498db';
+    connectionNode.innerHTML = '<div class="variable-name">Network Connection</div><div class="variable-value">Status: ✅ Connected</div>';
+    
+    document.getElementById('simulationResults').innerHTML = `
+        <div style="background: #27ae60; color: white; padding: 1rem; border-radius: 4px;">
+            <strong>Connection Restored:</strong><br>
+            ✅ All systems operational<br>
+            • Data synchronization in progress<br>
+            • Full CAP properties available<br>
+            • Normal operations resumed
+        </div>
+    `;
+}
+
+function sendUserRequest() {
+    const systemType = document.getElementById('systemType').value || 'cp'; // Default to CP if none selected
+    let response = '';
+    
+    if (!partitionActive) {
+        response = `
+            <div style="background: #27ae60; color: white; padding: 1rem; border-radius: 4px;">
+                <strong>User Request Response:</strong><br>
+                ✅ "Balance: $300"<br>
+                • Systems functioning normally<br>
+                • Consistent and available<br>
+                • Optimal user experience
+            </div>
+        `;
+    } else {
+        if (systemType === 'cp') {
+            response = `
+                <div style="background: #e74c3c; color: white; padding: 1rem; border-radius: 4px;">
+                    <strong>CP System - User Request:</strong><br>
+                    ❌ "Service unavailable. Try again later."<br>
+                    • Prioritizes data accuracy<br>
+                    • Users wait for partition to resolve
+                </div>
+            `;
+        } else if (systemType === 'ap') {
+            response = `
+                <div style="background: #f39c12; color: white; padding: 1rem; border-radius: 4px;">
+                    <strong>AP System - User Request:</strong><br>
+                    ⚠️ "Balance: $300 (possibly outdated)"<br>
+                    • System remains responsive<br>
+                    • Data may not be current
+                </div>
+            `;
+        } else {
+            response = `
+                <div style="background: #9b59b6; color: white; padding: 1rem; border-radius: 4px;">
+                    <strong>CA System - User Request:</strong><br>
+                    💥 "System Error - Unable to process"<br>
+                    • Complete failure during partition<br>
+                    • Requires manual recovery
+                </div>
+            `;
+        }
+    }
+    
+    document.getElementById('simulationResults').innerHTML = response;
+}
+
+// Initialize
+window.onload = function() {
+    document.getElementById('capDemoResults').innerHTML = 
+        '<div class="event-message">Click a demo button to explore CAP principles!</div>';
+    document.getElementById('systemTypeResults').innerHTML = 
+        '<div class="event-message">Click a system type to see detailed examples!</div>';
+};
+</script>
+</body>
+</html>

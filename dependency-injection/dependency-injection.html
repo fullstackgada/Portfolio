@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dependency Injection Interactive Demo | Fullstackgada</title>
+    <meta name="description" content="Discover Dependency Injection (DI) with our interactive demo! Learn tight vs loose coupling, DI benefits, and real-world Angular and Spring Boot examples.">
+    <meta name="keywords" content="Dependency Injection, DI, loose coupling, tight coupling, software design, Angular DI, Spring Boot DI, JavaScript DI, programming tutorial, coding demo">
+    <meta name="author" content="Fullstackgada">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="/interactive-demo.css">
+    <link rel="canonical" href="https://fullstackgada.netlify.app/dependency-injection/dependency-injection.html">
+    <link rel="icon" type="image/png" href="/image/favicon.ico">
+    <link rel="preload" href="/interactive-demo.css" as="style">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Dependency Injection Interactive Demo | Fullstackgada">
+    <meta property="og:description" content="Discover Dependency Injection with an interactive demo! Learn tight vs loose coupling, DI benefits, and Angular/Spring Boot examples.">
+    <meta property="og:url" content="https://fullstackgada.netlify.app/dependency-injection/dependency-injection.html">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://fullstackgada.netlify.app/dependency-injection/Capture.webp">
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dependency Injection Interactive Demo | Fullstackgada">
+    <meta name="twitter:description" content="Learn Dependency Injection with an interactive demo, covering tight vs loose coupling and real-world examples.">
+    <meta name="twitter:image" content="https://fullstackgada.netlify.app/dependency-injection/Capture.webp">
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Dependency Injection Interactive Demo",
+      "description": "Explore Dependency Injection (DI) with an interactive demo, covering tight vs loose coupling, benefits, and examples in Angular and Spring Boot.",
+      "author": {
+        "@type": "Person",
+        "name": "Fullstackgada"
+      },
+      "url": "https://fullstackgada.netlify.app/dependency-injection/dependency-injection.html",
+      "datePublished": "2025-09-07"
+    }
+    </script>
+</head>
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="header-interactive">
+        <h1>Dependency Injection Interactive Demo</h1>
+        <p>Master DI with a fun and engaging approach!</p>
+   <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+
+    <!-- Main Concept Section -->
+    <div class="demo-grid">
+        <div class="demo-section">
+            <h2 class="demo-title"> What is Dependency Injection?</h2>
+            <div class="explanation">
+                <strong>DI:</strong> Instead of creating dependencies inside an object, inject them from the outside!
+            </div>
+
+            <div class="saree-analogy">
+                <h4>☕ Tea-Making Analogy</h4>
+                <div class="saree-step">
+                    <div class="saree-emoji">🥛</div>
+                    <div><strong>Without DI:</strong> You need to gather milk, tea leaves, and sugar every time.</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">🛍️</div>
+                    <div><strong>With DI:</strong> Someone hands you ready ingredients—just brew!</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">😌</div>
+                    <div><strong>Result:</strong> Simpler, flexible, and maintainable code!</div>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button class="demo-btn first-btn" onclick="showTightCoupling()">🔗 Tight Coupling Problem</button>
+                <button class="demo-btn" onclick="showLooseCoupling()">🔓 Loose Coupling Solution</button>
+                <button class="demo-btn" onclick="showDIBenefits()">🎯 DI Benefits</button>
+                <button class="demo-btn clear-btn" onclick="clearDemo()">🗑️ Clear</button>
+            </div>
+
+            <div class="demo-area" id="diResults">
+                <div class="event-message one-message">
+                    Click the buttons above to explore Dependency Injection!
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Code Playground -->
+        <div class="demo-section">
+            <h2 class="demo-title">💻 Live DI Code Playground</h2>
+            <div class="explanation one-explanation">
+                <strong>Try:</strong> See the difference between tight and loose coupling in code!
+            </div>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('before-di')">🔴 Before DI</button>
+                <button class="tab" onclick="showTab('after-di')">🟢 After DI</button>
+            </div>
+
+            <!-- Before DI Tab -->
+            <div id="before-di" class="tab-content active">
+                <div class="code-block">
+                    <div class="code-line comment">// 🔴 Tight Coupling - Must create new instance every time</div>
+                    <div class="code-line var-declaration">class Car {</div>
+                    <div class="code-line var-usage">  constructor() {</div>
+                    <div class="code-line var-usage">    this.engine = new Engine(); // 😰 Hard dependency!</div>
+                    <div class="code-line var-usage">  }</div>
+                    <div class="code-line var-usage">  start() {</div>
+                    <div class="code-line var-usage">    this.engine.start();</div>
+                    <div class="code-line var-usage">  }</div>
+                    <div class="code-line var-declaration">}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line var-declaration">class Engine {</div>
+                    <div class="code-line var-usage">  start() { console.log("Engine started!"); }</div>
+                    <div class="code-line var-declaration">}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line comment">// Problem: Car directly depends on Engine</div>
+                    <div class="code-line var-usage">const car = new Car(); // Always uses the same Engine</div>
+                </div>
+                <button class="demo-btn" onclick="runTightCouplingDemo()">▶️ Run Tight Coupling</button>
+            </div>
+
+            <!-- After DI Tab -->
+            <div id="after-di" class="tab-content">
+                <div class="code-block">
+                    <div class="code-line comment">// 🟢 Loose Coupling - Dependency injected from outside</div>
+                    <div class="code-line var-declaration">class Car {</div>
+                    <div class="code-line var-usage">  constructor(engine) { // 😍 Dependency injected!</div>
+                    <div class="code-line var-usage">    this.engine = engine;</div>
+                    <div class="code-line var-usage">  }</div>
+                    <div class="code-line var-usage">  start() {</div>
+                    <div class="code-line var-usage">    this.engine.start();</div>
+                    <div class="code-line var-usage">  }</div>
+                    <div class="code-line var-declaration">}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line var-declaration">class PetrolEngine {</div>
+                    <div class="code-line var-usage">  start() { console.log("Petrol engine started!"); }</div>
+                    <div class="code-line var-declaration">}</div>
+                    <div class="code-line var-declaration">class ElectricEngine {</div>
+                    <div class="code-line var-usage">  start() { console.log("Electric engine started!"); }</div>
+                    <div class="code-line var-declaration">}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line comment">// Flexible! Use any engine type</div>
+                    <div class="code-line var-usage">const car1 = new Car(new PetrolEngine());</div>
+                    <div class="code-line var-usage">const car2 = new Car(new ElectricEngine());</div>
+                </div>
+                <button class="demo-btn" onclick="runLooseCouplingDemo()">▶️ Run Loose Coupling</button>
+            </div>
+
+            <div id="codeOutput" style="margin-top:1rem;padding:1rem;background:#f8f9fa;border-radius:8px;min-height:60px;">
+                <strong>Output:</strong> Click any "Run" button to see results!
+            </div>
+        </div>
+    </div>
+
+    <!-- DI Benefits Table -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🎯 Benefits of Dependency Injection</h2>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Benefit</th>
+                    <th>Without DI</th>
+                    <th>With DI</th>
+                    <th>Fun Explanation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Testing</td>
+                    <td>Hard to test (Real dependencies)</td>
+                    <td>Easy (Mock dependencies)</td>
+                    <td>Use fake objects for testing!</td>
+                </tr>
+                <tr>
+                    <td>Flexibility</td>
+                    <td>Fixed dependencies</td>
+                    <td>Interchangeable</td>
+                    <td>Swap engines like changing tires!</td>
+                </tr>
+                <tr>
+                    <td>Code Reuse</td>
+                    <td>Tightly bound</td>
+                    <td>Highly reusable</td>
+                    <td>Build once, use anywhere!</td>
+                </tr>
+                <tr>
+                    <td>Maintenance</td>
+                    <td>Hard to modify</td>
+                    <td>Easy to extend</td>
+                    <td>Add new features without breaking code!</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Real-world DI Examples -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🌍 Real-World DI Examples</h2>
+        
+        <div class="display-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <!-- Angular DI -->
+            <div class="demo-card">
+                <h4>🅰️ Angular DI</h4>
+                <div class="code-block" style="font-size: 0.9rem;">
+                    <div class="code-line comment">// Inject service into component</div>
+                    <div class="code-line var-usage">@Injectable()</div>
+                    <div class="code-line var-usage">export class UserService {</div>
+                    <div class="code-line var-usage">  getUsers() { return [...]; }</div>
+                    <div class="code-line var-usage">}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line var-usage">@Component({...})</div>
+                    <div class="code-line var-usage">export class UserComponent {</div>
+                    <div class="code-line var-usage">  constructor(private userService: UserService) {}</div>
+                    <div class="code-line var-usage">}</div>
+                </div>
+            </div>
+
+            <!-- Spring Boot DI -->
+            <div class="demo-card">
+                <h4>🍃 Spring Boot DI</h4>
+                <div class="code-block" style="font-size: 0.9rem;">
+                    <div class="code-line comment">// @Autowired for automatic injection</div>
+                    <div class="code-line var-usage">@Service</div>
+                    <div class="code-line var-usage">public class OrderService {</div>
+                    <div class="code-line var-usage">  // business logic</div>
+                    <div class="code-line var-usage">}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line var-usage">@Controller</div>
+                    <div class="code-line var-usage">public class OrderController {</div>
+                    <div class="code-line var-usage">  @Autowired OrderService orderService;</div>
+                    <div class="code-line var-usage">}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pro Tips -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">💡 Pro Tips for Dependency Injection</h2>
+        <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+            <ul>
+                <li><strong>🔧 Constructor Injection:</strong> The most common and recommended approach.</li>
+                <li><strong>🎯 Use Interfaces:</strong> Inject interfaces instead of concrete classes.</li>
+                <li><strong>🏭 DI Containers:</strong> Use containers like Spring or Angular for large projects.</li>
+                <li><strong>🧪 Testing:</strong> Easily inject mock objects for testing.</li>
+            </ul>
+            <div style="margin-top: 1rem; font-style: italic; color: #2d3748;">
+                <strong>Pro Tip:</strong> "With DI, your code becomes as flexible as a breeze!" 😄
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Demo Functions
+function showTightCoupling() {
+    document.getElementById('diResults').innerHTML = `
+        <div class="error-message">
+            <strong>🔗 Tight Coupling Problem</strong><br><br>
+            <em>Example:</em> Car class directly creates Engine object<br><br>
+            <strong>Problems:</strong><br>
+            ❌ Hard to test (can't mock Engine)<br>
+            ❌ Fixed to one engine type<br>
+            ❌ Changes in Engine require changes in Car<br>
+            ❌ Code reuse is impossible<br><br>
+            <pre style="background:#2c3e50;color:#e74c3c;padding:0.5rem;">
+class Car {
+    constructor() {
+        this.engine = new Engine(); // 😰 Tight coupling!
+    }
+}
+            </pre>
+            <strong>Analogy:</strong> Need to go to the market every time to make tea!<br>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
+}
+
+function showLooseCoupling() {
+    document.getElementById('diResults').innerHTML = `
+        <div class="success-message">
+            <strong>🔓 Loose Coupling Solution</strong><br><br>
+            <em>Example:</em> Car receives Engine from outside (dependency injection)<br><br>
+            <strong>Benefits:</strong><br>
+            ✅ Easy to test (inject mock engines)<br>
+            ✅ Flexible (use any engine type)<br>
+            ✅ Engine changes don't affect Car<br>
+            ✅ High code reusability<br><br>
+            <pre style="background:#2c3e50;color:#27ae60;padding:0.5rem;">
+class Car {
+    constructor(engine) {
+        this.engine = engine; // 😍 Dependency injected!
+    }
+}
+            </pre>
+            <strong>Analogy:</strong> Get ready ingredients and just brew!<br>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
+}
+
+function showDIBenefits() {
+    document.getElementById('diResults').innerHTML = `
+        <div class="success-message">
+            <strong>🎯 Three Key Benefits of DI</strong><br><br>
+            
+            <strong>1️⃣ Easier Testing:</strong><br>
+            Inject fake data instead of real databases<br><br>
+            
+            <strong>2️⃣ Flexible Code:</strong><br>
+            Use any type of dependency<br><br>
+            
+            <strong>3️⃣ Simplified Maintenance:</strong><br>
+            Add new features without changing existing code<br><br>
+            
+            <pre style="background:#2c3e50;color:#f39c12;padding:0.5rem;">
+// Inject mock for testing
+const mockEngine = { start: () => "Test engine" };
+const testCar = new Car(mockEngine);
+
+// Use real engine in production
+const realEngine = new PetrolEngine();
+const prodCar = new Car(realEngine);
+            </pre>
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
+}
+
+function clearDemo() {
+    document.getElementById('diResults').innerHTML = 
+        '<div class="event-message one-message">Click the buttons above to explore Dependency Injection!</div>';
+}
+
+// Tab Functions
+function showTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(content => 
+        content.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(tab => 
+        tab.classList.remove('active'));
+    
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// Code Demo Functions
+function runTightCouplingDemo() {
+    document.getElementById('codeOutput').innerHTML = `
+        <strong>🔴 Tight Coupling Output:</strong><br>
+        <div style="background:#2c3e50;color:#e74c3c;padding:0.5rem;margin:0.5rem 0;font-family:monospace;">
+> const car = new Car();<br>
+> car.start();<br>
+"Engine started!"<br><br>
+⚠️ Problem: Always uses the same Engine, no flexibility!
+        </div>
+    `;
+}
+
+function runLooseCouplingDemo() {
+    document.getElementById('codeOutput').innerHTML = `
+        <strong>🟢 Loose Coupling Output:</strong><br>
+        <div style="background:#2c3e50;color:#27ae60;padding:0.5rem;margin:0.5rem 0;font-family:monospace;">
+> const car1 = new Car(new PetrolEngine());<br>
+> car1.start();<br>
+"Petrol engine started!"<br><br>
+> const car2 = new Car(new ElectricEngine());<br>
+> car2.start();<br>
+"Electric engine started!"<br><br>
+✅ Flexibility: Use different engines easily!
+        </div>
+    `;
+}
+</script>
+</body>
+</html>

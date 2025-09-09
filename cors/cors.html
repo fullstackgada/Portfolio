@@ -1,46 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CORS - Interactive Demo | Fullstackgada</title>
-<link rel="icon" type="image/png" href="/image/favicon.ico">
-<link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORS Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Master Cross-Origin Resource Sharing (CORS) with an interactive demo! Learn about CORS errors, solutions, and headers with real-world examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/cors/cors">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="CORS Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Learn Cross-Origin Resource Sharing (CORS) with an interactive demo, covering errors, solutions, and headers with practical examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/cors/cors">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/cors/Capture.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CORS Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Explore CORS with an interactive demo! Understand errors, solutions, and headers for secure API calls.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/cors/Capture.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "CORS Interactive Demo",
+    "description": "Master Cross-Origin Resource Sharing (CORS) with an interactive demo, covering errors, solutions, and headers with practical examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/cors/cors",
+    "datePublished": "2025-09-09",
+    "dateModified": "2025-09-09",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is CORS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CORS (Cross-Origin Resource Sharing) is a browser security feature that allows or restricts requests for resources on a web page from another domain. It protects users by preventing unauthorized cross-origin requests."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do CORS errors occur?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CORS errors occur when a web application tries to make a request to a different domain, protocol, or port, and the server does not include the correct Access-Control-Allow-* headers in its response."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can you fix CORS issues?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CORS issues can be fixed by configuring the server to send the correct headers (e.g., Access-Control-Allow-Origin), using a proxy in development (like React's proxy), or enabling CORS middleware in frameworks such as Express.js or Spring Boot."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
 <div class="container">
 
     <!-- Header -->
     <div class="header-interactive">
         <h1>CORS Interactive Demo</h1>
-        <p>Master CORS Errors - From Problem to Solution!</p>
- <div class="explore-diagrams-btn-wrapper">
+        <p>Master CORS Errors - From Problem to Solution! 🛡️</p>
+        <div class="explore-diagrams-btn-wrapper">
             <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+                <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
             </a>
         </div>
-       <div class="follow-btn-wrapper">
+        <div class="follow-btn-wrapper">
             <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
+                <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+            </a>
         </div>
     </div>
+
     <!-- Concept Explanation -->
     <div class="demo-section">
         <h2 class="demo-title">🚫 What is CORS?</h2>
         <div class="explanation">
-            <strong>CORS:</strong> Cross-Origin Resource Sharing — Browser's security check, "Do you have permission?" 🛡️
+            <strong>CORS:</strong> Cross-Origin Resource Sharing — A browser security mechanism that checks if a website has permission to access resources from another domain.
         </div>
 
         <div class="saree-analogy">
             <h4>🏠 Apartment Security Analogy</h4>
             <div class="saree-step">
                 <div class="saree-emoji">🚪</div>
-                <div><strong>Your Site (localhost:3000):</strong> Resident of Building A</div>
+                <div><strong>Your Site (localhost:3000):</strong> Resident of Building A.</div>
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">🏢</div>
-                <div><strong>API (api.example.com):</strong> Office in Building B</div>
+                <div><strong>API (api.example.com):</strong> Office in Building B.</div>
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">👮</div>
@@ -48,7 +133,7 @@
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">📋</div>
-                <div><strong>CORS Headers:</strong> Permission letter — "Yes, allow this person"</div>
+                <div><strong>CORS Headers:</strong> Permission letter — "Yes, this site is allowed."</div>
             </div>
         </div>
 
@@ -61,7 +146,7 @@
 
         <div class="demo-area" id="corsResults">
             <div class="event-message one-message">
-                Click above buttons to explore CORS in action!
+                Click the buttons above to explore CORS in action!
             </div>
         </div>
     </div>
@@ -70,7 +155,7 @@
     <div class="demo-section">
         <h2 class="demo-title">🎮 Live CORS Error Simulator</h2>
         <div class="explanation one-explanation">
-            <strong>Try:</strong> Make API calls to different origins and see CORS errors!
+            <strong>Try:</strong> Make API calls to different origins and see CORS errors in action!
         </div>
         
         <div style="border:2px solid #e74c3c; padding:1rem; border-radius:8px;">
@@ -107,27 +192,27 @@
             <tbody>
                 <tr>
                     <td><code>Access-Control-Allow-Origin</code></td>
-                    <td>Which domains are allowed</td>
+                    <td>Specifies which domains are allowed to access resources</td>
                     <td><code>*</code> or <code>http://localhost:3000</code></td>
-                    <td>"Let everyone in" or "Only specific domain"</td>
+                    <td>"Allow all domains" or "Allow specific domain"</td>
                 </tr>
                 <tr>
                     <td><code>Access-Control-Allow-Methods</code></td>
-                    <td>Which HTTP methods are allowed</td>
+                    <td>Lists allowed HTTP methods</td>
                     <td><code>GET, POST, PUT, DELETE</code></td>
-                    <td>"These actions are allowed"</td>
+                    <td>"These actions are permitted"</td>
                 </tr>
                 <tr>
                     <td><code>Access-Control-Allow-Headers</code></td>
-                    <td>Which headers can be sent</td>
+                    <td>Defines allowed request headers</td>
                     <td><code>Content-Type, Authorization</code></td>
-                    <td>"You can bring these documents"</td>
+                    <td>"These headers can be sent"</td>
                 </tr>
                 <tr>
                     <td><code>Access-Control-Allow-Credentials</code></td>
-                    <td>Permission to send cookies</td>
+                    <td>Enables sending cookies or credentials</td>
                     <td><code>true</code></td>
-                    <td>"Bring your ID card along"</td>
+                    <td>"Include your credentials"</td>
                 </tr>
             </tbody>
         </table>
@@ -156,7 +241,7 @@
                 <div class="code-line"></div>
                 <div class="code-line comment">// Method 2: Allow specific origin (Production recommended)</div>
                 <div class="code-line var-usage">app.use(cors({</div>
-                <div class="code-line var-usage">  origin: ['http://localhost:3000', 'https://yourdomain.com'],</div>
+                <div class="code-line var-usage">  origin: ['http://localhost:3000', 'https://fullstackgada.netlify.app'],</div>
                 <div class="code-line var-usage">  credentials: true // If you need to allow cookies</div>
                 <div class="code-line var-usage">}));</div>
                 <div class="code-line"></div>
@@ -229,7 +314,7 @@
 
 <script>
 // Demo Functions
-function showCORSError(){
+function showCORSError() {
     document.getElementById('corsResults').innerHTML = `
         <div class="error-message">
             <strong>🚫 CORS Error Demo</strong><br>
@@ -250,7 +335,7 @@ on the requested resource.
     `;
 }
 
-function showCORSSuccess(){
+function showCORSSuccess() {
     document.getElementById('corsResults').innerHTML = `
         <div class="success-message">
             <strong>✅ CORS Fixed Demo</strong><br>
@@ -278,7 +363,7 @@ Content-Type: application/json
     `;
 }
 
-function showCORSSolutions(){
+function showCORSSolutions() {
     document.getElementById('corsResults').innerHTML = `
         <div class="success-message">
             <strong>🛠️ CORS Solutions Quick Guide</strong><br><br>
@@ -295,7 +380,7 @@ function showCORSSolutions(){
             • Call your middleware (same origin)<br><br>
             
             <strong>⚠️ DON'T:</strong><br>
-            • Don't disable browser (security risk)<br>
+            • Don't disable browser security (security risk)<br>
             • Don't use "*" in production<br>
             • CORS can't be fixed client-side!<br>
             <div class="message-time">${new Date().toLocaleTimeString()}</div>
@@ -303,13 +388,13 @@ function showCORSSolutions(){
     `;
 }
 
-function clearDemo(){
+function clearDemo() {
     document.getElementById('corsResults').innerHTML = 
-        '<div class="event-message one-message">Click above buttons to explore CORS in action!</div>';
+        '<div class="event-message one-message">Click the buttons above to explore CORS in action!</div>';
 }
 
 // Live CORS Testing
-function testCORS(){
+function testCORS() {
     const origin = document.getElementById('yourOrigin').value;
     const apiUrl = document.getElementById('apiUrl').value;
     const resultDiv = document.getElementById('corsTestResult');
@@ -332,7 +417,7 @@ function testCORS(){
             `;
         })
         .catch(error => {
-            if(error.message.includes('CORS')) {
+            if (error.message.includes('CORS')) {
                 resultDiv.innerHTML = `
                     <div style="background:#f8d7da; border:1px solid #f5c6cb; padding:0.5rem; border-radius:4px; color:#721c24;">
                         🚫 <strong>CORS Error!</strong><br>
@@ -358,7 +443,6 @@ function showSolutionTab(tab) {
     document.getElementById(tab).classList.add('active');
     event.target.classList.add('active');
 }
-
 </script>
 </body>
 </html>

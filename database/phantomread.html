@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phantom Read in Database Transactions - Interactive Demo | Learn with Examples</title>
+  <meta name="description" content="Understand Phantom Read database transaction problems with interactive examples. Learn transaction isolation levels, SERIALIZABLE solutions, and real-world scenarios with SQL examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/phantom-read">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Phantom Read in Database Transactions - Interactive Demo | Learn with Examples">
+  <meta property="og:description" content="Explore Phantom Read problems in database transactions with interactive demos, isolation levels, and SQL examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/phantom-read">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/phantom-read-cover.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Phantom Read in Database Transactions - Interactive Demo | Learn with Examples">
+  <meta name="twitter:description" content="Learn Phantom Read issues in database transactions with interactive demos, isolation levels, and real-world SQL examples.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/phantom-read-cover.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Phantom Read in Database Transactions - Interactive Demo",
+    "description": "Understand Phantom Read problems in database transactions with interactive demos. Learn isolation levels, SERIALIZABLE solutions, and SQL-based real-world examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/phantom-read",
+    "datePublished": "2025-09-08",
+    "dateModified": "2025-09-08",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a Phantom Read in database transactions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A Phantom Read occurs when two identical queries within the same transaction return different results because another transaction inserted or deleted rows in the meantime."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can Phantom Reads be prevented?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Phantom Reads can be prevented by using the SERIALIZABLE isolation level, which ensures that concurrent transactions behave as if they were executed one after another, avoiding phantom rows."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between Phantom Read and Non-Repeatable Read?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In a Phantom Read, new rows appear or existing rows disappear between queries. In a Non-Repeatable Read, an existing row's data changes between queries. Both are concurrency issues but differ in scope."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+<div class="container">
+
+    <!-- Header -->
+    <div class="header-interactive">
+        <h1>Phantom Read in Database Transactions</h1>
+        <p>Interactive Demo: Understanding Transaction Isolation Problems</p>
+    <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
+    </div>
+    <!-- Concept Explanation -->
+    <div class="demo-section">
+        <h2 class="demo-title">👻 What is Phantom Read?</h2>
+        <div class="explanation">
+            <strong>Phantom Read:</strong> When a transaction re-executes a query and finds new rows that didn't exist during the first execution, inserted by another concurrent transaction.
+        </div>
+
+        <div class="saree-analogy">
+            <h4>🥭 Mango Pickle Order Scenario</h4>
+            <div class="saree-step">
+                <div class="saree-emoji">📊</div>
+                <div><strong>Transaction 1:</strong> Count orders WHERE product = 'Mango Pickle' → Result: 5</div>
+            </div>
+            <div class="saree-step">
+                <div class="saree-emoji">➕</div>
+                <div><strong>Transaction 2:</strong> INSERT new 'Mango Pickle' order → COMMIT</div>
+            </div>
+            <div class="saree-step">
+                <div class="saree-emoji">👻</div>
+                <div><strong>Transaction 1:</strong> Same count query → Result: 6 (Phantom Row!)</div>
+            </div>
+            <div class="saree-step">
+                <div class="saree-emoji">❌</div>
+                <div><strong>Problem:</strong> Inconsistent results within same transaction</div>
+            </div>
+        </div>
+
+        <div class="demo-controls">
+            <button class="demo-btn first-btn" onclick="showPhantomReadExample()">👻 Phantom Read Demo</button>
+            <button class="demo-btn" onclick="showSQLExample()">💻 SQL Example</button>
+            <button class="demo-btn" onclick="showSolution()">🛡️ SERIALIZABLE Solution</button>
+            <button class="demo-btn clear-btn" onclick="clearDemo()">🗑️ Clear</button>
+        </div>
+
+        <div class="demo-area" id="phantomResults">
+            <div class="event-message one-message">
+                Click above buttons to explore Phantom Read phenomenon!
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Transaction Simulator -->
+    <div class="demo-section">
+        <h2 class="demo-title">⚡ Live Transaction Simulator</h2>
+        <div class="explanation one-explanation">
+            <strong>Simulate:</strong> Watch phantom reads happen in real-time with concurrent transactions
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <!-- Transaction 1 -->
+            <div style="border:2px solid #e74c3c; padding:1rem; border-radius:8px;">
+                <h4>🔍 Transaction 1 (Reader)</h4>
+                <button class="demo-btn" onclick="startTransaction1()">Start Transaction 1</button>
+                <button class="demo-btn" onclick="countOrders1()" disabled id="count1Btn">Count Orders</button>
+                <button class="demo-btn" onclick="countOrders1Again()" disabled id="count1AgainBtn">Count Again</button>
+                <div id="transaction1Status" style="margin-top:0.5rem; min-height:80px; font-family: monospace; background: #f8f9fa; padding: 0.5rem; border-radius: 4px;">
+                    <div>Status: Ready to start</div>
+                </div>
+            </div>
+            
+            <!-- Transaction 2 -->
+            <div style="border:2px solid #27ae60; padding:1rem; border-radius:8px;">
+                <h4>➕ Transaction 2 (Writer)</h4>
+                <button class="demo-btn" onclick="startTransaction2()" disabled id="startT2Btn">Start Transaction 2</button>
+                <button class="demo-btn" onclick="insertOrder2()" disabled id="insertBtn">Insert New Order</button>
+                <button class="demo-btn" onclick="commitTransaction2()" disabled id="commitBtn">Commit</button>
+                <div id="transaction2Status" style="margin-top:0.5rem; min-height:80px; font-family: monospace; background: #f8f9fa; padding: 0.5rem; border-radius: 4px;">
+                    <div>Status: Waiting for Transaction 1</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:1rem;">
+            <button class="demo-btn clear-btn" onclick="resetSimulator()">🔄 Reset Simulator</button>
+            <div id="phantomAlert" style="margin-top:1rem; padding:1rem; background:#fff3cd; border:1px solid #ffeaa7; border-radius:8px; display:none;">
+                <strong>🚨 Phantom Read Detected!</strong>
+                <p>Transaction 1 got different results for the same query within the same transaction. This is a phantom read phenomenon!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Isolation Levels Table -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🔒 Transaction Isolation Levels & Phantom Read</h2>
+        <table class="comparison-table responsive-table">
+            <thead>
+                <tr>
+                    <th>Isolation Level</th>
+                    <th>Dirty Read</th>
+                    <th>Non-Repeatable Read</th>
+                    <th>Phantom Read</th>
+                    <th>Performance</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #ffebee;">
+                    <td><strong>READ UNCOMMITTED</strong></td>
+                    <td>❌ Possible</td>
+                    <td>❌ Possible</td>
+                    <td>❌ Possible</td>
+                    <td>🚀 Fastest</td>
+                    <td>Analytics, Reporting</td>
+                </tr>
+                <tr style="background: #fff3e0;">
+                    <td><strong>READ COMMITTED</strong></td>
+                    <td>✅ Prevented</td>
+                    <td>❌ Possible</td>
+                    <td>❌ Possible</td>
+                    <td>⚡ Fast</td>
+                    <td>Most web applications</td>
+                </tr>
+                <tr style="background: #e8f5e8;">
+                    <td><strong>REPEATABLE READ</strong></td>
+                    <td>✅ Prevented</td>
+                    <td>✅ Prevented</td>
+                    <td>❌ Possible</td>
+                    <td>🐌 Slower</td>
+                    <td>Financial calculations</td>
+                </tr>
+                <tr style="background: #e3f2fd;">
+                    <td><strong>SERIALIZABLE</strong></td>
+                    <td>✅ Prevented</td>
+                    <td>✅ Prevented</td>
+                    <td>✅ Prevented</td>
+                    <td>🐢 Slowest</td>
+                    <td>Critical transactions</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SQL Examples -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">💻 SQL Code Examples</h2>
+        <div class="tabs">
+            <button class="tab active" onclick="showSQLTab('phantom-demo')">👻 Phantom Read Demo</button>
+            <button class="tab" onclick="showSQLTab('serializable-fix')">🛡️ SERIALIZABLE Fix</button>
+            <button class="tab" onclick="showSQLTab('real-world')">🌍 Real World Example</button>
+        </div>
+
+        <!-- Phantom Read Demo SQL -->
+        <div id="phantom-demo" class="tab-content active">
+            <div class="code-block">
+                <div class="code-line comment">-- 👻 Phantom Read Demonstration</div>
+                <div class="code-line comment">-- Transaction 1 (Connection 1)</div>
+                <div class="code-line var-declaration">SET TRANSACTION ISOLATION LEVEL READ COMMITTED;</div>
+                <div class="code-line var-declaration">BEGIN TRANSACTION;</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- First count query</div>
+                <div class="code-line var-usage">SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';</div>
+                <div class="code-line comment">-- Result: 5 orders</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- ... doing other work ...</div>
+                <div class="code-line var-usage">WAITFOR DELAY '00:00:05'; -- Wait 5 seconds</div>
+                <div class="code-line"></div>
+                <div class="code-line comment">-- Meanwhile, Transaction 2 inserts and commits!</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Second count query (same as first)</div>
+                <div class="code-line var-usage">SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';</div>
+                <div class="code-line comment">-- Result: 6 orders (Phantom Read!)</div>
+                <div class="code-line"></div>
+                <div class="code-line var-declaration">COMMIT;</div>
+            </div>
+            
+            <div class="code-block">
+                <div class="code-line comment">-- Transaction 2 (Connection 2) - Runs concurrently</div>
+                <div class="code-line var-declaration">SET TRANSACTION ISOLATION LEVEL READ COMMITTED;</div>
+                <div class="code-line var-declaration">BEGIN TRANSACTION;</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Insert new order while Transaction 1 is running</div>
+                <div class="code-line var-usage">INSERT INTO Orders (Product, Quantity, Customer)</div>
+                <div class="code-line var-usage">VALUES ('Mango Pickle', 2, 'Babita Ji');</div>
+                <div class="code-line"></div>
+                <div class="code-line var-declaration">COMMIT; -- This creates the phantom row</div>
+            </div>
+        </div>
+
+        <!-- SERIALIZABLE Solution -->
+        <div id="serializable-fix" class="tab-content">
+            <div class="code-block">
+                <div class="code-line comment">-- 🛡️ SERIALIZABLE Solution - Prevents Phantom Reads</div>
+                <div class="code-line comment">-- Transaction 1 with SERIALIZABLE isolation</div>
+                <div class="code-line var-declaration">SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;</div>
+                <div class="code-line var-declaration">BEGIN TRANSACTION;</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- First count query - locks the range</div>
+                <div class="code-line var-usage">SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';</div>
+                <div class="code-line comment">-- Result: 5 orders</div>
+                <div class="code-line comment">-- Range lock prevents new inserts matching the condition</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- ... doing other work ...</div>
+                <div class="code-line var-usage">WAITFOR DELAY '00:00:05';</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Second count query</div>
+                <div class="code-line var-usage">SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';</div>
+                <div class="code-line comment">-- Result: 5 orders (Consistent!)</div>
+                <div class="code-line"></div>
+                <div class="code-line var-declaration">COMMIT;</div>
+                <div class="code-line comment">-- Now Transaction 2 can proceed</div>
+            </div>
+            
+            <div class="code-block">
+                <div class="code-line comment">-- Transaction 2 - Will be blocked until Transaction 1 commits</div>
+                <div class="code-line var-declaration">SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;</div>
+                <div class="code-line var-declaration">BEGIN TRANSACTION;</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- This INSERT will be blocked by Transaction 1's range lock</div>
+                <div class="code-line var-usage">INSERT INTO Orders (Product, Quantity, Customer)</div>
+                <div class="code-line var-usage">VALUES ('Mango Pickle', 2, 'Babita Ji');</div>
+                <div class="code-line comment">-- Waits until Transaction 1 completes</div>
+                <div class="code-line"></div>
+                <div class="code-line var-declaration">COMMIT;</div>
+            </div>
+            
+            <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>✅ Benefits of SERIALIZABLE:</strong>
+                <ul>
+                    <li>Prevents all concurrency phenomena (dirty read, non-repeatable read, phantom read)</li>
+                    <li>Ensures consistent results within a transaction</li>
+                    <li>Range locks prevent phantom rows</li>
+                </ul>
+                <strong>⚠️ Trade-offs:</strong>
+                <ul>
+                    <li>Reduced concurrency (transactions may wait)</li>
+                    <li>Higher chance of deadlocks</li>
+                    <li>Lower performance</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Real World Example -->
+        <div id="real-world" class="tab-content">
+            <div class="code-block">
+                <div class="code-line comment">-- 🌍 Real World Example: E-commerce Inventory Management</div>
+                <div class="code-line comment">-- Scenario: Checking low-stock items for reorder</div>
+                <div class="code-line"></div>
+                <div class="code-line comment">-- Transaction 1: Daily inventory check</div>
+                <div class="code-line var-declaration">BEGIN TRANSACTION;</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Find all low-stock items (< 10 units)</div>
+                <div class="code-line var-usage">SELECT ProductID, ProductName, Stock</div>
+                <div class="code-line var-usage">FROM Inventory</div>
+                <div class="code-line var-usage">WHERE Stock < 10;</div>
+                <div class="code-line comment">-- Result: 3 products need reordering</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Calculate total reorder cost</div>
+                <div class="code-line var-usage">SELECT SUM(ReorderCost) as TotalCost</div>
+                <div class="code-line var-usage">FROM Inventory</div>
+                <div class="code-line var-usage">WHERE Stock < 10;</div>
+                <div class="code-line comment">-- Result: $1,500</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- ... manager reviews the list ...</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Re-run the same queries for final confirmation</div>
+                <div class="code-line var-usage">SELECT COUNT(*) FROM Inventory WHERE Stock < 10;</div>
+                <div class="code-line comment">-- Without SERIALIZABLE: Could show 4 products (Phantom!)</div>
+                <div class="code-line comment">-- With SERIALIZABLE: Shows 3 products (Consistent)</div>
+                <div class="code-line"></div>
+                <div class="code-line var-declaration">COMMIT;</div>
+            </div>
+            
+            <div class="code-block">
+                <div class="code-line comment">-- Transaction 2: Concurrent sale reduces stock</div>
+                <div class="code-line var-declaration">BEGIN TRANSACTION;</div>
+                <div class="code-line"></div>
+                <div class="code-line var-usage">-- Customer purchases last units of a product</div>
+                <div class="code-line var-usage">UPDATE Inventory</div>
+                <div class="code-line var-usage">SET Stock = Stock - 5</div>
+                <div class="code-line var-usage">WHERE ProductID = 'WIDGET-123';</div>
+                <div class="code-line comment">-- This brings stock from 12 to 7 (now < 10!)</div>
+                <div class="code-line"></div>
+                <div class="code-line var-declaration">COMMIT;</div>
+                <div class="code-line comment">-- Creates a phantom row for Transaction 1's queries</div>
+            </div>
+            
+            <div style="background: #fff3e0; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <strong>🎯 Business Impact:</strong>
+                <ul>
+                    <li><strong>Without SERIALIZABLE:</strong> Inventory report shows inconsistent data, wrong reorder amounts</li>
+                    <li><strong>With SERIALIZABLE:</strong> Consistent snapshot of inventory throughout the transaction</li>
+                    <li><strong>Use Case:</strong> Financial reports, audit trails, inventory management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Best Practices -->
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">💡 Best Practices for Handling Phantom Reads</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px;">
+                <h4>✅ Do This</h4>
+                <ul>
+                    <li>Use SERIALIZABLE for critical financial operations</li>
+                    <li>Choose appropriate isolation level based on consistency needs</li>
+                    <li>Consider application-level consistency checks</li>
+                    <li>Use optimistic locking for better performance</li>
+                    <li>Test your application with concurrent load</li>
+                </ul>
+            </div>
+            <div style="background: #ffebee; padding: 1rem; border-radius: 8px;">
+                <h4>❌ Avoid This</h4>
+                <ul>
+                    <li>Using READ UNCOMMITTED for financial data</li>
+                    <li>Ignoring phantom reads in reporting systems</li>
+                    <li>Always using SERIALIZABLE (performance impact)</li>
+                    <li>Not handling isolation level exceptions</li>
+                    <li>Mixing different isolation levels carelessly</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global state for transaction simulation
+let transactionState = {
+    t1Active: false,
+    t2Active: false,
+    t1FirstCount: null,
+    t1SecondCount: null,
+    orderCount: 5
+};
+
+// Demo Functions
+function showPhantomReadExample(){
+    document.getElementById('phantomResults').innerHTML = `
+        <div class="success-message">
+            <strong>👻 Phantom Read Scenario</strong><br><br>
+            <strong>Step 1:</strong> Transaction 1 starts and counts orders<br>
+            <code>SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';</code><br>
+            <em>Result: 5 orders</em><br><br>
+            
+            <strong>Step 2:</strong> Transaction 2 inserts new order and commits<br>
+            <code>INSERT INTO Orders VALUES ('Mango Pickle', 2, 'Babita');</code><br>
+            <em>New order committed to database</em><br><br>
+            
+            <strong>Step 3:</strong> Transaction 1 runs same count query again<br>
+            <code>SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';</code><br>
+            <em>Result: 6 orders (Phantom row appeared!)</em><br><br>
+            
+            <strong>🚨 Problem:</strong> Same query in same transaction returned different results!
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
+}
+
+function showSQLExample(){
+    document.getElementById('phantomResults').innerHTML = `
+        <div class="success-message">
+            <strong>💻 SQL Code Demonstration</strong><br>
+            <pre style="background:#2c3e50;color:#ecf0f1;padding:1rem;border-radius:8px;text-align:left;">
+-- Connection 1 (Bhide's Transaction)
+BEGIN TRANSACTION;
+SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';
+-- Result: 5
+
+-- Wait... meanwhile Connection 2 executes:
+-- INSERT INTO Orders VALUES ('Mango Pickle', 2, 'Babita');
+-- COMMIT;
+
+-- Same query again in Connection 1
+SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';
+-- Result: 6 (Phantom Read!)
+COMMIT;
+            </pre>
+            <strong>Key Points:</strong><br>
+            • Same transaction, same query, different results<br>
+            • Caused by concurrent INSERT from another transaction<br>
+            • Common in READ COMMITTED isolation level
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
+}
+
+function showSolution(){
+    document.getElementById('phantomResults').innerHTML = `
+        <div class="success-message">
+            <strong>🛡️ SERIALIZABLE Solution</strong><br>
+            <pre style="background:#2c3e50;color:#ecf0f1;padding:1rem;border-radius:8px;text-align:left;">
+-- Set SERIALIZABLE isolation level
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+BEGIN TRANSACTION;
+
+SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';
+-- Result: 5 (Range lock acquired)
+
+-- Other transactions trying to INSERT 'Mango Pickle' 
+-- orders will be BLOCKED until this transaction commits
+
+SELECT COUNT(*) FROM Orders WHERE Product = 'Mango Pickle';
+-- Result: 5 (Consistent!)
+
+COMMIT;
+-- Now other transactions can proceed
+            </pre>
+            <strong>How SERIALIZABLE Prevents Phantom Reads:</strong><br>
+            • Creates range locks on query conditions<br>
+            • Blocks INSERT/DELETE operations that would affect the result<br>
+            • Guarantees consistent snapshots within transaction
+            <div class="message-time">${new Date().toLocaleTimeString()}</div>
+        </div>
+    `;
+}
+
+function clearDemo(){
+    document.getElementById('phantomResults').innerHTML = 
+        '<div class="event-message one-message">Click above buttons to explore Phantom Read phenomenon!</div>';
+}
+
+// Transaction Simulator Functions
+function startTransaction1(){
+    transactionState.t1Active = true;
+    transactionState.orderCount = 5; // Reset to initial state
+    document.getElementById('count1Btn').disabled = false;
+    document.getElementById('startT2Btn').disabled = false;
+    document.getElementById('transaction1Status').innerHTML = `
+        <div style="color:#e74c3c;">▶ Transaction 1 STARTED</div>
+        <div>Status: Active, ready to count orders</div>
+        <div>Current order count: Unknown</div>
+    `;
+}
+
+function countOrders1(){
+    transactionState.t1FirstCount = transactionState.orderCount;
+    document.getElementById('transaction1Status').innerHTML = `
+        <div style="color:#e74c3c;">▶ Transaction 1 ACTIVE</div>
+        <div>First COUNT query executed</div>
+        <div>Result: ${transactionState.t1FirstCount} Mango Pickle orders</div>
+        <div style="color:#f39c12;">Waiting for other operations...</div>
+    `;
+    document.getElementById('count1AgainBtn').disabled = false;
+}
+
+function countOrders1Again(){
+    transactionState.t1SecondCount = transactionState.orderCount;
+    const isPhantom = transactionState.t1SecondCount !== transactionState.t1FirstCount;
+    
+    document.getElementById('transaction1Status').innerHTML = `
+        <div style="color:#e74c3c;">▶ Transaction 1 ACTIVE</div>
+        <div>Second COUNT query executed</div>
+        <div>Result: ${transactionState.t1SecondCount} Mango Pickle orders</div>
+        <div style="color:${isPhantom ? '#e74c3c' : '#27ae60'};">
+            ${isPhantom ? '🚨 PHANTOM READ DETECTED!' : '✅ Consistent results'}
+        </div>
+    `;
+    
+    if(isPhantom){
+        document.getElementById('phantomAlert').style.display = 'block';
+    }
+}
+
+function startTransaction2(){
+    transactionState.t2Active = true;
+    document.getElementById('insertBtn').disabled = false;
+    document.getElementById('transaction2Status').innerHTML = `
+        <div style="color:#27ae60;">▶ Transaction 2 STARTED</div>
+        <div>Status: Active, ready to insert</div>
+    `;
+}
+
+function insertOrder2(){
+    document.getElementById('commitBtn').disabled = false;
+    document.getElementById('transaction2Status').innerHTML = `
+        <div style="color:#27ae60;">▶ Transaction 2 ACTIVE</div>
+        <div>INSERT statement executed</div>
+        <div>New 'Mango Pickle' order prepared</div>
+        <div style="color:#f39c12;">Ready to commit...</div>
+    `;
+}
+
+function commitTransaction2(){
+    transactionState.orderCount = 6; // Phantom row added
+    document.getElementById('transaction2Status').innerHTML = `
+        <div style="color:#27ae60;">✅ Transaction 2 COMMITTED</div>
+        <div>New order inserted successfully</div>
+        <div>Database updated: +1 Mango Pickle order</div>
+        <div style="color:#e74c3c;">Phantom row created for Transaction 1!</div>
+    `;
+    document.getElementById('commitBtn').disabled = true;
+}
+
+function resetSimulator(){
+    transactionState = {
+        t1Active: false,
+        t2Active: false,
+        t1FirstCount: null,
+        t1SecondCount: null,
+        orderCount: 5
+    };
+    
+    // Reset all buttons
+    document.getElementById('count1Btn').disabled = true;
+    document.getElementById('count1AgainBtn').disabled = true;
+    document.getElementById('startT2Btn').disabled = true;
+    document.getElementById('insertBtn').disabled = true;
+    document.getElementById('commitBtn').disabled = true;
+    
+    // Reset status displays
+    document.getElementById('transaction1Status').innerHTML = '<div>Status: Ready to start</div>';
+    document.getElementById('transaction2Status').innerHTML = '<div>Status: Waiting for Transaction 1</div>';
+    document.getElementById('phantomAlert').style.display = 'none';
+}
+
+// SQL Tabs
+function showSQLTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    event.target.classList.add('active');
+}
+
+
+// Initialize
+window.onload = function() {
+    clearDemo();
+    resetSimulator();
+};
+</script>
+</body>
+</html>

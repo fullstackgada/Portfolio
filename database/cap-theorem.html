@@ -1,44 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAP Theorem Interactive Demo | Fullstackgada</title>
-    <meta name="description" content="Discover CAP Theorem with an interactive demo! Learn Consistency, Availability, and Partition Tolerance in distributed systems with real-world examples.">
-    <meta name="keywords" content="CAP Theorem, distributed systems, consistency, availability, partition tolerance, database design, system architecture, MongoDB, Cassandra">
-    <meta name="author" content="Fullstackgada">
-    <meta name="robots" content="index, follow">
-    <link rel="stylesheet" href="/interactive-demo.css">
-    <link rel="canonical" href="https://fullstackgada.netlify.app/database/cap-theorem.html">
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="preload" href="/interactive-demo.css" as="style">
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="CAP Theorem Interactive Demo | Fullstackgada">
-    <meta property="og:description" content="Explore CAP Theorem with an interactive demo! Understand Consistency, Availability, and Partition Tolerance with real-world examples.">
-    <meta property="og:url" content="https://fullstackgada.netlify.app/database/cap-theorem.html">
-    <meta property="og:type" content="article">
-    <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/cap-theorem.webp">
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="CAP Theorem Interactive Demo | Fullstackgada">
-    <meta name="twitter:description" content="Learn CAP Theorem through an interactive demo, covering Consistency, Availability, and Partition Tolerance.">
-    <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/cap-theorem.webp">
-    <!-- Schema Markup -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "CAP Theorem Interactive Demo",
-      "description": "Explore CAP Theorem with an interactive demo, covering Consistency, Availability, and Partition Tolerance in distributed systems with real-world examples.",
-      "author": {
-        "@type": "Person",
-        "name": "Fullstackgada"
-      },
-      "url": "https://fullstackgada.netlify.app/database/cap-theorem.html",
-      "datePublished": "2025-09-07"
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAP Theorem Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Discover CAP Theorem with an interactive demo! Learn Consistency, Availability, and Partition Tolerance in distributed systems with real-world examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/cap-theorem">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="CAP Theorem Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Explore CAP Theorem with an interactive demo! Understand Consistency, Availability, and Partition Tolerance with real-world examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/cap-theorem">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/cap-theorem.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CAP Theorem Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn CAP Theorem through an interactive demo, covering Consistency, Availability, and Partition Tolerance.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/cap-theorem.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "CAP Theorem Interactive Demo",
+    "description": "Explore CAP Theorem with an interactive demo, covering Consistency, Availability, and Partition Tolerance in distributed systems with real-world examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/cap-theorem",
+    "datePublished": "2025-09-07",
+    "dateModified": "2025-09-08",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
     }
-    </script>
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the CAP Theorem?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CAP Theorem states that in distributed systems, it is impossible to simultaneously guarantee Consistency, Availability, and Partition Tolerance. A system can only achieve two of the three at the same time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is CAP Theorem important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CAP Theorem helps system architects and developers make trade-offs when designing distributed systems. It guides decisions on whether to prioritize consistency, availability, or partition tolerance depending on the use case."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are real-world examples of CAP Theorem trade-offs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For example, MongoDB and Cassandra often prioritize availability and partition tolerance over strict consistency, while traditional relational databases like PostgreSQL prioritize consistency and availability over partition tolerance."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
 <div class="container">
 

@@ -1,29 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL JOINs ka Funda - Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL JOINs Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore SQL JOINs with an interactive demo! Learn INNER, LEFT, RIGHT, FULL OUTER, and CROSS JOINs with examples and visualizations.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/sql-joins">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="SQL JOINs Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Master SQL JOINs with an interactive demo! Understand INNER, LEFT, RIGHT, FULL OUTER, and CROSS JOINs with clear examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/sqljoins">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/sql-joins.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SQL JOINs Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn SQL JOINs with an interactive demo, covering INNER, LEFT, RIGHT, FULL OUTER, and CROSS JOINs.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/sql-joins.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "SQL JOINs Interactive Demo",
+    "description": "Explore SQL JOINs with an interactive demo, covering INNER, LEFT, RIGHT, FULL OUTER, and CROSS JOINs with examples and visualizations.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/sql-joins",
+    "datePublished": "2025-09-10",
+    "dateModified": "2025-09-10",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are SQL JOINs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SQL JOINs are used to combine rows from two or more tables based on a related column. They help retrieve meaningful data relationships."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between INNER JOIN and LEFT JOIN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "INNER JOIN returns only matching records from both tables, while LEFT JOIN returns all records from the left table and matching records from the right table."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use FULL OUTER JOIN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "FULL OUTER JOIN is useful when you want all records from both tables, with NULLs filled in for non-matching rows. It’s helpful for comprehensive comparisons."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a CROSS JOIN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CROSS JOIN produces the Cartesian product of two tables, meaning every row from one table is combined with every row from the other."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header-interactive" style="position: relative;">
-            <h1>SQL JOINs ka Funda</h1>
-            <p class="subtitle">Understand how SQL JOINs works with Fullstackgada</p>
+            <h1>SQL JOINs Interactive Demo</h1>
+            <p class="subtitle">Master SQL JOINs with FullstackGada’s fun approach! 📊</p>
             <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="Explore more diagrams"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
-        </div>
-        
+
+        <!-- Tabs for Join Types -->
         <div class="tabs">
             <button class="tab active" onclick="showJoin('inner')">INNER JOIN</button>
             <button class="tab" onclick="showJoin('left')">LEFT JOIN</button>
@@ -32,14 +126,15 @@
             <button class="tab" onclick="showJoin('cross')">CROSS JOIN</button>
         </div>
 
+        <!-- Demo Grid with Tables -->
         <div class="demo-grid">
             <div class="demo-section">
-                <div class="demo-title">Members ki Table</div>
+                <h2 class="demo-title">Members Table</h2>
                 <table id="membersTable" class="comparison-table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Naam</th>
+                            <th>Name</th>
                             <th>Role</th>
                         </tr>
                     </thead>
@@ -74,12 +169,12 @@
             </div>
 
             <div class="demo-section">
-                <div class="demo-title">GamesParticipated ki Table</div>
+                <h2 class="demo-title">GamesParticipated Table</h2>
                 <table id="gamesTable" class="comparison-table">
                     <thead>
                         <tr>
                             <th>PlayerID</th>
-                            <th>Game ka Naam</th>
+                            <th>Game Name</th>
                             <th>Score</th>
                         </tr>
                     </thead>
@@ -114,12 +209,13 @@
             </div>
         </div>
 
+        <!-- Result Section -->
         <div class="demo-section">
-            <div class="demo-title" id="resultTitle">INNER JOIN ka Result</div>
+            <h2 class="demo-title" id="resultTitle">INNER JOIN Result</h2>
             
             <div class="explanation" id="explanation">
                 <h3>INNER JOIN</h3>
-                <p>Sirf woh members dikhega jo koi game khela hai. Bapuji nahi dikhega kyunki unhone koi game nahi khela. Guest (ID 6) bhi nahi dikhega kyunki woh members list mein hai hi nahi.</p>
+                <p>Shows only members who have played a game. Bapuji won’t appear because he hasn’t played any games. Guest (ID 6) also won’t appear because they’re not in the Members table.</p>
             </div>
 
             <div class="memory-diagram" id="vennDiagram">
@@ -135,14 +231,14 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Naam</th>
+                        <th>Name</th>
                         <th>Role</th>
-                        <th>Game ka Naam</th>
+                        <th>Game Name</th>
                         <th>Score</th>
                     </tr>
                 </thead>
                 <tbody id="resultBody">
-                    <!-- Results yaha JavaScript se populate honge -->
+                    <!-- Results will be populated by JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -168,23 +264,23 @@
         const joinExplanations = {
             inner: {
                 title: 'INNER JOIN',
-                explanation: 'Sirf woh members dikhega jo koi game khela hai. Bapuji nahi dikhega kyunki unhone koi game nahi khela. Guest (ID 6) bhi nahi dikhega kyunki woh members list mein hai hi nahi.'
+                explanation: 'Shows only members who have played a game. Bapuji won’t appear because he hasn’t played any games. Guest (ID 6) also won’t appear because they’re not in the Members table.'
             },
             left: {
                 title: 'LEFT JOIN',
-                explanation: 'Saare members dikhega. Bapuji ne koi game nahi khela — unke liye Game ka Naam NULL hoga. Members table ka har record dikhega.'
+                explanation: 'Shows all members. Bapuji hasn’t played any games, so his Game Name and Score will be NULL. Every record from the Members table is included.'
             },
             right: {
                 title: 'RIGHT JOIN',
-                explanation: 'Saare GamesParticipated ke records dikhega. Guest (ID 6) ki Volleyball dikhegi, bhale woh member list mein nahi hai. Bapuji nahi dikhega kyunki unhone koi game nahi khela.'
+                explanation: 'Shows all records from GamesParticipated. Guest (ID 6) with Volleyball will appear, even though they’re not in the Members table. Bapuji won’t appear since he hasn’t played any games.'
             },
             full: {
                 title: 'FULL OUTER JOIN',
-                explanation: 'Saare members aur saare games dikhega. Jinke paas jo nahi hai — waha NULL aayega. Bapuji ke paas koi game nahi → Game ka Naam = NULL. Guest ke paas member record nahi → Naam = NULL.'
+                explanation: 'Shows all members and all games. Where there’s no match, NULL is displayed. Bapuji has no games, so Game Name = NULL. Guest has no member record, so Name = NULL.'
             },
             cross: {
                 title: 'CROSS JOIN',
-                explanation: 'Har member ko har game assign kar diya gaya — Bapuji ko bhi saare games khela diya! Koi relationship nahi dekha gaya, bas har possible combination bana dala. Thoda pagalpan wala kaam!'
+                explanation: 'Pairs every member with every game, creating all possible combinations. Even Bapuji is assigned to all games! No relationship is checked, just a massive combination.'
             }
         };
 
@@ -273,7 +369,7 @@
         }
 
         function showJoin(type) {
-            // Tabs ko update karo
+            // Update tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.classList.remove('active');
             });
@@ -284,18 +380,18 @@
                 }
             });
 
-            // Title aur explanation update karo
+            // Update title and explanation
             const info = joinExplanations[type];
-            document.getElementById('resultTitle').textContent = info.title + ' ka Result';
+            document.getElementById('resultTitle').textContent = info.title + ' Result';
             document.getElementById('explanation').innerHTML = `
                 <h3>${info.title}</h3>
                 <p>${info.explanation}</p>
             `;
 
-            // Venn diagram update karo
+            // Update Venn diagram
             updateVennDiagram(type);
 
-            // Join perform karo aur result table update karo
+            // Perform join and update result table
             const result = performJoin(type);
             const resultBody = document.getElementById('resultBody');
             resultBody.innerHTML = '';
@@ -322,11 +418,11 @@
                     diagramHTML = `
                         <div class="memory-slot hoisted">
                             <div class="variable-name">Members</div>
-                            <div class="variable-value">Sirf common records</div>
+                            <div class="variable-value">Only common records</div>
                         </div>
                         <div class="memory-slot hoisted">
                             <div class="variable-name">Games</div>
-                            <div class="variable-value">Sirf common records</div>
+                            <div class="variable-value">Only common records</div>
                         </div>
                     `;
                     break;
@@ -334,11 +430,11 @@
                     diagramHTML = `
                         <div class="memory-slot hoisted">
                             <div class="variable-name">Members</div>
-                            <div class="variable-value">Saare members shamil hain</div>
+                            <div class="variable-value">All members included</div>
                         </div>
                         <div class="memory-slot">
                             <div class="variable-name">Games</div>
-                            <div class="variable-value">Sirf matching games</div>
+                            <div class="variable-value">Only matching games</div>
                         </div>
                     `;
                     break;
@@ -346,11 +442,11 @@
                     diagramHTML = `
                         <div class="memory-slot">
                             <div class="variable-name">Members</div>
-                            <div class="variable-value">Sirf matching members</div>
+                            <div class="variable-value">Only matching members</div>
                         </div>
                         <div class="memory-slot hoisted">
                             <div class="variable-name">Games</div>
-                            <div class="variable-value">Saare games shamil hain</div>
+                            <div class="variable-value">All games included</div>
                         </div>
                     `;
                     break;
@@ -358,11 +454,11 @@
                     diagramHTML = `
                         <div class="memory-slot hoisted">
                             <div class="variable-name">Members</div>
-                            <div class="variable-value">Saare members shamil hain</div>
+                            <div class="variable-value">All members included</div>
                         </div>
                         <div class="memory-slot hoisted">
                             <div class="variable-name">Games</div>
-                            <div class="variable-value">Saare games shamil hain</div>
+                            <div class="variable-value">All games included</div>
                         </div>
                     `;
                     break;
@@ -370,7 +466,7 @@
                     diagramHTML = `
                         <div class="memory-slot error">
                             <div class="variable-name">Cartesian Product</div>
-                            <div class="variable-value">Har possible combination!</div>
+                            <div class="variable-value">All possible combinations!</div>
                         </div>
                     `;
                     break;
@@ -379,7 +475,7 @@
             vennDiagram.innerHTML = diagramHTML;
         }
 
-        // INNER JOIN ke saath shuru karo
+        // Start with INNER JOIN
         showJoin('inner');
     </script>
 </body>

@@ -1,53 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BASE Properties in NoSQL Databases - Interactive Demo | Complete Guide</title>
-<meta name="description" content="Learn BASE properties (Basically Available, Soft State, Eventual Consistency) in NoSQL databases with interactive demos. Complete guide to distributed database principles.">
-<meta name="keywords" content="BASE properties, NoSQL databases, eventual consistency, distributed systems, database availability, soft state">
-<link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BASE Properties in NoSQL Databases - Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Discover BASE properties (Basically Available, Soft State, Eventual Consistency) in NoSQL databases with an interactive demo. Complete guide to distributed systems.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/base-property">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="BASE Properties in NoSQL Databases - Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Explore BASE properties in NoSQL databases with an interactive demo. Learn Basically Available, Soft State, and Eventual Consistency principles.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/base-property">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/base-property.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BASE Properties in NoSQL Databases - Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn BASE properties with an interactive demo, covering Basically Available, Soft State, and Eventual Consistency in NoSQL databases.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/base-property.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "BASE Properties in NoSQL Databases - Interactive Demo",
+    "description": "Discover BASE properties (Basically Available, Soft State, Eventual Consistency) in NoSQL databases with an interactive demo and real-world examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/base-property",
+    "datePublished": "2025-09-10",
+    "dateModified": "2025-09-10",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are BASE properties in NoSQL databases?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "BASE properties stand for Basically Available, Soft State, and Eventual Consistency. These principles describe the behavior of distributed NoSQL databases, focusing on availability and scalability rather than strict consistency."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do BASE properties differ from ACID?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ACID ensures strict consistency and reliability in traditional relational databases, while BASE sacrifices strong consistency for high availability and partition tolerance, making it more suitable for distributed NoSQL systems."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which NoSQL databases use BASE properties?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Databases like Cassandra, DynamoDB, Couchbase, and MongoDB rely on BASE principles to achieve scalability and fault tolerance in distributed environments."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
 <div class="container">
 
     <!-- Header -->
     <div class="header-interactive">
         <h1>BASE Properties in NoSQL Databases</h1>
-        <p>Understanding Basically Available, Soft State, and Eventual Consistency</p>
+        <p>Master Basically Available, Soft State, and Eventual Consistency! 📊</p>
+     <div class="explore-diagrams-btn-wrapper">
+            <a href="/interactive.html" class="explore-diagrams-btn">
+                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+            </a>
+        </div>
+       <div class="follow-btn-wrapper">
+            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+</a>
+        </div>
     </div>
 
     <!-- Introduction -->
     <div class="demo-section">
         <h2 class="demo-title">🏗️ What are BASE Properties?</h2>
         <div class="explanation">
-            <strong>BASE Properties:</strong> A set of principles for distributed NoSQL databases that prioritize availability and partition tolerance over strict consistency.
+            <strong>BASE Properties:</strong> Principles for distributed NoSQL databases prioritizing availability and partition tolerance over immediate consistency.
         </div>
 
         <div class="saree-analogy">
             <h4>📊 BASE Acronym Breakdown</h4>
             <div class="saree-step">
                 <div class="saree-emoji">✅</div>
-                <div><strong>Basically Available:</strong> System responds to requests even during partial failures</div>
+                <div><strong>Basically Available:</strong> System responds even during partial failures.</div>
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">🔄</div>
-                <div><strong>Soft State:</strong> Data state may change over time without external input</div>
+                <div><strong>Soft State:</strong> Data may change over time without external input.</div>
             </div>
             <div class="saree-step">
                 <div class="saree-emoji">⏰</div>
-                <div><strong>Eventual Consistency:</strong> All nodes will eventually have consistent data</div>
+                <div><strong>Eventual Consistency:</strong> Nodes eventually reach consistent data.</div>
             </div>
         </div>
 
         <div class="demo-controls">
-            <button class="demo-btn first-btn" onclick="showBasicallyAvailable()">✅ Basically Available</button>
-            <button class="demo-btn" onclick="showSoftState()">🔄 Soft State</button>
-            <button class="demo-btn" onclick="showEventualConsistency()">⏰ Eventual Consistency</button>
-            <button class="demo-btn clear-btn" onclick="clearDemo()">🗑️ Clear</button>
+            <button class="demo-btn first-btn" onclick="showBasicallyAvailable()" role="button" aria-label="Show Basically Available">✅ Basically Available</button>
+            <button class="demo-btn" onclick="showSoftState()" role="button" aria-label="Show Soft State">🔄 Soft State</button>
+            <button class="demo-btn" onclick="showEventualConsistency()" role="button" aria-label="Show Eventual Consistency">⏰ Eventual Consistency</button>
+            <button class="demo-btn clear-btn" onclick="clearDemo()" role="button" aria-label="Clear Demo">🗑️ Clear</button>
         </div>
 
-        <div class="demo-area" id="baseResults">
+        <div class="demo-area" id="baseResults" role="region" aria-live="polite">
             <div class="event-message one-message">
                 Click above buttons to explore BASE properties!
             </div>
@@ -85,12 +178,12 @@
         </div>
 
         <div style="display:flex; gap:1rem; text-align: center; margin: 1rem 0;">
-            <button class="demo-btn first-btn" onclick="simulateUserSignup()">👤 New User Signup</button>
-            <button class="demo-btn" onclick="simulateNodeFailure()">⚠️ Simulate Node Failure</button>
-            <button class="demo-btn" onclick="resetSimulation()">🔄 Reset Simulation</button>
+            <button class="demo-btn first-btn" onclick="simulateUserSignup()" role="button" aria-label="Simulate New User Signup">👤 New User Signup</button>
+            <button class="demo-btn" onclick="simulateNodeFailure()" role="button" aria-label="Simulate Node Failure">⚠️ Simulate Node Failure</button>
+            <button class="demo-btn" onclick="resetSimulation()" role="button" aria-label="Reset Simulation">🔄 Reset Simulation</button>
         </div>
 
-        <div id="simulationLog" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem; font-family: monospace; min-height: 100px;">
+        <div id="simulationLog" style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem; font-family: monospace; min-height: 100px;" role="log" aria-live="polite">
             Simulation log will appear here...
         </div>
     </div>
@@ -134,8 +227,8 @@
                 </tr>
                 <tr>
                     <td><strong>Data State</strong></td>
-                    <td>Hard state (fixed until explicitly changed)</td>
-                    <td>Soft state (can change without input)</td>
+                    <td>Hard state (fixed until changed)</td>
+                    <td>Soft state (changes without input)</td>
                     <td>Predictability vs Flexibility</td>
                 </tr>
             </tbody>
@@ -144,16 +237,16 @@
 
     <!-- Real-world Examples -->
     <div class="demo-section" style="grid-column:1/-1;">
-        <h2 class="demo-title">🌍 Real-world BASE Implementation Examples</h2>
+        <h2 class="demo-title">🌍 Real-World BASE Implementation Examples</h2>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
             <div class="demo-card">
                 <h3>📘 Facebook/Meta</h3>
                 <p><strong>Scenario:</strong> User posts and friend updates</p>
                 <ul>
-                    <li><strong>Basically Available:</strong> Users can always post, even if some servers are down</li>
-                    <li><strong>Soft State:</strong> Post visibility may vary across regions initially</li>
-                    <li><strong>Eventual Consistency:</strong> All friends see the post within minutes</li>
+                    <li><strong>Basically Available:</strong> Users can post even if some servers are down.</li>
+                    <li><strong>Soft State:</strong> Post visibility varies across regions initially.</li>
+                    <li><strong>Eventual Consistency:</strong> All friends see posts within minutes.</li>
                 </ul>
             </div>
             
@@ -161,9 +254,9 @@
                 <h3>🛒 Amazon DynamoDB</h3>
                 <p><strong>Scenario:</strong> Product inventory management</p>
                 <ul>
-                    <li><strong>Basically Available:</strong> Shopping cart always works, even during high traffic</li>
-                    <li><strong>Soft State:</strong> Item availability might show different values temporarily</li>
-                    <li><strong>Eventual Consistency:</strong> Inventory counts sync across all regions</li>
+                    <li><strong>Basically Available:</strong> Shopping cart works during high traffic.</li>
+                    <li><strong>Soft State:</strong> Item availability may differ temporarily.</li>
+                    <li><strong>Eventual Consistency:</strong> Inventory syncs across regions.</li>
                 </ul>
             </div>
             
@@ -171,9 +264,9 @@
                 <h3>📱 Twitter/X</h3>
                 <p><strong>Scenario:</strong> Tweet timeline and follower counts</p>
                 <ul>
-                    <li><strong>Basically Available:</strong> Users can tweet even during system maintenance</li>
-                    <li><strong>Soft State:</strong> Follower counts may fluctuate briefly</li>
-                    <li><strong>Eventual Consistency:</strong> All followers see tweets in their timeline</li>
+                    <li><strong>Basically Available:</strong> Tweeting works during maintenance.</li>
+                    <li><strong>Soft State:</strong> Follower counts fluctuate briefly.</li>
+                    <li><strong>Eventual Consistency:</strong> Tweets appear in all timelines.</li>
                 </ul>
             </div>
         </div>
@@ -184,9 +277,9 @@
         <h2 class="demo-title">💻 Technical Implementation of BASE Properties</h2>
         
         <div class="tabs">
-            <button class="tab active" onclick="showImplementation('basically-available')">✅ Basically Available</button>
-            <button class="tab" onclick="showImplementation('soft-state')">🔄 Soft State</button>
-            <button class="tab" onclick="showImplementation('eventual-consistency')">⏰ Eventual Consistency</button>
+            <button class="tab active" onclick="showImplementation('basically-available')" role="button" aria-label="Show Basically Available Implementation">✅ Basically Available</button>
+            <button class="tab" onclick="showImplementation('soft-state')" role="button" aria-label="Show Soft State Implementation">🔄 Soft State</button>
+            <button class="tab" onclick="showImplementation('eventual-consistency')" role="button" aria-label="Show Eventual Consistency Implementation">⏰ Eventual Consistency</button>
         </div>
 
         <!-- Basically Available Implementation -->
@@ -207,7 +300,7 @@
                     <div class="code-line var-usage">async function getUserData(userId) {</div>
                     <div class="code-line var-usage">  try {</div>
                     <div class="code-line var-usage">    // Try primary database</div>
-                    <div class="code-line var-usage">    return await primaryDB.collection('users').findOne({_id: userId});</div>
+                    <div class="code-line var-usage">    return await primaryDB.collection('users').findOne({ _id: userId });</div>
                     <div class="code-line var-usage">  } catch (error) {</div>
                     <div class="code-line var-usage">    // Fallback to cached data or secondary DB</div>
                     <div class="code-line var-usage">    console.log('Primary DB down, using fallback');</div>
@@ -249,7 +342,6 @@
                     <div class="code-line var-usage">  setWithTTL(key, value, ttl) {</div>
                     <div class="code-line var-usage">    const expiry = Date.now() + ttl;</div>
                     <div class="code-line var-usage">    this.cache.set(key, { ...value, expiry });</div>
-                    <div class="code-line var-usage">    </div>
                     <div class="code-line var-usage">    // Auto-cleanup expired data</div>
                     <div class="code-line var-usage">    setTimeout(() => this.cache.delete(key), ttl);</div>
                     <div class="code-line var-usage">  }</div>
@@ -270,7 +362,7 @@
                     <div class="code-line var-usage">  async updateUserProfile(userId, changes) {</div>
                     <div class="code-line var-usage">    // 1. Update primary database immediately</div>
                     <div class="code-line var-usage">    await primaryDB.users.updateOne(</div>
-                    <div class="code-line var-usage">      { _id: userId }, </div>
+                    <div class="code-line var-usage">      { _id: userId },</div>
                     <div class="code-line var-usage">      { $set: changes }</div>
                     <div class="code-line var-usage">    );</div>
                     <div class="code-line"></div>
@@ -308,119 +400,131 @@
     <div class="demo-section" style="grid-column:1/-1;">
         <h2 class="demo-title">🔺 BASE Properties and CAP Theorem</h2>
         <div class="explanation">
-            The CAP theorem states that distributed systems can only guarantee two out of three properties: <strong>Consistency</strong>, <strong>Availability</strong>, and <strong>Partition Tolerance</strong>. BASE properties align with choosing AP (Availability + Partition Tolerance) over C (Consistency).
+            The CAP theorem states that distributed systems can only guarantee two out of three properties: <strong>Consistency</strong>, <strong>Availability</strong>, and <strong>Partition Tolerance</strong>. BASE properties prioritize AP (Availability + Partition Tolerance) over immediate Consistency.
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
             <div class="demo-card">
                 <h3>🔄 Consistency (C)</h3>
-                <p>All nodes see the same data simultaneously</p>
-                <div style="color: #e74c3c;">❌ Sacrificed in BASE for better availability</div>
+                <p>All nodes see the same data simultaneously.</p>
+                <div style="color: #e74c3c;">❌ Sacrificed in BASE for better availability.</div>
             </div>
             
             <div class="demo-card">
                 <h3>✅ Availability (A)</h3>
-                <p>System remains operational even during failures</p>
-                <div style="color: #27ae60;">✅ Prioritized in BASE systems</div>
+                <p>System remains operational during failures.</p>
+                <div style="color: #27ae60;">✅ Prioritized in BASE systems.</div>
             </div>
             
             <div class="demo-card">
                 <h3>🌐 Partition Tolerance (P)</h3>
-                <p>System continues despite network failures</p>
-                <div style="color: #27ae60;">✅ Essential for distributed NoSQL databases</div>
+                <p>System continues despite network failures.</p>
+                <div style="color: #27ae60;">✅ Essential for NoSQL databases.</div>
             </div>
         </div>
     </div>
->
 
     <!-- SEO Footer Content -->
     <div class="demo-section" style="grid-column:1/-1;">
         <h2 class="demo-title">📖 BASE Properties: Complete Guide</h2>
         <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px;">
             <h3>What are BASE Properties in NoSQL Databases?</h3>
-            <p>BASE properties are fundamental principles that guide the design and operation of modern distributed NoSQL databases. Unlike traditional ACID properties that prioritize consistency, BASE properties focus on availability and eventual consistency, making them ideal for large-scale distributed systems.</p>
+            <p>BASE properties guide the design of distributed NoSQL databases, prioritizing availability and partition tolerance over immediate consistency. Unlike ACID properties used in SQL databases, BASE is ideal for scalable, high-traffic applications.</p>
             
             <h3>When to Use BASE Properties?</h3>
             <ul>
-                <li><strong>High-traffic applications:</strong> Social media platforms, content delivery networks</li>
-                <li><strong>Global distribution:</strong> Applications serving users across multiple continents</li>
-                <li><strong>Real-time systems:</strong> Chat applications, gaming platforms, live streaming</li>
-                <li><strong>Big data processing:</strong> Analytics platforms, log processing systems</li>
+                <li><strong>High-traffic applications:</strong> Social media platforms, content delivery networks.</li>
+                <li><strong>Global distribution:</strong> Applications serving users across multiple continents.</li>
+                <li><strong>Real-time systems:</strong> Chat apps, gaming platforms, live streaming.</li>
+                <li><strong>Big data processing:</strong> Analytics platforms, log processing systems.</li>
             </ul>
             
             <h3>Popular NoSQL Databases Using BASE Properties</h3>
             <ul>
-                <li><strong>MongoDB:</strong> Document-based database with eventual consistency</li>
-                <li><strong>Cassandra:</strong> Column-family database designed for high availability</li>
-                <li><strong>DynamoDB:</strong> Amazon's managed NoSQL with configurable consistency</li>
-                <li><strong>Redis:</strong> In-memory data structure store with clustering</li>
+                <li><strong>MongoDB:</strong> Document-based database with eventual consistency.</li>
+                <li><strong>Cassandra:</strong> Column-family database for high availability.</li>
+                <li><strong>DynamoDB:</strong> Amazon's managed NoSQL with configurable consistency.</li>
+                <li><strong>Redis:</strong> In-memory store with clustering support.</li>
             </ul>
+            
+        
         </div>
     </div>
 </div>
 
 <script>
 // Demo Functions
-function showBasicallyAvailable(){
-    document.getElementById('baseResults').innerHTML = `
-        <div class="success-message">
-            <strong>✅ Basically Available - System Reliability</strong><br><br>
-            <strong>Core Principle:</strong> The system guarantees availability, responding to requests even during partial failures or high load conditions.<br><br>
-            <strong>Real-world Example:</strong><br>
-            • Netflix continues streaming even if some servers are down<br>
-            • Users might experience slight quality reduction, but service remains available<br>
-            • Fallback mechanisms ensure continuous operation<br><br>
-            <strong>Technical Implementation:</strong><br>
-            • Load balancers distribute traffic across healthy nodes<br>
-            • Circuit breakers prevent cascade failures<br>
-            • Graceful degradation maintains core functionality<br><br>
-            <strong>Trade-off:</strong> May serve slightly stale data to maintain availability
-            <div class="message-time">${new Date().toLocaleTimeString()}</div>
-        </div>
-    `;
+function showBasicallyAvailable() {
+    const resultsDiv = document.getElementById('baseResults');
+    if (resultsDiv) {
+        resultsDiv.innerHTML = `
+            <div class="success-message">
+                <strong>✅ Basically Available - System Reliability</strong><br><br>
+                <strong>Core Principle:</strong> Ensures system availability, responding even during partial failures or high load.<br><br>
+                <strong>Real-world Example:</strong><br>
+                • Netflix streams even if some servers fail.<br>
+                • Users may see reduced quality but service continues.<br>
+                • Fallback mechanisms ensure operation.<br><br>
+                <strong>Technical Implementation:</strong><br>
+                • Load balancers distribute traffic to healthy nodes.<br>
+                • Circuit breakers prevent cascade failures.<br>
+                • Graceful degradation maintains core functionality.<br><br>
+                <strong>Trade-off:</strong> May serve slightly stale data for availability.
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+    }
 }
 
-function showSoftState(){
-    document.getElementById('baseResults').innerHTML = `
-        <div class="success-message">
-            <strong>🔄 Soft State - Dynamic Data Evolution</strong><br><br>
-            <strong>Core Principle:</strong> Data state can change over time without explicit external updates, acknowledging the transitional nature of distributed data.<br><br>
-            <strong>Real-world Example:</strong><br>
-            • Social media "like" counts that fluctuate during high activity<br>
-            • Trending topics that change rankings based on time decay<br>
-            • Cache entries that expire and refresh automatically<br><br>
-            <strong>Technical Implementation:</strong><br>
-            • Time-to-live (TTL) mechanisms for automatic data expiration<br>
-            • Background processes that update metrics and scores<br>
-            • Probabilistic data structures (e.g., bloom filters)<br><br>
-            <strong>Benefits:</strong> Enables efficient handling of frequently changing data
-            <div class="message-time">${new Date().toLocaleTimeString()}</div>
-        </div>
-    `;
+function showSoftState() {
+    const resultsDiv = document.getElementById('baseResults');
+    if (resultsDiv) {
+        resultsDiv.innerHTML = `
+            <div class="success-message">
+                <strong>🔄 Soft State - Dynamic Data Evolution</strong><br><br>
+                <strong>Core Principle:</strong> Data can change over time without explicit updates, reflecting distributed system dynamics.<br><br>
+                <strong>Real-world Example:</strong><br>
+                • Social media "like" counts fluctuate during activity.<br>
+                • Trending topics decay over time.<br>
+                • Cache entries expire automatically.<br><br>
+                <strong>Technical Implementation:</strong><br>
+                • Time-to-live (TTL) for data expiration.<br>
+                • Background processes update metrics.<br>
+                • Probabilistic data structures (e.g., bloom filters).<br><br>
+                <strong>Benefits:</strong> Efficiently handles dynamic data.
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+    }
 }
 
-function showEventualConsistency(){
-    document.getElementById('baseResults').innerHTML = `
-        <div class="success-message">
-            <strong>⏰ Eventual Consistency - Convergent Data States</strong><br><br>
-            <strong>Core Principle:</strong> All replicas will eventually converge to the same consistent state, given sufficient time without new updates.<br><br>
-            <strong>Real-world Example:</strong><br>
-            • DNS updates propagating across global servers (24-48 hours)<br>
-            • Bank ATM balances synchronizing across locations<br>
-            • Social media posts appearing in all followers' feeds<br><br>
-            <strong>Technical Implementation:</strong><br>
-            • Asynchronous replication across nodes<br>
-            • Vector clocks for ordering distributed events<br>
-            • Conflict resolution algorithms (last-writer-wins, etc.)<br><br>
-            <strong>Guarantee:</strong> Consistency achieved through time, not immediate synchronization
-            <div class="message-time">${new Date().toLocaleTimeString()}</div>
-        </div>
-    `;
+function showEventualConsistency() {
+    const resultsDiv = document.getElementById('baseResults');
+    if (resultsDiv) {
+        resultsDiv.innerHTML = `
+            <div class="success-message">
+                <strong>⏰ Eventual Consistency - Convergent Data States</strong><br><br>
+                <strong>Core Principle:</strong> Replicas converge to a consistent state over time, given no new updates.<br><br>
+                <strong>Real-world Example:</strong><br>
+                • DNS updates propagate globally (24-48 hours).<br>
+                • Bank ATM balances sync across locations.<br>
+                • Social media posts reach all followers’ feeds.<br><br>
+                <strong>Technical Implementation:</strong><br>
+                • Asynchronous replication across nodes.<br>
+                • Vector clocks for event ordering.<br>
+                • Conflict resolution (e.g., last-writer-wins).<br><br>
+                <strong>Guarantee:</strong> Consistency achieved over time.
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+    }
 }
 
-function clearDemo(){
-    document.getElementById('baseResults').innerHTML = 
-        '<div class="event-message one-message">Click above buttons to explore BASE properties!</div>';
+function clearDemo() {
+    const resultsDiv = document.getElementById('baseResults');
+    if (resultsDiv) {
+        resultsDiv.innerHTML = '<div class="event-message one-message">Click above buttons to explore BASE properties!</div>';
+    }
 }
 
 // Simulation Functions
@@ -432,62 +536,66 @@ let nodeStates = {
 let simulationStep = 0;
 
 function simulateUserSignup() {
-    simulationStep++;
     const logDiv = document.getElementById('simulationLog');
-    
-    // New user signs up on Node 1 (primary)
+    if (!logDiv) return;
+
+    simulationStep++;
     nodeStates.node1.userCount++;
-    document.getElementById('node1Data').textContent = `User Count: ${nodeStates.node1.userCount}`;
+    const node1Data = document.getElementById('node1Data');
+    if (node1Data) node1Data.textContent = `User Count: ${nodeStates.node1.userCount}`;
     
     logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] Step ${simulationStep}: New user registered on Node 1</div>`;
     
-    // Simulate eventual consistency - updates propagate over time
     setTimeout(() => {
-        if(nodeStates.node2.online) {
+        if (nodeStates.node2.online) {
             nodeStates.node2.userCount++;
-            document.getElementById('node2Data').textContent = `User Count: ${nodeStates.node2.userCount}`;
+            const node2Data = document.getElementById('node2Data');
+            if (node2Data) node2Data.textContent = `User Count: ${nodeStates.node2.userCount}`;
             logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] → Node 2 synchronized (Europe)</div>`;
         }
     }, 1000);
     
     setTimeout(() => {
-        if(nodeStates.node3.online) {
+        if (nodeStates.node3.online) {
             nodeStates.node3.userCount++;
-            document.getElementById('node3Data').textContent = `User Count: ${nodeStates.node3.userCount}`;
+            const node3Data = document.getElementById('node3Data');
+            if (node3Data) node3Data.textContent = `User Count: ${nodeStates.node3.userCount}`;
             logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] → Node 3 synchronized (Asia)</div>`;
             logDiv.innerHTML += `<div style="color: #27ae60;"><strong>✅ Eventual consistency achieved!</strong></div><br>`;
         }
+        logDiv.scrollTop = logDiv.scrollHeight;
     }, 2000);
-    
-    logDiv.scrollTop = logDiv.scrollHeight;
 }
 
 function simulateNodeFailure() {
     const logDiv = document.getElementById('simulationLog');
-    
-    // Simulate Node 2 failure
+    if (!logDiv) return;
+
     nodeStates.node2.online = false;
-    document.getElementById('node2Status').textContent = 'Status: OFFLINE';
-    document.getElementById('node2Status').style.color = '#e74c3c';
+    const node2Status = document.getElementById('node2Status');
+    if (node2Status) {
+        node2Status.textContent = 'Status: OFFLINE';
+        node2Status.style.color = '#e74c3c';
+    }
     
     logDiv.innerHTML += `<div style="color: #e74c3c;">[${new Date().toLocaleTimeString()}] ⚠️ Node 2 (Europe) has failed!</div>`;
     logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ✅ System remains basically available (Nodes 1 & 3 serving users)</div><br>`;
     
-    // Auto-recovery after 5 seconds
     setTimeout(() => {
         nodeStates.node2.online = true;
-        document.getElementById('node2Status').textContent = 'Status: RECOVERED';
-        document.getElementById('node2Status').style.color = '#27ae60';
+        if (node2Status) {
+            node2Status.textContent = 'Status: RECOVERED';
+            node2Status.style.color = '#27ae60';
+        }
         
         logDiv.innerHTML += `<div style="color: #27ae60;">[${new Date().toLocaleTimeString()}] 🔄 Node 2 recovered and syncing data...</div>`;
         
-        // Sync with current state
         nodeStates.node2.userCount = nodeStates.node1.userCount;
-        document.getElementById('node2Data').textContent = `User Count: ${nodeStates.node2.userCount}`;
+        const node2Data = document.getElementById('node2Data');
+        if (node2Data) node2Data.textContent = `User Count: ${nodeStates.node2.userCount}`;
         logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ✅ Node 2 data synchronized</div><br>`;
+        logDiv.scrollTop = logDiv.scrollHeight;
     }, 5000);
-    
-    logDiv.scrollTop = logDiv.scrollHeight;
 }
 
 function resetSimulation() {
@@ -498,27 +606,37 @@ function resetSimulation() {
     };
     simulationStep = 0;
     
-    document.getElementById('node1Status').textContent = 'Status: Ready';
-    document.getElementById('node1Status').style.color = '';
-    document.getElementById('node1Data').textContent = 'User Count: 1000';
+    const nodes = [
+        { status: 'node1Status', data: 'node1Data' },
+        { status: 'node2Status', data: 'node2Data' },
+        { status: 'node3Status', data: 'node3Data' }
+    ];
     
-    document.getElementById('node2Status').textContent = 'Status: Ready';
-    document.getElementById('node2Status').style.color = '';
-    document.getElementById('node2Data').textContent = 'User Count: 1000';
+    nodes.forEach(node => {
+        const statusEl = document.getElementById(node.status);
+        const dataEl = document.getElementById(node.data);
+        if (statusEl) {
+            statusEl.textContent = 'Status: Ready';
+            statusEl.style.color = '';
+        }
+        if (dataEl) dataEl.textContent = 'User Count: 1000';
+    });
     
-    document.getElementById('node3Status').textContent = 'Status: Ready';
-    document.getElementById('node3Status').style.color = '';
-    document.getElementById('node3Data').textContent = 'User Count: 1000';
-    
-    document.getElementById('simulationLog').innerHTML = 'Simulation log will appear here...';
+    const logDiv = document.getElementById('simulationLog');
+    if (logDiv) logDiv.innerHTML = 'Simulation log will appear here...';
 }
 
-// Implementation tabs
+// Implementation Tabs
 function showImplementation(impl) {
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(impl).classList.add('active');
-    event.target.classList.add('active');
+    const contents = document.querySelectorAll('.tab-content');
+    const tabs = document.querySelectorAll('.tab');
+    if (contents && tabs && event) {
+        contents.forEach(c => c.classList.remove('active'));
+        tabs.forEach(t => t.classList.remove('active'));
+        const content = document.getElementById(impl);
+        if (content) content.classList.add('active');
+        event.target.classList.add('active');
+    }
 }
 
 // Initialize

@@ -220,6 +220,24 @@
         <priority>0.80</priority>
     </url>
     <url>
+        <loc>https://fullstackgada.netlify.app/callstack/callstack/</loc>
+        <lastmod>2025-09-01T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/cors/cors/</loc>
+        <lastmod>2025-09-02T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/csr-ssr/csr-ssr/</loc>
+        <lastmod>2025-09-03T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
         <loc>https://fullstackgada.netlify.app/graphql/graphql/</loc>
         <lastmod>2025-08-10T06:37:00+00:00</lastmod>
         <changefreq>weekly</changefreq>
@@ -228,6 +246,48 @@
     <url>
         <loc>https://fullstackgada.netlify.app/throttling/throttling/</loc>
         <lastmod>2025-08-10T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/dependency-injection/dependency-injection/</loc>
+        <lastmod>2025-09-04T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/event-loop/event-loop/</loc>
+        <lastmod>2025-09-05T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/multithreading-vs-multiprocessing/multithreading-vs-multiprocessingp/</loc>
+        <lastmod>2025-09-06T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/base-property/base-property/</loc>
+        <lastmod>2025-09-07T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/cap-theorem/cap-theorem/</loc>
+        <lastmod>2025-09-08T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/deadlock/deadlock/</loc>
+        <lastmod>2025-09-09T06:37:00+00:00</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.80</priority>
+    </url>
+    <url>
+        <loc>https://fullstackgada.netlify.app/phantomread/phantomread/</loc>
+        <lastmod>2025-09-10T06:37:00+00:00</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.80</priority>
     </url>

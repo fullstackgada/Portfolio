@@ -1,134 +1,214 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Event Loop ka Funda - Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-  <link rel="stylesheet" href="/interactive-demo.css"/>
-  <style>
-    /* Minimal extras to complement your base CSS */
-    .lane { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: start; margin: 8px 0; }
-    .lane .label { font-weight: 700; color: #334155; }
-    .lane .box { min-height: 70px; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px; background: #fff; }
-    .pill { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; margin: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .pill.sync { background: #eafaf1; color:#166534; border-color:#bbf7d0; }
-    .pill.async { background: #fff7ed; color:#9a3412; border-color:#fed7aa; }
-    .pill.micro { background: #ecfeff; color:#155e75; border-color:#a5f3fc; }
-    .arrow { font-size: 15px; color:#64748b; margin: 4px 0 8px; }
-    .step { font-size: 15px; color:#475569; }
-    .highlight { outline: 2px dashed #8b5cf6; outline-offset: 3px; border-radius: 8px; }
-    .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .legend { display: flex; gap: 8px; flex-wrap: wrap; }
-    .legend .pill { margin: 0; }
-    .small { font-size: 15px; color: #475569; }
-    .muted { color:#64748b; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-    .btn-inline { margin: 2px 4px 2px 0; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Loop Interactive Demo | FullstackGada</title>
+  <meta name="description" content="Explore the JavaScript Event Loop with an interactive demo! Learn how synchronous, asynchronous, and microtasks work with real-world examples.">
+  <meta name="author" content="FullstackGada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/event-loop/event-loop">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Event Loop Interactive Demo | FullstackGada">
+  <meta property="og:description" content="Discover the JavaScript Event Loop with an interactive demo! Learn synchronous, asynchronous, and microtask execution.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/event-loop/event-loop">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/event-loop/event-loop.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Event Loop Interactive Demo | FullstackGada">
+  <meta name="twitter:description" content="Learn the JavaScript Event Loop with an interactive demo, covering synchronous, asynchronous, and microtask execution.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/event-loop/event-loop.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Event Loop Interactive Demo",
+    "description": "Explore the JavaScript Event Loop with an interactive demo, covering synchronous, asynchronous, and microtask execution with real-world examples.",
+    "author": {
+      "@type": "Person",
+      "name": "FullstackGada"
+    },
+    "url": "https://fullstackgada.netlify.app/event-loop/event-loop",
+    "datePublished": "2025-09-23",
+    "dateModified": "2025-09-23",
+    "publisher": {
+      "@type": "Organization",
+      "name": "FullstackGada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the JavaScript Event Loop?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The JavaScript Event Loop is a mechanism that handles asynchronous callbacks, allowing non-blocking execution in a single-threaded environment. It processes tasks from the call stack and task queues in order."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are microtasks and macrotasks?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Microtasks include operations like Promises, while macrotasks include events like setTimeout, setInterval, and I/O operations. The Event Loop prioritizes microtasks over macrotasks after each tick of the call stack."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is understanding the Event Loop important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Understanding the Event Loop is crucial for writing efficient JavaScript code, debugging asynchronous behavior, and optimizing performance in web applications."
+        }
+      }
+    ]
+  }
+  </script>
+    <style>
+        /* Minimal extras to complement your base CSS */
+        .lane { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: start; margin: 8px 0; }
+        .lane .label { font-weight: 700; color: #334155; }
+        .lane .box { min-height: 70px; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px; background: #fff; }
+        .pill { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; margin: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .pill.sync { background: #eafaf1; color:#166534; border-color:#bbf7d0; }
+        .pill.async { background: #fff7ed; color:#9a3412; border-color:#fed7aa; }
+        .pill.micro { background: #ecfeff; color:#155e75; border-color:#a5f3fc; }
+        .arrow { font-size: 15px; color:#64748b; margin: 4px 0 8px; }
+        .step { font-size: 15px; color:#475569; }
+        .highlight { outline: 2px dashed #8b5cf6; outline-offset: 3px; border-radius: 8px; }
+        .flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .legend { display: flex; gap: 8px; flex-wrap: wrap; }
+        .legend .pill { margin: 0; }
+        .small { font-size: 15px; color: #475569; }
+        .muted { color:#64748b; }
+        .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .btn-inline { margin: 2px 4px 2px 0; }
+    </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <!-- Header -->
     <div class="header-interactive">
-      <h1>Event Loop ka Funda </h1>
-      <p>Understand how Event Loop works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
+        <h1>JavaScript Event Loop Interactive Demo</h1>
+        <p>Understand how the Event Loop works with FullstackGada! 🚀</p>
+        <div class="explore-diagrams-btn-wrapper">
             <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+                <img src="/image/plus-circle.svg" alt="Explore more diagrams icon"> More Diagrams
             </a>
         </div>
-       <div class="follow-btn-wrapper">
+        <div class="follow-btn-wrapper">
             <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
+                <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+            </a>
         </div>
     </div>
+
     <!-- Code Example -->
     <div class="demo-section">
-      <h2 class="demo-title">🧪 Example Code</h2>
-      <div class="code-block">
-        <div class="code-line var-usage mono">console.log("A");</div>
-        <div class="code-line var-usage mono">setTimeout(() =&gt; { console.log("B"); }, 0);</div>
-        <div class="code-line var-usage mono">console.log("C");</div>
-      </div>
-      <div class="small muted">Expected logs order: A, C, then B</div>
-      <div class="demo-controls" style="margin-top: 8px;">
-        <button class="demo-btn first-btn" id="btnRunACB">▶️ Run A/C/B Simulation</button>
-        <button class="demo-btn" id="btnMicro">🧵 Add Microtask (Promise)</button>
-        <button class="demo-btn clear-btn" id="btnReset">🔄 Reset</button>
-      </div>
+        <h2 class="demo-title">🧪 Example Code</h2>
+        <div class="code-block">
+            <div class="code-line var-usage mono">console.log("A");</div>
+            <div class="code-line var-usage mono">setTimeout(() => { console.log("B"); }, 0);</div>
+            <div class="code-line var-usage mono">console.log("C");</div>
+        </div>
+        <div class="small muted">Expected logs order: A, C, then B</div>
+        <div class="demo-controls" style="margin-top: 8px;">
+            <button class="demo-btn first-btn" id="btnRunACB">▶️ Run A/C/B Simulation</button>
+            <button class="demo-btn" id="btnMicro">🧵 Add Microtask (Promise)</button>
+            <button class="demo-btn clear-btn" id="btnReset">🔄 Reset</button>
+        </div>
     </div>
 
     <!-- Interactive Diagram -->
     <div class="demo-section" style="grid-column:1/-1;">
-      <h2 class="demo-title">🔁 Event Loop Diagram</h2>
-
-      <div class="legend" style="margin-bottom: 10px;">
-        <span class="pill sync">Synchronous</span>
-        <span class="pill async">setTimeout Callback</span>
-        <span class="pill micro">Microtask (Promise.then)</span>
-      </div>
-
-      <div class="flow-grid">
-        <div class="demo-card">
-          <h3>🔷 Call Stack</h3>
-          <div class="box" id="callStack"></div>
-          <div class="arrow">LIFO (Last-In, First-Out)</div>
+        <h2 class="demo-title">🔁 Event Loop Diagram</h2>
+        <div class="legend" style="margin-bottom: 10px;">
+            <span class="pill sync">Synchronous</span>
+            <span class="pill async">setTimeout Callback</span>
+            <span class="pill micro">Microtask (Promise.then)</span>
         </div>
-        <div class="demo-card">
-          <h3>🧩 Web APIs</h3>
-          <div class="box" id="webAPIs"></div>
-          <div class="arrow">Timers, fetch, DOM events handled outside main thread</div>
+        <div class="flow-grid">
+            <div class="demo-card">
+                <h3>🔷 Call Stack</h3>
+                <div class="box" id="callStack"></div>
+                <div class="arrow">LIFO (Last-In, First-Out)</div>
+            </div>
+            <div class="demo-card">
+                <h3>🧩 Web APIs</h3>
+                <div class="box" id="webAPIs"></div>
+                <div class="arrow">Timers, fetch, DOM events handled outside main thread</div>
+            </div>
         </div>
-      </div>
-
-      <div class="flow-grid" style="margin-top: 12px;">
-        <div class="demo-card">
-          <h3>📥 Callback Queue (Macrotask Queue)</h3>
-          <div class="box" id="callbackQueue"></div>
-          <div class="arrow">Event Loop moves from here when Stack is empty</div>
+        <div class="flow-grid" style="margin-top: 12px;">
+            <div class="demo-card">
+                <h3>📥 Callback Queue (Macrotask Queue)</h3>
+                <div class="box" id="callbackQueue"></div>
+                <div class="arrow">Event Loop moves from here when Stack is empty</div>
+            </div>
+            <div class="demo-card">
+                <h3>🧵 Microtask Queue</h3>
+                <div class="box" id="microtaskQueue"></div>
+                <div class="arrow">Processed fully before macrotasks each tick</div>
+            </div>
         </div>
-        <div class="demo-card">
-          <h3>🧵 Microtask Queue</h3>
-          <div class="box" id="microtaskQueue"></div>
-          <div class="arrow">Processed fully before macrotasks each tick</div>
+        <div class="how-it-works" style="margin-top: 12px;">
+            <h4>🎛️ How the Event Loop Works</h4>
+            <div class="step">1. Synchronous code is pushed/popped from the Call Stack.</div>
+            <div class="step">2. Timers go to Web APIs; when ready, they move to the Callback Queue.</div>
+            <div class="step">3. Promise.then tasks go to the Microtask Queue (processed before macrotasks).</div>
+            <div class="step">4. Tick: When the Stack is empty, process all microtasks, then one macrotask.</div>
+            <div class="demo-controls" style="margin-top: 8px;">
+                <button class="demo-btn first-btn btn-inline" id="btnTick">🔂 Event Loop Tick</button>
+                <button class="demo-btn btn-inline" id="btnAuto">⏱️ Auto Run</button>
+                <button class="demo-btn clear-btn btn-inline" id="btnClearLogs">🧹 Clear Logs</button>
+            </div>
+            <div class="server-simulation">
+                <h4>📜 Execution Log</h4>
+                <div class="server-log" id="execLog">Ready…</div>
+            </div>
         </div>
-      </div>
-
-      <div class="how-it-works" style="margin-top: 12px;">
-        <h4>🎛️ Event Loop Controls</h4>
-        <div class="step">1. “Run” se synchronous lines stack par push/pop hoti hain.</div>
-        <div class="step">2. Timers Web APIs me chale jaate hain; ready hone par callback queue me aate hain.</div>
-        <div class="step">3. Promise.then microtask queue me aata hai (microtasks pehle process hote hain).</div>
-        <div class="step">4. Tick: Stack khaali ho to pehle microtasks, phir macrotask (callback queue) execute.</div>
-        <div class="demo-controls" style="margin-top: 8px;">
-          <button class="demo-btn first-btn btn-inline" id="btnTick">🔂 Event Loop Tick</button>
-          <button class="demo-btn btn-inline" id="btnAuto">⏱️ Auto Run</button>
-          <button class="demo-btn clear-btn btn-inline" id="btnClearLogs">🧹 Clear Logs</button>
-        </div>
-        <div class="server-simulation">
-          <h4>📜 Execution Log</h4>
-          <div class="server-log" id="execLog">Ready…</div>
-        </div>
-      </div>
     </div>
 
     <!-- Extra Scenarios -->
     <div class="demo-section" style="grid-column:1/-1;">
-      <h2 class="demo-title">🧠 Try More Scenarios</h2>
-      <div class="demo-controls">
-        <button class="demo-btn" id="btnTimeout10">⏲️ setTimeout 10ms</button>
-        <button class="demo-btn" id="btnNested">🪆 Nested timeouts</button>
-        <button class="demo-btn" id="btnBusyLoop">🛠️ Busy sync work (blocks)</button>
-      </div>
-      <div class="small muted" style="margin-top: 6px;">
-        Tip: Busy synchronous loops block the stack, delaying both microtasks and callbacks.
-      </div>
+        <h2 class="demo-title">🧠 Try More Scenarios</h2>
+        <div class="demo-controls">
+            <button class="demo-btn" id="btnTimeout10">⏲️ setTimeout 10ms</button>
+            <button class="demo-btn" id="btnNested">🪆 Nested timeouts</button>
+            <button class="demo-btn" id="btnBusyLoop">🛠️ Busy sync work (blocks)</button>
+        </div>
+        <div class="small muted" style="margin-top: 6px;">
+            Tip: Busy synchronous loops block the stack, delaying both microtasks and callbacks.
+        </div>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     // Simple in-memory model
     const callStack = [];
     const webAPIs = [];
@@ -144,20 +224,20 @@
     const log = (msg) => elLog.innerHTML += (elLog.innerHTML.trim() ? "<br>" : "") + msg;
 
     function render() {
-      elStack.innerHTML = callStack.slice().reverse().map(x => pill(x.label, x.cls)).join('');
-      elWeb.innerHTML = webAPIs.map(x => pill(x.label, x.cls)).join('');
-      elCBQ.innerHTML = callbackQueue.map(x => pill(x.label, x.cls)).join('');
-      elMicro.innerHTML = microtaskQueue.map(x => pill(x.label, x.cls)).join('');
+        elStack.innerHTML = callStack.slice().reverse().map(x => pill(x.label, x.cls)).join('');
+        elWeb.innerHTML = webAPIs.map(x => pill(x.label, x.cls)).join('');
+        elCBQ.innerHTML = callbackQueue.map(x => pill(x.label, x.cls)).join('');
+        elMicro.innerHTML = microtaskQueue.map(x => pill(x.label, x.cls)).join('');
     }
     function pill(text, cls='') {
-      return `<span class="pill ${cls}">${escapeHtml(text)}</span>`;
+        return `<span class="pill ${cls}">${escapeHtml(text)}</span>`;
     }
     function escapeHtml(s){ return s.replace(/[&<>"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
 
     function resetAll() {
-      callStack.length = 0; webAPIs.length = 0; callbackQueue.length = 0; microtaskQueue.length = 0;
-      render();
-      elLog.innerHTML = 'Ready…';
+        callStack.length = 0; webAPIs.length = 0; callbackQueue.length = 0; microtaskQueue.length = 0;
+        render();
+        elLog.innerHTML = 'Ready…';
     }
 
     // Simulation helpers
@@ -165,116 +245,116 @@
     function popStack(){ const x = callStack.pop(); render(); return x; }
 
     function scheduleTimeout(label, delay=0) {
-      // put into Web APIs
-      webAPIs.push({label: `${label} (timer ${delay}ms)`, cls:'async', delay, t: performance.now()});
-      render();
-      // After delay, move to Callback Queue
-      setTimeout(()=>{
-        const idx = webAPIs.findIndex(x => x.label.startsWith(label));
-        if(idx>=0){
-          webAPIs.splice(idx,1);
-          callbackQueue.push({label, cls:'async'});
-          render();
-          log(`⏲️ Timer ready → Callback Queue: ${label}`);
-        }
-      }, delay);
+        // put into Web APIs
+        webAPIs.push({label: `${label} (timer ${delay}ms)`, cls:'async', delay, t: performance.now()});
+        render();
+        // After delay, move to Callback Queue
+        setTimeout(()=>{
+            const idx = webAPIs.findIndex(x => x.label.startsWith(label));
+            if(idx>=0){
+                webAPIs.splice(idx,1);
+                callbackQueue.push({label, cls:'async'});
+                render();
+                log(`⏲️ Timer ready → Callback Queue: ${label}`);
+            }
+        }, delay);
     }
 
     function scheduleMicrotask(label){
-      microtaskQueue.push({label, cls:'micro'});
-      render();
-      log(`🧵 Microtask queued: ${label}`);
+        microtaskQueue.push({label, cls:'micro'});
+        render();
+        log(`🧵 Microtask queued: ${label}`);
     }
 
     // Event Loop Tick: process microtasks fully, then one macrotask
     function eventLoopTick() {
-      log('🔂 Tick: Checking queues…');
+        log('🔂 Tick: Checking queues…');
 
-      if (callStack.length) {
-        log('⚠️ Stack not empty → cannot run tasks.');
-        return;
-      }
-      // Run all microtasks first
-      while (microtaskQueue.length) {
-        const task = microtaskQueue.shift();
-        render();
-        pushStack(task.label, task.cls);
-        log(`🧵 Running microtask: ${task.label}`);
-        popStack();
-      }
-      // Then macrotask (one callback)
-      if (callbackQueue.length) {
-        const mac = callbackQueue.shift();
-        render();
-        pushStack(mac.label, mac.cls);
-        log(`📥 Running callback: ${mac.label}`);
-        popStack();
-      } else {
-        log('ℹ️ No macrotask; idle.');
-      }
+        if (callStack.length) {
+            log('⚠️ Stack not empty → cannot run tasks.');
+            return;
+        }
+        // Run all microtasks first
+        while (microtaskQueue.length) {
+            const task = microtaskQueue.shift();
+            render();
+            pushStack(task.label, task.cls);
+            log(`🧵 Running microtask: ${task.label}`);
+            popStack();
+        }
+        // Then macrotask (one callback)
+        if (callbackQueue.length) {
+            const mac = callbackQueue.shift();
+            render();
+            pushStack(mac.label, mac.cls);
+            log(`📥 Running callback: ${mac.label}`);
+            popStack();
+        } else {
+            log('ℹ️ No macrotask; idle.');
+        }
     }
 
     // Scenario: A / setTimeout 0 / C
     function runACB() {
-      resetAll();
-      // console.log("A")
-      pushStack('console.log("A")');
-      log('A');
-      popStack();
+        resetAll();
+        // console.log("A")
+        pushStack('console.log("A")');
+        log('A');
+        popStack();
 
-      // setTimeout(..., 0)
-      pushStack('setTimeout(() => console.log("B"), 0)');
-      scheduleTimeout('() => console.log("B")', 0);
-      popStack();
+        // setTimeout(..., 0)
+        pushStack('setTimeout(() => console.log("B"), 0)');
+        scheduleTimeout('() => console.log("B")', 0);
+        popStack();
 
-      // console.log("C")
-      pushStack('console.log("C")');
-      log('C');
-      popStack();
+        // console.log("C")
+        pushStack('console.log("C")');
+        log('C');
+        popStack();
 
-      // Now user can tick: microtasks first (none), then macrotask B
-      log('➡️ Now press "Event Loop Tick" to run queued tasks.');
+        // Now user can tick: microtasks first (none), then macrotask B
+        log('➡️ Now press "Event Loop Tick" to run queued tasks.');
     }
 
     // Microtask demo: Promise.then
     function addMicrotask() {
-      scheduleMicrotask('Promise.then(() => log("micro"))');
+        scheduleMicrotask('Promise.then(() => log("micro"))');
     }
 
     // Extra scenarios
     function runTimeout10() {
-      scheduleTimeout('() => console.log("timeout 10ms")', 10);
+        scheduleTimeout('() => console.log("timeout 10ms")', 10);
     }
     function runNestedTimeouts(){
-      scheduleTimeout('() => { t1; setTimeout t2 }', 0);
-      // When first callback runs (user tick), it can schedule another
-      // We simulate the second scheduling by also enqueuing a timer after a short real delay:
-      setTimeout(()=> scheduleTimeout('() => console.log("nested t2")', 0), 5);
-      log('Nested timer scheduled.');
+        scheduleTimeout('() => { t1; setTimeout t2 }', 0);
+        // When first callback runs (user tick), it can schedule another
+        // We simulate the second scheduling by also enqueuing a timer after a short real delay:
+        setTimeout(()=> scheduleTimeout('() => console.log("nested t2")', 0), 5);
+        log('Nested timer scheduled.');
     }
     function runBusyLoop(){
-      pushStack('busySyncWork()');
-      log('⛏️ Doing heavy sync work (blocking)…');
-      // simulate busy work without freezing UI too long
-      const start = performance.now();
-      while (performance.now() - start < 300) {} // ~300ms block
-      popStack();
-      log('✅ Busy work done. Now tick to run tasks.');
-      render();
+        pushStack('busySyncWork()');
+        log('⛏️ Doing heavy sync work (blocking)…');
+        // simulate busy work without freezing UI too long
+        const start = performance.now();
+        while (performance.now() - start < 300) {} // ~300ms block
+        popStack();
+        log('✅ Busy work done. Now tick to run tasks.');
+        render();
     }
 
     // Auto runner
     let auto = null;
     function toggleAuto() {
-      if (auto) {
-        clearInterval(auto); auto = null;
-        document.getElementById('btnAuto').textContent = '⏱️ Auto Run';
-        log('⏹️ Auto stopped.');
-      } else {
-        auto = setInterval(eventLoopTick, 400);
-        document.getElementById('btnAuto').textContent = '⏳ Auto Running…';
-        log('▶️ Auto started (tick every ~400ms).');
-      }
+        if (auto) {
+            clearInterval(auto); auto = null;
+            document.getElementById('btnAuto').textContent = '⏱️ Auto Run';
+            log('⏹️ Auto stopped.');
+        } else {
+            auto = setInterval(eventLoopTick, 400);
+            document.getElementById('btnAuto').textContent = '⏳ Auto Running…';
+            log('▶️ Auto started (tick every ~400ms).');
+        }
     }
 
     // Bind UI
@@ -290,6 +370,6 @@
 
     // Initial render
     resetAll();
-  </script>
+</script>
 </body>
 </html>

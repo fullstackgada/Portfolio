@@ -1,112 +1,196 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database Normalization - Fullstackgada Interactive Demo </title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Normalization Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore Database Normalization with an interactive demo! Learn about normal forms (1NF, 2NF, 3NF), reduce data redundancy, and see real-world examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/normalization">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Database Normalization Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover Database Normalization with an interactive demo! Learn 1NF, 2NF, 3NF, reduce data redundancy, and explore real-world examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/normalization">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/normalization.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Database Normalization Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn Database Normalization with an interactive demo, covering 1NF, 2NF, 3NF, and real-world examples.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/normalization.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Database Normalization Interactive Demo",
+    "description": "Explore Database Normalization with an interactive demo, covering normal forms (1NF, 2NF, 3NF), data redundancy reduction, and real-world examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/normalization",
+    "datePublished": "2025-09-17",
+    "dateModified": "2025-09-17",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Database Normalization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Database Normalization is the process of organizing data to minimize redundancy and improve data integrity by dividing larger tables into smaller, related tables."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is Database Normalization important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Normalization is important because it reduces data duplication, improves consistency, ensures efficient queries, and enhances overall database design."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the different normal forms in Database Normalization?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The main normal forms are 1NF (eliminates repeating groups), 2NF (removes partial dependencies), and 3NF (removes transitive dependencies). Higher forms like BCNF also exist for stricter design rules."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
         <!-- Header Section -->
         <div class="header-interactive" style="position:relative;">
-        <h1>Database Normalization ka Funda</h1>
-        <p>Understand how Database Normalization works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
+            <h1>Database Normalization Interactive Demo</h1>
+            <p>Master Database Normalization with Fullstackgada’s Fun Approach!</p>
+            <div class="explore-diagrams-btn-wrapper">
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="Explore more diagrams icon"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
-    </div>
 
         <!-- Demo Grid -->
         <div class="demo-grid">
             <!-- Normalization Problem Demo -->
             <div class="demo-section">
-                <h2 class="demo-title">🔄 Data Redundancy ki Problem</h2>
+                <h2 class="demo-title">🔄 Data Redundancy Problem</h2>
                 
                 <div class="explanation">
-                    <strong>Bhide ki Pareshani:</strong> Ek hi customer ka data baar-baar store ho raha hai. Update karne mein dikkat!
+                    <strong>The Challenge:</strong> Storing the same customer data multiple times causes update issues!
                 </div>
 
                 <!-- Problem Demonstration -->
                 <div class="demo-controls">
-                    <button class="demo-btn first-btn" onclick="showProblem()">
-                        ❌ Data Redundancy Problem Dikhao
+                    <button class="demo-btn first-btn" onclick="showProblem()" role="button" aria-label="Show Data Redundancy Problem">
+                        ❌ Show Data Redundancy Problem
                     </button>
-                    <button class="demo-btn" onclick="showSolution()">
-                        ✅ Normalized Solution Dikhao
+                    <button class="demo-btn" onclick="showSolution()" role="button" aria-label="Show Normalized Solution">
+                        ✅ Show Normalized Solution
                     </button>
-                    <button class="demo-btn clear-btn" onclick="resetDemo()">
-                        🔄 Demo Reset Karo
+                    <button class="demo-btn clear-btn" onclick="resetDemo()" role="button" aria-label="Reset Demo">
+                        🔄 Reset Demo
                     </button>
                 </div>
 
                 <!-- Table Display Area -->
                 <div class="demo-area" id="tableDisplayArea">
                     <div class="event-message one-message">
-                        Upar ke buttons click karo aur dekho redundant aur normalized data ka fark!
+                        Click the buttons above to see the difference between redundant and normalized data!
                     </div>
                 </div>
 
                 <!-- Benefits Display -->
                 <div class="how-it-works" id="benefitsDisplay" style="display: none;">
-                    <h4>🎯 Normalization ke Fayde</h4>
+                    <h4>🎯 Benefits of Normalization</h4>
                     <div class="step">
                         <div class="step-number">1</div>
-                        <div>Data duplication kam ho jata hai</div>
+                        <div>Reduces data duplication</div>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <div>Storage space bachta hai</div>
+                        <div>Saves storage space</div>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div>Data consistency bani rehti hai</div>
+                        <div>Ensures data consistency</div>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
-                        <div>Update anomalies se bachaav</div>
+                        <div>Prevents update anomalies</div>
                     </div>
                 </div>
             </div>
 
             <!-- Normal Forms Explorer -->
             <div class="demo-section">
-                <h2 class="demo-title">📊 Normal Forms ka Explorer</h2>
+                <h2 class="demo-title">📊 Normal Forms Explorer</h2>
                 
                 <div class="explanation one-explanation">
-                    <strong>Jethalal ka Gyaan:</strong> Alag-alag Normal Forms se data ko step-by-step clean karte hain!
+                    <strong>Pro Tip:</strong> Learn how normal forms clean up data step-by-step!
                 </div>
 
                 <!-- Normal Form Buttons -->
                 <div class="demo-controls">
-                    <button class="demo-btn first-btn" onclick="showNormalForm('unnormalized')">
+                    <button class="demo-btn first-btn" onclick="showNormalForm('unnormalized')" role="button" aria-label="Show Unnormalized Data">
                         🗂️ Unnormalized
                     </button>
-                    <button class="demo-btn" onclick="showNormalForm('1nf')">
+                    <button class="demo-btn" onclick="showNormalForm('1nf')" role="button" aria-label="Show First Normal Form">
                         1️⃣ First NF
                     </button>
-                    <button class="demo-btn" onclick="showNormalForm('2nf')">
+                    <button class="demo-btn" onclick="showNormalForm('2nf')" role="button" aria-label="Show Second Normal Form">
                         2️⃣ Second NF
                     </button>
-                    <button class="demo-btn" onclick="showNormalForm('3nf')">
+                    <button class="demo-btn" onclick="showNormalForm('3nf')" role="button" aria-label="Show Third Normal Form">
                         3️⃣ Third NF
                     </button>
                 </div>
 
                 <!-- Normal Form Explanation -->
                 <div class="saree-analogy" id="normalFormExplanation">
-                    <h4>🏠 Gokuldham Society ka Example</h4>
+                    <h4>🏠 Shopping Example</h4>
                     <div class="saree-step">
                         <div class="saree-emoji">🤔</div>
-                        <div>Koi Normal Form select karo aur Jethalal ka explanation dekho!</div>
+                        <div>Select a Normal Form to see the explanation!</div>
                     </div>
                 </div>
             </div>
@@ -114,18 +198,18 @@
 
         <!-- Interactive Normal Forms Demonstration -->
         <div class="demo-section" style="grid-column: 1 / -1;">
-            <h2 class="demo-title">🎭 Step-by-Step Normalization ka Process</h2>
+            <h2 class="demo-title">🎭 Step-by-Step Normalization Process</h2>
             
             <div class="tabs">
-                <button class="tab active" onclick="showTab('unnorm-tab')">Unnormalized Table</button>
-                <button class="tab" onclick="showTab('1nf-tab')">1NF Process</button>
-                <button class="tab" onclick="showTab('2nf-tab')">2NF Process</button>
-                <button class="tab" onclick="showTab('3nf-tab')">3NF Process</button>
+                <button class="tab active" onclick="showTab('unnorm-tab')" role="button" aria-label="Show Unnormalized Table">Unnormalized Table</button>
+                <button class="tab" onclick="showTab('1nf-tab')" role="button" aria-label="Show 1NF Process">1NF Process</button>
+                <button class="tab" onclick="showTab('2nf-tab')" role="button" aria-label="Show 2NF Process">2NF Process</button>
+                <button class="tab" onclick="showTab('3nf-tab')" role="button" aria-label="Show 3NF Process">3NF Process</button>
             </div>
 
             <!-- Unnormalized Tab -->
             <div id="unnorm-tab" class="tab-content active">
-                <h4>❌ Unnormalized Table (Problems ka Mela!)</h4>
+                <h4>❌ Unnormalized Table (Full of Problems!)</h4>
                 <table class="responsive-table">
                     <thead>
                         <tr>
@@ -141,39 +225,39 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Soap, Shampoo</td>
                             <td>50, 120</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Toothpaste</td>
                             <td>80</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>Jethalal</td>
-                            <td>Gokuldham Society</td>
-                            <td>Fafda, Dhokla</td>
+                            <td>Bob</td>
+                            <td>456 Oak Ave</td>
+                            <td>Bread, Butter</td>
                             <td>30, 25</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="error-message">
                     <strong>Problems:</strong><br>
-                    • Ek cell mein multiple values (Products, Prices)<br>
-                    • Customer data repeat ho raha hai (Data Redundancy)<br>
-                    • Babita ka address change ho toh dikkat<br>
-                    • Storage ka wastage
+                    • Multiple values in one cell (Products, Prices)<br>
+                    • Repeated customer data (Data Redundancy)<br>
+                    • Changing Alice’s address requires multiple updates<br>
+                    • Wastes storage space
                 </div>
             </div>
 
@@ -195,60 +279,60 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Soap</td>
                             <td>50</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                         <tr>
                             <td>1</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Shampoo</td>
                             <td>120</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Toothpaste</td>
                             <td>80</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>Jethalal</td>
-                            <td>Gokuldham Society</td>
-                            <td>Fafda</td>
+                            <td>Bob</td>
+                            <td>456 Oak Ave</td>
+                            <td>Bread</td>
                             <td>30</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>Jethalal</td>
-                            <td>Gokuldham Society</td>
-                            <td>Dhokla</td>
+                            <td>Bob</td>
+                            <td>456 Oak Ave</td>
+                            <td>Butter</td>
                             <td>25</td>
-                            <td>Mumbai</td>
-                            <td>400001</td>
+                            <td>New York</td>
+                            <td>10001</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="success-message">
-                    <strong>✅ 1NF Done:</strong> Har cell mein sirf ek value!<br>
-                    <strong>Jethalal:</strong> "Ek cell mein ek hi cheez - comma wala mix-up nahi!"
+                    <strong>✅ 1NF Done:</strong> Each cell contains only one value!<br>
+                    <strong>Pro Tip:</strong> "One value per cell—no mixing things up!"
                 </div>
             </div>
 
             <!-- 2NF Tab -->
             <div id="2nf-tab" class="tab-content">
-                <h4>2️⃣ Second Normal Form (2NF) - Partial Dependencies Hatao</h4>
+                <h4>2️⃣ Second Normal Form (2NF) - Remove Partial Dependencies</h4>
                 
                 <div class="code-container">
                     <div>
@@ -283,8 +367,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>101</td><td>Babita</td><td>Gokuldham Society</td><td>Mumbai</td><td>400001</td></tr>
-                                <tr><td>102</td><td>Jethalal</td><td>Gokuldham Society</td><td>Mumbai</td><td>400001</td></tr>
+                                <tr><td>101</td><td>Alice</td><td>123 Main St</td><td>New York</td><td>10001</td></tr>
+                                <tr><td>102</td><td>Bob</td><td>456 Oak Ave</td><td>New York</td><td>10001</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -304,21 +388,21 @@
                             <tr><td>201</td><td>Soap</td><td>50</td></tr>
                             <tr><td>202</td><td>Shampoo</td><td>120</td></tr>
                             <tr><td>203</td><td>Toothpaste</td><td>80</td></tr>
-                            <tr><td>204</td><td>Fafda</td><td>30</td></tr>
-                            <tr><td>205</td><td>Dhokla</td><td>25</td></tr>
+                            <tr><td>204</td><td>Bread</td><td>30</td></tr>
+                            <tr><td>205</td><td>Butter</td><td>25</td></tr>
                         </tbody>
                     </table>
                 </div>
                 
                 <div class="success-message">
-                    <strong>✅ 2NF Done:</strong> Partial dependencies hata di!<br>
-                    <strong>Jethalal:</strong> "Customer info bas CustomerID pe depend kare, Product info bas ProductID pe!"
+                    <strong>✅ 2NF Done:</strong> Removed partial dependencies!<br>
+                    <strong>Pro Tip:</strong> "Customer info depends only on CustomerID, product info on ProductID!"
                 </div>
             </div>
 
             <!-- 3NF Tab -->
             <div id="3nf-tab" class="tab-content">
-                <h4>3️⃣ Third Normal Form (3NF) - Transitive Dependencies Hatao</h4>
+                <h4>3️⃣ Third Normal Form (3NF) - Remove Transitive Dependencies</h4>
                 
                 <div class="code-container">
                     <div>
@@ -333,8 +417,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>101</td><td>Babita</td><td>Gokuldham Society</td><td>1</td></tr>
-                                <tr><td>102</td><td>Jethalal</td><td>Gokuldham Society</td><td>1</td></tr>
+                                <tr><td>101</td><td>Alice</td><td>123 Main St</td><td>1</td></tr>
+                                <tr><td>102</td><td>Bob</td><td>456 Oak Ave</td><td>1</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -349,15 +433,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>1</td><td>Mumbai</td><td>400001</td></tr>
+                                <tr><td>1</td><td>New York</td><td>10001</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 
                 <div class="success-message">
-                    <strong>✅ 3NF Done:</strong> Transitive dependencies hata di!<br>
-                    <strong>Jethalal:</strong> "City aur Pincode pe depend karta hai, toh Locations table alag banaya!"
+                    <strong>✅ 3NF Done:</strong> Removed transitive dependencies!<br>
+                    <strong>Pro Tip:</strong> "City and Pincode depend on LocationID, so we created a separate Locations table!"
                 </div>
             </div>
         </div>
@@ -377,40 +461,39 @@
                 <tbody>
                     <tr>
                         <td><strong>Data Redundancy</strong></td>
-                        <td>Minimum duplication</td>
-                        <td>Speed ke liye jaan bujhkar duplication</td>
+                        <td>Minimal duplication</td>
+                        <td>Intentional duplication for speed</td>
                     </tr>
                     <tr>
                         <td><strong>Storage Space</strong></td>
-                        <td>Kam storage chahiye</td>
-                        <td>Zyaada storage chahiye</td>
+                        <td>Less storage needed</td>
+                        <td>More storage required</td>
                     </tr>
                     <tr>
                         <td><strong>Query Performance</strong></td>
-                        <td>JOINs chahiye (thodi slow reading)</td>
-                        <td>Direct access (fast reading)</td>
+                        <td>Requires JOINs (slower reads)</td>
+                        <td>Direct access (faster reads)</td>
                     </tr>
                     <tr>
                         <td><strong>Data Consistency</strong></td>
                         <td>High consistency</td>
-                        <td>Inconsistency ka risk</td>
+                        <td>Risk of inconsistency</td>
                     </tr>
                     <tr>
                         <td><strong>Updates</strong></td>
-                        <td>Ek jagah update karo (aasaan)</td>
-                        <td>Kayi jagah update karna padta hai (mushkil)</td>
+                        <td>Update in one place (easier)</td>
+                        <td>Update multiple places (harder)</td>
                     </tr>
                     <tr>
                         <td><strong>Best For</strong></td>
-                        <td>OLTP systems, frequent updates ke liye</td>
-                        <td>OLAP systems, reporting, read-heavy ke liye</td>
+                        <td>OLTP systems, frequent updates</td>
+                        <td>OLAP systems, reporting, read-heavy</td>
                     </tr>
                 </tbody>
             </table>
             
             <div class="explanation">
-                <strong>Jethalal ki Salah:</strong> Jaise garmi mein AC mast lagta hai, par bijli gayi toh pankha kaam aata hai! 
-                Waise hi normalization generally better hai, par reporting ke liye kabhi-kabhi denormalization bhi karna padta hai.
+                <strong>Pro Tip:</strong> Normalization is like organizing your closet for efficiency, but denormalization is like keeping duplicates for quick access when reporting!
             </div>
         </div>
     </div>
@@ -422,34 +505,34 @@
         const normalForms = {
             unnormalized: {
                 title: "🗂️ Unnormalized Data",
-                explanation: "Data mein koi rules nahi - bilkul mix-up aachar jaisa! Multiple values, duplicate data, sab kuch gadbad.",
-                analogy: "Jaise teri almirah mein sab kuch bikhar gaya - shirt, pant, kuch bhi kahi bhi!",
-                problems: ["Ek cell mein multiple values", "Data redundancy", "Update anomalies", "Storage ka wastage"]
+                explanation: "No rules applied—data is messy with duplicates and multiple values!",
+                analogy: "Like a cluttered closet with everything mixed up!",
+                problems: ["Multiple values in one cell", "Data redundancy", "Update anomalies", "Wasted storage"]
             },
             '1nf': {
                 title: "1️⃣ First Normal Form (1NF)",
-                explanation: "Har cell mein sirf ek hi value honi chahiye - atomic data!",
-                analogy: "Jaise ek dabbe mein sirf ek cheez rakho - comma wala mix-up nahi!",
-                rules: ["Har cell mein atomic values", "Koi repeating groups nahi", "Har row unique"]
+                explanation: "Every cell must contain a single, atomic value!",
+                analogy: "One item per box—no mixing things up!",
+                rules: ["Atomic values in each cell", "No repeating groups", "Each row is unique"]
             },
             '2nf': {
                 title: "2️⃣ Second Normal Form (2NF)",
-                explanation: "Pehle 1NF hona chahiye, fir partial dependencies hatao.",
-                analogy: "Customer info bas CustomerID pe depend kare, Product info bas ProductID pe!",
-                rules: ["1NF mein hona chahiye", "Partial dependencies hatao", "Non-key attributes poore primary key pe depend karein"]
+                explanation: "Must be in 1NF, then remove partial dependencies.",
+                analogy: "Customer info depends only on CustomerID, product info on ProductID!",
+                rules: ["Must be in 1NF", "Remove partial dependencies", "Non-key attributes fully depend on the primary key"]
             },
             '3nf': {
                 title: "3️⃣ Third Normal Form (3NF)",
-                explanation: "Pehle 2NF hona chahiye, fir transitive dependencies hatao.",
-                analogy: "City aur Pincode pe depend karta hai toh Locations table alag banao!",
-                rules: ["2NF mein hona chahiye", "Transitive dependencies hatao", "Non-key attributes sirf primary key pe depend karein"]
+                explanation: "Must be in 2NF, then remove transitive dependencies.",
+                analogy: "City and Pincode depend on LocationID, so create a separate Locations table!",
+                rules: ["Must be in 2NF", "Remove transitive dependencies", "Non-key attributes depend only on the primary key"]
             }
         };
 
         // Show data redundancy problem
         function showProblem() {
             document.getElementById('tableDisplayArea').innerHTML = `
-                <h4>❌ Data Redundancy ki Problem</h4>
+                <h4>❌ Data Redundancy Problem</h4>
                 <table class="responsive-table">
                     <thead>
                         <tr>
@@ -463,33 +546,33 @@
                     <tbody>
                         <tr style="background: rgba(245,101,101,0.1);">
                             <td>1</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Soap</td>
                             <td>50</td>
                         </tr>
                         <tr style="background: rgba(245,101,101,0.1);">
                             <td>2</td>
-                            <td>Babita</td>
-                            <td>Gokuldham Society</td>
+                            <td>Alice</td>
+                            <td>123 Main St</td>
                             <td>Shampoo</td>
                             <td>120</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>Jethalal</td>
-                            <td>Gokuldham Society</td>
-                            <td>Fafda</td>
+                            <td>Bob</td>
+                            <td>456 Oak Ave</td>
+                            <td>Bread</td>
                             <td>30</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="error-message">
                     <strong>Problems:</strong><br>
-                    • Babita ka naam aur address baar-baar repeat ho raha hai<br>
-                    • Address change karna ho toh har row mein badalna padega<br>
-                    • Storage waste ho raha hai<br>
-                    • Data inconsistency ka risk hai
+                    • Alice’s name and address are repeated<br>
+                    • Changing address requires updating multiple rows<br>
+                    • Wastes storage space<br>
+                    • Risk of data inconsistency
                 </div>
             `;
             document.getElementById('benefitsDisplay').style.display = 'none';
@@ -505,8 +588,8 @@
                         <table class="responsive-table">
                             <thead><tr><th>CustomerID</th><th>Name</th><th>Address</th></tr></thead>
                             <tbody>
-                                <tr><td>101</td><td>Babita</td><td>Gokuldham Society</td></tr>
-                                <tr><td>102</td><td>Jethalal</td><td>Gokuldham Society</td></tr>
+                                <tr><td>101</td><td>Alice</td><td>123 Main St</td></tr>
+                                <tr><td>102</td><td>Bob</td><td>456 Oak Ave</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -517,17 +600,17 @@
                             <tbody>
                                 <tr><td>1</td><td>101</td><td>Soap</td><td>50</td></tr>
                                 <tr><td>2</td><td>101</td><td>Shampoo</td><td>120</td></tr>
-                                <tr><td>3</td><td>102</td><td>Fafda</td><td>30</td></tr>
+                                <tr><td>3</td><td>102</td><td>Bread</td><td>30</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="success-message">
                     <strong>Solution:</strong><br>
-                    • Customer info bas ek baar store hua<br>
-                    • Address change karna ho toh sirf ek jagah<br>
-                    • Storage bacha, data clean ho gaya<br>
-                    • JOIN se data mil jayega
+                    • Customer info stored only once<br>
+                    • Update address in one place<br>
+                    • Saves storage, cleaner data<br>
+                    • Use JOINs to retrieve data
                 </div>
             `;
             document.getElementById('benefitsDisplay').style.display = 'block';
@@ -546,7 +629,7 @@
                 </div>
                 <div class="saree-step">
                     <div class="saree-emoji">🎭</div>
-                    <div><strong>Jethalal ka Analogy:</strong> ${form.analogy}</div>
+                    <div><strong>Analogy:</strong> ${form.analogy}</div>
                 </div>
                 ${form.rules ? `
                     <div class="saree-step">
@@ -567,15 +650,15 @@
         function resetDemo() {
             document.getElementById('tableDisplayArea').innerHTML = `
                 <div class="event-message one-message">
-                    Upar ke buttons click karo aur dekho redundant aur normalized data ka fark!
+                    Click the buttons above to see the difference between redundant and normalized data!
                 </div>
             `;
             document.getElementById('benefitsDisplay').style.display = 'none';
             document.getElementById('normalFormExplanation').innerHTML = `
-                <h4>🏠 Gokuldham Society ka Example</h4>
+                <h4>🏠 Shopping Example</h4>
                 <div class="saree-step">
                     <div class="saree-emoji">🤔</div>
-                    <div>Koi Normal Form select karo aur Jethalal ka explanation dekho!</div>
+                    <div>Select a Normal Form to see the explanation!</div>
                 </div>
             `;
         }

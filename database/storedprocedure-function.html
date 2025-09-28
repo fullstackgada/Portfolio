@@ -1,45 +1,127 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stored Procedure and Function ka Funda - Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stored Procedure and Function Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore Stored Procedures and Functions with an interactive demo! Learn how to manage database operations, optimize performance, and see real-world SQL examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/storedprocedure-function">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Stored Procedure and Function Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover Stored Procedures and Functions with an interactive demo! Learn database operations, performance optimization, and SQL examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/storedprocedure-function">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/storedprocedure-function.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stored Procedure and Function Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn Stored Procedures and Functions with an interactive SQL demo, covering database operations and performance.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/storedprocedure-function.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Stored Procedure and Function Interactive Demo",
+    "description": "Explore Stored Procedures and Functions with an interactive demo, covering database operations, performance optimization, and SQL examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/storedprocedure-function",
+    "datePublished": "2025-09-17",
+    "dateModified": "2025-09-18",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a Stored Procedure in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A Stored Procedure is a precompiled set of SQL statements stored in the database that can be executed to perform tasks like data manipulation, queries, and transaction handling."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between a Stored Procedure and a Function?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A Stored Procedure can perform multiple operations, return multiple values, and does not need to return a value. A Function must return a single value and is often used in queries."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why use Stored Procedures and Functions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "They improve performance by reducing repeated SQL parsing, enhance security through controlled access, and make code reusable and easier to maintain."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
-        <!-- Updated Header with your existing CSS class -->
+        <!-- Header -->
         <div class="header-interactive" style="position: relative;">
-            <h1>Stored Procedure and Function ka Funda</h1>
-            <p>Understand how Stored Procedure and Function works with Fullstackgada</p>
+            <h1>Stored Procedure and Function Interactive Demo</h1>
+            <p>Master database operations with Fullstackgada's fun approach! 🗄️</p>
             <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
-        </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
         
-        <!-- Updated Navigation with your existing CSS class -->
+        <!-- Navigation -->
         <div class="tabs">
-            <button class="tab active" onclick="showTab('database')" role="tab" aria-label="डेटाबेस टैब">🗄️ Database</button>
-            <button class="tab" onclick="showTab('procedure')" role="tab" aria-label="प्रोसीजर डेमो टैब">🔧 Procedure Demo</button>
-            <button class="tab" onclick="showTab('function')" role="tab" aria-label="फंक्शन डेमो टैब">⚡ Function Demo</button>
-            <button class="tab" onclick="showTab('performance')" role="tab" aria-label="प्रदर्शन टैब">📊 Performance</button>
+            <button class="tab active" onclick="showTab('database')" role="tab" aria-label="Database Tab">🗄️ Database</button>
+            <button class="tab" onclick="showTab('procedure')" role="tab" aria-label="Procedure Demo Tab">🔧 Procedure Demo</button>
+            <button class="tab" onclick="showTab('function')" role="tab" aria-label="Function Demo Tab">⚡ Function Demo</button>
+            <button class="tab" onclick="showTab('performance')" role="tab" aria-label="Performance Tab">📊 Performance</button>
         </div>
         
-    
         <!-- Database Tab -->
         <div id="database" class="tab-content active">
-            
             <div class="demo-grid">
                 <div class="demo-section">
-                    <h3>👥 Accounts Table</h3>
+                    <h2 class="demo-title">👥 Accounts Table</h2>
                     <table class="responsive-table" id="accountsTable">
                         <thead>
                             <tr>
@@ -56,7 +138,7 @@
                 </div>
                 
                 <div class="demo-section">
-                    <h3>💼 Employees Table</h3>
+                    <h2 class="demo-title">💼 Employees Table</h2>
                     <table class="responsive-table" id="employeesTable">
                         <thead>
                             <tr>
@@ -74,7 +156,7 @@
             </div>
             
             <div class="demo-section">
-                <h3>📊 Transaction History</h3>
+                <h2 class="demo-title">📊 Transaction History</h2>
                 <table class="responsive-table" id="transactionsTable">
                     <thead>
                         <tr>
@@ -95,39 +177,41 @@
         
         <!-- Procedure Demo Tab -->
         <div id="procedure" class="tab-content">
-            
             <div class="demo-grid">
                 <div class="demo-section">
-                    <h3>💰 Transfer Money</h3>
+                    <h2 class="demo-title">💰 Transfer Money</h2>
+                    <div class="explanation">
+                        <strong>Stored Procedure:</strong> Encapsulates complex database logic for secure and efficient transactions.
+                    </div>
                     <div class="form-group">
-                        <label>From Account:</label>
-                        <select id="fromAccount">
+                        <label for="fromAccount">From Account:</label>
+                        <select id="fromAccount" aria-label="Select source account">
                             <option value="1">Account 1 - Jethalal</option>
                             <option value="2">Account 2 - Bhide</option>
                             <option value="3">Account 3 - Tarak</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>To Account:</label>
-                        <select id="toAccount">
+                        <label for="toAccount">To Account:</label>
+                        <select id="toAccount" aria-label="Select destination account">
                             <option value="1">Account 1 - Jethalal</option>
                             <option value="2">Account 2 - Bhide</option>
                             <option value="3">Account 3 - Tarak</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Amount (₹):</label>
-                        <input type="number" id="transferAmount" placeholder="Enetr amount" min="1" max="100000">
+                        <label for="transferAmount">Amount ($):</label>
+                        <input type="number" id="transferAmount" placeholder="Enter amount" min="1" max="100000" aria-label="Enter transfer amount">
                     </div>
                     <div class="demo-controls">
-                        <button class="demo-btn" onclick="executeTransfer()">
+                        <button class="demo-btn" onclick="executeTransfer()" role="button" aria-label="Execute Money Transfer">
                             💸 Execute Transfer <span class="performance-indicator fast">Fast</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="demo-section">
-                    <h3>📝 Stored Procedure Code</h3>
+                    <h2 class="demo-title">📝 Stored Procedure Code</h2>
                     <div class="code-block">
 CREATE PROCEDURE TransferMoney(
     @FromAccount INT,
@@ -172,37 +256,39 @@ END
             </div>
             
             <div class="demo-area" id="procedureResult">
-                <p> procedure run karne ke liye <strong>Execute Transfer</strong>  par click kare..</p>
+                <div class="event-message one-message">Click <strong>Execute Transfer</strong> to run the procedure.</div>
             </div>
         </div>
         
         <!-- Function Demo Tab -->
         <div id="function" class="tab-content">
-           
             <div class="demo-grid">
                 <div class="demo-section">
-                    <h3>🎯 Calculate Bonus</h3>
+                    <h2 class="demo-title">🎯 Calculate Bonus</h2>
+                    <div class="explanation">
+                        <strong>Function:</strong> Reusable logic to compute values based on inputs, like employee bonuses.
+                    </div>
                     <div class="form-group">
-                        <label>Select Employee:</label>
-                        <select id="employeeSelect">
+                        <label for="employeeSelect">Select Employee:</label>
+                        <select id="employeeSelect" aria-label="Select employee">
                             <option value="1">Employee 1 - Jethalal</option>
                             <option value="2">Employee 2 - Bhide</option>
                             <option value="3">Employee 3 - Tarak</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Performance Score (0-100):</label>
-                        <input type="number" id="performanceScore" placeholder="Enter prformance score" min="0" max="100">
+                        <label for="performanceScore">Performance Score (0-100):</label>
+                        <input type="number" id="performanceScore" placeholder="Enter performance score" min="0" max="100" aria-label="Enter performance score">
                     </div>
                     <div class="demo-controls">
-                        <button class="demo-btn" onclick="calculateBonus()">
+                        <button class="demo-btn" onclick="calculateBonus()" role="button" aria-label="Calculate Bonus">
                             🎉 Calculate Bonus <span class="performance-indicator fast">Fast</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="demo-section">
-                    <h3>📝 Function Code</h3>
+                    <h2 class="demo-title">📝 Function Code</h2>
                     <div class="code-block">
 CREATE FUNCTION CalculateBonus(
     @Salary DECIMAL(10,2), 
@@ -227,7 +313,6 @@ BEGIN
     RETURN @Bonus
 END
 
-
 -- Usage Example:
 SELECT Name, Salary, 
        dbo.CalculateBonus(Salary, Performance) as Bonus
@@ -237,13 +322,13 @@ FROM Employees
             </div>
             
             <div class="demo-area" id="functionResult">
-                <p>Function ko run karne ke liye <strong>Calculate Bonus</strong> par click kare..</p>
+                <div class="event-message one-message">Click <strong>Calculate Bonus</strong> to run the function.</div>
             </div>
             
             <div class="demo-section">
-                <h3>📊 All Employees Bonus Report</h3>
+                <h2 class="demo-title">📊 All Employees Bonus Report</h2>
                 <div class="demo-controls">
-                    <button class="demo-btn" onclick="generateBonusReport()">
+                    <button class="demo-btn" onclick="generateBonusReport()" role="button" aria-label="Generate Bonus Report">
                         📋 Generate Report <span class="performance-indicator medium">Medium</span>
                     </button>
                 </div>
@@ -253,42 +338,92 @@ FROM Employees
         
         <!-- Performance Tab -->
         <div id="performance" class="tab-content">
-            <div class="comparison-metrics">
-                <div class="metric-card">
-                    <h4>Regular Query</h4>
-                    <div class="metric-value" id="regularQueryTime">2.5s</div>
-                    <div class="metric-label">Average Execution Time</div>
-                    <span class="performance-indicator slow">Slow</span>
-                </div>
-                
-                <div class="metric-card">
-                    <h4>Function</h4>
-                    <div class="metric-value" id="functionTime">1.8s</div>
-                    <div class="metric-label">Average Execution Time</div>
-                    <span class="performance-indicator medium">Medium</span>
-                </div>
-                
-                <div class="metric-card">
-                    <h4>Stored Procedure</h4>
-                    <div class="metric-value" id="procedureTime">1.2s</div>
-                    <div class="metric-label">Average Execution Time</div>
-                    <span class="performance-indicator fast">Fast</span>
-                </div>
+            <div class="demo-section">
+                <h2 class="demo-title">🎯 Benefits of Stored Procedures and Functions</h2>
+                <table class="comparison-table responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Regular Query</th>
+                            <th>Stored Procedure</th>
+                            <th>Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Performance</td>
+                            <td>Slower due to parsing</td>
+                            <td>Faster (pre-compiled)</td>
+                            <td>Fast for reusable logic</td>
+                        </tr>
+                        <tr>
+                            <td>Security</td>
+                            <td>Vulnerable to SQL injection</td>
+                            <td>Secure with parameterized inputs</td>
+                            <td>Secure for calculations</td>
+                        </tr>
+                        <tr>
+                            <td>Reusability</td>
+                            <td>Repeated code</td>
+                            <td>Reusable across applications</td>
+                            <td>Reusable for computations</td>
+                        </tr>
+                        <tr>
+                            <td>Maintenance</td>
+                            <td>Hard to update</td>
+                            <td>Centralized logic</td>
+                            <td>Centralized calculations</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             
             <div class="demo-section">
-                <h3>🧪 Performance Test</h3>
-                <p>Run karne ke liye <strong>Run Performance Test</strong> par Click kare</p>
+                <h2 class="demo-title">🧪 Performance Comparison</h2>
+                <div class="comparison-metrics">
+                    <div class="metric-card">
+                        <h4>Regular Query</h4>
+                        <div class="metric-value" id="regularQueryTime">2.5s</div>
+                        <div class="metric-label">Average Execution Time</div>
+                        <span class="performance-indicator slow">Slow</span>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Function</h4>
+                        <div class="metric-value" id="functionTime">1.8s</div>
+                        <div class="metric-label">Average Execution Time</div>
+                        <span class="performance-indicator medium">Medium</span>
+                    </div>
+                    <div class="metric-card">
+                        <h4>Stored Procedure</h4>
+                        <div class="metric-value" id="procedureTime">1.2s</div>
+                        <div class="metric-label">Average Execution Time</div>
+                        <span class="performance-indicator fast">Fast</span>
+                    </div>
+                </div>
                 <div class="demo-controls">
-                    <button class="demo-btn" onclick="runPerformanceTest()">
+                    <button class="demo-btn" onclick="runPerformanceTest()" role="button" aria-label="Run Performance Test">
                         🚀 Run Performance Test
                     </button>
                 </div>
                 <div class="demo-area" id="performanceResult">
-                    <p>Performance test ka results yaha show hoga...</p>
+                    <div class="event-message one-message">Click <strong>Run Performance Test</strong> to see results.</div>
                 </div>
             </div>
-          
+            
+            <div class="demo-section">
+                <h2 class="demo-title">💡 Pro Tips for Stored Procedures and Functions</h2>
+                <div style="background: #e8f5e8; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                    <ul>
+                        <li><strong>🔒 Use Parameters:</strong> Prevent SQL injection with parameterized queries.</li>
+                        <li><strong>🚀 Optimize Performance:</strong> Pre-compile logic with stored procedures.</li>
+                        <li><strong>🔄 Reuse Logic:</strong> Centralize business rules in procedures and functions.</li>
+                        <li><strong>🛠️ Modularize Code:</strong> Break complex logic into smaller functions.</li>
+                    </ul>
+                    <div style="margin-top: 1rem; font-style: italic; color: #2d3748;">
+                        <strong>Pro Tip:</strong> "Make your database work smarter, not harder!" 😄
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -343,7 +478,7 @@ FROM Employees
                 row.innerHTML = `
                     <td>${account.id}</td>
                     <td>${account.name}</td>
-                    <td>₹${account.balance.toLocaleString()}</td>
+                    <td>$${account.balance.toLocaleString()}</td>
                     <td>${account.type}</td>
                 `;
             });
@@ -356,7 +491,7 @@ FROM Employees
                 row.innerHTML = `
                     <td>${employee.id}</td>
                     <td>${employee.name}</td>
-                    <td>₹${employee.salary.toLocaleString()}</td>
+                    <td>$${employee.salary.toLocaleString()}</td>
                     <td>${employee.performance}</td>
                 `;
             });
@@ -370,7 +505,7 @@ FROM Employees
                     <td>${transaction.id}</td>
                     <td>${transaction.from}</td>
                     <td>${transaction.to}</td>
-                    <td>₹${transaction.amount.toLocaleString()}</td>
+                    <td>$${transaction.amount.toLocaleString()}</td>
                     <td>${transaction.status}</td>
                     <td>${transaction.timestamp}</td>
                 `;
@@ -385,11 +520,11 @@ FROM Employees
             
             // Input validation
             if (fromAccount === toAccount) {
-                resultPanel.innerHTML = '<p class="error-message">Error: From and To accounts cannot be the same!</p>';
+                resultPanel.innerHTML = '<div class="error-message">Error: From and To accounts cannot be the same!</div>';
                 return;
             }
             if (isNaN(amount) || amount <= 0 || amount > 100000) {
-                resultPanel.innerHTML = '<p class="error-message">Error: Please enter a valid amount (1-100,000)!</p>';
+                resultPanel.innerHTML = '<div class="error-message">Error: Please enter a valid amount (1-100,000)!</div>';
                 return;
             }
             
@@ -409,9 +544,9 @@ FROM Employees
                     timestamp: new Date().toLocaleString()
                 });
                 
-                resultPanel.innerHTML = `<p class="success-message">Success: ₹${amount.toLocaleString()} transferred from Account ${fromAccount} to Account ${toAccount}!</p>`;
+                resultPanel.innerHTML = `<div class="success-message">Success: $${amount.toLocaleString()} transferred from Account ${fromAccount} to Account ${toAccount}!</div>`;
             } else {
-                resultPanel.innerHTML = `<p class="error-message">Error: Insufficient balance in Account ${fromAccount}!</p>`;
+                resultPanel.innerHTML = `<div class="error-message">Error: Insufficient balance in Account ${fromAccount}!</div>`;
             }
             
             // Refresh database tables
@@ -425,7 +560,7 @@ FROM Employees
             
             // Input validation
             if (isNaN(performance) || performance < 0 || performance > 100) {
-                resultPanel.innerHTML = '<p class="error-message">Error: Please enter a valid performance score (0-100)!</p>';
+                resultPanel.innerHTML = '<div class="error-message">Error: Please enter a valid performance score (0-100)!</div>';
                 return;
             }
             
@@ -442,7 +577,7 @@ FROM Employees
                 bonus = employee.salary * 0.05;
             }
             
-            resultPanel.innerHTML = `<p class="success-message">Bonus for ${employee.name}: ₹${bonus.toLocaleString()}</p>`;
+            resultPanel.innerHTML = `<div class="success-message">Bonus for ${employee.name}: $${bonus.toLocaleString()}</div>`;
         }
         
         function generateBonusReport() {
@@ -474,9 +609,9 @@ FROM Employees
                                 <tr>
                                     <td>${emp.id}</td>
                                     <td>${emp.name}</td>
-                                    <td>₹${emp.salary.toLocaleString()}</td>
+                                    <td>$${emp.salary.toLocaleString()}</td>
                                     <td>${emp.performance}</td>
-                                    <td>₹${bonus.toLocaleString()}</td>
+                                    <td>$${bonus.toLocaleString()}</td>
                                 </tr>
                             `;
                         }).join('')}
@@ -498,7 +633,7 @@ FROM Employees
             document.getElementById('procedureTime').textContent = `${procedureTime}s`;
             
             resultPanel.innerHTML = `
-                <p class="success-message">Performance Test Results:</p>
+                <div class="success-message">Performance Test Results:</div>
                 <p>Regular Query: ${regularQueryTime}s</p>
                 <p>Function: ${functionTime}s</p>
                 <p>Stored Procedure: ${procedureTime}s</p>

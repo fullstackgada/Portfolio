@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clustered vs Non-Clustered Indexing: Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Discover clustered vs non-clustered indexing in databases with our interactive demo! Learn SQL performance, optimization, and practical examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/clustered-and-non-clustered-indexing">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Clustered vs Non-Clustered Indexing: Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Master clustered and non-clustered indexing with interactive SQL examples, performance comparisons, and optimization tips.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/clustered-and-non-clustered-indexing">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/clustered-and-non-clustered-indexing.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Clustered vs Non-Clustered Indexing: Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn clustered vs non-clustered indexing with an interactive demo, SQL examples, and performance tips.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/clustered-and-non-clustered-indexing.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Clustered vs Non-Clustered Indexing: Interactive Demo",
+    "description": "Explore clustered and non-clustered indexing in databases with interactive SQL examples, performance comparisons, and optimization techniques.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/clustered-and-non-clustered-indexing",
+    "datePublished": "2025-09-28",
+    "dateModified": "2025-09-28",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/favicon.png"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a clustered index?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A clustered index determines the physical order of data in a table. Each table can have only one clustered index, and it improves performance for range queries and sorting."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a non-clustered index?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A non-clustered index is a separate structure that stores pointers to the data in the table. A table can have multiple non-clustered indexes, which improve query performance without changing the physical order of data."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When should I use clustered vs non-clustered indexes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use clustered indexes for columns that are frequently sorted or used in range queries. Use non-clustered indexes for columns that are frequently searched but not sorted, or when you need multiple indexes on the same table."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-interactive">
+            <h1>Clustered vs Non-Clustered Indexing: Interactive Demo</h1>
+            <p>Master database indexing with <strong>Fullstackgada</strong>’s fun approach! 🌳</p>
+        <div class="explore-diagrams-btn-wrapper">
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
+        </div>
+
+        <!-- Core Concepts -->
+        <div class="demo-section">
+            <h2 class="demo-title">📚 Understanding Database Indexing</h2>
+            <div class="explanation">
+                <strong>Database Indexing:</strong> Data structures that improve query performance by providing faster access paths to table data.
+            </div>
+
+            <!-- Library Analogy -->
+            <div class="saree-analogy">
+                <h4>📖 Library Organization Analogy</h4>
+                <div class="saree-step">
+                    <div class="saree-emoji">📋</div>
+                    <div><strong>Clustered Index:</strong> Books organized alphabetically on shelves—physical order matches search order.</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">🗂️</div>
+                    <div><strong>Non-Clustered Index:</strong> Separate catalog pointing to book locations—books remain in random order.</div>
+                </div>
+                <div class="saree-step">
+                    <div class="saree-emoji">🎯</div>
+                    <div><strong>Result:</strong> Both speed up searches but use different mechanisms.</div>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button class="demo-btn first-btn" onclick="showClusteredDemo()" role="button" aria-label="Show Clustered Index Demo">🗂️ Clustered Index</button>
+                <button class="demo-btn" onclick="showNonClusteredDemo()" role="button" aria-label="Show Non-Clustered Index Demo">📑 Non-Clustered Index</button>
+                <button class="demo-btn" onclick="showPerformanceComparison()" role="button" aria-label="Show Performance Comparison">⚡ Performance Analysis</button>
+                <button class="demo-btn clear-btn" onclick="clearDemo()" role="button" aria-label="Clear Demo">🗑️ Clear</button>
+            </div>
+
+            <div id="indexResults">
+                <div class="event-message one-message">
+                    Click buttons above to explore database indexing concepts!
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Query Simulator -->
+        <div class="demo-section">
+            <h2 class="demo-title">⚡ Live Query Performance Simulator</h2>
+            <div class="explanation one-explanation">
+                <strong>Test:</strong> Compare query performance with clustered and non-clustered indexing strategies.
+            </div>
+            
+            <div style="display: grid; gap: 1rem;">
+                <!-- Clustered Index Query -->
+                <div style="border:2px solid #27ae60; padding:1rem; border-radius:8px;">
+                    <h4>🗂️ Clustered Index Query</h4>
+                    <select id="clusteredQuery" aria-label="Select Clustered Index Query">
+                        <option value="range">SELECT * WHERE id BETWEEN 100-200</option>
+                        <option value="single">SELECT * WHERE id = 150</option>
+                        <option value="sort">SELECT * ORDER BY id</option>
+                    </select>
+                    <button class="demo-btn" onclick="simulateClusteredQuery()" role="button" aria-label="Execute Clustered Query">Execute</button>
+                    <div id="clusteredResult" style="margin-top:0.5rem; min-height:60px;">
+                        <div>Status: Ready to execute</div>
+                    </div>
+                </div>
+                
+                <!-- Non-Clustered Index Query -->
+                <div style="border:2px solid #3498db; padding:1rem; border-radius:8px;">
+                    <h4>📑 Non-Clustered Index Query</h4>
+                    <select id="nonClusteredQuery" aria-label="Select Non-Clustered Index Query">
+                        <option value="name">SELECT * WHERE name = 'John'</option>
+                        <option value="email">SELECT * WHERE email LIKE '%@gmail%'</option>
+                        <option value="join">JOIN on indexed foreign key</option>
+                    </select>
+                    <button class="demo-btn" onclick="simulateNonClusteredQuery()" role="button" aria-label="Execute Non-Clustered Query">Execute</button>
+                    <div id="nonClusteredResult" style="margin-top:0.5rem; min-height:60px;">
+                        <div>Status: Ready to execute</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:1rem;">
+                <button class="demo-btn first-btn" onclick="runBenchmark()" role="button" aria-label="Run Performance Benchmark">🏁 Run Performance Benchmark</button>
+                <div id="benchmarkResults" style="margin-top:1rem;"></div>
+            </div>
+        </div>
+
+        <!-- Technical Comparison -->
+        <div class="demo-section" style="grid-column:1/-1;">
+            <h2 class="demo-title">🔍 Clustered vs Non-Clustered Index Comparison</h2>
+            <table class="comparison-table responsive-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Clustered Index</th>
+                        <th>Non-Clustered Index</th>
+                        <th>Performance Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Data Storage</strong></td>
+                        <td>Data physically ordered by index key</td>
+                        <td>Separate structure with pointers to data</td>
+                        <td>Clustered: Better for range queries</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Number per Table</strong></td>
+                        <td>Only one per table</td>
+                        <td>Multiple indexes possible</td>
+                        <td>Non-clustered: More flexibility</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory Usage</strong></td>
+                        <td>Lower memory overhead</td>
+                        <td>Additional memory for index structure</td>
+                        <td>Clustered: More memory efficient</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Insert Performance</strong></td>
+                        <td>May require data reorganization</td>
+                        <td>Faster inserts, index updates needed</td>
+                        <td>Non-clustered: Better for frequent inserts</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Range Queries</strong></td>
+                        <td>Excellent performance</td>
+                        <td>Good but requires additional lookups</td>
+                        <td>Clustered: 40-60% faster for ranges</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Point Lookups</strong></td>
+                        <td>Fast direct access</td>
+                        <td>Fast with index scan + key lookup</td>
+                        <td>Similar performance for single records</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SQL Implementation Examples -->
+        <div class="demo-section" style="grid-column:1/-1;">
+            <h2 class="demo-title">💻 SQL Implementation Examples</h2>
+            
+            <div class="tabs">
+                <button class="tab active" onclick="showSQLExample('clustered-sql')" role="button" aria-label="Show Clustered Index SQL">🗂️ Clustered Index SQL</button>
+                <button class="tab" onclick="showSQLExample('nonclustered-sql')" role="button" aria-label="Show Non-Clustered Index SQL">📑 Non-Clustered Index SQL</button>
+                <button class="tab" onclick="showSQLExample('optimization-sql')" role="button" aria-label="Show Query Optimization SQL">⚡ Query Optimization</button>
+            </div>
+
+            <!-- Clustered Index SQL -->
+            <div id="clustered-sql" class="tab-content active">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- Creating Clustered Index (Primary Key automatically creates one)</div>
+                        <div class="code-line var-declaration">CREATE TABLE Students (</div>
+                        <div class="code-line var-usage">    StudentID INT PRIMARY KEY,  -- Clustered index automatically created</div>
+                        <div class="code-line var-usage">    Name NVARCHAR(100),</div>
+                        <div class="code-line var-usage">    Email NVARCHAR(100),</div>
+                        <div class="code-line var-usage">    DateOfBirth DATE</div>
+                        <div class="code-line var-declaration">);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Manual clustered index creation (if no primary key)</div>
+                        <div class="code-line var-usage">CREATE CLUSTERED INDEX IX_Students_ID</div>
+                        <div class="code-line var-usage">ON Students (StudentID ASC);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Optimal queries for clustered index</div>
+                        <div class="code-line var-usage">SELECT * FROM Students WHERE StudentID = 1001;</div>
+                        <div class="code-line var-usage">SELECT * FROM Students WHERE StudentID BETWEEN 1000 AND 2000;</div>
+                        <div class="code-line var-usage">SELECT * FROM Students ORDER BY StudentID;</div>
+                    </div>
+                </div>
+                
+                <div class="explanation">
+                    <strong>Key Points:</strong>
+                    <ul class="ml-5">
+                        <li>Primary key automatically creates a clustered index.</li>
+                        <li>Data rows stored in physical order of the index key.</li>
+                        <li>Excellent for range queries and sorting operations.</li>
+                        <li>Only one clustered index per table is possible.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Non-Clustered Index SQL -->
+            <div id="nonclustered-sql" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- Creating Non-Clustered Indexes</div>
+                        <div class="code-line var-usage">CREATE NONCLUSTERED INDEX IX_Students_Name</div>
+                        <div class="code-line var-usage">ON Students (Name ASC);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line var-usage">CREATE NONCLUSTERED INDEX IX_Students_Email</div>
+                        <div class="code-line var-usage">ON Students (Email ASC);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Composite non-clustered index</div>
+                        <div class="code-line var-usage">CREATE NONCLUSTERED INDEX IX_Students_Name_DOB</div>
+                        <div class="code-line var-usage">ON Students (Name ASC, DateOfBirth DESC);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Covering index (includes additional columns)</div>
+                        <div class="code-line var-usage">CREATE NONCLUSTERED INDEX IX_Students_Name_Covering</div>
+                        <div class="code-line var-usage">ON Students (Name ASC)</div>
+                        <div class="code-line var-usage">INCLUDE (Email, DateOfBirth);</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- Optimal queries for non-clustered indexes</div>
+                        <div class="code-line var-usage">SELECT * FROM Students WHERE Name = 'John Smith';</div>
+                        <div class="code-line var-usage">SELECT * FROM Students WHERE Email LIKE '%@university.edu';</div>
+                    </div>
+                </div>
+                
+                <div class="explanation">
+                    <strong>Best Practices:</strong>
+                    <ul class="ml-5">
+                        <li>Create indexes on frequently queried columns.</li>
+                        <li>Use composite indexes for multi-column searches.</li>
+                        <li>Consider covering indexes to avoid key lookups.</li>
+                        <li>Monitor index usage and remove unused indexes.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Query Optimization -->
+            <div id="optimization-sql" class="tab-content">
+                <div class="code-container">
+                    <div class="code-block">
+                        <div class="code-line comment">-- Query Optimization Examples</div>
+                        <div class="code-line comment">-- 1. Using index hints</div>
+                        <div class="code-line var-usage">SELECT * FROM Students WITH (INDEX(IX_Students_Name))</div>
+                        <div class="code-line var-usage">WHERE Name = 'Alice Johnson';</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- 2. Analyzing query execution plans</div>
+                        <div class="code-line var-usage">SET STATISTICS IO ON;</div>
+                        <div class="code-line var-usage">SELECT * FROM Students WHERE Name = 'Bob Wilson';</div>
+                        <div class="code-line var-usage">SET STATISTICS IO OFF;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- 3. Check index fragmentation</div>
+                        <div class="code-line var-usage">SELECT</div>
+                        <div class="code-line var-usage">    OBJECT_NAME(ips.object_id) AS TableName,</div>
+                        <div class="code-line var-usage">    i.name AS IndexName,</div>
+                        <div class="code-line var-usage">    ips.avg_fragmentation_in_percent</div>
+                        <div class="code-line var-usage">FROM sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, 'DETAILED') ips</div>
+                        <div class="code-line var-usage">INNER JOIN sys.indexes i ON ips.object_id = i.object_id</div>
+                        <div class="code-line var-usage">WHERE ips.avg_fragmentation_in_percent > 10;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line comment">-- 4. Rebuild fragmented indexes</div>
+                        <div class="code-line var-usage">ALTER INDEX IX_Students_Name ON Students REBUILD;</div>
+                    </div>
+                </div>
+                
+                <div class="explanation">
+                    <strong>Performance Tips:</strong>
+                    <ul class="ml-5">
+                        <li>Monitor query execution plans regularly.</li>
+                        <li>Rebuild indexes when fragmentation exceeds 30%.</li>
+                        <li>Use covering indexes to eliminate key lookups.</li>
+                        <li>Consider partitioning for very large tables.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="demo-section" style="grid-column:1/-1;">
+            <h2 class="demo-title">📈 Performance Optimization Guide</h2>
+            <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin: 1rem 0;">
+                <h3>When to Use Clustered Indexes</h3>
+                <ul>
+                    <li><strong>Primary Key Columns:</strong> Identity columns, unique identifiers.</li>
+                    <li><strong>Range Queries:</strong> Date ranges, numeric ranges, sequential data access.</li>
+                    <li><strong>Sorting Operations:</strong> ORDER BY clauses on frequently queried columns.</li>
+                    <li><strong>Data Warehousing:</strong> Time-series data, reporting tables.</li>
+                </ul>
+
+                <h3>When to Use Non-Clustered Indexes</h3>
+                <ul>
+                    <li><strong>Foreign Key Columns:</strong> Improve JOIN performance.</li>
+                    <li><strong>Search Columns:</strong> WHERE clause predicates, LIKE operations.</li>
+                    <li><strong>Multiple Query Patterns:</strong> Different access paths to the same table.</li>
+                    <li><strong>Covering Queries:</strong> Include frequently selected columns.</li>
+                </ul>
+
+                <h3>Index Maintenance Best Practices</h3>
+                <ul>
+                    <li><strong>Regular Monitoring:</strong> Track index usage and fragmentation.</li>
+                    <li><strong>Rebuild Strategy:</strong> Rebuild when fragmentation > 30%.</li>
+                    <li><strong>Update Statistics:</strong> Keep query optimizer informed.</li>
+                    <li><strong>Remove Unused:</strong> Drop indexes with zero usage.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Demo Functions
+    function showClusteredDemo() {
+        document.getElementById('indexResults').innerHTML = `
+            <div class="success-message">
+                <strong>🗂️ Clustered Index Demonstration</strong><br><br>
+                <strong>Structure:</strong> Data rows are physically stored in order of the index key.<br>
+                <strong>Analogy:</strong> Dictionary with words arranged alphabetically.<br><br>
+                <strong>SQL Example:</strong>
+                <pre style="background:#2c3e50;color:#ecf0f1;padding:1rem;border-radius:4px;">
+CREATE TABLE Employee (
+    EmployeeID INT PRIMARY KEY,  -- Clustered index
+    Name NVARCHAR(100),
+    Department NVARCHAR(50)
+);
+
+-- Optimal query (uses clustered index)
+SELECT * FROM Employee WHERE EmployeeID BETWEEN 100 AND 200;
+                </pre>
+                <strong>Performance Benefits:</strong><br>
+                ✅ Excellent for range queries<br>
+                ✅ Fast sorting operations<br>
+                ✅ Efficient for sequential data access<br>
+                ✅ Lower memory overhead<br><br>
+                <strong>Limitations:</strong><br>
+                ❌ Only one per table<br>
+                ❌ Slower inserts (may cause page splits)<br>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+    }
+
+    function showNonClusteredDemo() {
+        document.getElementById('indexResults').innerHTML = `
+            <div class="success-message">
+                <strong>📑 Non-Clustered Index Demonstration</strong><br><br>
+                <strong>Structure:</strong> Separate index structure with pointers to data rows.<br>
+                <strong>Analogy:</strong> Library catalog pointing to book locations.<br><br>
+                <strong>SQL Example:</strong>
+                <pre style="background:#2c3e50;color:#ecf0f1;padding:1rem;border-radius:4px;">
+-- Create non-clustered indexes
+CREATE NONCLUSTERED INDEX IX_Employee_Name 
+ON Employee (Name ASC);
+
+CREATE NONCLUSTERED INDEX IX_Employee_Dept 
+ON Employee (Department ASC);
+
+-- Optimal queries (use non-clustered indexes)
+SELECT * FROM Employee WHERE Name = 'John Smith';
+SELECT * FROM Employee WHERE Department = 'IT';
+                </pre>
+                <strong>Performance Benefits:</strong><br>
+                ✅ Multiple indexes per table<br>
+                ✅ Fast point lookups<br>
+                ✅ Flexible query optimization<br>
+                ✅ Good for JOIN operations<br><br>
+                <strong>Considerations:</strong><br>
+                ⚠️ Additional storage overhead<br>
+                ⚠️ Requires key lookup for non-covered columns<br>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+    }
+
+    function showPerformanceComparison() {
+        document.getElementById('indexResults').innerHTML = `
+            <div class="success-message">
+                <strong>⚡ Performance Analysis & Benchmarks</strong><br><br>
+                <em>Note: Performance metrics are simulated for demonstration purposes.</em><br><br>
+                <table style="width:100%; border-collapse:collapse; margin: 1rem 0;">
+                    <tr style="background:#34495e; color:white;">
+                        <th style="padding:0.5rem; border:1px solid #ddd;">Query Type</th>
+                        <th style="padding:0.5rem; border:1px solid #ddd;">Clustered Index</th>
+                        <th style="padding:0.5rem; border:1px solid #ddd;">Non-Clustered Index</th>
+                        <th style="padding:0.5rem; border:1px solid #ddd;">Winner</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">Range Query (1K rows)</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#e8f5e8; color: #000000;">2ms</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#ffebee; color: #000000;">8ms</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">🏆 Clustered</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">Point Lookup</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#e8f5e8; color: #000000;">1ms</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#e8f5e8; color: #000000;">1.2ms</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">🤝 Similar</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">INSERT Operation</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#ffebee; color: #000000;">3ms</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#e8f5e8; color: #000000;">1.5ms</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">🏆 Non-Clustered</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">Memory Usage</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#e8f5e8; color: #000000;">Low</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; background:#fff3e0; color: #000000;">Medium</td>
+                        <td style="padding:0.5rem; border:1px solid #ddd; color: #000000;">🏆 Clustered</td>
+                    </tr>
+                </table>
+                <strong>Real-World Impact:</strong><br>
+                📊 Clustered indexes can improve range query performance by 40-60%.<br>
+                📊 Non-clustered indexes reduce point lookup time by 80-90%.<br>
+                📊 Proper indexing strategy can improve overall application performance by 3-5x.<br>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            </div>
+        `;
+    }
+
+    function clearDemo() {
+        document.getElementById('indexResults').innerHTML = 
+            '<div class="event-message one-message">Click buttons above to explore database indexing concepts!</div>';
+    }
+
+    // Query Simulations
+    function simulateClusteredQuery() {
+        const query = document.getElementById('clusteredQuery').value;
+        const result = document.getElementById('clusteredResult');
+        
+        result.innerHTML = '<div style="color:#f39c12;">🔄 Executing clustered index query...</div>';
+        
+        setTimeout(() => {
+            let performance = '';
+            switch(query) {
+                case 'range':
+                    performance = '✅ Range scan: 2ms (excellent performance)';
+                    break;
+                case 'single':
+                    performance = '✅ Index seek: 1ms (optimal)';
+                    break;
+                case 'sort':
+                    performance = '✅ No sorting needed: 0.5ms (data pre-sorted)';
+                    break;
+            }
+            result.innerHTML = `<div style="color:#27ae60;"><strong>Execution Complete!</strong><br>${performance}</div>`;
+        }, 1500);
+    }
+
+    function simulateNonClusteredQuery() {
+        const query = document.getElementById('nonClusteredQuery').value;
+        const result = document.getElementById('nonClusteredResult');
+        
+        result.innerHTML = '<div style="color:#f39c12;">🔄 Executing non-clustered index query...</div>';
+        
+        setTimeout(() => {
+            let performance = '';
+            switch(query) {
+                case 'name':
+                    performance = '✅ Index seek + Key lookup: 1.2ms';
+                    break;
+                case 'email':
+                    performance = '✅ Index scan: 5ms (pattern matching)';
+                    break;
+                case 'join':
+                    performance = '✅ Nested loop join: 3ms (optimized)';
+                    break;
+            }
+            result.innerHTML = `<div style="color:#27ae60;"><strong>Execution Complete!</strong><br>${performance}</div>`;
+        }, 1200);
+    }
+
+    function runBenchmark() {
+        document.getElementById('benchmarkResults').innerHTML = `
+            <div style="background:#ecf0f1; padding:1rem; border-radius:8px;">
+                <h4>🏁 Performance Benchmark Results:</h4>
+                <div style="margin: 1rem 0;">
+                    <strong>Test Dataset:</strong> 1M rows, various query patterns<br>
+                    <strong>Hardware:</strong> Standard cloud database instance<br><br>
+                    <em>Note: Results are simulated for demonstration purposes.</em><br><br>
+                    
+                    <strong>🏆 Winners by Category:</strong><br>
+                    📊 Range Queries: Clustered Index (75% faster)<br>
+                    📊 Point Lookups: Similar performance<br>
+                    📊 Bulk Inserts: Non-Clustered Index (45% faster)<br>
+                    📊 Memory Efficiency: Clustered Index (30% less memory)<br>
+                </div>
+                <div style="font-style:italic; color:#7f8c8d;">
+                    Recommendation: Use clustered index for primary access path, non-clustered for secondary lookups.
+                </div>
+            </div>
+        `;
+    }
+
+    // SQL Example Tabs
+    function showSQLExample(example) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(example).classList.add('active');
+        event.target.classList.add('active');
+    }
+    </script>
+</body>
+</html>

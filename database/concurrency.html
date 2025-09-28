@@ -1,36 +1,121 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concurrency Issues ka Funda - Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Concurrency Issues Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore concurrency issues with an interactive demo! Learn about race conditions, locking mechanisms, and solutions like pessimistic and optimistic locking.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/concurrency">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Concurrency Issues Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover concurrency issues with an interactive demo! Learn race conditions, locking mechanisms, and solutions like pessimistic and optimistic locking.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/concurrency">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/concurrency.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Concurrency Issues Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn concurrency issues with an interactive demo, covering race conditions, locking mechanisms, and solutions.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/concurrency.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Concurrency Issues Interactive Demo",
+    "description": "Explore concurrency issues with an interactive demo, covering race conditions, locking mechanisms, and solutions like pessimistic and optimistic locking.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/concurrency",
+    "datePublished": "2025-09-13",
+    "dateModified": "2025-09-13",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are concurrency issues in databases?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Concurrency issues occur when multiple transactions try to access or modify the same data simultaneously, leading to problems like race conditions, dirty reads, lost updates, and inconsistent states."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is pessimistic locking?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pessimistic locking prevents conflicts by locking the data until a transaction is completed. This ensures data consistency but may reduce performance due to blocking other transactions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is optimistic locking?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Optimistic locking assumes conflicts are rare. Instead of locking data, it checks for changes before committing a transaction. If a conflict is detected, the transaction is retried, making it more efficient in read-heavy systems."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
-       <div class="header-interactive" style="position:relative;">
-        <h1>Concurrency Issue ka Funda</h1>
-        <p>Understand how Concurrency Issue works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
+        <!-- Header -->
+        <div class="header-interactive" style="position:relative;">
+            <h1>Concurrency Issues Interactive Demo</h1>
+            <p>Master concurrency issues with FullstackGada’s fun approach! ⚡</p>
+            <div class="explore-diagrams-btn-wrapper">
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="Explore more diagrams"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Follow FullstackGada on Instagram"> Follow for More
+                </a>
+            </div>
         </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
-    </div>
+
         <!-- Demo Grid -->
         <div class="demo-grid">
             <!-- Concurrency Problem Simulator -->
             <div class="demo-section">
                 <h2 class="demo-title">⚡ Concurrency Problem Simulator</h2>
-                
                 <div class="explanation">
-                    <strong>Problem:</strong> दो users एक ही product को एक साथ खरीदने की कोशिश कर रहे हैं!
+                    <strong>Problem:</strong> Two users trying to buy the same product simultaneously!
                 </div>
 
                 <!-- Product Stock Display -->
@@ -38,22 +123,22 @@
                     <div class="event-message one-message">
                         <strong>📱 iPhone 15 Pro</strong><br>
                         <strong>Stock Available:</strong> <span id="currentStock">1</span><br>
-                        <strong>Price:</strong> ₹1,29,999
+                        <strong>Price:</strong> $1,499
                     </div>
                 </div>
 
                 <!-- User Simulation Controls -->
                 <div class="demo-controls">
-                    <button class="demo-btn first-btn" onclick="simulateNormalPurchase()">
+                    <button class="demo-btn first-btn" onclick="simulateNormalPurchase()" role="button" aria-label="Simulate Normal Purchase">
                         ✅ Normal Purchase (No Concurrency)
                     </button>
-                    <button class="demo-btn" onclick="simulateConcurrencyIssue()">
+                    <button class="demo-btn" onclick="simulateConcurrencyIssue()" role="button" aria-label="Simulate Concurrency Issue">
                         ⚠️ Simulate Concurrency Issue
                     </button>
-                    <button class="demo-btn" onclick="simulateWithLocking()">
+                    <button class="demo-btn" onclick="simulateWithLocking()" role="button" aria-label="Simulate Purchase with Locking">
                         🔒 Purchase with Locking
                     </button>
-                    <button class="demo-btn clear-btn" onclick="resetStock()">
+                    <button class="demo-btn clear-btn" onclick="resetStock()" role="button" aria-label="Reset Stock">
                         🔄 Reset Stock
                     </button>
                 </div>
@@ -70,17 +155,16 @@
             <!-- Solutions Demonstration -->
             <div class="demo-section">
                 <h2 class="demo-title">🛡️ Concurrency Solutions</h2>
-                
                 <div class="explanation one-explanation">
-                    <strong>जेठालाल के Solutions:</strong> Different techniques to handle concurrent access properly.
+                    <strong>Solutions:</strong> Techniques to handle concurrent access effectively.
                 </div>
 
                 <!-- Solution Tabs -->
                 <div class="tabs">
-                    <button class="tab active" onclick="showSolution('locking')">🔒 Locking</button>
-                    <button class="tab" onclick="showSolution('optimistic')">🎯 Optimistic</button>
-                    <button class="tab" onclick="showSolution('atomic')">⚛️ Atomic</button>
-                    <button class="tab" onclick="showSolution('ui-handling')">🖥️ UI Handling</button>
+                    <button class="tab active" onclick="showSolution('locking')" role="button" aria-label="Show Locking Solution">🔒 Locking</button>
+                    <button class="tab" onclick="showSolution('optimistic')" role="button" aria-label="Show Optimistic Locking Solution">🎯 Optimistic</button>
+                    <button class="tab" onclick="showSolution('atomic')" role="button" aria-label="Show Atomic Transactions Solution">⚛️ Atomic</button>
+                    <button class="tab" onclick="showSolution('ui-handling')" role="button" aria-label="Show UI Handling Solution">🖥️ UI Handling</button>
                 </div>
 
                 <!-- Solution Content -->
@@ -144,7 +228,6 @@
                         <div class="code-line var-usage">  if (isProcessing) return;</div>
                         <div class="code-line var-usage">  isProcessing = true;</div>
                         <div class="code-line var-usage">  document.getElementById('buyBtn').disabled = true;</div>
-                        <div class="code-line var-usage">  </div>
                         <div class="code-line var-usage">  fetch('/api/purchase', { method: 'POST' })</div>
                         <div class="code-line var-usage">    .then(response => {</div>
                         <div class="code-line var-usage">      isProcessing = false;</div>
@@ -159,11 +242,10 @@
         <!-- Debug and Monitoring Section -->
         <div class="demo-section" style="grid-column: 1 / -1;">
             <h2 class="demo-title">🔍 Concurrency Debugging & Monitoring</h2>
-            
             <div class="tabs">
-                <button class="tab active" onclick="showTab('debug-logs')">📋 Debug Logs</button>
-                <button class="tab" onclick="showTab('metrics')">📊 Metrics</button>
-                <button class="tab" onclick="showTab('solutions-comparison')">⚖️ Solutions Comparison</button>
+                <button class="tab active" onclick="showTab('debug-logs')" role="button" aria-label="Show Debug Logs">📋 Debug Logs</button>
+                <button class="tab" onclick="showTab('metrics')" role="button" aria-label="Show Metrics">📊 Metrics</button>
+                <button class="tab" onclick="showTab('solutions-comparison')" role="button" aria-label="Show Solutions Comparison">⚖️ Solutions Comparison</button>
             </div>
 
             <!-- Debug Logs Tab -->
@@ -172,7 +254,7 @@
                 <div class="code-block" id="debugLogsDisplay">
                     <div class="code-line comment">/* Simulate purchases to see debug logs */</div>
                 </div>
-                <button class="demo-btn" onclick="generateDebugLogs()">🔍 Generate Debug Logs</button>
+                <button class="demo-btn" onclick="generateDebugLogs()" role="button" aria-label="Generate Debug Logs">🔍 Generate Debug Logs</button>
             </div>
 
             <!-- Metrics Tab -->
@@ -262,12 +344,12 @@
             if (currentStock > 0) {
                 currentStock--;
                 const timestamp = new Date().toLocaleTimeString();
-                purchaseLog.push(`${timestamp} - User Jethalal: Purchase successful`);
+                purchaseLog.push(`${timestamp} - User 1: Purchase successful`);
                 
                 document.getElementById('currentStock').textContent = currentStock;
                 document.getElementById('purchaseLogs').innerHTML = `
                     <strong style="color: #4caf50;">✅ Purchase Successful</strong><br>
-                    User: Jethalal purchased iPhone 15 Pro<br>
+                    User 1 purchased iPhone 15 Pro<br>
                     Remaining Stock: ${currentStock}
                 `;
             } else {
@@ -284,19 +366,19 @@
             
             // Simulate two users accessing at the same time
             setTimeout(() => {
-                purchaseLog.push(`${timestamp} - User Jethalal: Checking stock (Stock: ${currentStock})`);
-                purchaseLog.push(`${timestamp} - User Iyer: Checking stock (Stock: ${currentStock})`);
+                purchaseLog.push(`${timestamp} - User 1: Checking stock (Stock: ${currentStock})`);
+                purchaseLog.push(`${timestamp} - User 2: Checking stock (Stock: ${currentStock})`);
                 
                 // Both see stock as available
                 if (currentStock > 0) {
-                    purchaseLog.push(`${timestamp} - User Jethalal: Stock available, proceeding...`);
-                    purchaseLog.push(`${timestamp} - User Iyer: Stock available, proceeding...`);
+                    purchaseLog.push(`${timestamp} - User 1: Stock available, proceeding...`);
+                    purchaseLog.push(`${timestamp} - User 2: Stock available, proceeding...`);
                     
                     // Both try to purchase
                     setTimeout(() => {
                         currentStock--;
-                        purchaseLog.push(`${timestamp + 1} - User Jethalal: Purchase successful`);
-                        purchaseLog.push(`${timestamp + 1} - User Iyer: Purchase successful`);
+                        purchaseLog.push(`${timestamp} - User 1: Purchase successful`);
+                        purchaseLog.push(`${timestamp} - User 2: Purchase successful`);
                         
                         document.getElementById('currentStock').textContent = currentStock;
                         document.getElementById('purchaseLogs').innerHTML = `
@@ -316,20 +398,20 @@
             
             // Simulate locking mechanism
             setTimeout(() => {
-                purchaseLog.push(`${timestamp} - User Jethalal: Acquiring lock on product...`);
-                purchaseLog.push(`${timestamp} - User Iyer: Waiting for lock...`);
+                purchaseLog.push(`${timestamp} - User 1: Acquiring lock on product...`);
+                purchaseLog.push(`${timestamp} - User 2: Waiting for lock...`);
                 
                 // First user gets the lock
                 if (currentStock > 0) {
                     currentStock--;
-                    purchaseLog.push(`${timestamp + 1} - User Jethalal: Lock acquired, purchase successful`);
-                    purchaseLog.push(`${timestamp + 2} - User Iyer: Lock acquired, but stock is 0 - purchase failed`);
+                    purchaseLog.push(`${timestamp} - User 1: Lock acquired, purchase successful`);
+                    purchaseLog.push(`${timestamp} - User 2: Lock acquired, but stock is 0 - purchase failed`);
                     
                     document.getElementById('currentStock').textContent = currentStock;
                     document.getElementById('purchaseLogs').innerHTML = `
                         <strong style="color: #4caf50;">✅ Locking Mechanism Working</strong><br>
-                        User Jethalal: Purchase successful (got the lock first)<br>
-                        User Iyer: Purchase failed (stock depleted)<br>
+                        User 1: Purchase successful (got the lock first)<br>
+                        User 2: Purchase failed (stock depleted)<br>
                         <strong>Data integrity maintained!</strong>
                     `;
                 }
@@ -346,18 +428,13 @@
 
         // Show solution tabs
         function showSolution(solutionName) {
-            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
             
-            // Remove active class from all tabs
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Show selected tab content
             document.getElementById(solutionName).classList.add('active');
-            
-            // Add active class to clicked tab
             event.target.classList.add('active');
         }
 
@@ -367,32 +444,27 @@
             const timestamp = new Date().toISOString();
             
             debugDisplay.innerHTML = `
-                <div class="code-line">${timestamp} - [DEBUG] User Jethalal accessing product ID: 1</div>
-                <div class="code-line">${timestamp} - [DEBUG] User Iyer accessing product ID: 1</div>
+                <div class="code-line">${timestamp} - [DEBUG] User 1 accessing product ID: 1</div>
+                <div class="code-line">${timestamp} - [DEBUG] User 2 accessing product ID: 1</div>
                 <div class="code-line">${timestamp} - [DEBUG] Current stock: 1</div>
-                <div class="code-line">${timestamp} - [DEBUG] User Jethalal: Stock check passed</div>
-                <div class="code-line">${timestamp} - [DEBUG] User Iyer: Stock check passed (SAME TIME!)</div>
+                <div class="code-line">${timestamp} - [DEBUG] User 1: Stock check passed</div>
+                <div class="code-line">${timestamp} - [DEBUG] User 2: Stock check passed (SAME TIME!)</div>
                 <div class="code-line error">${timestamp} - [ERROR] Concurrency detected: Multiple users accessing same resource</div>
-                <div class="code-line">${timestamp} - [DEBUG] User Jethalal: Purchase successful</div>
-                <div class="code-line">${timestamp} - [DEBUG] User Iyer: Purchase successful (PROBLEM!)</div>
+                <div class="code-line">${timestamp} - [DEBUG] User 1: Purchase successful</div>
+                <div class="code-line">${timestamp} - [DEBUG] User 2: Purchase successful (PROBLEM!)</div>
                 <div class="code-line error">${timestamp} - [ERROR] Data inconsistency: Stock oversold</div>
             `;
         }
 
         // Tab functionality for debug section
         function showTab(tabName) {
-            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
             
-            // Remove active class from all tabs
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Show selected tab content
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked tab
             event.target.classList.add('active');
         }
 

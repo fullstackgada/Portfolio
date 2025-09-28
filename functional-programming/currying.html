@@ -1,28 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimum-scale=1.0, maximum-scale=5.0">
-    <title>Currying ka Funda - Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currying Interactive Demo | Fullstackada</title>
+  <meta name="description" content="Discover Currying with an interactive demo! Learn how to transform functions with partial application using JavaScript, with step-by-step examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/functional-programming/currying">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Currying Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Explore Currying in JavaScript with an interactive demo! Learn partial application and functional programming with step-by-step examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/functional-programming/currying">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/functional-programming/images/currying.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Currying Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Master Currying in JavaScript with an interactive demo, exploring partial application and functional programming.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/functional-programming/images/currying.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Currying Interactive Demo",
+    "description": "Explore Currying in JavaScript with an interactive demo, covering partial application, functional programming, and step-by-step examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/functional-programming/currying",
+    "datePublished": "2025-09-23",
+    "dateModified": "2025-09-23",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Currying in JavaScript?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Currying is a functional programming technique where a function is transformed into a sequence of functions, each taking a single argument. It allows partial application of functions and makes code more reusable."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why use Currying in JavaScript?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Currying makes code modular and reusable, enables partial application, improves readability, and allows better function composition in functional programming."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you give an example of Currying?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For example, a function add(a, b) can be converted into a curried version add(a)(b). Calling add(2)(3) would return 5, while add(2) returns a new function waiting for the second argument."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
         <div class="header-interactive" style="position:relative;">
-            <h1>Currying ka Funda</h1>
-            <p>Understand Currying with Fullstackgada</p>
+            <h1>Currying Interactive Demo</h1>
+            <p>Master Currying with Fullstackgada’s Fun Approach! 🥻</p>
             
             <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
-        </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
 
         <div class="demo-grid">
@@ -30,17 +114,17 @@
                 <h2 class="demo-title">🎮 Try Currying Yourself!</h2>
                 
                 <div class="form-group">
-                    <label for="num1">First Number (like wearing a saree):</label>
+                    <label for="num1">First Number (like choosing a saree):</label>
                     <input type="number" id="num1" value="2" placeholder="Enter first number">
                 </div>
 
                 <div class="form-group">
-                    <label for="num2">Second Number (like wearing a blouse):</label>
+                    <label for="num2">Second Number (like adding a blouse):</label>
                     <input type="number" id="num2" value="3" placeholder="Enter second number">
                 </div>
 
                 <div class="form-group">
-                    <label for="num3">Third Number (like wearing jewelry):</label>
+                    <label for="num3">Third Number (like adding jewelry):</label>
                     <input type="number" id="num3" value="4" placeholder="Enter third number">
                 </div>
 
@@ -51,18 +135,18 @@
                 </div>
 
                 <div class="saree-analogy">
-                    <h4>🥻 Jethalal's Saree Analogy:</h4>
+                    <h4>🥻 Saree Analogy</h4>
                     <div class="saree-step">
                         <span class="saree-emoji">👗</span>
-                        <span>First, wearing the saree = sum(2)</span>
+                        <span>First, choose the saree = sum(2)</span>
                     </div>
                     <div class="saree-step">
                         <span class="saree-emoji">👚</span>
-                        <span>Then, wearing the blouse = sum(2)(3)</span>
+                        <span>Then, add the blouse = sum(2)(3)</span>
                     </div>
                     <div class="saree-step">
                         <span class="saree-emoji">💍</span>
-                        <span>Finally, wearing jewelry = sum(2)(3)(4)</span>
+                        <span>Finally, add jewelry = sum(2)(3)(4)</span>
                     </div>
                 </div>
             </div>
@@ -146,25 +230,25 @@
             // Create steps
             steps.length = 0;
             steps.push({
-                title: "Step 1: Wearing the saree (First Function Call)",
+                title: "Step 1: Choosing the Saree (First Function Call)",
                 code: `const sum = (a) => (b) => (c) => a + b + c;
 const step1 = sum(${num1});`,
-                explanation: `Jethalal: "First, the saree is worn - now ${num1} is stored!"`
+                explanation: `First, the saree is chosen - now ${num1} is stored!`
             });
 
             steps.push({
-                title: "Step 2: Wearing the blouse (Second Function Call)",
+                title: "Step 2: Adding the Blouse (Second Function Call)",
                 code: `const step2 = step1(${num2});
 // This is equivalent to: sum(${num1})(${num2})`,
-                explanation: `Jethalal: "Now the blouse is worn too - ${num1} and ${num2} are both ready!"`
+                explanation: `Now the blouse is added - ${num1} and ${num2} are both ready!`
             });
 
             steps.push({
-                title: "Step 3: Wearing jewelry (Final Function Call)",
+                title: "Step 3: Adding Jewelry (Final Function Call)",
                 code: `const result = step2(${num3});
 // This is equivalent to: sum(${num1})(${num2})(${num3})
 // Final calculation: ${num1} + ${num2} + ${num3} = ${num1 + num2 + num3}`,
-                explanation: `Jethalal: "Finally, the jewelry is worn - now the look is complete!"`
+                explanation: `Finally, the jewelry is added - now the look is complete!`
             });
 
             // Display steps one by one
@@ -196,7 +280,7 @@ const step1 = sum(${num1});`,
                             finalResultDiv.innerHTML = `
                                 🎉 Final Result: ${finalResult}
                                 <br>
-                                <small>Babita: "Wow Jethalal, now I understand!"</small>
+                                <small>Wow, now I understand Currying!</small>
                             `;
                             finalResultDiv.classList.add('show');
                         }, 1000);

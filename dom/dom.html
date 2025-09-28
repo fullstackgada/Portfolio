@@ -1,41 +1,126 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOM ka Funda - Fullstackgada</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Fundamentals Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore the Document Object Model (DOM) with our interactive demo! Learn DOM structure, element access, manipulation, and real-world JavaScript examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/dom/dom">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="DOM Fundamentals Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover the DOM with an interactive demo! Learn DOM structure, element access, manipulation, and JavaScript examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/dom/dom">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/dom/dom.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DOM Fundamentals Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Master the DOM with an interactive demo, covering structure, access, and manipulation with JavaScript.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/dom/dom.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "DOM Fundamentals Interactive Demo",
+    "description": "Explore the Document Object Model (DOM) with an interactive demo, covering structure, element access, manipulation, and JavaScript examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/dom/dom",
+    "datePublished": "2025-09-21",
+    "dateModified": "2025-09-21",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the DOM?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Document Object Model (DOM) is a programming interface for web documents. It represents the structure of a web page as a tree of objects, allowing developers to access and manipulate elements using JavaScript."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is learning the DOM important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Learning the DOM is important because it enables developers to create dynamic, interactive web pages by modifying HTML and CSS through JavaScript."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are common DOM manipulations in JavaScript?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common DOM manipulations include selecting elements, changing text or attributes, updating styles, creating new elements, and handling user events like clicks and input changes."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
-       <div class="header-interactive" style="position:relative;">
-        <h1>DOM ka Funda</h1>
-        <p>Understand how DOM works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
-        </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-            <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-            </a>
-        </div>
+        <!-- Header -->
+        <div class="header-interactive" style="position:relative;">
+            <h1>DOM Fundamentals Interactive Demo</h1>
+            <p>Master the DOM with <strong>Fullstackgada</strong>’s fun approach! 🌳</p>
+            <div class="explore-diagrams-btn-wrapper">
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
 
         <!-- Demo Grid -->
         <div class="demo-grid">
             <!-- DOM Concept Explanation -->
             <div class="demo-section">
-                <h2 class="demo-title">🌳 What is DOM?</h2>
+                <h2 class="demo-title">🌳 What is the DOM?</h2>
                 <div class="explanation">
-                    <strong>DOM:</strong> HTML ka tree structure jise JavaScript se modify kar sakte hain!
+                    <strong>DOM:</strong> A tree structure of HTML that JavaScript can modify dynamically!
                 </div>
                 <div class="saree-analogy">
-                    <h4>🌉 DOM - HTML & JavaScript ka Bridge</h4>
+                    <h4>🌉 DOM - The Bridge Between HTML & JavaScript</h4>
                     <div class="saree-step"><div class="saree-emoji">📄</div><div><strong>HTML:</strong> Static structure</div></div>
-                    <div class="saree-step"><div class="saree-emoji">🌉</div><div><strong>DOM:</strong> Bridge</div></div>
+                    <div class="saree-step"><div class="saree-emoji">🌉</div><div><strong>DOM:</strong> The bridge</div></div>
                     <div class="saree-step"><div class="saree-emoji">⚡</div><div><strong>JavaScript:</strong> Dynamic control</div></div>
                 </div>
                 <div class="demo-controls">
@@ -45,7 +130,7 @@
                     <button class="demo-btn clear-btn" onclick="clearDOMDemo()">🗑️ Clear</button>
                 </div>
                 <div class="demo-area" id="domResults">
-                    <div class="event-message one-message">Click buttons to explore DOM!</div>
+                    <div class="event-message one-message">Click buttons to explore the DOM!</div>
                 </div>
             </div>
 
@@ -53,12 +138,12 @@
             <div class="demo-section">
                 <h2 class="demo-title">🎮 DOM Playground</h2>
                 <div class="explanation one-explanation">
-                    <strong>Test:</strong> Try real DOM manipulation!
+                    <strong>Try:</strong> Experiment with real DOM manipulation!
                 </div>
                 <div class="demo-area" style="border: 2px solid #4caf50; padding: 1rem; margin: 1rem 0;">
-                    <h3 id="playgroundTitle">Hello Daya</h3>
-                    <p id="playgroundText">This is original text</p>
-                    <div class="demo-buttons">
+                    <h3 id="playgroundTitle">Hello World</h3>
+                    <p id="playgroundText">This is the original text</p>
+                    <div class="demo-buttons" style="display: flex;">
                         <button id="changeTextBtn" class="demo-btn">Change Text</button>
                         <button id="changeColorBtn" class="demo-btn">Change Color</button>
                         <button id="addElementBtn" class="demo-btn">Add Element</button>
@@ -112,8 +197,8 @@
                     <div class="code-block">
                         <div class="code-line comment">// 📝 Content Manipulation</div>
                         <div class="code-line var-usage">const heading = document.getElementById('playgroundTitle');</div>
-                        <div class="code-line var-usage">heading.textContent = 'Hello Babita Ji!';</div>
-                        <div class="code-line var-usage">heading.innerHTML = '<em>Hello Babita!</em>';</div>
+                        <div class="code-line var-usage">heading.textContent = 'Hello World!';</div>
+                        <div class="code-line var-usage">heading.innerHTML = '<em>Hello World!</em>';</div>
                         <div class="code-line var-usage">const btn = document.getElementById('changeTextBtn');</div>
                         <div class="code-line var-usage">btn.setAttribute('disabled', 'true');</div>
                         <div class="code-line var-usage">const newPara = document.createElement('p');</div>
@@ -153,7 +238,7 @@
                         <div class="code-line comment">// ⚡ Event Handling</div>
                         <div class="code-line var-usage">const button = document.getElementById('changeTextBtn');</div>
                         <div class="code-line var-usage">button.addEventListener('click', () => {</div>
-                        <div class="code-line var-usage">  document.getElementById('playgroundTitle').textContent = 'Hello Babita Ji!';</div>
+                        <div class="code-line var-usage">  document.getElementById('playgroundTitle').textContent = 'Hello World!';</div>
                         <div class="code-line var-usage">});</div>
                         <div class="code-line var-usage">button.addEventListener('mouseenter', () => {</div>
                         <div class="code-line var-usage">  button.style.backgroundColor = '#4caf50';</div>
@@ -169,29 +254,29 @@
 
         <!-- DOM Tree Visualization -->
         <div class="demo-section" style="grid-column: 1 / -1;">
-            <h2 class="demo-title">🌳 DOM Tree</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <h2 class="demo-title">🌳 DOM Tree Visualization</h2>
+            <div style="display: contents; grid-template-columns: 1fr 1fr; gap: 2rem;">
                 <div>
-                    <h4>📄 HTML</h4>
+                    <h4>📄 HTML Code</h4>
                     <div class="code-block">
                         <div class="code-line var-declaration">&lt;html&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&lt;head&gt;&lt;title&gt;DOM Demo&lt;/title&gt;&lt;/head&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&lt;body&gt;</div>
-                        <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1 id="title"&gt;Hello Daya&lt;/h1&gt;</div>
+                        <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1 id="title"&gt;Hello World&lt;/h1&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p class="text"&gt;Original text&lt;/p&gt;</div>
                         <div class="code-line var-usage">&nbsp;&nbsp;&nbsp;&nbsp;&lt;button id="btn"&gt;Click Me&lt;/button&gt;</div>
                         <div class="code-line var-declaration">&lt;/html&gt;</div>
                     </div>
                 </div>
-                <div>
-                    <h4>🌳 DOM Tree</h4>
+                <div style="display: flex;">
+                    <h4>🌳 DOM Tree Structure</h4>
                     <div class="memory-diagram">
                         <div class="memory-slot"><div class="variable-name">📄 document</div><div class="variable-value">Root</div></div>
                         <div class="memory-slot" style="margin-left: 1rem;"><div class="variable-name">🏠 html</div><div class="variable-value">Document</div></div>
                         <div class="memory-slot" style="margin-left: 2rem;"><div class="variable-name">🧠 head</div><div class="variable-value">Meta</div></div>
                         <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📰 title</div><div class="variable-value">"DOM Demo"</div></div>
                         <div class="memory-slot" style="margin-left: 2rem;"><div class="variable-name">🎭 body</div><div class="variable-value">Content</div></div>
-                        <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📝 h1#title</div><div class="variable-value">"Hello Daya"</div></div>
+                        <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📝 h1#title</div><div class="variable-value">"Hello World"</div></div>
                         <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">📄 p.text</div><div class="variable-value">"Original text"</div></div>
                         <div class="memory-slot" style="margin-left: 3rem;"><div class="variable-name">🔘 button#btn</div><div class="variable-value">"Click Me"</div></div>
                     </div>
@@ -207,8 +292,8 @@
         </div>
 
         <!-- DOM Performance & Best Practices -->
-        <div class="comparison-section">
-            <h3>🚀 Best Practices</h3>
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🚀 DOM Best Practices</h2>
             <table class="comparison-table responsive-table">
                 <thead>
                     <tr><th>Practice</th><th>✅ Do</th><th>❌ Avoid</th><th>Why?</th></tr>
@@ -243,8 +328,8 @@
         </div>
 
         <!-- DOM Methods Comparison -->
-        <div class="comparison-section">
-            <h3>🛠️ Methods Comparison</h3>
+        <div class="demo-section" style="grid-column: 1 / -1;">
+            <h2 class="demo-title">🛠️ DOM Methods Comparison</h2>
             <table class="comparison-table responsive-table">
                 <thead>
                     <tr><th>Method</th><th>Purpose</th><th>Returns</th><th>Use Case</th></tr>
@@ -296,7 +381,7 @@
         function demonstrateManipulation() {
             const title = document.getElementById('playgroundTitle');
             const originalText = title.textContent;
-            title.textContent = 'Hello Babita Ji! 💖';
+            title.textContent = 'Hello World!';
             title.style.color = '#e91e63';
             title.style.transform = 'scale(1.1)';
             setTimeout(() => {
@@ -307,7 +392,7 @@
             document.getElementById('domResults').innerHTML = `
                 <div class="success-message">
                     <strong>✨ Manipulation</strong><br>
-                    • Text changed to "Hello Babita Ji!"<br>
+                    • Text changed to "Hello World!"<br>
                     • Color to pink<br>
                     • Resets in 3s<br>
                     <strong>Methods:</strong><br>
@@ -320,7 +405,7 @@
 
         function clearDOMDemo() {
             document.getElementById('domResults').innerHTML = `
-                <div class="event-message one-message">Click buttons to explore DOM!</div>
+                <div class="event-message one-message">Click buttons to explore the DOM!</div>
             `;
         }
 
@@ -332,14 +417,14 @@
                 <div class="code-line var-usage">const title = document.getElementById('playgroundTitle');</div>
                 <div class="code-line var-usage">const btn = document.getElementById('changeTextBtn');</div>
                 <div class="code-line var-usage">btn.addEventListener('click', () => {</div>
-                <div class="code-line var-usage">  title.textContent = 'Hello Babita Ji!';</div>
+                <div class="code-line var-usage">  title.textContent = 'Hello World!';</div>
                 <div class="code-line var-usage">  title.style.color = '#e91e63';</div>
                 <div class="code-line var-usage">});</div>
             `;
             const title = document.getElementById('playgroundTitle');
             const btn = document.getElementById('changeTextBtn');
             btn.addEventListener('click', () => {
-                title.textContent = 'Hello Babita Ji!';
+                title.textContent = 'Hello World!';
                 title.style.color = '#e91e63';
             });
         }
@@ -354,7 +439,7 @@
                 <div class="code-line var-usage">const container = document.getElementById('dynamicContent');</div>
                 <div class="code-line var-usage">allBtns.forEach((btn, index) => {</div>
                 <div class="code-line var-usage">  btn.addEventListener('click', () => {</div>
-                <div class="code-line var-usage">    if (index === 0) title.textContent = 'Hello Babita Ji!';</div>
+                <div class="code-line var-usage">    if (index === 0) title.textContent = 'Hello World!';</div>
                 <div class="code-line var-usage">    if (index === 1) title.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';</div>
                 <div class="code-line var-usage">    if (index === 2) {</div>
                 <div class="code-line var-usage">      const newEl = document.createElement('p');</div>
@@ -369,7 +454,7 @@
             const container = document.getElementById('dynamicContent');
             allBtns.forEach((btn, index) => {
                 btn.addEventListener('click', () => {
-                    if (index === 0) title.textContent = 'Hello Babita Ji!';
+                    if (index === 0) title.textContent = 'Hello World!';
                     if (index === 1) {
                         title.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
                         title.style.color = 'white';
@@ -407,9 +492,9 @@
 
         function resetPlayground() {
             const title = document.getElementById('playgroundTitle');
-            title.textContent = 'Hello Daya';
+            title.textContent = 'Hello World';
             title.style.cssText = '';
-            document.getElementById('playgroundText').textContent = 'This is original text';
+            document.getElementById('playgroundText').textContent = 'This is the original text';
             document.getElementById('dynamicContent').innerHTML = '';
             const buttons = document.querySelectorAll('#changeTextBtn, #changeColorBtn, #addElementBtn');
             buttons.forEach(btn => {

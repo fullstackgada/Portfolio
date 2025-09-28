@@ -1,27 +1,111 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Transactions ka Funda- Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Transactions Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore SQL Transactions with an interactive demo! Learn ACID properties, commit, rollback, and real-world examples with FullstackGada.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/sql-transactions">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="SQL Transactions Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover SQL Transactions with an interactive demo! Learn ACID properties, commit, rollback, and real-world database examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/sql-transactions">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/sql-transactions.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SQL Transactions Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn SQL Transactions with an interactive demo, covering ACID properties, commit, and rollback.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/sql-transactions.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "SQL Transactions Interactive Demo",
+    "description": "Explore SQL Transactions with an interactive demo, covering ACID properties, commit, rollback, and real-world database examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/sql-transactions",
+    "datePublished": "2025-09-18",
+    "dateModified": "2025-09-18",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are SQL Transactions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SQL Transactions are sequences of one or more SQL operations executed as a single unit of work. They ensure data consistency and reliability by following ACID properties."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are the ACID properties in SQL Transactions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ACID stands for Atomicity, Consistency, Isolation, and Durability. These properties guarantee reliable database transactions, ensuring data integrity even in case of failures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between COMMIT and ROLLBACK?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "COMMIT saves all changes made during the current transaction permanently to the database, while ROLLBACK undoes all changes, restoring the database to its previous state."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
 <div class="container">
     <!-- Header -->
     <div class="header-interactive" style="position:relative;">
-        <h1>SQL Transactions ka Funda</h1>
-        <p>Understand how SQL Transactions works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
+        <h1>SQL Transactions Interactive Demo</h1>
+        <p>Master SQL Transactions with Fullstackgada’s fun approach! 🗄️</p>
+        <div class="explore-diagrams-btn-wrapper">
             <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+                <img src="/image/plus-circle.svg" alt="More diagrams icon"> More Diagrams
             </a>
         </div>
-       <div class="follow-btn-wrapper">
+        <div class="follow-btn-wrapper">
             <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
+                <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+            </a>
         </div>
     </div>
 
@@ -31,76 +115,76 @@
         <div class="demo-section">
             <h2 class="demo-title">🔄 SQL Transactions Explorer</h2>
             <div class="explanation">
-                <b>Transactions:</b> Sab kuch ek saath ya phir bilkul nahi! Stock ghatana, order daalna, payment — ya toh sab ho ya ek bhi nahi.
+                <b>Transactions:</b> All or nothing! Update stock, add order, process payment—either everything succeeds or nothing does.
             </div>
             <div class="demo-controls">
                 <button class="demo-btn first-btn" onclick="startTransaction(true)">
                     ✅ Successful Transaction
                 </button>
                 <button class="demo-btn" onclick="startTransaction(false)">
-                    ❌ Transaction mein Error (Rollback)
+                    ❌ Transaction Error (Rollback)
                 </button>
                 <button class="demo-btn clear-btn" onclick="clearTransDemo()">
-                    🔄 Demo Reset Karo
+                    🔄 Reset Demo
                 </button>
             </div>
             <!-- Visual Transaction Steps -->
             <div class="memory-diagram" id="transSteps">
                 <div class="memory-slot" id="step1">
-                    <b>BEGIN</b> <br> (Transaction shuru)
+                    <b>BEGIN</b> <br> (Start Transaction)
                 </div>
                 <div class="memory-slot" id="step2">
-                    <b>Stock -1</b> <br> (Stock kam kiya)
+                    <b>Stock -1</b> <br> (Reduce Stock)
                 </div>
                 <div class="memory-slot" id="step3">
-                    <b>Order Added</b> <br> (Order daala)
+                    <b>Order Added</b> <br> (Insert Order)
                 </div>
                 <div class="memory-slot" id="step4">
-                    <b>Payment</b> <br> (Payment hua)
+                    <b>Payment</b> <br> (Process Payment)
                 </div>
                 <div class="memory-slot tdz" id="step5">
-                    <b>Commit ya Rollback?</b>
+                    <b>Commit or Rollback?</b>
                 </div>
             </div>
             <!-- Transaction Output -->
             <div class="demo-area" id="transOutput">
                 <div class="event-message one-message">
-                    <b>Demo:</b> Upar ke button dabao aur dekho transaction kaise kaam karta hai!
+                    <b>Demo:</b> Click the buttons above to see how transactions work!
                 </div>
             </div>
         </div>
 
         <!-- Analogy Section -->
         <div class="demo-section">
-            <h2 class="demo-title">🏠 Gokuldham ka Analogy</h2>
+            <h2 class="demo-title">🏠 Wedding Ceremony Analogy</h2>
             <div class="saree-analogy">
-                <h4>Transaction = Shaadi ka Mandap!</h4>
+                <h4>Transaction = Wedding Ceremony!</h4>
                 <div class="saree-step">
                     <div class="saree-emoji">🪔</div>
-                    <div>Teen rasmein chal rahi hain: <b>Haldi, Phere, Mangalsutra</b>... Ek bhi chhuti toh shaadi cancel (Rollback)!</div>
+                    <div>Three rituals: <b>Haldi, Vows, Ring</b>... If one fails, the wedding is canceled (Rollback)!</div>
                 </div>
                 <div class="saree-step">
                     <div class="saree-emoji">🎉</div>
-                    <div>Sab rasmein poori? <b>Commit</b> – Shaadi pakki!</div>
+                    <div>All rituals complete? <b>Commit</b> – Wedding confirmed!</div>
                 </div>
                 <div class="saree-step">
                     <div class="saree-emoji">😨</div>
-                    <div>Beech mein bijli chali gayi? – Rollback – Sab wapas, jaise kuch hua hi nahi.</div>
+                    <div>Power outage in the middle? Rollback – Everything resets, as if nothing happened.</div>
                 </div>
             </div>
             <div class="how-it-works">
-                <h4>💡 Transaction ke Properties (ACID)</h4>
-                <div class="step"><div class="step-number">A</div>Atomicity: Sab ya kuch bhi nahi</div>
-                <div class="step"><div class="step-number">C</div>Consistency: Data hamesha sahi rules pe</div>
-                <div class="step"><div class="step-number">I</div>Isolation: Ek transaction doosre se alag</div>
-                <div class="step"><div class="step-number">D</div>Durability: Ek baar commit hua – data safe</div>
+                <h4>💡 Transaction Properties (ACID)</h4>
+                <div class="step"><div class="step-number">A</div>Atomicity: All or nothing</div>
+                <div class="step"><div class="step-number">C</div>Consistency: Data always follows rules</div>
+                <div class="step"><div class="step-number">I</div>Isolation: Transactions are independent</div>
+                <div class="step"><div class="step-number">D</div>Durability: Committed data is safe</div>
             </div>
         </div>
     </div>
 
     <!-- Transactional Tables and SQL -->
     <div class="demo-section">
-        <h2 class="demo-title">🔢 Example: Orders aur Stock Table</h2>
+        <h2 class="demo-title">🔢 Example: Orders and Stock Tables</h2>
         <div class="tabs">
             <button class="tab active" onclick="showTab('orders-tab')">Orders</button>
             <button class="tab" onclick="showTab('stock-tab')">Stock</button>
@@ -135,28 +219,28 @@
             </table>
         </div>
         <div id="sql-tab" class="tab-content">
-            <h4>💻 Transaction SQL ka Example</h4>
+            <h4>💻 SQL Transaction Example</h4>
             <div class="code-block" id="sqlDemo">
 <pre>
 BEGIN;
-/* Step 1: Stock kam karo */
+/* Step 1: Reduce stock */
 UPDATE Stock SET count = count - 1 WHERE product='Soap';
 
-/* Step 2: Order daalo */
+/* Step 2: Insert order */
 INSERT INTO Orders(product, qty, status) VALUES ('Soap', 1, 'Pending');
 
 /* Step 3: Payment */
--- Yahan payment step imagine karo
+-- Imagine payment step here
 
-/* Sab theek hai */
+/* All good */
 COMMIT;
 
-/* Agar koi ERROR */
+/* If an error occurs */
 ROLLBACK;
 </pre>
             </div>
             <div class="explanation">
-                <b>Sirf COMMIT ke baad data pakka!</b> Error hua toh sab wapas (ROLLBACK).
+                <b>Only COMMIT saves data!</b> If an error occurs, ROLLBACK reverts everything.
             </div>
         </div>
     </div>
@@ -181,7 +265,7 @@ function renderTables() {
             <td>${o.status}</td>
         </tr>`;
     });
-    document.getElementById("ordersRows").innerHTML = orderHtml || "<tr><td colspan='4'>Koi Orders Nahi</td></tr>";
+    document.getElementById("ordersRows").innerHTML = orderHtml || "<tr><td colspan='4'>No Orders</td></tr>";
     // Stock
     let stockHtml = '';
     stockTable.forEach(s=>{
@@ -200,14 +284,14 @@ function startTransaction(success) {
     document.querySelectorAll('.memory-slot').forEach(e=>e.classList.remove('error','hoisted','tdz'));
     // Step 1: Begin
     document.getElementById('step1').classList.add('hoisted');
-    document.getElementById('transOutput').innerHTML = "<div class='event-message one-message'>Transaction shuru...<br>BEGIN;</div>";
+    document.getElementById('transOutput').innerHTML = "<div class='event-message one-message'>Transaction started...<br>BEGIN;</div>";
 
     setTimeout(()=>{
         // Step 2: Stock minus
         document.getElementById('step2').classList.add('hoisted');
         stockTable[0].count--;
         renderTables();
-        document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Stock kam kiya!</div>";
+        document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Stock reduced!</div>";
         
         setTimeout(()=>{
             // Step 3: Order insert
@@ -215,7 +299,7 @@ function startTransaction(success) {
             let nextId = ordersTable.length ? Math.max(...ordersTable.map(o=>o.orderid))+1 : 1;
             ordersTable.push({orderid: nextId, product:"Soap", qty:1, status:"Pending"});
             renderTables();
-            document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Order daala!</div>";
+            document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'>Order added!</div>";
             
             setTimeout(()=>{
                 // Step 4: Payment
@@ -229,14 +313,14 @@ function startTransaction(success) {
                         document.getElementById('step5').classList.add('hoisted');
                         ordersTable[ordersTable.length-1].status="Delivered";
                         renderTables();
-                        document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'><b>COMMIT; Sab kaam success — Data pakka!</b></div>";
+                        document.getElementById('transOutput').innerHTML += "<div class='event-message one-message'><b>COMMIT; All steps succeeded — Data saved!</b></div>";
                     } else {
                         document.getElementById('step5').classList.add('error');
                         // ROLLBACK: revert stock, remove order
                         stockTable[0].count++;
                         ordersTable.pop();
                         renderTables();
-                        document.getElementById('transOutput').innerHTML += "<div class='event-message two-message'><b>ERROR! System crash — ROLLBACK; <br>Sab wapas, jaise kuch hua hi nahi.</b></div>";
+                        document.getElementById('transOutput').innerHTML += "<div class='event-message two-message'><b>ERROR! System crashed — ROLLBACK; <br>Everything reverted, as if nothing happened.</b></div>";
                     }
                 },700);
             },700);
@@ -256,7 +340,7 @@ function clearTransDemo(){
     // Reset visuals
     document.querySelectorAll('.memory-slot').forEach(e=>e.classList.remove('error','hoisted','tdz'));
     document.getElementById('step5').classList.add('tdz');
-    document.getElementById('transOutput').innerHTML = "<div class='event-message one-message'><b>Demo:</b> Upar ke button dabao aur dekho transaction kaise kaam karta hai!</div>";
+    document.getElementById('transOutput').innerHTML = "<div class='event-message one-message'><b>Demo:</b> Click the buttons above to see how transactions work!</div>";
 }
 
 /* Tabs */

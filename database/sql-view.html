@@ -1,298 +1,365 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL View ka Funda - Fullstackgada Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL View Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore SQL Views with an interactive demo! Learn how to create, use, update, and drop views, with real-world examples and comparisons to tables.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/sql-view">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="SQL View Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover SQL Views with an interactive demo! Learn to create, use, and manage views with practical examples and comparisons.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/sql-view">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/sql-view.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SQL View Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn SQL Views with an interactive demo, covering creation, usage, and real-world examples.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/sql-view.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "SQL View Interactive Demo",
+    "description": "Explore SQL Views with an interactive demo, covering how to create, use, update, and drop views, with practical examples and comparisons to tables.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/sql-view",
+    "datePublished": "2025-09-17",
+    "dateModified": "2025-09-17",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a SQL View?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A SQL View is a virtual table created using a SQL query. It does not store data itself but presents data from one or more tables as if it were a real table."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why should I use SQL Views?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SQL Views simplify complex queries, improve security by restricting access to specific columns, and provide a layer of abstraction for easier database management."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you update or drop a SQL View?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can update a view using CREATE OR REPLACE VIEW in SQL. To remove a view completely, use the DROP VIEW statement."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container">
         <div class="header-interactive" style="position: relative;">
-            <h1> SQL View ka Fund</h1>
-           <p class="subtitle">Understand how SQL Views works with Fullstackgada</p>
-           <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
-        </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
-
+            <h1>SQL View Interactive Demo</h1>
+            <p class="subtitle">Master SQL Views with Fullstackgada’s fun approach!</p>
+            <div class="explore-diagrams-btn-wrapper">
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="Explore more diagrams"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
         
         <div class="demo-grid">
-         <div class="demo-section">
-            <div class="demo">
-            <div class="demo-title">📊 Orders Table</div>
-            <table class="responsive-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Customer ID</th>
-                        <th>Product ID</th>
-                        <th>Quantity</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>101</td>
-                        <td>201</td>
-                        <td>2</td>
-                        <td>2024-01-15</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>102</td>
-                        <td>202</td>
-                        <td>1</td>
-                        <td>2024-01-16</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>101</td>
-                        <td>203</td>
-                        <td>3</td>
-                        <td>2024-01-17</td>
-                    </tr>
-                </tbody>
-            </table>
-        
-        </div>
-            <div class="demo">
-            <div class="demo-title">👥 Customers Table</div>
-            <table class="responsive-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>City</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>101</td>
-                        <td>राम शर्मा</td>
-                        <td>मुंबई</td>
-                        <td>ram@email.com</td>
-                        <td>9876543210</td>
-                    </tr>
-                    <tr>
-                        <td>102</td>
-                        <td>श्याम गुप्ता</td>
-                        <td>दिल्ली</td>
-                        <td>shyam@email.com</td>
-                        <td>9876543211</td>
-                    </tr>
-                    <tr>
-                        <td>103</td>
-                        <td>गीता पटेल</td>
-                        <td>पुणे</td>
-                        <td>geeta@email.com</td>
-                        <td>9876543212</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>    
-        
-             <div class="demo">
-            <div class="demo-title">📦 Products Table</div>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Price (₹)</th>
-                        <th>Category</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>201</td>
-                        <td>लैपटॉप</td>
-                        <td>50,000</td>
-                        <td>Electronics</td>
-                        <td>25</td>
-                    </tr>
-                    <tr>
-                        <td>202</td>
-                        <td>मोबाइल</td>
-                        <td>20,000</td>
-                        <td>Electronics</td>
-                        <td>50</td>
-                    </tr>
-                    <tr>
-                        <td>203</td>
-                        <td>हेडफोन</td>
-                        <td>2,500</td>
-                        <td>Electronics</td>
-                        <td>100</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-</div>
-
+            <div class="demo-section">
+                <div class="demo">
+                    <div class="demo-title">📊 Orders Table</div>
+                    <table class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer ID</th>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>101</td>
+                                <td>201</td>
+                                <td>2</td>
+                                <td>2024-01-15</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>102</td>
+                                <td>202</td>
+                                <td>1</td>
+                                <td>2024-01-16</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>101</td>
+                                <td>203</td>
+                                <td>3</td>
+                                <td>2024-01-17</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="demo">
+                    <div class="demo-title">👥 Customers Table</div>
+                    <table class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>City</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>101</td>
+                                <td>Ram Sharma</td>
+                                <td>Mumbai</td>
+                                <td>ram@email.com</td>
+                                <td>9876543210</td>
+                            </tr>
+                            <tr>
+                                <td>102</td>
+                                <td>Shyam Gupta</td>
+                                <td>Delhi</td>
+                                <td>shyam@email.com</td>
+                                <td>9876543211</td>
+                            </tr>
+                            <tr>
+                                <td>103</td>
+                                <td>Geeta Patel</td>
+                                <td>Pune</td>
+                                <td>geeta@email.com</td>
+                                <td>9876543212</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>    
+                <div class="demo">
+                    <div class="demo-title">📦 Products Table</div>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price ($)</th>
+                                <th>Category</th>
+                                <th>Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>201</td>
+                                <td>Laptop</td>
+                                <td>500</td>
+                                <td>Electronics</td>
+                                <td>25</td>
+                            </tr>
+                            <tr>
+                                <td>202</td>
+                                <td>Mobile</td>
+                                <td>200</td>
+                                <td>Electronics</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>203</td>
+                                <td>Headphones</td>
+                                <td>25</td>
+                                <td>Electronics</td>
+                                <td>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             
             <div class="demo-section">
-                <div class="demo-title"><span class="icon">🔍</span>View Creation</div>
-                
-                    <div class="step-title">📋 Order Report View</div>
-                    <div class="step-code">CREATE VIEW order_report AS
+                <div class="demo-title"><span class="icon">🔍</span> View Creation</div>
+                <div class="step-title">📋 Order Report View</div>
+                <div class="step-code">CREATE VIEW order_report AS
 SELECT 
     o.id,
-    c.name as customer_name,
-    p.name as product_name,
+    c.name AS customer_name,
+    p.name AS product_name,
     o.quantity,
-    o.quantity * p.price as total_amount,
+    o.quantity * p.price AS total_amount,
     o.date
 FROM orders o
 JOIN customers c ON o.customer_id = c.id
 JOIN products p ON o.product_id = p.id;</div>
-                </div>
-             
             </div>
         
-        <div class="demo-section">
-            <div class="tabs">
-                <button class="tab active" onclick="showTab('usage')">📝 Usage</button>
-                <button class="tab" onclick="showTab('comparison')">⚖️ Comparison</button>
-                <button class="tab" onclick="showTab('examples')">💻 Examples</button>
-            </div>
-            
-            <div id="usage" class="tab-content active">
-                <div class="demo-title">View का इस्तेमाल कैसे करें:</div>
-                <div class="step-code">-- View बनाना
+            <div class="demo-section">
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('usage')" role="button" aria-label="Show Usage Tab">📝 Usage</button>
+                    <button class="tab" onclick="showTab('comparison')" role="button" aria-label="Show Comparison Tab">⚖️ Comparison</button>
+                    <button class="tab" onclick="showTab('examples')" role="button" aria-label="Show Examples Tab">💻 Examples</button>
+                </div>
+                
+                <div id="usage" class="tab-content active">
+                    <div class="demo-title">How to Use SQL Views:</div>
+                    <div class="step-code">-- Create a View
 CREATE VIEW simple_report AS
 SELECT customer_name, product_name, total_amount
 FROM order_report
-WHERE total_amount > 10000;
+WHERE total_amount > 100;
 
-
--- View को use करना (बिल्कुल table की तरह)
+-- Use View (like a table)
 SELECT * FROM simple_report;
 
-
--- View को update करना
+-- Update View
 CREATE OR REPLACE VIEW simple_report AS
 SELECT customer_name, product_name, total_amount, date
 FROM order_report
-WHERE total_amount > 15000;
+WHERE total_amount > 150;
 
-
--- View को delete करना
+-- Delete View
 DROP VIEW simple_report;</div>
+                </div>
                 
-               
-            </div>
-            
-            <div id="comparison" class="tab-content">
-                <div class="demo-title">Table vs View:</div>
-                <table class="comparison-table">
-                    <tr>
-                        <th>विशेषता</th>
-                        <th>Table</th>
-                        <th>View</th>
-                    </tr>
-                    <tr>
-                        <td>Data Storage</td>
-                        <td>✅ Physical storage</td>
-                        <td>❌ Virtual (No storage)</td>
-                    </tr>
-                    <tr>
-                        <td>Space Usage</td>
-                        <td>💾 Disk space लेता है</td>
-                        <td>🪶 कोई space नहीं</td>
-                    </tr>
-                    <tr>
-                        <td>Data Freshness</td>
-                        <td>⏰ Manual update</td>
-                        <td>🔄 हमेशा fresh</td>
-                    </tr>
-                    <tr>
-                        <td>Complex Queries</td>
-                        <td>🔍 हर बार लिखना पड़ता है</td>
-                        <td>✨ एक बार define करके reuse</td>
-                    </tr>
-                    <tr>
-                        <td>Performance</td>
-                        <td>⚡ Fast (direct access)</td>
-                        <td>🐌 Slower (query execution)</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <div id="examples" class="tab-content">
-                <div class="demo-title">Practical Examples:</div>
+                <div id="comparison" class="tab-content">
+                    <div class="demo-title">Table vs View:</div>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Table</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Data Storage</td>
+                                <td>✅ Physical storage</td>
+                                <td>❌ Virtual (No storage)</td>
+                            </tr>
+                            <tr>
+                                <td>Space Usage</td>
+                                <td>💾 Takes disk space</td>
+                                <td>🪶 No space required</td>
+                            </tr>
+                            <tr>
+                                <td>Data Freshness</td>
+                                <td>⏰ Manual updates</td>
+                                <td>🔄 Always fresh</td>
+                            </tr>
+                            <tr>
+                                <td>Complex Queries</td>
+                                <td>🔍 Rewrite every time</td>
+                                <td>✨ Define once, reuse</td>
+                            </tr>
+                            <tr>
+                                <td>Performance</td>
+                                <td>⚡ Fast (direct access)</td>
+                                <td>🐌 Slower (query execution)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 
-              
+                <div id="examples" class="tab-content">
+                    <div class="demo-title">Practical Examples:</div>
                     <div class="step-title">🎯 Simple View (Updatable)</div>
                     <div class="step-code">CREATE VIEW mumbai_customers AS
-                        SELECT id, name, email
-                        FROM customers
-                        WHERE city = 'मुंबई';
-                        -- यह view में data update कर सकते हैं
-                        UPDATE mumbai_customers 
-                        SET email = 'newemail@example.com' 
-                        WHERE id = 101;</div>
-                
-                
-               
+SELECT id, name, email
+FROM customers
+WHERE city = 'Mumbai';
+
+-- Update data in view
+UPDATE mumbai_customers 
+SET email = 'newemail@example.com' 
+WHERE id = 101;</div>
+                    
                     <div class="step-title">🔒 Complex View (Read-only)</div>
                     <div class="step-code">CREATE VIEW monthly_sales AS
-                    SELECT 
-                        DATE_FORMAT(date, '%Y-%m') as month,
-                        COUNT(*) as total_orders,
-                        SUM(quantity * price) as total_revenue
-                    FROM orders o
-                    JOIN products p ON o.product_id = p.id
-                    GROUP BY DATE_FORMAT(date, '%Y-%m');
+SELECT 
+    DATE_FORMAT(date, '%Y-%m') AS month,
+    COUNT(*) AS total_orders,
+    SUM(quantity * price) AS total_revenue
+FROM orders o
+JOIN products p ON o.product_id = p.id
+GROUP BY DATE_FORMAT(date, '%Y-%m');
 
-
-                    -- यह view read-only है (GROUP BY के कारण)
-                    SELECT * FROM monthly_sales;</div>
+-- Read-only view (due to GROUP BY)
+SELECT * FROM monthly_sales;</div>
                 </div>
             </div>
 
-
-        
-        <div class="demo-section">
-            <div class="demo-title">🎮 Interactive Demo</div>
-            <div class="explanation">Click buttons to see how views work:</div>
-            <div class="demo-controls">
-                <button class="demo-btn" onclick="showDemo('create')">Create View</button>
-                <button class="demo-btn" onclick="showDemo('select')">Select from View</button>
-                <button class="demo-btn" onclick="showDemo('update')">Update View</button>
-                <button class="demo-btn" onclick="showDemo('drop')">Drop View</button>
-            </div>
-            
-            <div id="demo-output" class="demo-area">
-                <p>👆 Upar ke buttons par click karke dekhein ki Views kaise kaam karte hain!"</p>
+            <div class="demo-section">
+                <div class="demo-title">🎮 Interactive Demo</div>
+                <div class="explanation">Click buttons to see how SQL Views work:</div>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="showDemo('create')" role="button" aria-label="Create View Demo">Create View</button>
+                    <button class="demo-btn" onclick="showDemo('select')" role="button" aria-label="Select from View Demo">Select from View</button>
+                    <button class="demo-btn" onclick="showDemo('update')" role="button" aria-label="Update View Demo">Update View</button>
+                    <button class="demo-btn" onclick="showDemo('drop')" role="button" aria-label="Drop View Demo">Drop View</button>
+                </div>
+                
+                <div id="demo-output" class="demo-area">
+                    <p>👆 Click the buttons above to explore how SQL Views work!</p>
+                </div>
             </div>
         </div>
     </div>
     
     <script>
         function showTab(tabId) {
-            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
             
-            // Remove active class from all buttons
             const buttons = document.querySelectorAll('.tab');
             buttons.forEach(button => button.classList.remove('active'));
             
-            // Show selected tab
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
         }
@@ -305,8 +372,8 @@ DROP VIEW simple_report;</div>
                     title: '🔨 Creating View',
                     code: `CREATE VIEW customer_orders AS
 SELECT 
-    c.name as customer_name,
-    p.name as product_name,
+    c.name AS customer_name,
+    p.name AS product_name,
     o.quantity,
     o.date
 FROM orders o
@@ -317,21 +384,21 @@ JOIN products p ON o.product_id = p.id;`,
                 'select': {
                     title: '🔍 Selecting from View',
                     code: `SELECT * FROM customer_orders 
-WHERE customer_name = 'राम';`,
-                    message: '📋 Results: राम के सभी orders display हो गए!'
+WHERE customer_name = 'Ram';`,
+                    message: '📋 Results: All orders for Ram displayed!'
                 },
                 'update': {
                     title: '✏️ Updating through View',
-                    code: `-- Simple view के case में
+                    code: `-- In case of a simple view
 UPDATE customer_orders 
 SET quantity = 5 
-WHERE customer_name = 'राम';`,
-                    message: '⚠️ Complex views में UPDATE नहीं कर सकते!'
+WHERE customer_name = 'Ram';`,
+                    message: '⚠️ Complex views cannot be updated!'
                 },
                 'drop': {
                     title: '🗑️ Dropping View',
                     code: `DROP VIEW customer_orders;`,
-                    message: '🚮 View deleted! लेकिन original tables safe हैं।'
+                    message: '🚮 View deleted! Original tables remain safe.'
                 }
             };
             
@@ -345,7 +412,6 @@ WHERE customer_name = 'राम';`,
             `;
         }
         
-        // Add some animation on load
         window.addEventListener('load', function() {
             const sections = document.querySelectorAll('.demo-section');
             sections.forEach((section, index) => {

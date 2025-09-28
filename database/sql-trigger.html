@@ -1,114 +1,198 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Triggers ka Funda - Fullstackgada ka Interactive Demo</title>
-    <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Triggers Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore SQL Triggers with an interactive demo! Learn INSERT, UPDATE, DELETE triggers, their benefits, and real-world examples with mock data.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/database/sql-trigger">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="SQL Triggers Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover SQL Triggers with an interactive demo! Learn how INSERT, UPDATE, and DELETE triggers work with mock data and real-world examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/database/sql-trigger">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/database/images/sql-trigger.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SQL Triggers Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn SQL Triggers through an interactive demo, covering INSERT, UPDATE, DELETE triggers, and their benefits.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/database/images/sql-trigger.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "SQL Triggers Interactive Demo",
+    "description": "Explore SQL Triggers with an interactive demo, covering INSERT, UPDATE, DELETE triggers, their benefits, and real-world examples with mock data.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/database/sql-trigger",
+    "datePublished": "2025-09-17",
+    "dateModified": "2025-09-17",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a SQL Trigger?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A SQL Trigger is a special type of stored procedure that automatically executes in response to specific events on a database table, such as INSERT, UPDATE, or DELETE."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why are SQL Triggers important?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SQL Triggers are important because they enforce business rules, maintain data integrity, automate repetitive tasks, and provide auditing capabilities without requiring extra application code."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are real-world examples of SQL Triggers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Real-world examples of SQL Triggers include maintaining audit logs for updates, automatically calculating totals, preventing invalid data entry, and syncing changes across related tables."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
+
 <body>
     <div class="container"> 
         <!-- Header Section -->
         <div class="header-interactive" style="position:relative;">
-            <h1>SQL Triggers ka Funda</h1>
-            <p>Understand how SQL Triggers works with Fullstackgada</p>
+            <h1>SQL Triggers Interactive Demo</h1>
+            <p>Master SQL Triggers with Fullstackgada’s fun approach! ⏳</p>
             <div class="explore-diagrams-btn-wrapper">
-            <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
-            </a>
-        </div>
-       <div class="follow-btn-wrapper">
-            <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
-        </div>
+                <a href="/interactive.html" class="explore-diagrams-btn">
+                    <img src="/image/plus-circle.svg" alt="Explore more diagrams icon"> More Diagrams
+                </a>
+            </div>
+            <div class="follow-btn-wrapper">
+                <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
+                    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+                </a>
+            </div>
         </div>
 
         <!-- Demo Grid -->
         <div class="demo-grid">
             <!-- Trigger Concepts -->
             <div class="demo-section">
-                <h2 class="demo-title">⏳ Database Triggers ka Concept</h2>
+                <h2 class="demo-title">⏳ What Are Database Triggers?</h2>
                 
                 <div class="explanation">
-                    <strong>Trigger</strong> ek automated action hai, jo database mein koi event (INSERT, UPDATE, DELETE) hone par apne-aap chal jati hai.
+                    <strong>Trigger:</strong> An automated action that runs in response to a database event (INSERT, UPDATE, DELETE).
                 </div>
 
                 <!-- Trigger Control Buttons -->
                 <div class="demo-controls">
-                    <button class="demo-btn first-btn" onclick="showTriggerType('insert')">
+                    <button class="demo-btn first-btn" onclick="showTriggerType('insert')" role="button" aria-label="Show INSERT Trigger">
                         🗓️ INSERT Trigger
                     </button>
-                    <button class="demo-btn" onclick="showTriggerType('update')">
+                    <button class="demo-btn" onclick="showTriggerType('update')" role="button" aria-label="Show UPDATE Trigger">
                         ✏️ UPDATE Trigger
                     </button>
-                    <button class="demo-btn" onclick="showTriggerType('delete')">
+                    <button class="demo-btn" onclick="showTriggerType('delete')" role="button" aria-label="Show DELETE Trigger">
                         🗑️ DELETE Trigger
                     </button>
                 </div>
 
                 <div class="demo-controls">
-                    <button class="demo-btn" onclick="showTriggerCondition()">
+                    <button class="demo-btn" onclick="showTriggerCondition()" role="button" aria-label="Show Trigger Condition">
                         🚦 Trigger Condition
                     </button>
-                    <button class="demo-btn clear-btn" onclick="resetTriggerDemo()">
-                        🔄 Demo Reset Karo
+                    <button class="demo-btn clear-btn" onclick="resetTriggerDemo()" role="button" aria-label="Reset Demo">
+                        🔄 Reset Demo
                     </button>
                 </div>
 
                 <!-- Trigger SQL Example -->
                 <div class="code-block" id="triggerSqlCode">
-                    <div class="code-line comment">/* Koi trigger type choose karo SQL example dekhne ke liye */</div>
+                    <div class="code-line comment">/* Choose a trigger type to see the SQL example */</div>
                 </div>
 
                 <!-- Trigger Action Results -->
                 <div class="demo-area" id="triggerActionOutput">
                     <div class="event-message one-message">
-                        <div>Trigger ki action ka natija yahan dikhega...</div>
+                        <div>Trigger action results will appear here...</div>
                     </div>
                 </div>
 
                 <!-- Trigger Benefits -->
                 <div class="how-it-works">
-                    <h4>🔍 Triggers ke Fayde</h4>
+                    <h4>🔍 Benefits of Triggers</h4>
                     <div class="step">
                         <div class="step-number">1</div>
-                        <div>Repetitive tasks ko automate karo</div>
+                        <div>Automate repetitive tasks</div>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <div>Business rules ko enforce karo</div>
+                        <div>Enforce business rules</div>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <div>Audit logs maintain karo</div>
+                        <div>Maintain audit logs</div>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
-                        <div>Data ko consistent rakho</div>
+                        <div>Ensure data consistency</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Gokuldham Analogy & Jethalal Style -->
+            <!-- Real-World Analogy -->
             <div class="demo-section">
-                <h2 class="demo-title">🏠 Gokuldham Analogy</h2>
+                <h2 class="demo-title">🏠 Real-World Analogy</h2>
                 
                 <div class="explanation one-explanation">
-                    <strong>Jethalal ka Style:</strong> Triggers ko real-world desi examples se samjhaate hain.
+                    <strong>Fun Analogy:</strong> Understand triggers with a real-world example.
                 </div>
 
                 <!-- Analogy Display -->
                 <div class="saree-analogy" id="triggerAnalogy">
-                    <h4>Gokuldham Society ka Example</h4>
+                    <h4>Doorbell Example</h4>
                     <div class="saree-step">
                         <div class="saree-emoji">🚪</div>
-                        <div>Kisi table mein event (INSERT, UPDATE, DELETE) hone par trigger apne-aap kaam karta hai</div>
+                        <div>When an event (INSERT, UPDATE, DELETE) occurs in a table, the trigger automatically responds.</div>
                     </div>
                     <div class="saree-step">
                         <div class="saree-emoji">🛎️</div>
-                        <div>Jaise Gokuldham mein doorbell (trigger), koi aayega toh apne-aap baj jayega — tumhe manually check nahi karna padega</div>
+                        <div>Like a doorbell: when someone arrives, it rings automatically—no need to check manually!</div>
                     </div>
                 </div>
 
@@ -116,11 +200,11 @@
                 <div class="memory-diagram" id="triggerFlowDiagram">
                     <div class="memory-slot">
                         <div class="variable-name">Event (INSERT/UPDATE/DELETE)</div>
-                        <div class="variable-value">Table mein data change hote hi</div>
+                        <div class="variable-value">When data changes in a table</div>
                     </div>
                     <div class="memory-slot">
                         <div class="variable-name">Trigger Fires!</div>
-                        <div class="variable-value">Automated action (notification, log, vagairah)</div>
+                        <div class="variable-value">Automated action (notification, log, etc.)</div>
                     </div>
                 </div>
             </div>
@@ -128,12 +212,12 @@
 
         <!-- Tables & Mock Data -->
         <div class="demo-section">
-            <h2 class="demo-title">📝 Order & Notification Tables (Mock Data)</h2>
+            <h2 class="demo-title">📝 Orders & Notifications Tables (Mock Data)</h2>
             
             <div class="tabs">
-                <button class="tab active" onclick="showTab('orders-tab')">Orders Table</button>
-                <button class="tab" onclick="showTab('notifications-tab')">Notifications Table</button>
-                <button class="tab" onclick="showTab('logs-tab')">Audit Logs Table</button>
+                <button class="tab active" onclick="showTab('orders-tab')" role="button" aria-label="Show Orders Table">Orders Table</button>
+                <button class="tab" onclick="showTab('notifications-tab')" role="button" aria-label="Show Notifications Table">Notifications Table</button>
+                <button class="tab" onclick="showTab('logs-tab')" role="button" aria-label="Show Audit Logs Table">Audit Logs Table</button>
             </div>
 
             <!-- Orders Table Tab -->
@@ -146,7 +230,7 @@
                             <th>Customer</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            <th>Samay</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody id="ordersTableBody">
@@ -154,14 +238,14 @@
                     </tbody>
                 </table>
                 <div class="demo-controls" style="margin-top: 1rem;">
-                    <button class="demo-btn first-btn" onclick="addOrder()">
-                        ➕ Naya Order Add Karo (Insert)
+                    <button class="demo-btn first-btn" onclick="addOrder()" role="button" aria-label="Add New Order">
+                        ➕ Add New Order (Insert)
                     </button>
-                    <button class="demo-btn" onclick="updateOrder()">
-                        ✏️ Order Update Karo
+                    <button class="demo-btn" onclick="updateOrder()" role="button" aria-label="Update Order">
+                        ✏️ Update Order
                     </button>
-                    <button class="demo-btn clear-btn" onclick="deleteOrder()">
-                        🗑️ Order Delete Karo
+                    <button class="demo-btn clear-btn" onclick="deleteOrder()" role="button" aria-label="Delete Order">
+                        🗑️ Delete Order
                     </button>
                 </div>
             </div>
@@ -175,7 +259,7 @@
                             <th>NotificationID</th>
                             <th>Message</th>
                             <th>ForUser</th>
-                            <th>Samay</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody id="notificationsTableBody">
@@ -183,7 +267,7 @@
                     </tbody>
                 </table>
                 <div class="explanation">
-                    <strong>INSERT Trigger:</strong> Naye order aane par notification apne-aap add hota hai
+                    <strong>INSERT Trigger:</strong> Automatically adds a notification when a new order is created.
                 </div>
             </div>
 
@@ -196,7 +280,7 @@
                             <th>LogID</th>
                             <th>Action</th>
                             <th>Details</th>
-                            <th>Samay</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody id="logsTableBody">
@@ -204,126 +288,55 @@
                     </tbody>
                 </table>
                 <div class="explanation">
-                    <strong>UPDATE/DELETE Trigger:</strong> Order mein change hua toh log apne-aap add hota hai
+                    <strong>UPDATE/DELETE Trigger:</strong> Automatically logs changes when an order is updated or deleted.
                 </div>
             </div>
         </div>
 
-        <!-- Jethalal-Bhide Conversation Section -->
-        <div class="demo-section" style="grid-column: 1 / -1;">
-            <h2 class="demo-title">💬 Jethalal aur Bhide ki Trigger wali Baat</h2>
-            
-            <div class="chat-input">
-                <button class="demo-btn first-btn" onclick="startConversation()">
-                    🎬 Baat Shuru Karo
-                </button>
-                <button class="demo-btn" onclick="nextMessage()">
-                    ➡️ Agla Message
-                </button>
-                <button class="demo-btn clear-btn" onclick="resetConversation()">
-                    🔄 Chat Reset Karo
-                </button>
-            </div>
-
-            <div class="demo-area" id="conversationArea">
-                <div class="event-message">
-                    "Baat Shuru Karo" pe click karke Jethalal-Bhide ki Triggers wali charcha shuru karo!
-                </div>
-            </div>
-        </div>
 
         <!-- Trigger Best Practices & Warnings -->
         <div class="comparison-section" id="triggerBestPractices">
-            <h3>📌 Trigger ke Best Practices aur Warnings</h3>
+            <h3>📌 Trigger Best Practices and Warnings</h3>
             
             <table class="comparison-table responsive-table">
                 <thead>
                     <tr>
                         <th>Aspect</th>
-                        <th>✅ Karo</th>
-                        <th>❌ Mat Karo</th>
+                        <th>✅ Do</th>
+                        <th>❌ Don’t</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Istemal</strong></td>
+                        <td><strong>Usage</strong></td>
                         <td>Notifications, Logs, Data Consistency</td>
-                        <td>Complex Business Logic, Lambi Tasks</td>
+                        <td>Complex Business Logic, Long Tasks</td>
                     </tr>
                     <tr>
                         <td><strong>Performance</strong></td>
-                        <td>Fast, Idempotent actions</td>
-                        <td>Heavy calculations, API calls, Nested Triggers</td>
+                        <td>Fast, Idempotent Actions</td>
+                        <td>Heavy Calculations, API Calls, Nested Triggers</td>
                     </tr>
                     <tr>
                         <td><strong>Testing</strong></td>
-                        <td>Realistic data ke saath test karo</td>
-                        <td>Development mein ignore mat karo</td>
+                        <td>Test with Realistic Data</td>
+                        <td>Ignore in Development</td>
                     </tr>
                     <tr>
                         <td><strong>Monitoring</strong></td>
-                        <td>Errors ke liye monitor karo</td>
-                        <td>Bina dhyan ke chhod do</td>
+                        <td>Monitor for Errors</td>
+                        <td>Leave Unmonitored</td>
                     </tr>
                 </tbody>
             </table>
             <div class="explanation">
-                <strong>Jethalal ki Salah:</strong> Trigger ko halki-phulki cheezon ke liye hi use karo. Nahi toh website ki performance ka band baj jayega!
+                <strong>Pro Tip:</strong> Use triggers for lightweight tasks to keep your database performance smooth!
             </div>
         </div>
     </div>
 
     <script>
-        // Conversation data
-        const conversation = [
-            {
-                speaker: "भिडे",
-                message: "Jethalal! Meri website par naya order aate hi mujhe notification chahiye, lekin har baar manually check karna padta hai! Koi hal hai?",
-                type: "one"
-            },
-            {
-                speaker: "जेठालाल",
-                message: "Arre Bhide! Tu manually kyun jhak maar raha hai? Iske liye Database mein 'Trigger' laga — jaise automatic alarm! Koi INSERT, UPDATE ya DELETE ho — database khud action le lega!",
-                type: "two"
-            },
-            {
-                speaker: "भिडे",
-                message: "Achha! Toh Trigger ek tarah ka watchdog hai? Yeh kaise tay karta hai ki kab aur kis table par react kare?",
-                type: "one"
-            },
-            {
-                speaker: "जेठालाल",
-                message: "Simple Bhide! Trigger ko set karta hai — jaise 'AFTER INSERT ON Orders'. Matlab jaise hi naya order dalega, Trigger chal padega. Yeh notification bhej sakta hai, log bana sakta hai, ya doosri table update kar sakta hai.",
-                type: "two"
-            },
-            {
-                speaker: "जेठालाल",
-                message: "Agar condition lagani ho toh WHEN ya IF use kar — jaise 'Order ₹1000 se zyada ho tabhi Trigger chale!' Yani Trigger soch-samajhkar active hoga, bina wajah nahi.",
-                type: "two"
-            },
-            {
-                speaker: "भिडे",
-                message: "Lekin Jethalal, agar ek Trigger ke andar hum doosra Trigger chala dein toh?",
-                type: "one"
-            },
-            {
-                speaker: "जेठालाल",
-                message: "Arre Bhide, ise kehte hain 'Nested Triggers' — aur haan, kuch databases ise allow karte hain! Lekin zyada chhedchhad ki toh system ki performance ka achar ban jayega! Isliye inhe samajhdari se istemal karna chahiye.",
-                type: "two"
-            },
-            {
-                speaker: "भिडे",
-                message: "Agar ek saath 100 logon ne order kar diya toh?",
-                type: "one"
-            },
-            {
-                speaker: "जेठालाल",
-                message: "Trigger har insert par chalega — yani 100 order aaye toh 100 baar trigger active hoga. Trigger koi jadu nahi, woh bhi resource leta hai. Isliye heavy logic mat daal usme — notification bhejne jaisi light cheezein trigger se kar, lekin complex calculations, API calls, ya long-running kaam nahi.",
-                type: "two"
-            }
-        ];
-
-        let currentMessageIndex = 0;
+     
         let currentTriggerType = null;
         let orders = [
             { id: 1, customer: 'Jethalal', amount: 1500, status: 'Pending', timestamp: new Date().toLocaleTimeString() },
@@ -346,12 +359,12 @@ CREATE OR REPLACE TRIGGER new_order_notification
 AFTER INSERT ON Orders
 FOR EACH ROW
 BEGIN
-    -- Ek notification bhejo
+    -- Send a notification
     INSERT INTO Notifications(message, forUser, time)
-    VALUES ('Naya order #' || :new.id || ' mila!', 'Admin', SYSDATE);
+    VALUES ('New order #' || :new.id || ' received!', 'Admin', SYSDATE);
 END;
 `;
-                    output = "✅ Trigger chalega jab bhi koi naya order aayega — notification apne-aap ban jayega!";
+                    output = "✅ Trigger runs whenever a new order is added—a notification is created automatically!";
                     break;
                 case 'update':
                     sql = `
@@ -360,12 +373,12 @@ AFTER UPDATE ON Orders
 FOR EACH ROW
 WHEN (new.status != old.status)
 BEGIN
-    -- Audit log daalo
+    -- Add audit log
     INSERT INTO Logs(action, details, time)
-    VALUES ('Status Badla', 'Order #' || :new.id || ' from ' || :old.status || ' to ' || :new.status, SYSDATE);
+    VALUES ('Status Changed', 'Order #' || :new.id || ' from ' || :old.status || ' to ' || :new.status, SYSDATE);
 END;
 `;
-                    output = "✅ Trigger chalega jab order ki status change hogi — log apne-aap add ho jayega!";
+                    output = "✅ Trigger runs when an order’s status changes—a log entry is added automatically!";
                     break;
                 case 'delete':
                     sql = `
@@ -373,19 +386,19 @@ CREATE OR REPLACE TRIGGER order_deleted
 AFTER DELETE ON Orders
 FOR EACH ROW
 BEGIN
-    -- Deletion log daalo
+    -- Log deletion
     INSERT INTO Logs(action, details, time)
-    VALUES ('Order Delete Hua', 'Order #' || :old.id || ' delete ho gaya', SYSDATE);
+    VALUES ('Order Deleted', 'Order #' || :old.id || ' deleted', SYSDATE);
 END;
 `;
-                    output = "✅ Trigger chalega jab koi order delete hoga — log entry apne-aap ban jayegi!";
+                    output = "✅ Trigger runs when an order is deleted—a log entry is created automatically!";
                     break;
             }
 
             document.getElementById('triggerSqlCode').innerHTML = `
-                <div class="code-line comment">/* ${triggerType.toUpperCase()} Trigger ka Example */</div>
+                <div class="code-line comment">/* ${triggerType.toUpperCase()} Trigger Example */</div>
                 ${sql.split('\n').map(line => `<div class="code-line">${line}</div>`).join('')}
-                <div class="code-line comment">/* Niche "Add", "Update", ya "Delete" button try karo triggers in action dekhne ke liye! */</div>
+                <div class="code-line comment">/* Try the "Add", "Update", or "Delete" buttons below to see triggers in action! */</div>
             `;
             document.getElementById('triggerActionOutput').innerHTML = `
                 <div class="event-message one-message">
@@ -404,18 +417,18 @@ FOR EACH ROW
 WHEN (new.amount > 1000)
 BEGIN
     INSERT INTO Notifications(message, forUser, time)
-    VALUES ('High value order #' || :new.id || ' (' || :new.amount || ') mila!', 'Admin', SYSDATE);
+    VALUES ('High value order #' || :new.id || ' ($' || :new.amount || ') received!', 'Admin', SYSDATE);
 END;
 `;
             document.getElementById('triggerSqlCode').innerHTML = `
-                <div class="code-line comment">/* Conditional INSERT Trigger ka Example */</div>
+                <div class="code-line comment">/* Conditional INSERT Trigger Example */</div>
                 ${sql.split('\n').map(line => `<div class="code-line">${line}</div>`).join('')}
-                <div class="code-line comment">/* Yeh trigger tabhi chalega jab order amount ₹1000 se zyada ho! */</div>
+                <div class="code-line comment">/* This trigger only runs when the order amount exceeds $1000! */</div>
             `;
             document.getElementById('triggerActionOutput').innerHTML = `
                 <div class="event-message one-message">
-                    ✅ Trigger sirf tabhi chalega jab koi condition puri hogi (jaise amount > ₹1000).<br>
-                    🙅‍♂️ Chhota order hua toh trigger nahi chalega — database par unnecessary load se bachayega!
+                    ✅ Trigger only runs when a condition is met (e.g., amount > $1000).<br>
+                    🙅‍♂️ Smaller orders won’t trigger it, reducing unnecessary database load!
                 </div>
             `;
         }
@@ -424,49 +437,42 @@ END;
         function resetTriggerDemo() {
             currentTriggerType = null;
             document.getElementById('triggerSqlCode').innerHTML = `
-                <div class="code-line comment">/* Koi trigger type choose karo SQL example dekhne ke liye */</div>
+                <div class="code-line comment">/* Choose a trigger type to see the SQL example */</div>
             `;
             document.getElementById('triggerActionOutput').innerHTML = `
                 <div class="event-message one-message">
-                    <div>Trigger ki action ka natija yahan dikhega...</div>
+                    <div>Trigger action results will appear here...</div>
                 </div>
             `;
         }
 
         // Tab functionality
         function showTab(tabName) {
-            // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
             
-            // Remove active class from all tabs
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Show selected tab content
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked tab
             event.target.classList.add('active');
         }
 
         // Render tables
         function renderTables() {
-            // Orders Table
             document.getElementById('ordersTableBody').innerHTML = '';
             orders.forEach(order => {
                 document.getElementById('ordersTableBody').innerHTML += `
                     <tr>
                         <td>${order.id}</td>
                         <td>${order.customer}</td>
-                        <td>₹${order.amount}</td>
+                        <td>$${order.amount}</td>
                         <td>${order.status}</td>
                         <td>${order.timestamp}</td>
                     </tr>
                 `;
             });
             
-            // Notifications Table
             document.getElementById('notificationsTableBody').innerHTML = '';
             notifications.forEach(notif => {
                 document.getElementById('notificationsTableBody').innerHTML += `
@@ -479,7 +485,6 @@ END;
                 `;
             });
             
-            // Logs Table
             document.getElementById('logsTableBody').innerHTML = '';
             logs.forEach(log => {
                 document.getElementById('logsTableBody').innerHTML += `
@@ -511,20 +516,20 @@ END;
             if (amount > 1000) {
                 notifications.push({
                     id: notifId,
-                    message: `High value order #${newId} (₹${amount}) mila!`,
+                    message: `High value order #${newId} ($${amount}) received!`,
                     forUser: 'Admin',
                     time: timestamp
                 });
                 logs.push({
                     id: logs.length + 1,
                     action: 'Order Created (High Value)',
-                    details: `Order #${newId} (₹${amount}) by ${customer}`,
+                    details: `Order #${newId} ($${amount}) by ${customer}`,
                     time: timestamp
                 });
             } else {
                 notifications.push({
                     id: notifId,
-                    message: `Naya order #${newId} mila!`,
+                    message: `New order #${newId} received!`,
                     forUser: 'Admin',
                     time: timestamp
                 });
@@ -546,7 +551,7 @@ END;
             // UPDATE Trigger logic (simulated)
             logs.push({
                 id: logs.length + 1,
-                action: 'Status Badla',
+                action: 'Status Changed',
                 details: `Order #${order.id} ${order.status}`,
                 time: order.timestamp
             });
@@ -563,53 +568,12 @@ END;
             // DELETE Trigger logic (simulated)
             logs.push({
                 id: logs.length + 1,
-                action: 'Order Delete Hua',
-                details: `Order #${order.id} by ${order.customer} (₹${order.amount}) delete ho gaya`,
+                action: 'Order Deleted',
+                details: `Order #${order.id} by ${order.customer} ($${order.amount}) deleted`,
                 time: new Date().toLocaleTimeString()
             });
             
             renderTables();
-        }
-
-        // Conversation functions
-        function startConversation() {
-            currentMessageIndex = 0;
-            showMessage();
-        }
-
-        function nextMessage() {
-            if (currentMessageIndex < conversation.length - 1) {
-                currentMessageIndex++;
-                showMessage();
-            }
-        }
-
-        function showMessage() {
-            const message = conversation[currentMessageIndex];
-            const conversationArea = document.getElementById('conversationArea');
-            
-            if (currentMessageIndex === 0) {
-                conversationArea.innerHTML = '';
-            }
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `event-message ${message.type}-message`;
-            messageDiv.innerHTML = `
-                <strong>${message.speaker}:</strong> ${message.message}
-                <div class="message-time">${new Date().toLocaleTimeString()}</div>
-            `;
-            
-            conversationArea.appendChild(messageDiv);
-            conversationArea.scrollTop = conversationArea.scrollHeight;
-        }
-
-        function resetConversation() {
-            currentMessageIndex = 0;
-            document.getElementById('conversationArea').innerHTML = `
-                <div class="event-message">
-                    "Baat Shuru Karo" pe click karke Jethalal-Bhide ki Triggers wali charcha shuru karo!
-                </div>
-            `;
         }
 
         // Render default tables on load

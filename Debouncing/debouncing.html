@@ -1,12 +1,96 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Debouncing - Fullstackgada Interactive Demo</title>
-   <link rel="icon" type="image/png" href="/image/favicon.ico">
-    <link rel="stylesheet" href="/interactive-demo.css" />
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debouncing Interactive Demo | Fullstackgada</title>
+  <meta name="description" content="Explore Debouncing with our interactive demo! Learn how to optimize event handling, reduce server load, and improve performance with JavaScript examples.">
+  <meta name="author" content="Fullstackgada">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://fullstackgada.netlify.app/debouncing/debouncing">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/image/favicon.ico">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/interactive-demo.css">
+  <link rel="preload" href="/interactive-demo.css" as="style">
+
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Debouncing Interactive Demo | Fullstackgada">
+  <meta property="og:description" content="Discover Debouncing with an interactive demo! Optimize event handling, reduce server load, and improve performance with JavaScript examples.">
+  <meta property="og:url" content="https://fullstackgada.netlify.app/debouncing/debouncing">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://fullstackgada.netlify.app/debouncing/debouncing.webp">
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Debouncing Interactive Demo | Fullstackgada">
+  <meta name="twitter:description" content="Learn Debouncing with an interactive demo, optimizing event handling and performance in JavaScript.">
+  <meta name="twitter:image" content="https://fullstackgada.netlify.app/debouncing/debouncing.webp">
+
+  <!-- Article Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Debouncing Interactive Demo",
+    "description": "Explore Debouncing with an interactive demo, learning how to optimize event handling and improve performance with JavaScript examples.",
+    "author": {
+      "@type": "Person",
+      "name": "Fullstackgada"
+    },
+    "url": "https://fullstackgada.netlify.app/debouncing/debouncing",
+    "datePublished": "2025-09-21",
+    "dateModified": "2025-09-21",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fullstackgada",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fullstackgada.netlify.app/image/favicon.ico"
+      }
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Debouncing in JavaScript?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Debouncing is a programming technique that ensures a function is executed only after a certain period of inactivity. It helps optimize event handling and prevents unnecessary function calls."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why should you use Debouncing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Debouncing improves performance by reducing the number of times a function is triggered. It is especially useful in scenarios like search boxes, window resizing, and scroll events."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is an example of Debouncing in real-world applications?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A common example of debouncing is in search input fields. Instead of sending a request to the server on every keystroke, debouncing waits until the user stops typing for a short duration before making the request."
+        }
+      }
+    ]
+  }
+  </script>
+  
+<style>
         /* Additional styles specific to typing demo */
         .typing-input {
             width: 100%;
@@ -29,22 +113,23 @@
         }
     </style>
 </head>
+
 <body>
 <div class="container">
 
     <!-- Header -->
-     <div class="header-interactive" style="position:relative;">
-        <h1>Debouncing ka Funda</h1>
-        <p>Understand how Debouncing works with Fullstackgada</p>
-       <div class="explore-diagrams-btn-wrapper">
+    <div class="header-interactive" style="position:relative;">
+        <h1>Debouncing Interactive Demo</h1>
+        <p>Master Debouncing with Fullstackgada’s fun approach! ⏳</p>
+        <div class="explore-diagrams-btn-wrapper">
             <a href="/interactive.html" class="explore-diagrams-btn">
-                <img src="/image/plus-circle.svg" alt="Instagram icon"> More Diagrams
+                <img src="/image/plus-circle.svg" alt="Explore more diagrams icon"> More Diagrams
             </a>
         </div>
-       <div class="follow-btn-wrapper">
+        <div class="follow-btn-wrapper">
             <a href="https://www.instagram.com/fullstackgada" target="_blank" class="follow-btn">
-    <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
-</a>
+                <img src="/image/instagram.svg" alt="Instagram icon"> Follow for More
+            </a>
         </div>
     </div>
 
@@ -53,42 +138,42 @@
 
         <!-- Debouncing Concept Explanation -->
         <div class="demo-section">
-            <h2 class="demo-title">⏳ Debouncing Kya Hai?</h2>
+            <h2 class="demo-title">⏳ What is Debouncing?</h2>
             <div class="explanation">
-                <strong>Debouncing:</strong> Baar-baar hone wale events ko rok kar sirf last event ke baad function ko run karna.<br>
-                Jaise Popatlal mithai tabhi baant-ta hai jab pura rishta confirm ho jaye!
+                <strong>Debouncing:</strong> Limits rapid event triggers by executing a function only after the last event in a series, with a delay.<br>
+                Like waiting to confirm an event before taking action!
             </div>
 
             <div class="saree-analogy">
-                <h4>🍬 Popatlal ka Sweet Debounce Analogy</h4>
+                <h4>🍬 Event Confirmation Analogy</h4>
                 <div class="saree-step">
                     <div class="saree-emoji">📞</div>
-                    <div><strong>Fast-Fast Calls:</strong> Rishta aaya → mithai baanto → rishta toot gaya → fir se drama!</div>
+                    <div><strong>Rapid Events:</strong> Every keystroke triggers a search, overwhelming the server.</div>
                 </div>
                 <div class="saree-step">
                     <div class="saree-emoji">⏳</div>
-                    <div><strong>Debouncing:</strong> Thodi der ruk jao, agar rishta nahi toota toh mithai baanto!</div>
+                    <div><strong>Debouncing:</strong> Wait for typing to pause, then trigger the search!</div>
                 </div>
                 <div class="saree-step">
                     <div class="saree-emoji">😌</div>
-                    <div><strong>Result:</strong> Server confuse nahi hota, aur performance mast rehti hai!</div>
+                    <div><strong>Result:</strong> Fewer server calls, smoother performance, and better user experience!</div>
                 </div>
             </div>
 
             <!-- Debounce Demo Controls -->
             <div class="demo-controls">
-                <button class="demo-btn" onclick="demonstrateNoDebounceTyping()">
-                    ⌨️ Typing Search bina Debouncing ke
+                <button class="demo-btn" onclick="demonstrateNoDebounceTyping()" role="button" aria-label="Demonstrate typing without debouncing">
+                    ⌨️ Typing Search Without Debouncing
                 </button>
-                <button class="demo-btn clear-btn" onclick="clearDebounceDemo()">
-                    🗑️ Demo Clear Karo
+                <button class="demo-btn clear-btn" onclick="clearDebounceDemo()" role="button" aria-label="Clear demo">
+                    🗑️ Clear Demo
                 </button>
             </div>
 
             <!-- Demo Results -->
             <div class="demo-area" id="debounceDemoArea">
                 <div class="event-message one-message">
-                    Upar ke buttons click karo to try typing search with/without debouncing!
+                    Click the buttons above to try typing search with/without debouncing!
                 </div>
             </div>
         </div>
@@ -97,61 +182,61 @@
         <div class="demo-section">
             <h2 class="demo-title">🎮 Live Search Input Simulator</h2>
             <div class="explanation one-explanation">
-                <strong>Demo:</strong> Niche box mein type karo aur dekho kaise debounced search server calls ko kam karta hai.
+                <strong>Demo:</strong> Type in the box below to see how debouncing reduces server calls and improves performance.
             </div>
-            <input type="text" id="searchInput" class="typing-input" placeholder="Yahan search type karo..." autocomplete="off" />
-            <div class="search-results" id="searchResults">Search results yahan dikhenge...</div>
+            <input type="text" id="searchInput" class="typing-input" placeholder="Type your search here..." autocomplete="off" aria-label="Search input">
+            <div class="search-results" id="searchResults">Search results will appear here...</div>
             <div style="margin-top: 0.5rem;">
                 <label for="debounceDelay">Debounce Delay (milliseconds): </label>
-                <select id="debounceDelay" onchange="changeDebounceDelay()">
-                    <option value="200">200 ms (Jaldi)</option>
+                <select id="debounceDelay" onchange="changeDebounceDelay()" aria-label="Select debounce delay">
+                    <option value="200">200 ms (Fast)</option>
                     <option value="500" selected>500 ms (Default)</option>
-                    <option value="1000">1000 ms (Dheere)</option>
-                    <option value="1500">1500 ms (Aur Dheere)</option>
+                    <option value="1000">1000 ms (Slow)</option>
+                    <option value="1500">1500 ms (Slower)</option>
                 </select>
             </div>
             <div style="margin-top: 0.5rem;">
-                <button id="clearLiveSearchBtn" class="demo-btn clear-btn">🗑️ Live Search Clear Karo</button>
+                <button id="clearLiveSearchBtn" class="demo-btn clear-btn" role="button" aria-label="Clear live search">🗑️ Clear Live Search</button>
             </div>
         </div>
     </div>
 
     <!-- Benefits & Best Practices -->
-    <div class="comparison-section">
-        <h3>🚀 Debouncing ke Fayde</h3>
+    <div class="demo-section" style="grid-column:1/-1;">
+        <h2 class="demo-title">🚀 Benefits of Debouncing</h2>
         <table class="comparison-table responsive-table">
             <thead>
                 <tr>
                     <th>Aspect</th>
-                    <th>Fayde</th>
-                    <th>Kyun?</th>
+                    <th>Benefit</th>
+                    <th>Why?</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><strong>Server Load</strong></td>
-                    <td>Requests ki sankhya kam hoti hai</td>
-                    <td>Bina zarurat ke requests ko rokta hai</td>
+                    <td>Reduces the number of requests</td>
+                    <td>Prevents unnecessary server calls</td>
                 </tr>
                 <tr>
                     <td><strong>Performance</strong></td>
-                    <td>Webpage smooth chalta hai</td>
-                    <td>Bar-bar ka kaam rukta hai, resources bachta hai</td>
+                    <td>Smoother webpage experience</td>
+                    <td>Saves resources by limiting frequent tasks</td>
                 </tr>
                 <tr>
                     <td><strong>User Experience</strong></td>
-                    <td>Search sahi time pe chalta hai</td>
-                    <td>Delay ke baad meaningful result dikhta hai</td>
+                    <td>Timely and relevant search results</td>
+                    <td>Triggers searches after meaningful input</td>
                 </tr>
                 <tr>
                     <td><strong>Error Handling</strong></td>
-                    <td>Load spikes se bachta hai</td>
-                    <td>Kam time mein kam errors aate hain</td>
+                    <td>Avoids load spikes</td>
+                    <td>Reduces errors from excessive requests</td>
                 </tr>
                 <tr>
                     <td><strong>Implementation</strong></td>
-                    <td>Callback management asaan ho jata hai</td>
-                    <td>Events ke chaotic execution ko control karta hai</td>
+                    <td>Simplifies callback management</td>
+                    <td>Controls chaotic event execution</td>
                 </tr>
             </tbody>
         </table>
@@ -174,10 +259,10 @@
     function fakeSearchApi(query) {
         return new Promise((resolve) => {
             setTimeout(() => {
-                // fake search results based on query
-                const results = query ? [`"${query}" ke liye result`, `"${query}" ke liye aur ek result`] : [];
+                // Fake search results based on query
+                const results = query ? [`Result for "${query}"`, `Another result for "${query}"`] : [];
                 resolve(results);
-            }, 500); // simulating 500ms API latency
+            }, 500); // Simulating 500ms API latency
         });
     }
 
@@ -186,9 +271,9 @@
         const demoArea = document.getElementById("debounceDemoArea");
         demoArea.innerHTML = `
             <div>
-                <input type="text" id="noDebounceInput" class="typing-input" placeholder="Yahan type karo (bina debounce)..."/>
-                <div class="search-results" id="noDebounceResults">Type karna shuru karo toh turant search results dekho...</div>
-                <small style="color: #555;">Search function har keystroke pe chalta hai bina debounce ke.</small>
+                <input type="text" id="noDebounceInput" class="typing-input" placeholder="Type here (no debouncing)..." aria-label="Typing input without debouncing"/>
+                <div class="search-results" id="noDebounceResults">Start typing to see instant search results...</div>
+                <small style="color: #555;">Search function runs on every keystroke without debouncing.</small>
             </div>
         `;
 
@@ -197,10 +282,10 @@
 
         function handleSearch() {
             const query = input.value.trim();
-            resultsDiv.textContent = `Search kar raha hai: "${query}" ...`;
+            resultsDiv.textContent = `Searching for: "${query}" ...`;
             fakeSearchApi(query).then((results) => {
                 if (results.length === 0) {
-                    resultsDiv.textContent = "Koi result nahi mila.";
+                    resultsDiv.textContent = "No results found.";
                 } else {
                     resultsDiv.textContent = results.join("\n");
                 }
@@ -213,7 +298,7 @@
     function clearDebounceDemo() {
         document.getElementById("debounceDemoArea").innerHTML = `
             <div class="event-message one-message">
-                Upar ke buttons click karo to try typing search with/without debouncing!
+                Click the buttons above to try typing search with/without debouncing!
             </div>
         `;
     }
@@ -230,10 +315,10 @@
         liveDebounceTimeout = setTimeout(() => {
             const query = searchInput.value.trim();
             liveSearchCount++;
-            searchResults.textContent = `Search kar raha hai: "${query}" (Search count: ${liveSearchCount}) ...`;
+            searchResults.textContent = `Searching for: "${query}" (Search count: ${liveSearchCount}) ...`;
             fakeSearchApi(query).then((results) => {
                 if (results.length === 0) {
-                    searchResults.textContent = "Koi result nahi mila.";
+                    searchResults.textContent = "No results found.";
                 } else {
                     searchResults.textContent = results.join("\n");
                 }
@@ -245,7 +330,7 @@
         // Immediately clear any pending search and reset count for clarity
         clearTimeout(liveDebounceTimeout);
         liveSearchCount = 0;
-        searchResults.textContent = "Debounce delay badal gaya, ab type karo...";
+        searchResults.textContent = "Debounce delay changed, start typing...";
     }
 
     window.onload = () => {
@@ -257,7 +342,7 @@
         const clearBtn = document.getElementById("clearLiveSearchBtn");
         clearBtn?.addEventListener("click", () => {
             searchInput.value = "";
-            searchResults.textContent = "Search results yahan dikhenge...";
+            searchResults.textContent = "Search results will appear here...";
             clearTimeout(liveDebounceTimeout);
             liveSearchCount = 0;
         });

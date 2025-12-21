@@ -1319,3 +1319,28 @@ body {
         font-size: 1.1rem;
     }
 }
+
+.payment-support-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.payment-support-qr img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 12px;
+  padding: 8px;
+  background: #fff;
+  border: 1px dashed #ff6f61;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.qr-text {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
